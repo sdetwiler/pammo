@@ -34,21 +34,25 @@ SessionObserver* Session::getObserver()
 
 void Session::onReadable(Connection* connection)
 {
+    printf("Session::onReadable\n");
     read();
 }
 
 void Session::onWritable(Connection* connection)
 {
+    printf("Session::onWritable\n");
     write();
 }
 
 void Session::onError(Connection* connection)
 {
+    printf("Session::onError\n");
     mConnection->close();
 }
 
 void Session::onClosed(Connection* connection)
 {
+    printf("Session::onClosed\n");
     mConnection = NULL;
 }
 
@@ -57,7 +61,11 @@ void Session::read()
     int ret;
     
     if(mConnection->isReadable() == false)
+    {
+        printf("Session::read called but not readable\n");
         return;
+    }
+    
 
     uint32_t toRead;
     uint32_t numRead;

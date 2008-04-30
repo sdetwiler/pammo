@@ -7,7 +7,8 @@
 ## Path configuration.
 ########################################
 
-SERVER_ROOT        ?= /home/steved/prj/server
+#SERVER_ROOT        ?= /home/steved/prj/server
+SERVER_ROOT        ?= .
 BUILD_DST         ?= $(SERVER_ROOT)/build
 
 
@@ -19,7 +20,7 @@ BUILD_DST         ?= $(SERVER_ROOT)/build
 #common:
 #	 mkdir $(BUILD_DST)
 
-all:	server.elf
+all:	server.elf client.elf
 
 clean:
 	rm  $(BUILD_DST)/*.o $(BUILD_DST)/*.elf $(BUILD_DST)/*.so
@@ -58,10 +59,36 @@ SERVER_SRCS     += command.cpp
 SERVER_SRCS     += session.cpp 
 SERVER_SRCS     += server.cpp 
 SERVER_SRCS     += gameServer.cpp 
-SERVER_SRCS     += main.cpp
+SERVER_SRCS     += serverMain.cpp
 
 server.elf: 
 	$(CXX) -o$(SERVER_TARGET) $(COMMON_PARAMS) $(SERVER_CXXFLAGS) $(SERVER_INCPATHS) $(SERVER_LIBPATHS) $(SERVER_DEFINES) $(SERVER_LDFLAGS) $(SERVER_LIBS) $(SERVER_SRCS)
+
+
+########################################
+## Client.
+########################################
+
+CLIENT_CXXFLAGS += 
+CLIENT_INCPATHS +=
+CLIENT_LIBPATHS += -L$(BUILD_DST)
+CLIENT_DEFINES  +=
+CLIENT_LDFLAGS  += -Wl,-rpath,$(BUILD_DST),-rpath,.
+CLIENT_LIBS     += -lpthread
+CLIENT_TARGET    = $(BUILD_DST)/client.elf
+
+CLIENT_SRCS     += connection.cpp 
+CLIENT_SRCS     += command.cpp 
+CLIENT_SRCS     += session.cpp 
+CLIENT_SRCS     += client.cpp 
+CLIENT_SRCS     += gameClient.cpp 
+CLIENT_SRCS     += clientMain.cpp
+
+client.elf: 
+	$(CXX) -o$(CLIENT_TARGET) $(COMMON_PARAMS) $(CLIENT_CXXFLAGS) $(CLIENT_INCPATHS) $(CLIENT_LIBPATHS) $(CLIENT_DEFINES) $(CLIENT_LDFLAGS) $(CLIENT_LIBS) $(CLIENT_SRCS)
+
+
+
 
 #server: server.elf
 

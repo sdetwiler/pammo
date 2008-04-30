@@ -12,6 +12,8 @@ GameServer::~GameServer()
 
 void GameServer::onNewConnection(Server* server, Connection* connection)
 {
+    printf("GameServer::onNewConnection\n");
+    
     Session* session = new Session(connection);
     session->setObserver(this);
     mSessions[connection] = session;
@@ -19,6 +21,8 @@ void GameServer::onNewConnection(Server* server, Connection* connection)
 
 void GameServer::onConnectionClosed(Server* server, Connection* connection)
 {
+    printf("GameServer::onConnectionClosed\n");
+    
     ConnectionSessionMap::iterator i = mSessions.find(connection);
     if(i == mSessions.end())
         return;

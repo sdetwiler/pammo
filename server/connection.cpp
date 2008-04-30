@@ -4,11 +4,9 @@
 #include <string.h>
 
 #include "connection.h"
-#include "server.h"
 
-Connection::Connection(Server* server)
+Connection::Connection()
 {
-    mServer = server;
     mObserver = 0;
     mSocket = 0;
     mReadable = false;
@@ -33,14 +31,21 @@ ConnectionObserver* Connection::getObserver()
 
 int Connection::read(uint8_t* buf, uint32_t bufLen, uint32_t& numRead)
 {
+    printf("Connection::read\n");
+    
     numRead = 0;
     
     if(!mReadable)
         return -1;
     
     ssize_t read = recv(mSocket, buf, bufLen, 0);
+    printf("recv returned %d\n", read);
+    
+
     if(read == 0)
     {
+        printf("Connection::read of zero\n");
+        
         // Note that this makes a callback into the ConnectionObserver who probably called read...
         close();
         return -1;
@@ -90,7 +95,9 @@ int Connection::write(uint8_t* buf, uint32_t bufLen, uint32_t& numWritten)
 
 void Connection::close()
 {
-    mServer->closeConnection(this);
+    printf("TODO: Connection::close\n");
+    
+    //    mServer->closeConnection(this);
 }
 
 void Connection::setSocket(int socket)

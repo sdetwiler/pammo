@@ -31,7 +31,7 @@ class ConnectionObserver
 class Connection
 {
     public:
-        Connection(Server* server);
+        Connection();
         ~Connection();
 
         void setObserver(ConnectionObserver* o);
@@ -42,7 +42,7 @@ class Connection
 
         bool isReadable();
         bool isWritable();
-        
+
         // Calling this function will destroy this object.
         void close();
 
@@ -55,7 +55,6 @@ class Connection
         
     protected:
     private:
-        Server* mServer;
         
         ConnectionObserver* mObserver;
         

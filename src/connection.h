@@ -11,6 +11,17 @@ class Connection;
 class Server;
 
 
+class ConnectionOwner
+{
+    public:
+        ConnectionOwner()
+        {}
+
+        virtual ~ConnectionOwner()
+        {}
+
+        virtual void closeConnection(Connection* connection)=0;
+};
 
 class ConnectionObserver
 {
@@ -31,7 +42,7 @@ class ConnectionObserver
 class Connection
 {
     public:
-        Connection();
+        Connection(ConnectionOwner* owner);
         ~Connection();
 
         void setObserver(ConnectionObserver* o);
@@ -43,6 +54,9 @@ class Connection
         bool isReadable();
         bool isWritable();
 
+        void onReadable();
+        void onWritable();
+        
         // Calling this function will destroy this object.
         void close();
 
@@ -55,6 +69,7 @@ class Connection
         
     protected:
     private:
+        ConnectionOwner* mOwner;
         
         ConnectionObserver* mObserver;
         

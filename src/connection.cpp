@@ -5,8 +5,9 @@
 
 #include "connection.h"
 
-Connection::Connection()
+Connection::Connection(ConnectionOwner* owner)
 {
+    mOwner = owner;
     mObserver = 0;
     mSocket = 0;
     mReadable = false;
@@ -29,6 +30,22 @@ ConnectionObserver* Connection::getObserver()
     return mObserver;
 }
 
+void Connection::onReadable()
+{
+    mReadable = true;
+    
+    if(mObserver)
+        mObserver->onReadable(this);
+}
+
+void Connection::onWritable()
+{
+    mWritable = true;
+
+    if(mObserver)
+        mObserver->onWritable(this);
+}
+
 int Connection::read(uint8_t* buf, uint32_t bufLen, uint32_t& numRead)
 {
     printf("Connection::read\n");
@@ -39,12 +56,11 @@ int Connection::read(uint8_t* buf, uint32_t bufLen, uint32_t& numRead)
         return -1;
     
     ssize_t read = recv(mSocket, buf, bufLen, 0);
-    printf("recv returned %d\n", read);
-    
+    //    printf("recv returned %d\n", read);
 
     if(read == 0)
     {
-        printf("Connection::read of zero\n");
+        //        printf("Connection::read of zero\n");
         
         // Note that this makes a callback into the ConnectionObserver who probably called read...
         close();
@@ -95,9 +111,7 @@ int Connection::write(uint8_t* buf, uint32_t bufLen, uint32_t& numWritten)
 
 void Connection::close()
 {
-    printf("TODO: Connection::close\n");
-    
-    //    mServer->closeConnection(this);
+    mOwner->closeConnection(this);
 }
 
 void Connection::setSocket(int socket)

@@ -257,14 +257,13 @@ void Server::threadFunc()
 
     while(1)
     {
-        printf("pre epoll_wait\n");
+        printf("%d connections\n", mConnections.size());
         ret = epoll_wait(mPoller, events, numEvents, -1);
         if(ret < 0)
         {
             printf("epoll_wait failed %d\n", ret);
             return;
         }
-        printf("post epoll_wait\n");
 
         for(uint32_t i=0; i<ret; ++i)
         {
@@ -314,8 +313,7 @@ void Server::threadFunc()
                     it = mConnections.find(s);
                     if(it != mConnections.end())
                     {
-                        if(it->second->getObserver())
-                            it->second->getObserver()->onReadable(it->second);
+                        it->second->onReadable();
                     }
                 }
 
@@ -324,8 +322,7 @@ void Server::threadFunc()
                     it = mConnections.find(s);
                     if(it != mConnections.end())
                     {
-                        if(it->second->getObserver())
-                            it->second->getObserver()->onWritable(it->second);
+                        it->second->onWritable();
                     }
                 }
             }
@@ -346,7 +343,7 @@ int Server::onNewConnection()
     // While mSocket is readable, accept any pending connections.
     while(true)
     {
-        Connection* conn = new Connection();  
+        Connection* conn = new Connection(this);  
         struct sockaddr_in addr;
         socklen_t addrLen = sizeof(addr);
         int newSock = accept(mSocket, (struct sockaddr*)&addr, &addrLen);

@@ -226,7 +226,7 @@ void Client::threadFunc()
     int ret;
     
 
-    mConnection = new Connection;
+    mConnection = new Connection(this);
     
     
     if(mObserver)
@@ -293,3 +293,14 @@ void Client::threadFunc()
 }
 
 
+void Client::closeConnection(Connection* connection)
+{
+    if(mObserver)
+    {
+        mObserver->onClientDisconnected(this, mConnection);
+    }
+
+    mSocket = 0;
+    delete mConnection;
+    mConnection = 0;
+}

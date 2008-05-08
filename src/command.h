@@ -29,7 +29,6 @@ class Command
         CommandObserver* getObserver();
 
         virtual uint32_t getId() = 0;
-        virtual int execute() = 0;
         virtual int serialize(uint8_t** data, uint32_t* dataLen)=0;
         virtual int deserialize(uint8_t* data, uint32_t dataLen)=0;
         

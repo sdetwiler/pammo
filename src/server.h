@@ -27,7 +27,8 @@ class ServerObserver
         virtual void onConnectionClosed(Server* server, Connection* connection)=0;
 };
 
-class Server
+class Server :
+    public ConnectionOwner
 {
     public:
         Server();
@@ -39,7 +40,7 @@ class Server
         void setObserver(ServerObserver* o);
         ServerObserver* getObserver();
 
-        void closeConnection(Connection* c);
+        virtual void closeConnection(Connection* c);
         
     protected:
     private:

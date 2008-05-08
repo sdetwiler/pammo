@@ -1,5 +1,5 @@
 ########################################
-## Server project.
+## PAMMO project.
 ########################################
 
 
@@ -8,8 +8,8 @@
 ########################################
 
 #SERVER_ROOT        ?= /home/steved/prj/server
-SERVER_ROOT        ?= .
-BUILD_DST         ?= $(SERVER_ROOT)/build
+PAMMO_ROOT        ?= .
+BUILD_DST         ?= $(PAMMO_ROOT)/build
 
 
 ########################################
@@ -54,12 +54,12 @@ SERVER_LDFLAGS  += -Wl,-rpath,$(BUILD_DST),-rpath,.
 SERVER_LIBS     += -lpthread
 SERVER_TARGET    = $(BUILD_DST)/server.elf
 
-SERVER_SRCS     += connection.cpp 
-SERVER_SRCS     += command.cpp 
-SERVER_SRCS     += session.cpp 
-SERVER_SRCS     += server.cpp 
-SERVER_SRCS     += gameServer.cpp 
-SERVER_SRCS     += serverMain.cpp
+SERVER_SRCS     += src/connection.cpp 
+SERVER_SRCS     += src/command.cpp 
+SERVER_SRCS     += src/session.cpp 
+SERVER_SRCS     += src/server.cpp 
+SERVER_SRCS     += src/gameServer.cpp 
+SERVER_SRCS     += src/serverMain.cpp
 
 server.elf: 
 	$(CXX) -o$(SERVER_TARGET) $(COMMON_PARAMS) $(SERVER_CXXFLAGS) $(SERVER_INCPATHS) $(SERVER_LIBPATHS) $(SERVER_DEFINES) $(SERVER_LDFLAGS) $(SERVER_LIBS) $(SERVER_SRCS)
@@ -77,20 +77,15 @@ CLIENT_LDFLAGS  += -Wl,-rpath,$(BUILD_DST),-rpath,.
 CLIENT_LIBS     += -lpthread
 CLIENT_TARGET    = $(BUILD_DST)/client.elf
 
-CLIENT_SRCS     += connection.cpp 
-CLIENT_SRCS     += command.cpp 
-CLIENT_SRCS     += session.cpp 
-CLIENT_SRCS     += client.cpp 
-CLIENT_SRCS     += gameClient.cpp 
-CLIENT_SRCS     += clientMain.cpp
+CLIENT_SRCS     += src/connection.cpp 
+CLIENT_SRCS     += src/command.cpp 
+CLIENT_SRCS     += src/session.cpp 
+CLIENT_SRCS     += src/client.cpp 
+CLIENT_SRCS     += src/gameClient.cpp 
+CLIENT_SRCS     += src/clientMain.cpp
 
 client.elf: 
 	$(CXX) -o$(CLIENT_TARGET) $(COMMON_PARAMS) $(CLIENT_CXXFLAGS) $(CLIENT_INCPATHS) $(CLIENT_LIBPATHS) $(CLIENT_DEFINES) $(CLIENT_LDFLAGS) $(CLIENT_LIBS) $(CLIENT_SRCS)
-
-
-
-
-#server: server.elf
 
 
 

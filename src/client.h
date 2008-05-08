@@ -27,7 +27,8 @@ class ClientObserver
         virtual void onClientDisconnected(Client* client, Connection* connection)=0;
 };
 
-class Client
+class Client :
+    public ConnectionOwner
 {
     public:
         Client();
@@ -38,7 +39,8 @@ class Client
 
         void setObserver(ClientObserver* o);
         ClientObserver* getObserver();
-
+        virtual void closeConnection(Connection* connection);
+        
     protected:
     private:
 

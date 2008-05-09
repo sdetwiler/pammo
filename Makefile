@@ -7,7 +7,6 @@
 ## Path configuration.
 ########################################
 
-#SERVER_ROOT        ?= /home/steved/prj/server
 PAMMO_ROOT        ?= .
 BUILD_DST         ?= $(PAMMO_ROOT)/build
 

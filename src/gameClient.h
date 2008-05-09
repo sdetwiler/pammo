@@ -12,6 +12,9 @@ class GameClient
 
         int connect(char const* address, short port);
         int disconnect();
+
+        void login();
+        
             
     protected:
 
@@ -24,6 +27,12 @@ class GameClient
         virtual void onSessionClosed(Session* session);
         
     private:
+
+        // Called when server sends a status update command to the
+        // client.
+        void onStatusUpdate(StatusUpdateCommand* cmd);
+        
+        
         Client mClient;
         Session* mSession;
 };

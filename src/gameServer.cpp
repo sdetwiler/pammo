@@ -34,6 +34,16 @@ void GameServer::onConnectionClosed(Server* server, Connection* connection)
 void GameServer::onCommand(Session* session, Command* command)
 {
     printf("GameServer::onCommand\n");
+    switch(command->getId())
+    {
+    case PAMMO_COMMAND_LOGIN:
+        onLogin(session, (LoginCommand*)command);
+        break;
+
+    default:
+        printf("GameServer received unknown command %d\n", command->getId());
+        CommandFactory::deleteCommand(command);
+    }
 }
 
 
@@ -56,3 +66,7 @@ int GameServer::stop()
 }
 
 
+void GameServer::onLogin(Session* session, LoginCommand* cmd)
+{
+    session->send(CommandFactory::newCommand(PAMMO_COMMAND_STATUSUPDATE));
+}

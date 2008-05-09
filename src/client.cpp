@@ -223,15 +223,15 @@ void* Client::threadBootFunc(void* arg)
 
 void Client::threadFunc()
 {
+    printf("Client::threadFunc\n");
+    
     int ret;
     
-
     mConnection = new Connection(this);
-    
+    mConnection->setSocket(mSocket);
     
     if(mObserver)
         mObserver->onClientConnected(this, mConnection);
-
     
     // SCD should use a sane size.
     uint32_t numEvents = 16;
@@ -264,26 +264,30 @@ void Client::threadFunc()
                     delete[] events;
                     return;
                 }
+
+                // If notified, force a write on the connection.  This
+                // is in case the socket was readable or writable but
+                // no more data was available. The notification
+                // arrives when new data is ready to write.
+
+                mConnection->onWritable();
             }
 
             else
             {
                 if(events[i].events & EPOLLERR)
                 {
-                    if(mConnection->getObserver())
-                        mConnection->getObserver()->onError(mConnection);
+                    //mConnection->onError();
                 }
 
                 if(events[i].events & EPOLLIN)
                 {
-                    if(mConnection->getObserver())
-                        mConnection->getObserver()->onReadable(mConnection);
+                    mConnection->onReadable();
                 }
 
                 if(events[i].events & EPOLLOUT)
                 {
-                    if(mConnection->getObserver())
-                        mConnection->getObserver()->onWritable(mConnection);
+                    mConnection->onWritable();
                 }
             }
         }
@@ -304,3 +308,4 @@ void Client::closeConnection(Connection* connection)
     delete mConnection;
     mConnection = 0;
 }
+

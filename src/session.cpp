@@ -11,6 +11,12 @@ Session::Session(Connection* connection)
     mInState = Header;
     mInOffset = 0;
     mInCommand = 0;
+
+    mOutState = Header;
+    mOutOffset = 0;
+    mOutPayload = NULL;
+    mOutPayloadLen = 0;
+    mOutCommand = NULL;
     
     mConnection = connection;
     mConnection->setObserver(this);
@@ -30,6 +36,12 @@ void Session::setObserver(SessionObserver* o)
 SessionObserver* Session::getObserver()
 {
     return mObserver;
+}
+
+void Session::send(Command* command)
+{
+    mCommands.push(command);
+    //    mConnection->notifyOwner();
 }
 
 void Session::onReadable(Connection* connection)
@@ -119,14 +131,22 @@ void Session::read()
             return;
         }
         
-        ret = mInCommand->deserialize(mInPayload, mInPayloadLen);
-        if(ret < 0)
-        {
-            printf("Command failed to deserialize payload.\n");
-            mConnection->close();
-            return;
-        }
     }
+
+    ret = mInCommand->deserialize(mInPayload, mInPayloadLen);
+    if(ret < 0)
+    {
+        printf("Command failed to deserialize payload.\n");
+        delete[] mInPayload;
+        
+        mConnection->close();
+        return;
+    }
+
+    delete[] mInPayload;
+    
+    mInState = Header;
+    mInOffset = 0;
 
     if(mObserver)
     {
@@ -142,6 +162,102 @@ void Session::read()
 
 void Session::write()
 {
+    printf("Session::write\n");
+    
+    int ret;
+    
     if(mConnection->isWritable() == false)
+    {
+        printf("Session::write not writable\n");
         return;
+    }
+    
+
+    if(!mOutCommand)
+    {
+        printf("Session::write nothing to write.\n");
+        
+        if(mCommands.size() == 0)
+        {
+            return;
+        }
+        printf("Session::write starting send of new command\n");
+        
+        mOutCommand = mCommands.front();
+        mCommands.pop();
+
+        mOutState = Header;
+        mOutOffset = 0;
+        mOutPayloadLen = mOutCommand->getPayloadLength();
+        mOutPayload = new uint8_t[mOutPayloadLen];
+        ret = mOutCommand->serialize(mOutPayload, mOutPayloadLen);
+        if(ret < 0)
+        {
+            printf("Command failed to serialize: %d\n", ret);
+            CommandFactory::deleteCommand(mOutCommand);
+            delete[] mOutPayload;
+            mOutCommand = 0;
+            return;
+        }
+
+        ret = ProtocolHeader::serialize(mOutHeader, sizeof(mOutHeader),
+                                  mOutCommand->getId(), mOutPayloadLen);
+        delete[] mOutPayload;
+        
+        if(ret < 0)
+        {
+            printf("Failed to serialize protocol header: %d\n", ret);
+            CommandFactory::deleteCommand(mOutCommand);
+            mOutCommand = 0;
+            return;
+        }
+    }
+
+    uint32_t toWrite;
+    uint32_t numWritten;
+    
+    if(mOutState == Header)
+    {
+        toWrite = SIZEOF_PROTOCOL_HEADER - mOutOffset;
+
+        ret = mConnection->write(mOutHeader + mOutOffset, toWrite, numWritten);
+        if(ret < 0)
+        {
+            return;
+        }
+
+        mOutOffset+= numWritten;
+        if(toWrite != numWritten)
+        {
+            return;
+        }
+
+        mOutOffset = 0;
+        mOutState = Payload;
+    }
+    while(mOutState == Payload)
+    {
+        toWrite = mOutPayloadLen - mOutOffset;
+        ret = mConnection->write(mOutPayload+mOutOffset, toWrite, numWritten);
+        if(ret < 0)
+        {
+            return;
+        }
+
+        mOutOffset+= numWritten;
+        if(toWrite != numWritten)
+        {
+            return;
+        }
+
+        mOutState = Header;
+    }
+    
+    if(mOutCommand->getObserver())
+    {
+        mOutCommand->getObserver()->onSent(mOutCommand);
+    }
+
+    CommandFactory::deleteCommand(mOutCommand);
+    mOutCommand = NULL;
 }

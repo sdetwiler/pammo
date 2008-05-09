@@ -26,6 +26,10 @@ class GameServer
     private:
         Server mServer;
 
+        // Called when LoginCommand is received.
+        void onLogin(Session* session, LoginCommand* cmd);
+        
+
         
         typedef std::map< Connection*, Session* > ConnectionSessionMap;
         ConnectionSessionMap mSessions;

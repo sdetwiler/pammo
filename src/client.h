@@ -40,6 +40,7 @@ class Client :
         void setObserver(ClientObserver* o);
         ClientObserver* getObserver();
         virtual void closeConnection(Connection* connection);
+        virtual void notify();
         
     protected:
     private:
@@ -50,8 +51,6 @@ class Client :
         static void* threadBootFunc(void* arg);
         void threadFunc();
 
-        void notify();
-        
         ClientObserver* mObserver;
 
         Connection* mConnection;

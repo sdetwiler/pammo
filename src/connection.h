@@ -21,6 +21,7 @@ class ConnectionOwner
         {}
 
         virtual void closeConnection(Connection* connection)=0;
+        virtual void notify()=0;
 };
 
 class ConnectionObserver
@@ -60,6 +61,9 @@ class Connection
         // Calling this function will destroy this object.
         void close();
 
+        // Tell connection to notify it's owner.
+        void notifyOwner();
+        
         void setSocket(int socket);
         int getSocket();
 

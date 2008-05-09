@@ -41,6 +41,7 @@ class Server :
         ServerObserver* getObserver();
 
         virtual void closeConnection(Connection* c);
+        virtual void notify();
         
     protected:
     private:
@@ -53,8 +54,6 @@ class Server :
 
         int onNewConnection();
 
-        void notify();
-        
         ServerObserver* mObserver;
         
         int mSocket;

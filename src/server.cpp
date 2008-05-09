@@ -303,8 +303,7 @@ void Server::threadFunc()
                     it = mConnections.find(s);
                     if(it != mConnections.end())
                     {
-                        if(it->second->getObserver())
-                            it->second->getObserver()->onError(it->second);
+                        //it->second->onError();
                     }
                 }
 

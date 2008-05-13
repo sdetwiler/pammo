@@ -1,0 +1,29 @@
+#include "serverFactory.h"
+#include "mysql/server.h"
+///////////////////////////////////////////////////////////////
+namespace ps
+{
+    namespace ds
+    {
+        namespace db
+        {
+    
+///////////////////////////////////////////////////////////////
+
+Server* ServerFactory::create(int id)
+{
+    switch(id)
+    {
+    case PS_DS_DB_SERVER_MYSQL:
+        return new mysql::Server;
+
+    default:
+        return NULL;
+    }
+}
+///////////////////////////////////////////////////////////////
+        } 
+    
+    }
+}
+///////////////////////////////////////////////////////////////

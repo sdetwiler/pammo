@@ -1,0 +1,6 @@
+#ifndef PS_DS_DB_SERVERTYPES_H
+#define PS_DS_DB_SERVERTYPES_H
+
+#define PS_DS_DB_SERVER_MYSQL 1
+
+#endif

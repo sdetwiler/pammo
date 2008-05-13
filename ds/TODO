@@ -1,0 +1,61 @@
+Working on adding PHP support. Need to export objects that expose
+methods to call into ds.
+
+Basically the PHP API is a pile of shit. DO NOT CODE WITH MACROS.  The
+code is unreadable, undebuggable and plain stupid. The examples online
+use the same style, so it's all impossible to follow. The DS extension
+is a mess at the moment, but it's time to stop for now. Keep unwinding
+the borrowed macros and work from there.
+
+
+
+
+
+
+
+
+Running the test segfaults on cleanup of XmlElement(?)
+	Fixed	
+Need to complete ObjectTemplateIndex
+	Fixed
+
+
+Implemented better XmlElement parser that parses children elements and
+all that.
+	Fixed
+
+Build MySQL Interface
+	Server done
+	Database done
+	Next is Table
+		Built as Query class done
+
+Should ConnectionPool retain a secondary index of Servers for garbage
+collection?
+
+Build schema for DB storage
+
+	id		// Unique id for the object.
+	oid		// Id for the type of objec.
+	createdTime	// When the object was created.
+	modifiedTime	// When the object was last modified.
+	
+
+
+
+
+Hook to php
+
+
+
+
+Media serialization
+	Direct to disk for now, path stored in table
+
+
+
+
+
+Server
+	Database
+		Table

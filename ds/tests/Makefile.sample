@@ -1,0 +1,23 @@
+CC=g++-3.3
+DSROOT=~/prj/ds
+
+OUTNAME=$(DSROOT)/tests/sample
+
+MYSQLCFG=/usr/local/mysql/bin/mysql_config
+
+INCDIRS+= .
+LIBDIRS+= $(DSROOT)
+
+SRCS+= sample.cpp
+FLAGS+= `$(MYSQLCFG) --cflags`
+
+FLAGS+= -ggdb 
+
+LIBS+=  -lds
+LIBS+= -L/usr/local/mysql/lib -lmysqlclient -lcrypt -lnsl -lm -lc -lnss_files -lnss_dns -lresolv
+LIBS+= -lz -rpath.
+all:
+	$(CC) $(FLAGS) -I $(INCDIRS) -L $(LIBDIRS) $(LIBS) $(SRCS) -o $(OUTNAME).elf
+
+clean:
+	rm *.elf

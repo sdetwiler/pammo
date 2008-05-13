@@ -11,6 +11,8 @@ Session::Session(Connection* connection)
     mInState = Header;
     mInOffset = 0;
     mInCommand = 0;
+    mInPayload = NULL;
+    mInPayloadLen = 0;
 
     mOutState = Header;
     mOutOffset = 0;
@@ -25,7 +27,11 @@ Session::Session(Connection* connection)
 
 Session::~Session()
 {
-    //
+    if(mObserver)
+        mObserver->onSessionClosed(this);
+    
+    if(mConnection)
+        mConnection->setObserver(NULL);
 }
 
 void Session::setObserver(SessionObserver* o)
@@ -46,25 +52,25 @@ void Session::send(Command* command)
 
 void Session::onReadable(Connection* connection)
 {
-    printf("Session::onReadable\n");
+    //    printf("Session::onReadable\n");
     read();
 }
 
 void Session::onWritable(Connection* connection)
 {
-    printf("Session::onWritable\n");
+    //    printf("Session::onWritable\n");
     write();
 }
 
 void Session::onError(Connection* connection)
 {
-    printf("Session::onError\n");
+    //    printf("Session::onError\n");
     mConnection->close();
 }
 
 void Session::onClosed(Connection* connection)
 {
-    printf("Session::onClosed\n");
+    //    printf("Session::onClosed\n");
     mConnection = NULL;
 }
 
@@ -77,7 +83,6 @@ void Session::read()
         printf("Session::read called but not readable\n");
         return;
     }
-    
 
     uint32_t toRead;
     uint32_t numRead;
@@ -97,12 +102,16 @@ void Session::read()
         {
             return;
         }
+
         
         mInState = Payload;
         mInProtocolVersion = ntohs(*((uint16_t*)(mInHeader+PROTOCOL_VERSION)));
         mInCommandId = ntohl(*((uint32_t*)(mInHeader+PROTOCOL_COMMANDID)));
         mInPayloadLen = ntohl(*((uint32_t*)(mInHeader+PROTOCOL_PAYLOADLEN)));
         mInOffset = 0;
+
+//        printf("Session::read have header:\n\tprotocol: %d\n\tcommandId: %u\n\tpayloadLen: %u\n",
+//               mInProtocolVersion, mInCommandId, mInPayloadLen);
         
         mInCommand = CommandFactory::newCommand(mInCommandId);
         if(!mInCommand)
@@ -112,25 +121,33 @@ void Session::read()
             return;
         }
 
-        mInPayload = new uint8_t[mInPayloadLen];
+        if(mInPayloadLen)
+            mInPayload = new uint8_t[mInPayloadLen];
         
     }
 
     while(mInState == Payload)
     {
+        //        printf("Session::read state is payload\n");
+        
         toRead = mInPayloadLen - mInOffset;
-        ret = mConnection->read(mInPayload + mInOffset, toRead, numRead);
-        if(ret < 0)
+        if(toRead)
         {
-            return;
-        }
+            
+            ret = mConnection->read(mInPayload + mInOffset, toRead, numRead);
+            if(ret < 0)
+            {
+                return;
+            }
         
-        mInOffset+= numRead;
-        if(toRead != numRead)
-        {
-            return;
+            mInOffset+= numRead;
+            if(toRead != numRead)
+            {
+                return;
+            }
         }
-        
+
+        mInState = Header;
     }
 
     ret = mInCommand->deserialize(mInPayload, mInPayloadLen);
@@ -143,9 +160,13 @@ void Session::read()
         return;
     }
 
-    delete[] mInPayload;
+    if(mInPayload)
+    {
+        delete[] mInPayload;
+        mInPayload = 0;
+    }
     
-    mInState = Header;
+    
     mInOffset = 0;
 
     if(mObserver)
@@ -162,7 +183,7 @@ void Session::read()
 
 void Session::write()
 {
-    printf("Session::write\n");
+    //    printf("Session::write\n");
     
     int ret;
     
@@ -175,13 +196,13 @@ void Session::write()
 
     if(!mOutCommand)
     {
-        printf("Session::write nothing to write.\n");
+        //        printf("Session::write nothing to write.\n");
         
         if(mCommands.size() == 0)
         {
             return;
         }
-        printf("Session::write starting send of new command\n");
+        //        printf("Session::write starting send of new command\n");
         
         mOutCommand = mCommands.front();
         mCommands.pop();

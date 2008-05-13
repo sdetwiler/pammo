@@ -140,6 +140,8 @@ int Server::start(char const* address, short port)
 
 int Server::stop()
 {
+    printf("Server::stop\n");
+    
     if(mRunning)
     {
         mRunning = false;
@@ -149,6 +151,19 @@ int Server::stop()
         pthread_join(mThread, NULL);
     }
     
+    
+    for(IntConnectionMap::iterator i=mConnections.begin();
+        i!=mConnections.end();
+        i=mConnections.begin()) // Because calling close removes the connection from the map, reset.
+    {
+        printf("%d connections to cleanup\n", mConnections.size());
+        i->second->close();
+        printf("post close\n");
+        
+    }
+
+    mConnections.clear();
+
     if(mSocket)
         close(mSocket);
 
@@ -158,11 +173,6 @@ int Server::stop()
     if(mPoller)
         close(mPoller);
 
-    for(IntConnectionMap::iterator i=mConnections.begin(); i!=mConnections.end(); ++i)
-    {
-        i->second->close();
-    }
-    
     mSocket = 0;
     mNotifySocket = 0;
     mPoller = 0;
@@ -337,7 +347,7 @@ void Server::threadFunc()
 
 int Server::onNewConnection()
 {
-    printf("onNewConnection\n");
+    //    printf("onNewConnection\n");
     
     // While mSocket is readable, accept any pending connections.
     while(true)
@@ -380,11 +390,13 @@ int Server::onNewConnection()
 
 void Server::closeConnection(Connection* c)
 {
+    printf("Server::closeConnection %d\n", c->getSocket());
+    
     removeSocket(c->getSocket());
     mConnections.erase(c->getSocket());
     close(c->getSocket());
     
-    printf("closed: %d\n", c->getSocket());
+    printf("closed: %d. %d connections still open\n", c->getSocket(), mConnections.size());
 
     // Notify connection observer.
     if(c->getObserver())

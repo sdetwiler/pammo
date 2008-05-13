@@ -32,7 +32,7 @@ ConnectionObserver* Connection::getObserver()
 
 void Connection::onReadable()
 {
-    printf("Connection::onReadable\n");
+    //    printf("Connection::onReadable\n");
     
     mReadable = true;
     
@@ -42,7 +42,7 @@ void Connection::onReadable()
 
 void Connection::onWritable()
 {
-    printf("Connection::onWritable\n");
+    //    printf("Connection::onWritable\n");
     mWritable = true;
 
     if(mObserver)
@@ -51,7 +51,7 @@ void Connection::onWritable()
 
 int Connection::read(uint8_t* buf, uint32_t bufLen, uint32_t& numRead)
 {
-    printf("Connection::read\n");
+    //    printf("Connection::read on %d\n", mSocket);
     
     numRead = 0;
     
@@ -73,9 +73,9 @@ int Connection::read(uint8_t* buf, uint32_t bufLen, uint32_t& numRead)
     else if(read < 0)
     {
         int e = errno;
-        printf("recv failed: %s (%d)", strerror(e), e);
+        //printf("recv failed: %s (%d)\n", strerror(e), e);
         mReadable = false;
-        return e;
+        return -1;
     }
 
     // No longer readable.
@@ -90,7 +90,7 @@ int Connection::read(uint8_t* buf, uint32_t bufLen, uint32_t& numRead)
 
 int Connection::write(uint8_t* buf, uint32_t bufLen, uint32_t& numWritten)
 {
-    printf("Connection::write\n");
+    //    printf("Connection::write on %d\n", mSocket);
     numWritten = 0;
     
     if(!mWritable)
@@ -100,9 +100,9 @@ int Connection::write(uint8_t* buf, uint32_t bufLen, uint32_t& numWritten)
     if(sent < 0)
     {
         int e = errno;
-        printf("send failed: %s (%d)", strerror(e), e);
+        //        printf("send failed: %s (%d)", strerror(e), e);
         mWritable = false;
-        return e;
+        return -1;
     }
     if(sent < bufLen)
     {

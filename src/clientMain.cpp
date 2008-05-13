@@ -33,7 +33,7 @@ int main(int argc, char** argv)
 
     printf("Connected.\n");
     
-    while(gRunning)
+    while(client.isConnected())
     {
         sleep(1);
     }

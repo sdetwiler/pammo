@@ -17,6 +17,9 @@ Client::Client()
     mObserver = 0;
     mSocket = 0;
     mNotifySocket = 0;
+    mThread = 0;
+    mRunning = false;
+    
 }
 
 
@@ -129,8 +132,10 @@ int Client::disconnect()
         mRunning = false;
 
         notify();
-        
-        pthread_join(mThread, NULL);
+
+        if(mThread)
+            pthread_join(mThread, NULL);
+        mThread = 0;
     }
     
     if(mSocket)
@@ -224,7 +229,7 @@ void* Client::threadBootFunc(void* arg)
 void Client::threadFunc()
 {
     printf("Client::threadFunc\n");
-    
+
     int ret;
     
     mConnection = new Connection(this);
@@ -287,7 +292,8 @@ void Client::threadFunc()
 
                 if(events[i].events & EPOLLOUT)
                 {
-                    mConnection->onWritable();
+                    if(mConnection) // Connection could have closed from inside onReadable.
+                        mConnection->onWritable();
                 }
             }
         }
@@ -299,6 +305,8 @@ void Client::threadFunc()
 
 void Client::closeConnection(Connection* connection)
 {
+    printf("Client::closeConnection\n");
+    
     if(mObserver)
     {
         mObserver->onClientDisconnected(this, mConnection);

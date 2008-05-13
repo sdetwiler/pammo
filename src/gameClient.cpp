@@ -2,6 +2,7 @@
 
 GameClient::GameClient()
 {
+    mSession = NULL;
 }
 
 GameClient::~GameClient()
@@ -19,7 +20,8 @@ void GameClient::onClientConnected(Client* client, Connection* connection)
 
 void GameClient::onClientDisconnected(Client* client, Connection* connection)
 {
-    delete mSession;
+    if(mSession)
+        delete mSession;
     mSession = NULL;
 }
 
@@ -42,14 +44,23 @@ void GameClient::onCommand(Session* session, Command* command)
 void GameClient::onSessionClosed(Session* sesson)
 {
     printf("GameClient::onSessionClosed\n");
+    mConnected = false;
 }
-
-
 
 int GameClient::connect(char const* address, short port)
 {
     mClient.setObserver(this);
-    return mClient.connect(address, port);
+    int ret = mClient.connect(address, port);
+    if(ret < 0)
+        return ret;
+    
+    mConnected = true;
+    return ret;
+}
+
+bool GameClient::isConnected()
+{
+    return mConnected;
 }
 
 int GameClient::disconnect()

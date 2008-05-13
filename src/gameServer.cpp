@@ -68,5 +68,6 @@ int GameServer::stop()
 
 void GameServer::onLogin(Session* session, LoginCommand* cmd)
 {
+    printf("GameServer::onLogin\n");
     session->send(CommandFactory::newCommand(PAMMO_COMMAND_STATUSUPDATE));
 }

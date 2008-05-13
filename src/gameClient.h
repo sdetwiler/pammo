@@ -14,6 +14,8 @@ class GameClient
         int disconnect();
 
         void login();
+
+        bool isConnected();
         
             
     protected:
@@ -35,4 +37,5 @@ class GameClient
         
         Client mClient;
         Session* mSession;
+        bool mConnected;
 };

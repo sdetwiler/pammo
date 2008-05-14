@@ -10,7 +10,9 @@
 #define PS_DS_DB_QUERY_H
 
 #include "../types.h"
+
 #include "../table.h"
+
 //#include "database.h"
 #include <string>
 
@@ -37,8 +39,8 @@ class Query
         void setQuery(char const* n);
         std::string const* getQuery() const;
        
-        void setDatabase(Database* db);
-        Database* getDatabase() const;
+        void setDatabase(db::Database* db);
+        db::Database* getDatabase() const;
 
         virtual Result execute()=0;
         virtual Result saveResults()=0;
@@ -62,7 +64,7 @@ class Query
         
         
     private:
-        Database* mDatabase;
+        db::Database* mDatabase;
         std::string mQuery;
         
 };

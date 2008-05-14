@@ -1,5 +1,5 @@
-#ifndef PS_DS_XMLELEMENT_H
-#define PS_DS_XMLELEMENT_H
+#ifndef __PS_DS_XMLELEMENT_H__
+#define __PS_DS_XMLELEMENT_H__
 
 ///////////////////////////////////////////////////////////////
 // XmlElement.h
@@ -11,11 +11,8 @@
 ///////////////////////////////////////////////////////////////
 
 #include "types.h"
+//#include <vector>
 
-#include <string>
-#include <map>
-#include <vector>
-#include <stack>
 
 ///////////////////////////////////////////////////////////////
 namespace ps
@@ -24,7 +21,7 @@ namespace ps
     {
 ///////////////////////////////////////////////////////////////
 
-typedef std::map<std::string,std::string> stringstringmap_t;
+typedef std::map< std::string, std::string > stringstringmap_t;
 
 class XmlElement
 {
@@ -62,7 +59,7 @@ public:
         
 
 private:
-    typedef std::vector<XmlElement*> XmlElementVec;
+    typedef std::vector< XmlElement* > XmlElementVec;
         
 
     std::string			mName;

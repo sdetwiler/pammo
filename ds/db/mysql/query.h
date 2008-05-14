@@ -9,15 +9,7 @@
 #define PS_DS_DB_MYSQL_QUERY_H
 
 #include "../query.h"
-//#include "database.h"
 
-#include <my_global.h>
-#include <my_sys.h>
-#include <m_string.h>
-#include <mysql.h>
-#include <mysql_embed.h>
-#include <errmsg.h>
-#include <my_getopt.h>
 
 ///////////////////////////////////////////////////////////////
 namespace ps

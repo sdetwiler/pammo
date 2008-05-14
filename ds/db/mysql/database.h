@@ -29,7 +29,6 @@ namespace ps
             namespace mysql
             {
 ///////////////////////////////////////////////////////////////
-            //class Query;
             
 class Database : public db::Database
 {

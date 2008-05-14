@@ -39,7 +39,7 @@ class Database
         virtual Result connect() = 0;
         virtual Result disconnect() = 0;
 
-        virtual Query* newQuery();
+        virtual db::Query* newQuery();
         
     protected:
 

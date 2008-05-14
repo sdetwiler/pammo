@@ -12,10 +12,10 @@ namespace ps
             namespace mysql
             {
 ///////////////////////////////////////////////////////////////
-
+            
 
 Database::Database(mysql::Server const* server)
-    :db::Database(server)
+    : db::Database(server)
 {
 }
 
@@ -35,9 +35,6 @@ Result Database::connect()
     return Error;
 }
 
-
-    
-    
 Result Database::disconnect()
 {
     return OK;
@@ -45,7 +42,7 @@ Result Database::disconnect()
 
 db::Query* Database::newQuery()
 {
-    return new Query(this);
+    return new mysql::Query(this);
 }
 
 ///////////////////////////////////////////////////////////////

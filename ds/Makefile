@@ -1,9 +1,9 @@
 #CC=g++-3.3
-DSROOT=~/prj/ds
+DSROOT=.
 
 OUTNAME=$(DSROOT)/libds
 
-INCDIRS+= /usr/local/mysql/include
+INCDIRS+= /usr/include/mysql
 #INCDIRS+= $(DSROOT)
 #INCDIRS+= $(DSROOT)/database $(DSROOT)/database/mysql
 LIBS+=
@@ -23,8 +23,8 @@ SRCS+= db/query.cpp
 
 
 SRCS+= db/mysql/server.cpp
-SRCS+= db/mysql/database.cpp
 SRCS+= db/mysql/query.cpp
+SRCS+= db/mysql/database.cpp
 
 SRCS+= object.cpp
 SRCS+= objectTemplate.cpp
@@ -40,23 +40,23 @@ SRCS+= log.cpp
 
 
 #MySQL config script
-MYSQLCFG=/usr/local/mysql/bin/mysql_config
+MYSQLCFG=mysql_config
 
 
 #CFLAGS+= -c -fpic
 #CFLAGS+= -Idatabase -I databse/mysql
 # Settings for .so output
 CFLAGS+= `$(MYSQLCFG) --cflags` -shared -ggdb
-LIBS+= -L/usr/local/mysql/lib -lmysqlclient -lcrypt -lnsl -lm -lc 
+LIBS+= -L/usr/lib/mysql -lmysqlclient -lcrypt -lnsl -lm -lc 
 #-lnss_files -lnss_dns -lresolv -lc -lnss_files -lnss_dns -lresolv
 
 
 
 all:
-	$(CC) $(CFLAGS) -I$(INCDIRS)  $(SRCS) $(LIBS) -o $(OUTNAME).so
+	$(CXX) $(CFLAGS) -I$(INCDIRS)  $(SRCS) $(LIBS) -o $(OUTNAME).so
 
 nolink:
-	$(CC) $(CFLAGS) -I$(INCDIRS) $(SRCS) -c
+	$(CXX) $(CFLAGS) -I$(INCDIRS) $(SRCS) -c
 
 clean:
 	rm *.so *.o

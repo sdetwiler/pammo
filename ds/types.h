@@ -1,5 +1,5 @@
-#ifndef PS_TYPES_H
-#define PS_TYPES_H
+#ifndef __PS_TYPES_H__
+#define __PS_TYPES_H__
 
 enum Result
 {
@@ -16,10 +16,13 @@ enum Type
 };
 
 #include <stdint.h>
-//typedef unsigned long uint32_t;
 
 typedef uint32_t Id;
 
-
+// SCD WTF.
+#include <vector>
+#include <string>
+#include <map>
+#include <stack>
 
 #endif

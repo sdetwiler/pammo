@@ -33,9 +33,9 @@ int main(int argc, char** argv)
 
     printf("Started.\n");
     
-    //while(gRunning)
+    while(gRunning)
     {
-        sleep(5);
+        sleep(1);
     }
     
     printf("Stopping server...\n");

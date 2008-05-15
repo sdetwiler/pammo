@@ -1,10 +1,11 @@
 #include "server.h"
 
-#include "session.h"
+#include "serverSession.h"
+#include "serverMapIndex.h"
 
 class GameServer
     : public ServerObserver,
-      public SessionObserver
+      SessionObserver
 {
     public:
         GameServer();
@@ -15,22 +16,21 @@ class GameServer
             
     protected:
 
+        // SessionObserver interfaces.
+        virtual void onCommand(Session* session, Command* command);
+        virtual void onSessionClosed(Session* session);
+
         // ServerObserver interfaces.
         virtual void onNewConnection(Server* server, Connection* connection);
         virtual void onConnectionClosed(Server* server, Connection* connection);
 
-        // SessionObserver interfaces.
-        virtual void onCommand(Session* session, Command* command);
-        virtual void onSessionClosed(Session* session);
-        
     private:
         Server mServer;
+        ServerMapIndex mMapIndex;
 
         // Called when LoginCommand is received.
-        void onLogin(Session* session, LoginCommand* cmd);
+        void onLogin(ServerSession* session, LoginCommand* cmd);
         
-
-        
-        typedef std::map< Connection*, Session* > ConnectionSessionMap;
+        typedef std::map< Connection*, ServerSession* > ConnectionSessionMap;
         ConnectionSessionMap mSessions;
 };

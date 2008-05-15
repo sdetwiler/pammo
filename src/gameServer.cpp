@@ -1,5 +1,5 @@
 #include "gameServer.h"
-
+#include "serverMap.h"
 
 GameServer::GameServer()
 {
@@ -14,7 +14,7 @@ void GameServer::onNewConnection(Server* server, Connection* connection)
 {
     printf("GameServer::onNewConnection\n");
     
-    Session* session = new Session(connection);
+    ServerSession* session = new ServerSession(connection);
     session->setObserver(this);
     mSessions[connection] = session;
 }
@@ -37,7 +37,7 @@ void GameServer::onCommand(Session* session, Command* command)
     switch(command->getId())
     {
     case PAMMO_COMMAND_LOGIN:
-        onLogin(session, (LoginCommand*)command);
+        onLogin((ServerSession*)session, (LoginCommand*)command);
         break;
 
     default:
@@ -56,18 +56,45 @@ void GameServer::onSessionClosed(Session* sesson)
 
 int GameServer::start(char const* address, short port)
 {
+    int ret;
+    
     mServer.setObserver(this);
+
+    ret = mMapIndex.start("mappack.xml");
+    if(ret < 0)
+        return ret;
+
     return mServer.start(address, port);
 }
 
 int GameServer::stop()
 {
-    return mServer.stop();
+    int ret;
+
+    ret = mServer.stop();
+
+    ret = mMapIndex.stop();
+
+    return ret;
 }
 
 
-void GameServer::onLogin(Session* session, LoginCommand* cmd)
+void GameServer::onLogin(ServerSession* session, LoginCommand* cmd)
 {
     printf("GameServer::onLogin\n");
-    session->send(CommandFactory::newCommand(PAMMO_COMMAND_STATUSUPDATE));
+
+    // Find map that is being logged into.
+    ServerMap* map = mMapIndex.getServerMap(cmd->getMapInstanceId());
+    if(!map)
+    {
+        CommandFactory::deleteCommand(cmd);
+
+        ErrorCommand* errorCmd = (ErrorCommand*)CommandFactory::newCommand(PAMMO_COMMAND_ERROR);
+        errorCmd->setError(PAMMO_ERROR_UNKNOWNMAP);
+        session->send(errorCmd);
+        return;
+    }
+
+    // Login into the map.
+    map->onLogin(session, cmd);
 }

@@ -1,4 +1,4 @@
-#CC=g++-3.3
+#CXX=g++-3.3
 DSROOT=.
 
 OUTNAME=$(DSROOT)/libds

@@ -1,7 +1,7 @@
 #ifndef COMMAND_H
 #define COMMAND_H
 
-#include <stdint.h>
+#include "types.h"
 
 class Command;
 
@@ -41,6 +41,7 @@ class Command
 
 // Sent from client to server to make a login attempt.
 #define PAMMO_COMMAND_LOGIN     1
+
 class LoginCommand :
     public Command
 {
@@ -55,11 +56,17 @@ class LoginCommand :
 
         virtual uint32_t getPayloadLength()
         {
-            return 0;
+            return sizeof(mMapInstanceId);
         }
         
         virtual int serialize(uint8_t* data, uint32_t dataLen);
         virtual int deserialize(uint8_t* data, uint32_t dataLen);
+
+        MapInstanceId const& getMapInstanceId() const;
+        void setMapInstanceId(MapInstanceId const& id);
+        
+    private:
+        MapInstanceId mMapInstanceId;
 };
 
 // Sent from server to client to update the client's status.
@@ -88,6 +95,35 @@ class StatusUpdateCommand :
         virtual int serialize(uint8_t* data, uint32_t dataLen);
         virtual int deserialize(uint8_t* data, uint32_t dataLen);
 };
+
+#define PAMMO_COMMAND_ERROR  3
+class ErrorCommand :
+    public Command
+{
+    public:
+        ErrorCommand();
+        virtual ~ErrorCommand();
+
+        virtual uint32_t getId()
+        {
+            return PAMMO_COMMAND_ERROR;
+        }
+
+        virtual uint32_t getPayloadLength()
+        {
+            return sizeof(int32_t);
+        }
+
+        virtual int serialize(uint8_t* data, uint32_t dataLen);
+        virtual int deserialize(uint8_t* data, uint32_t dataLen);
+
+        void setError(int32_t error);
+        int32_t getError();
+
+    private:
+        int32_t mError;
+};
+
 
 
 class CommandFactory

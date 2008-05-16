@@ -12,9 +12,6 @@ Connection::Connection(ConnectionOwner* owner)
     mSocket = 0;
     mReadable = false;
     mWritable = false;
-
-    printf("::Connection\n");
-    
 }
 
 Connection::~Connection()
@@ -22,8 +19,6 @@ Connection::~Connection()
     if(mSocket)
         ::close(mSocket);
 
-    printf("~Connection\n");
-    
 }
 
 void Connection::setObserver(ConnectionObserver* o)

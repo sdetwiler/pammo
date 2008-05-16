@@ -1,4 +1,5 @@
 #include "types.h"
+#include <stdio.h>
 
 void hexdump(char const* str, void* buf, uint32_t bufLen)
 {

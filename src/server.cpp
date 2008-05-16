@@ -358,7 +358,8 @@ int Server::onNewConnection()
         int newSock = accept(mSocket, (struct sockaddr*)&addr, &addrLen);
         if(newSock < 0)
         {
-            closeConnection(conn);
+            //   closeConnection(conn);
+            delete conn;
 
             int e = errno;
             switch(e)

@@ -27,13 +27,16 @@ void GameServer::onConnectionClosed(Server* server, Connection* connection)
     if(i == mSessions.end())
         return;
 
+    // SCD: In a future version, this session should be marked as
+    // disconnected but left active for some time duration in case a
+    // user only momentarially lost connectivity.
     delete i->second;
     mSessions.erase(i);
 }
 
 void GameServer::onCommand(Session* session, Command* command)
 {
-    printf("GameServer::onCommand\n");
+    //    printf("GameServer::onCommand\n");
     switch(command->getId())
     {
     case PAMMO_COMMAND_LOGIN:
@@ -56,8 +59,6 @@ void GameServer::onSessionClosed(Session* session)
         ss->getServerMap()->onSessionClosed(ss);
     }
 }
-
-
 
 int GameServer::start(char const* address, short port)
 {

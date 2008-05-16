@@ -2,7 +2,6 @@
 #define TYPES_H
 
 #include <stdint.h>
-#include <stdio.h>
 
 #define PAMMO_OK                        0
 #define PAMMO_ERROR_UNKNOWNMAP         -1

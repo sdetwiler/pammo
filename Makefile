@@ -2,7 +2,6 @@
 ## PAMMO project.
 ########################################
 
-
 ########################################
 ## Path configuration.
 ########################################
@@ -15,15 +14,13 @@ BUILD_DST         ?= $(PAMMO_ROOT)/build
 ## Base make rules.
 ########################################
 
-## SCD: need conditional test for existance of path.
-#common:
-#	 mkdir $(BUILD_DST)
+all : $(BUILD_DST) server.elf client.elf
 
-all:	server.elf client.elf
-
-clean:
+clean :
 	rm  $(BUILD_DST)/*.o $(BUILD_DST)/*.elf $(BUILD_DST)/*.so
 
+$(BUILD_DST) : 
+	mkdir -p $(BUILD_DST)
 
 
 ########################################
@@ -68,7 +65,7 @@ SERVER_SRCS     += src/types.cpp
 
 SERVER_SRCS     += src/serverMain.cpp
 
-server.elf: 
+server.elf:
 	$(CXX) -o$(SERVER_TARGET) $(COMMON_PARAMS) $(SERVER_CXXFLAGS) $(SERVER_INCPATHS) $(SERVER_LIBPATHS) $(SERVER_DEFINES) $(SERVER_LDFLAGS) $(SERVER_LIBS) $(SERVER_SRCS)
 
 

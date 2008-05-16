@@ -14,8 +14,6 @@ void GameClient::onClientConnected(Client* client, Connection* connection)
 {
     mSession = new Session(connection);
     mSession->setObserver(this);
-
-    login();
 }
 
 void GameClient::onClientDisconnected(Client* client, Connection* connection)
@@ -34,6 +32,10 @@ void GameClient::onCommand(Session* session, Command* command)
         onStatusUpdate((StatusUpdateCommand*)command);
         break;
 
+    case PAMMO_COMMAND_ERROR:
+        onError((ErrorCommand*)command);
+        break;
+
     default:
         printf("GameClient received unknown command %d\n", command->getId());
         CommandFactory::deleteCommand(command);
@@ -50,11 +52,14 @@ void GameClient::onSessionClosed(Session* sesson)
 int GameClient::connect(char const* address, short port)
 {
     mClient.setObserver(this);
+    mConnected = true;
     int ret = mClient.connect(address, port);
     if(ret < 0)
+    {
+        mConnected = false;
         return ret;
+    }
     
-    mConnected = true;
     return ret;
 }
 
@@ -69,9 +74,12 @@ int GameClient::disconnect()
 }
 
 
-void GameClient::login()
+void GameClient::login(MapInstanceId const& id)
 {
-    mSession->send(CommandFactory::newCommand(PAMMO_COMMAND_LOGIN));
+    printf("GameClient::login\n");
+    LoginCommand* cmd = (LoginCommand*)CommandFactory::newCommand(PAMMO_COMMAND_LOGIN);
+    cmd->setMapInstanceId(id);
+    mSession->send(cmd);
 }
 
 
@@ -82,4 +90,12 @@ void GameClient::onStatusUpdate(StatusUpdateCommand* cmd)
     // TODO: Deserialize command and set status.
     
     CommandFactory::deleteCommand(cmd);
+}
+
+void GameClient::onError(ErrorCommand* cmd)
+{
+    printf("GameClient::onError: %d\n", cmd->getError());
+    CommandFactory::deleteCommand(cmd);
+
+    disconnect();
 }

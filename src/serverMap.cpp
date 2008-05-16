@@ -18,6 +18,10 @@ MapInstanceId const& ServerMap::getInstanceId() const
     return mInstanceId;
 }
 
+void ServerMap::setInstanceId(MapInstanceId const& id)
+{
+    mInstanceId = id;
+}
 
 int ServerMap::load(char const* filename, uint32_t instanceId)
 {
@@ -31,6 +35,8 @@ int ServerMap::load(char const* filename, uint32_t instanceId)
 
 void ServerMap::onLogin(ServerSession* session, LoginCommand* cmd)
 {
+    printf("ServerMap::onLogin\n");
+    
     SessionPlayerMap::iterator i = mPlayers.find(session);
     if(i!= mPlayers.end())
     {
@@ -55,4 +61,17 @@ void ServerMap::onLogin(ServerSession* session, LoginCommand* cmd)
 
     player->send(CommandFactory::newCommand(PAMMO_COMMAND_STATUSUPDATE));
 }
+
+void ServerMap::onSessionClosed(ServerSession* session)
+{
+    printf("ServerMap::onSessionClosed\n");
+
+    SessionPlayerMap::iterator i = mPlayers.find(session);
+    if(i!=mPlayers.end())
+    {
+        delete i->second;
+        mPlayers.erase(i);
+    }
+}
+
 

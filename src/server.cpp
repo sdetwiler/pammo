@@ -358,6 +358,8 @@ int Server::onNewConnection()
         int newSock = accept(mSocket, (struct sockaddr*)&addr, &addrLen);
         if(newSock < 0)
         {
+            closeConnection(conn);
+
             int e = errno;
             switch(e)
             {
@@ -365,7 +367,6 @@ int Server::onNewConnection()
                 return 0;
 
             default:
-                closeConnection(conn);
                 return e;
             }
         }
@@ -394,9 +395,9 @@ void Server::closeConnection(Connection* c)
     
     removeSocket(c->getSocket());
     mConnections.erase(c->getSocket());
-    close(c->getSocket());
+    //    close(c->getSocket());
     
-    printf("closed: %d. %d connections still open\n", c->getSocket(), mConnections.size());
+    //    printf("closed: %d. %d connections still open\n", c->getSocket(), mConnections.size());
 
     // Notify connection observer.
     if(c->getObserver())

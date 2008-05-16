@@ -47,7 +47,7 @@ SessionObserver* Session::getObserver()
 void Session::send(Command* command)
 {
     mCommands.push(command);
-    //    mConnection->notifyOwner();
+    mConnection->notifyOwner();
 }
 
 void Session::onReadable(Connection* connection)
@@ -223,8 +223,6 @@ void Session::write()
 
         ret = ProtocolHeader::serialize(mOutHeader, sizeof(mOutHeader),
                                   mOutCommand->getId(), mOutPayloadLen);
-        delete[] mOutPayload;
-        
         if(ret < 0)
         {
             printf("Failed to serialize protocol header: %d\n", ret);
@@ -256,7 +254,8 @@ void Session::write()
         mOutOffset = 0;
         mOutState = Payload;
     }
-    while(mOutState == Payload)
+    
+    if(mOutState == Payload)
     {
         toWrite = mOutPayloadLen - mOutOffset;
         ret = mConnection->write(mOutPayload+mOutOffset, toWrite, numWritten);
@@ -271,7 +270,9 @@ void Session::write()
             return;
         }
 
+        // Wrote everything.
         mOutState = Header;
+        delete[] mOutPayload;
     }
     
     if(mOutCommand->getObserver())

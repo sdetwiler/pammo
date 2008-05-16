@@ -47,9 +47,14 @@ void GameServer::onCommand(Session* session, Command* command)
 }
 
 
-void GameServer::onSessionClosed(Session* sesson)
+void GameServer::onSessionClosed(Session* session)
 {
     printf("GameServer::onSessionClosed\n");
+    ServerSession* ss = (ServerSession*)session;
+    if(ss->getServerMap())
+    {
+        ss->getServerMap()->onSessionClosed(ss);
+    }
 }
 
 

@@ -19,10 +19,13 @@ class ServerMap
         
         int load(char const* filename, uint32_t instanceId);
 
+        void setInstanceId(MapInstanceId const& id);
+        
         // Returns map id.
         MapInstanceId const& getInstanceId() const;
 
         void onLogin(ServerSession* session, LoginCommand* cmd);
+        void onSessionClosed(ServerSession* session);
         
     protected:
 

@@ -1,6 +1,9 @@
+#include "types.h"
 #include "command.h"
 #include <stdlib.h>
 #include <arpa/inet.h>
+
+#include <stdio.h>
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -145,6 +148,9 @@ Command* CommandFactory::newCommand(uint32_t id)
     case PAMMO_COMMAND_STATUSUPDATE:
         return new StatusUpdateCommand;
         
+    case PAMMO_COMMAND_ERROR:
+        return new ErrorCommand;
+
     default:
         return NULL;
     }

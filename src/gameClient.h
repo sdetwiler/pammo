@@ -1,3 +1,8 @@
+#ifndef GAMECLIENT_H
+#define GAMECLIENT_H
+
+#include "types.h"
+
 #include "client.h"
 
 #include "session.h"
@@ -13,10 +18,10 @@ class GameClient
         int connect(char const* address, short port);
         int disconnect();
 
-        void login();
+        // Login to a specific map instance.
+        void login(MapInstanceId const& id);
 
         bool isConnected();
-        
             
     protected:
 
@@ -33,9 +38,14 @@ class GameClient
         // Called when server sends a status update command to the
         // client.
         void onStatusUpdate(StatusUpdateCommand* cmd);
-        
+
+        // Called when server sends an error command to the client.
+        void onError(ErrorCommand* cmd);
         
         Client mClient;
         Session* mSession;
         bool mConnected;
 };
+
+
+#endif // GAMECLIENT_H

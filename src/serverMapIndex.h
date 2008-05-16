@@ -13,9 +13,14 @@ class ServerMapIndex
         // Loads all maps defined in mapPackFile.
         int start(char const* filename);
         int stop();
-        uint32_t getServerId();
+        uint32_t getServerId() const;
 
+        void addServerMap(ServerMap* map);
+        
         ServerMap* getServerMap(MapInstanceId const& id);
+
+        uint32_t getMapCount() const;
+        
         
     protected:
 

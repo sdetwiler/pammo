@@ -32,10 +32,20 @@ int main(int argc, char** argv)
     }
 
     printf("Connected.\n");
+
+    MapInstanceId id;
+    id.mServerId = 1;
+    id.mMapId = 1;
+    id.mInstanceId = 1;
     
-    while(client.isConnected())
+    client.login(id);
+    
+    
+    while(client.isConnected() && gRunning)
     {
         sleep(1);
+        printf(".");
+        fflush(stdout);
     }
     
     printf("Disconnecting client...\n");

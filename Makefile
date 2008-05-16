@@ -64,6 +64,7 @@ SERVER_SRCS     += src/serverSession.cpp
 SERVER_SRCS     += src/serverMap.cpp
 SERVER_SRCS     += src/serverMapIndex.cpp
 SERVER_SRCS     += src/player.cpp
+SERVER_SRCS     += src/types.cpp
 
 SERVER_SRCS     += src/serverMain.cpp
 
@@ -89,6 +90,7 @@ CLIENT_SRCS     += src/session.cpp
 CLIENT_SRCS     += src/client.cpp
 CLIENT_SRCS     += src/gameClient.cpp
 CLIENT_SRCS     += src/clientMain.cpp
+CLIENT_SRCS     += src/types.cpp
 
 client.elf: 
 	$(CXX) -o$(CLIENT_TARGET) $(COMMON_PARAMS) $(CLIENT_CXXFLAGS) $(CLIENT_INCPATHS) $(CLIENT_LIBPATHS) $(CLIENT_DEFINES) $(CLIENT_LDFLAGS) $(CLIENT_LIBS) $(CLIENT_SRCS)

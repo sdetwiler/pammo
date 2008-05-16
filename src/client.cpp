@@ -19,13 +19,14 @@ Client::Client()
     mNotifySocket = 0;
     mThread = 0;
     mRunning = false;
-    
+    mConnection = NULL;
 }
 
 
 Client::~Client()
 {
-
+    if(mConnection)
+        delete mConnection;
 }
 
 

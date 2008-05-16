@@ -2,6 +2,7 @@
 #define TYPES_H
 
 #include <stdint.h>
+#include <stdio.h>
 
 #define PAMMO_OK                        0
 #define PAMMO_ERROR_UNKNOWNMAP         -1
@@ -49,6 +50,11 @@ class MapInstanceId
             return false;
         }
 };
+
+
+
+void hexdump(char const* str, void* buf, uint32_t bufLen);
+
 
 
 #endif // TYPES_H

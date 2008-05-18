@@ -44,7 +44,8 @@ class MapEditor(wx.Panel):
         tileSize = MaterialLibrary.getMaterialSize()
         sizeX, sizeY = self.map.getProperties().getSize()
         realX, realY = self.display.CalcUnscrolledPosition(event.GetX(), event.GetY())
-        tileX, tileY = realX / tileSize, realY / tileSize
+        scale = self.display.getDrawScale()
+        tileX, tileY = int(realX / tileSize / scale), int(realY / tileSize / scale)
         if tileX < 0 or tileX > sizeX-1 or tileY < 0 or tileY > sizeY-1: return
         if self.map.getMaterialTile(tileX, tileY) == self.tool.getName(): return
 

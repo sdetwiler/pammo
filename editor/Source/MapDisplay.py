@@ -58,7 +58,7 @@ class MapDisplay(wx.ScrolledWindow):
             for x in range(sizeX):
                 materialTile = MaterialLibrary.getMaterial(self.map.getMaterialTile(x, y))
                 if not materialTile: continue
-                dc.DrawBitmap(materialTile.getBitmap(), x*tileSize - .0001, y*tileSize - .0001, True)
+                dc.DrawBitmap(materialTile.getBitmap(), x*tileSize, y*tileSize, True)
 
         if self.drawGrid:
             dc.SetPen(wx.Pen('BLACK', 3))

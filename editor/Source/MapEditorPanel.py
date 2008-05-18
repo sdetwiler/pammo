@@ -7,6 +7,7 @@ import MapEditor
 import MaterialBrowser
 import MapProperties
 import MapPropertiesDialog
+import MapPreviewDialog
 
 class MapEditorPanel(wx.Panel):
     def __init__(self, parent, id):
@@ -28,12 +29,14 @@ class MapEditorPanel(wx.Panel):
         self.saveMenu = 104
         self.deleteMenu = 105
         self.propertiesMenu = 106
+        self.previewMenu = 107
         self.Bind(wx.EVT_MENU, self.onNewMenu, id=self.newMenu)
         self.Bind(wx.EVT_MENU, self.onOpenMenu, id=self.openMenu)
         self.Bind(wx.EVT_MENU, self.onCloseMenu, id=self.closeMenu)
         self.Bind(wx.EVT_MENU, self.onSaveMenu, id=self.saveMenu)
         self.Bind(wx.EVT_MENU, self.onDeleteMenu, id=self.deleteMenu)
         self.Bind(wx.EVT_MENU, self.onPropertiesMenu, id=self.propertiesMenu)
+        self.Bind(wx.EVT_MENU, self.onPreviewMenu, id=self.previewMenu)
         fileMenu = wx.Menu()
         fileMenu.Append(self.newMenu, "&New Map...\tCtrl+N", "")
         fileMenu.Append(self.openMenu, "&Open Map...\tCtrl+O", "")
@@ -44,6 +47,7 @@ class MapEditorPanel(wx.Panel):
         fileMenu.Append(self.deleteMenu, "&Delete Map", "")
         fileMenu.AppendSeparator()
         fileMenu.Append(self.propertiesMenu, "&Map Properties...\tCtrl+P", "")
+        fileMenu.Append(self.previewMenu, "&iPhone View...\tCtrl+I", "")
         fileMenu.AppendSeparator()
         fileMenu.Append(wx.ID_EXIT, "&Quit\tCtrl+Q", "")
         self.menuBar = wx.MenuBar()
@@ -115,6 +119,7 @@ class MapEditorPanel(wx.Panel):
             if not self.askSaveMap(editor.getMap(), "Save changes before closing?"): return
         self.mapNotebook.RemovePage(index)
         editor.Destroy()
+        self.onMapNotebookPageChanged(None)
 
     def onSaveMenu(self, event):
         editor = self.mapNotebook.GetPage(self.mapNotebook.GetSelection())
@@ -127,6 +132,7 @@ class MapEditorPanel(wx.Panel):
         os.remove(os.getcwd() + '/Maps/%s.map' % editor.getMap().getProperties().getName())
         self.mapNotebook.RemovePage(index)
         editor.Destroy()
+        self.onMapNotebookPageChanged(None)
 
     def onPropertiesMenu(self, event):
         editor = self.mapNotebook.GetPage(self.mapNotebook.GetSelection())
@@ -144,11 +150,18 @@ class MapEditorPanel(wx.Panel):
 
             editor.getMap().setProperties(properties)
 
+    def onPreviewMenu(self, event):
+        editor = self.mapNotebook.GetPage(self.mapNotebook.GetSelection())
+        preview = MapPreviewDialog.MapPreviewDialog(self, -1, editor.getMap())
+        preview.ShowModal()
+        preview.Destroy()
+
     def onMapNotebookPageChanged(self, event):
         self.updateMenuState()
-        editor = self.mapNotebook.GetPage(self.mapNotebook.GetSelection())
-        editor.onToolChanged(self.browser.getSelectedMaterial())
-        event.Skip()
+        index = self.mapNotebook.GetSelection()
+        if index != -1:
+            editor = self.mapNotebook.GetPage(index)
+            editor.onToolChanged(self.browser.getSelectedMaterial())
 
     def onMaterialChanged(self, browser):
         if self.mapNotebook.GetPageCount() == 0: return
@@ -228,16 +241,19 @@ class MapEditorPanel(wx.Panel):
         closeMenu = self.menuBar.FindItemById(self.closeMenu)
         deleteMenu = self.menuBar.FindItemById(self.deleteMenu)
         propertiesMenu = self.menuBar.FindItemById(self.propertiesMenu)
+        previewMenu = self.menuBar.FindItemById(self.previewMenu)
 
         if self.mapNotebook.GetPageCount() == 0:
             saveMenu.Enable(False)
             closeMenu.Enable(False)
             deleteMenu.Enable(False)
             propertiesMenu.Enable(False)
+            previewMenu.Enable(False)
             return
 
         closeMenu.Enable(True)
         propertiesMenu.Enable(True)
+        previewMenu.Enable(True)
         
         editor = self.mapNotebook.GetPage(self.mapNotebook.GetSelection())
         if editor.getMap().getIsDirty():

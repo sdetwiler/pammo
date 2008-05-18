@@ -22,11 +22,6 @@ class MapEditor(wx.Panel):
         self.Bind(wx.EVT_CHECKBOX, self.onToggleGrid, gridButton)
         toolbar.Add(gridButton, 0, wx.CENTER)
 
-        tileButton = wx.CheckBox(self, -1, "Tiles")
-        tileButton.SetValue(self.display.getDrawTiles())
-        self.Bind(wx.EVT_CHECKBOX, self.onToggleTiles, tileButton)
-        toolbar.Add(tileButton, 0, wx.CENTER)
-
         self.slider = wx.Slider(self, -1, 100, 25, 500, style=wx.SL_HORIZONTAL)
         self.Bind(wx.EVT_SCROLL, self.onChangeScale, self.slider)
         toolbar.Add(self.slider, 0, wx.CENTER)
@@ -45,9 +40,6 @@ class MapEditor(wx.Panel):
         if not self.tool: return
 
         if not event.LeftIsDown(): return
-        #print event.Button
-        #print event.ButtonDown()
-        #print event.Moving()
 
         tileSize = MaterialLibrary.getMaterialSize()
         sizeX, sizeY = self.map.getProperties().getSize()
@@ -64,9 +56,6 @@ class MapEditor(wx.Panel):
 
     def onToggleGrid(self, event):
         self.display.setDrawGrid(event.IsChecked())
-
-    def onToggleTiles(self, event):
-        self.display.setDrawTiles(event.IsChecked())
 
     def onChangeScale(self, event):
         self.display.setDrawScale(self.slider.GetValue() / 100.)

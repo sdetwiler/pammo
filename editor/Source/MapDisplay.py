@@ -15,7 +15,6 @@ class MapDisplay(wx.ScrolledWindow):
         self.mouseObservers = []
 
         self.drawGrid = True
-        self.drawTiles = False
         self.drawScale = 1
         self.map = map
 
@@ -29,12 +28,6 @@ class MapDisplay(wx.ScrolledWindow):
 
     def setDrawGrid(self, drawGrid):
         self.drawGrid = drawGrid
-        self.Refresh()
-
-    def getDrawTiles(self): return self.drawTiles
-
-    def setDrawTiles(self, drawTiles):
-        self.drawTiles = drawTiles
         self.Refresh()
 
     def getDrawScale(self): return self.drawScale
@@ -53,10 +46,6 @@ class MapDisplay(wx.ScrolledWindow):
         for observer in self.mouseObservers: observer(self, event)
 
     def OnPaint(self, event):
-        if self.drawTiles: self.OnPaintTiles()
-        else: self.OnPaintMaterials()
-
-    def OnPaintMaterials(self):
         dc = wx.PaintDC(self)
         self.PrepareDC(dc)
         dc.BeginDrawing()
@@ -81,37 +70,3 @@ class MapDisplay(wx.ScrolledWindow):
         dc.SetUserScale(1, 1)
 
         dc.EndDrawing()
-
-    def OnPaintTiles(self):
-        dc = wx.PaintDC(self)
-        self.PrepareDC(dc)
-        dc.BeginDrawing()
-
-        dc.SetUserScale(self.drawScale, self.drawScale)
-        
-        (sizeX, sizeY) = self.map.getProperties().getSize()
-        tileSize = MaterialLibrary.getMaterialSize()
-        for y in range(sizeY - 1):
-            for x in range(sizeX - 1):
-                m0 = self.map.getMaterialTile(x, y)
-                m1 = self.map.getMaterialTile(x+1, y)
-                m2 = self.map.getMaterialTile(x, y+1)
-                m3 = self.map.getMaterialTile(x+1, y+1)
-                bitmap = MaterialLibrary.getMaterialTransition(m0, m1, m2, m3)
-                if not bitmap:
-                    tile = MaterialLibrary.getMaterial(m0)
-                    if not tile: continue
-                    bitmap = tile.getBitmap()
-                dc.DrawBitmap(bitmap, x*tileSize + tileSize/2, y*tileSize + tileSize/2, True)
-
-        if self.drawGrid:
-            dc.SetPen(wx.Pen('BLACK', 3))
-            for x in range(sizeX):
-                dc.DrawLine(x*tileSize + tileSize/2, tileSize/2, x*tileSize + tileSize/2, sizeY*tileSize - tileSize/2)
-            for y in range(sizeY):
-               dc.DrawLine(tileSize/2, y*tileSize + tileSize/2, sizeX*tileSize - tileSize/2, y*tileSize + tileSize/2)
-
-        dc.SetUserScale(1, 1)
-
-        dc.EndDrawing()
-

@@ -23,7 +23,7 @@ class Camera
 		Camera(Vector2 const& origin, Vector2 const& size);
 		~Camera();
 		
-		void set(GraphicsContext* context);
+		void set();
 		
 		void makeDirty();
 		

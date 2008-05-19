@@ -11,12 +11,10 @@
 #define __ENTITY_H__
  
 #include "pammo.h"
+#include "image.h"
 
 namespace pammo
 {
-
-class GraphicsContext;
-class Image;
 
 class Entity
 {
@@ -24,7 +22,7 @@ class Entity
 		Entity(Image* image);
 		virtual ~Entity();
 		
-		virtual void draw(GraphicsContext* context);
+		virtual void draw();
 		
 		void makeDirty();
 		
@@ -42,6 +40,8 @@ class Entity
 		Transform2 mInverseTransform;
 		bool mInverseTransformDirty;
 };
+
+typedef vector<Entity*> EntityVector;
 
 }
 

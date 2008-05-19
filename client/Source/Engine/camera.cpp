@@ -81,9 +81,22 @@ Transform2 Camera::getInverseTransform()
 	return mInverseTransform;
 }
 		
-void Camera::set(GraphicsContext* context)
+void Camera::set()
 {
-	context->setCameraTransform(getTransform());
+    getTransform();
+    glLoadIdentity();
+    float trans[16];
+    memset(trans, 0, sizeof(trans));
+    trans[0] = mTransform[0];
+    trans[1] = mTransform[1];
+    trans[4] = mTransform[2];
+    trans[5] = mTransform[3];
+    trans[10] = 1.0;
+    trans[12] = mTransform[4];
+    trans[13] = mTransform[5];
+    trans[15] = 1.0;
+
+    glMultMatrixf(trans);
 	
 	//CGContextConcatCTM(context, getTransform());
 	//CGContextTranslateCTM(context, -mCenter.x + mScale.width/2, -mCenter.y + mScale.height/2);

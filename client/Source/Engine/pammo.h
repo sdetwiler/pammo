@@ -7,6 +7,9 @@
  *
  */
 
+#ifndef __PAMMO_H__
+#define __PAMMO_H__
+
 #include "dprintf.h"
 #include "types_platform.h"
 
@@ -21,5 +24,22 @@ using namespace std;
 #include "vector2.h"
 #include "transform2.h"
 
-namespace pammo{}
+namespace pammo
+{
+struct Touch
+{
+	enum Phase
+	{
+		PhaseBegin,
+		PhaseMove,
+		PhaseEnd
+	};
+	
+	Phase mPhase;
+	Vector2 mLocation;
+};
+} // namespace pammo
+
 using namespace pammo;
+
+#endif // __PAMMO_H__

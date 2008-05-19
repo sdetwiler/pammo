@@ -8,7 +8,6 @@
  */
 
 #include "entity.h"
-#include "graphicsContext.h"
 
 Entity::Entity(Image* image)
 	: mImage(image),
@@ -17,7 +16,7 @@ Entity::Entity(Image* image)
 	mCenter.x = 0;
 	mCenter.y = 0;
 	
-	mSize = image->getSize();
+	mSize = image->mSize;
 	
 	mTransformDirty = true;
 	mInverseTransformDirty = true;
@@ -73,29 +72,7 @@ Transform2 const& Entity::getInverseTransform()
 	return mInverseTransform;
 }
 		
-void Entity::draw(GraphicsContext* context)
+void Entity::draw()
 {
-	context->drawImage(mImage, getTransform(), getInverseTransform());
-	
-	//Transform2 tmp;
-	//CGAffineTransform cgtmp;
-	
-	//tmp = getTransform();
-	//cgtmp = CGAffineTransformMake(tmp[0], tmp[1], tmp[2], tmp[3], tmp[4], tmp[5]);
-	//CGContextConcatCTM(context, cgtmp);
-	
-	//CGContextConcatCTM(context, getTransform());
-	
-	//CGRect rect;
-	//rect.origin.x = 0;
-	//rect.origin.y = 0;
-	//rect.size.width = 1;
-	//rect.size.height = 1;
-	
-	//CGContextDrawImage(context, rect, mImage);
-	
-	//tmp = getInverseTransform();
-	//cgtmp = CGAffineTransformMake(tmp[0], tmp[1], tmp[2], tmp[3], tmp[4], tmp[5]);
-	//CGContextConcatCTM(context, cgtmp);
-	//CGContextConcatCTM(context, getInverseTransform());
+    drawImage(mImage, getTransform());
 }

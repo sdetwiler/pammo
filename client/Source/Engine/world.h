@@ -11,44 +11,37 @@
 #define __WORLD_H__
 
 #include "pammo.h"
+#include "widget.h"
 
 namespace pammo
 {
 
 class Entity;
 class Camera;
-class GraphicsContext;
 
-struct Touch
-{
-	enum Phase
-	{
-		TouchPhaseBegin,
-		TouchPhaseMove,
-		TouchPhaseEnd
-	};
-	
-	Phase mPhase;
-	Vector2 mLocation;
-};
-
-class World
+class World : 
+    public Drawable,
+    public Touchable,
+    public Updateable
 {
 	public:
-		World(GraphicsContext* context);
+		World(Game* game);
 		~World();
 		
+        virtual void draw();
+        virtual bool touch(uint32_t count, Touch* touches);
+        virtual void update(int delta);
+
+        virtual uint32_t getTouchPriority() const;
+        virtual uint32_t getDrawPriority() const;
+
 		void addEntity(Entity* entity);
-		
-		void draw();
-		void update(int delta);
-		
-		void touches(uint32_t count, Touch* touches);
-		
-		GraphicsContext* mContext;
+    
+    protected:
+    private:
+		Game* mGame;
 		Camera* mCamera;
-		Vector2 mStartTouch;
-		typedef vector<Entity*> EntityVector;
+        typedef vector< Entity* > EntityVector;
 		EntityVector mEntities;
 };
 

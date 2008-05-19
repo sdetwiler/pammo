@@ -8,7 +8,6 @@
  */
 
 #include "camera.h"
-#include "graphicsContext.h"
 
 namespace pammo
 {

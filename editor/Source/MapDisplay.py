@@ -18,6 +18,7 @@ class MapDisplay(wx.ScrolledWindow):
         self.drawGrid = True
         self.drawScale = 1
         self.map = map
+        self.map.addObserver(self.onMapChanged)
 
         self.updateVirtualSize()
 
@@ -55,6 +56,9 @@ class MapDisplay(wx.ScrolledWindow):
         wx, wy = self.CalcUnscrolledPosition(x, y)
         wx, wy = wx / self.getDrawScale(), wy / self.getDrawScale()
         return wx, wy
+
+    def onMapChanged(self, map):
+        self.Refresh()
 
     def OnPaint(self, event):
         dc = wx.PaintDC(self)

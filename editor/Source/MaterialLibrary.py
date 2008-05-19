@@ -1,8 +1,6 @@
 import os
 import Material
 
-import wx
-
 materials = {}
 observers = []
 

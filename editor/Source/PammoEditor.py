@@ -18,14 +18,15 @@ class PammoEditorFrame(wx.Frame):
 
         self.Bind(wx.EVT_MENU_RANGE, self.onMenuItem, id=100, id2=200)
 
-        self.notebook = wx.Notebook(self, -1)
-        self.Bind(wx.EVT_NOTEBOOK_PAGE_CHANGED, self.onPageChanged, self.notebook)
+        #self.notebook = wx.Notebook(self, -1)
+        #self.Bind(wx.EVT_NOTEBOOK_PAGE_CHANGED, self.onPageChanged, self.notebook)
 
-        self.mapEditor = MapEditorPanel.MapEditorPanel(self.notebook, -1)
-        self.notebook.AddPage(self.mapEditor, "Map Editor")
+        self.mapEditor = MapEditorPanel.MapEditorPanel(self, -1)
+        self.mapEditor.onPanelSelected(self)
+        #self.notebook.AddPage(self.mapEditor, "Map Editor")
 
-        self.materialEditor = MaterialEditorPanel.MaterialEditorPanel(self.notebook, -1)
-        self.notebook.AddPage(self.materialEditor, "Material Editor")
+        #self.materialEditor = MaterialEditorPanel.MaterialEditorPanel(self.notebook, -1)
+        #self.notebook.AddPage(self.materialEditor, "Material Editor")
 
         #self.templateEditor = TemplateEditorPanel.TemplateEditorPanel(self.notebook, -1)
         #self.notebook.AddPage(self.templateEditor, "Template Editor")
@@ -43,11 +44,12 @@ class PammoEditorFrame(wx.Frame):
     def onTimeToQuit(self, evt):
         if self.askClose(): evt.Skip()
 
-    def onPageChanged(self, event):
-        self.notebook.GetPage(event.GetSelection()).onPanelSelected(self)
+    #def onPageChanged(self, event):
+    #    self.notebook.GetPage(event.GetSelection()).onPanelSelected(self)
 
     def onMenuItem(self, event):
-        self.notebook.GetPage(self.notebook.GetSelection()).AddPendingEvent(event)
+        #self.notebook.GetPage(self.notebook.GetSelection()).AddPendingEvent(event)
+        self.mapEditor.AddPendingEvent(event)
 
 class PammoEditorApp(wx.App):
     def OnInit(self):

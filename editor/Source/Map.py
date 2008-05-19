@@ -7,6 +7,7 @@ class Map:
         self.isDirty = True
         self.hasSavedOnce = False
         self.observers = []
+        self.entities = []
 
     def addObserver(self, observer):
         self.observers.append(observer)
@@ -61,6 +62,8 @@ class Map:
         self.notify()
 
     def setMaterialTile(self, x, y, material):
+        if self.materialTiles[y][x] == material: return
+
         self.materialTiles[y][x] = material
         self.isDirty = True
         self.notify()
@@ -84,3 +87,9 @@ class Map:
         elif deltaX > 0:
             for i in range(self.properties.getSizeY() + deltaY):
                 self.materialTiles[i].extend(["" for tmp in range(deltaX)])
+
+    def addEntity(self, entity):
+        self.entities.append(entity)
+
+    def getEntities(self):
+        return self.entities

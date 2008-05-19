@@ -4,16 +4,15 @@ import os
 
 import Map
 import MapEditor
-import MaterialBrowser
 import MapProperties
 import MapPropertiesDialog
 import MapPreviewDialog
+import ToolBrowser
 
 class MapEditorPanel(wx.Panel):
     def __init__(self, parent, id):
         wx.Panel.__init__(self, parent, id)
-        self.browser = MaterialBrowser.MaterialBrowser(self, -1)
-        self.browser.addObserver(self.onMaterialChanged)
+        self.browser = ToolBrowser.ToolBrowser(self, -1)
         self.mapNotebook = wx.Notebook(self)
         self.Bind(wx.EVT_NOTEBOOK_PAGE_CHANGED, self.onMapNotebookPageChanged, self.mapNotebook)
 
@@ -52,6 +51,15 @@ class MapEditorPanel(wx.Panel):
         fileMenu.Append(wx.ID_EXIT, "&Quit\tCtrl+Q", "")
         self.menuBar = wx.MenuBar()
         self.menuBar.Append(fileMenu, "&File")
+
+        self.selectedEditor = None
+
+        # Hack Shit
+        #properties = MapProperties.MapProperties()
+        #properties.setSize(10, 10)
+        #map = Map.Map()
+        #map.setProperties(properties)
+        #self.newEditorForMap(map)
 
     def onNewMenu(self, event):
         properties = MapProperties.MapProperties()
@@ -157,16 +165,14 @@ class MapEditorPanel(wx.Panel):
         preview.Destroy()
 
     def onMapNotebookPageChanged(self, event):
-        self.updateMenuState()
         index = self.mapNotebook.GetSelection()
-        if index != -1:
-            editor = self.mapNotebook.GetPage(index)
-            editor.onToolChanged(self.browser.getSelectedMaterial())
-
-    def onMaterialChanged(self, browser):
-        if self.mapNotebook.GetPageCount() == 0: return
-        editor = self.mapNotebook.GetPage(self.mapNotebook.GetSelection())
-        editor.onToolChanged(self.browser.getSelectedMaterial())
+        if index == -1:
+            self.selectedEditor = None
+        else:
+            self.selectedEditor = self.mapNotebook.GetPage(self.mapNotebook.GetSelection())
+        self.updateMenuState()
+        self.browser.onEditorChanged(self.selectedEditor)
+        event.Skip()
 
     def onTimeToQuit(self):
         for i in range(self.mapNotebook.GetPageCount()):

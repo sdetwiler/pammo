@@ -1,4 +1,5 @@
 import MapProperties
+import Entity
 
 class Map:
     def __init__(self):
@@ -15,37 +16,52 @@ class Map:
     def removeObserver(self, observer):
         self.observers.remove(observer)
 
-    def notify(self):
+    def _notify(self):
         for observer in self.observers: observer(self)
 
     def getIsDirty(self): return self.isDirty
 
     def getHasSavedOnce(self): return self.hasSavedOnce
 
+    def onEntityChanged(self, entity):
+        self.isDirty = True
+        self._notify()
+
     def saveToFile(self, f):
-        output = {"version":1, "sizeX": self.properties.getSizeX(), "sizeY": self.properties.getSizeY()}
+        output = {"version":2, "sizeX": self.properties.getSizeX(), "sizeY": self.properties.getSizeY()}
         output["materialTiles"] = self.materialTiles
+        
+        entities = []
+        for s in self.entities:
+            entities.append(s.saveToDic())
+        output['props'] = entities
 
         f.write(str(output))
 
         self.isDirty = False
         self.hasSavedOnce = True
-        self.notify()
+        self._notify()
 
     def loadFromFile(self, name, f):
         self.properties.setName(name)
         
         dic = eval(f.readline())
         
-        if dic['version'] != 1: raise ''
+        if dic['version'] != 2: raise ''
         self.resizeMaterialTiles(dic['sizeX'] - self.properties.getSizeX(), dic['sizeY'] - self.properties.getSizeY())
         self.properties.setSize(dic['sizeX'], dic['sizeY'])
 
         self.materialTiles = dic['materialTiles']
 
+        for s in dic['props']:
+            e = Entity.Entity()
+            e.loadFromDic(s)
+            e.addObserver(self.onEntityChanged)
+            self.entities.append(e)
+
         self.isDirty = False
         self.hasSavedOnce = True
-        self.notify()
+        self._notify()
 
     def getProperties(self): return self.properties
 
@@ -59,14 +75,14 @@ class Map:
         self.resizeMaterialTiles(deltaX, deltaY)
         self.properties = properties
         self.isDirty = True
-        self.notify()
+        self._notify()
 
     def setMaterialTile(self, x, y, material):
         if self.materialTiles[y][x] == material: return
 
         self.materialTiles[y][x] = material
         self.isDirty = True
-        self.notify()
+        self._notify()
 
     def getMaterialTile(self, x, y):
         return self.materialTiles[y][x]
@@ -90,6 +106,15 @@ class Map:
 
     def addEntity(self, entity):
         self.entities.append(entity)
+        entity.addObserver(self.onEntityChanged)
+        self.isDirty = True
+        self._notify()
+
+    def removeEntity(self, entity):
+        entity.removeObserver(self.onEntityChanged)
+        self.entities.remove(entity)
+        self.isDirty = True
+        self._notify()
 
     def getEntities(self):
         return self.entities

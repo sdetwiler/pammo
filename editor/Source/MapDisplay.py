@@ -29,7 +29,7 @@ class MapDisplay(wx.ScrolledWindow):
         self.mouseObservers.remove(observer)
 
     def addDrawObserver(self, observer): self.drawObservers.append(observer)
-    def removeDrawObserver(self, observer): self.drawObserver.remove(observer)
+    def removeDrawObserver(self, observer): self.drawObservers.remove(observer)
 
     def getDrawGrid(self): return self.drawGrid
 
@@ -86,15 +86,17 @@ class MapDisplay(wx.ScrolledWindow):
                 gc.StrokeLine(0, y*tileSize, sizeX*tileSize, y*tileSize)
 
         for e in self.map.getEntities():
-            gc.PushState()
+            s = e.getSprite()
+            if not s: continue
 
             pos = e.getPos()
             scale = e.getScale()
             rot = e.getRot()
-            bitmap = e.getSprite().getBitmap()
+            bitmap = s.getBitmap()
             w = bitmap.GetWidth()
             h = bitmap.GetHeight()
 
+            gc.PushState()
             gc.Translate(pos[0], pos[1])
             gc.Scale(scale, scale)
             gc.Rotate(rot)

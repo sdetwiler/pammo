@@ -29,7 +29,7 @@ class MapEditor(wx.Panel, wx.FileDropTarget):
         self.Bind(wx.EVT_CHECKBOX, self.onToggleGrid, gridButton)
         toolbar.Add(gridButton, 0, wx.CENTER)
 
-        self.slider = wx.Slider(self, -1, 100, 25, 500, style=wx.SL_HORIZONTAL)
+        self.slider = wx.Slider(self, -1, 100, 25, 500, size=(200, 20), style=wx.SL_HORIZONTAL)
         self.Bind(wx.EVT_SCROLL, self.onChangeScale, self.slider)
         toolbar.Add(self.slider, 0, wx.CENTER)
 
@@ -47,28 +47,10 @@ class MapEditor(wx.Panel, wx.FileDropTarget):
             name = Sprite.pathToName(name)
             if not name: continue
             x, y = self.display.calcMapLocationFromScreen(x, y)
-            sprite = SpriteLibrary.getSprite(name)
-            entity = Entity.Entity(sprite, (x, y), 1, 0)
+            #sprite = SpriteLibrary.getSprite(name)
+            entity = Entity.Entity(name, (x, y), 1, 0)
             self.map.addEntity(entity)
         self.Refresh()
-    
-    #def onDisplayMouseEvent(self, display, event):
-        #if not self.tool: return
-
-        #self.tool.onToolMouseEvent(self, event)
-
-        #if not event.LeftIsDown(): return
-
-        #tileSize = MaterialLibrary.getMaterialSize()
-        #sizeX, sizeY = self.map.getProperties().getSize()
-        #realX, realY = self.display.CalcUnscrolledPosition(event.GetX(), event.GetY())
-        #scale = self.display.getDrawScale()
-        #tileX, tileY = int(realX / scale / tileSize), int(realY / scale / tileSize)
-        #if tileX < 0 or tileX > sizeX-1 or tileY < 0 or tileY > sizeY-1: return
-        #if self.map.getMaterialTile(tileX, tileY) == self.tool.getName(): return
-
-        #self.map.setMaterialTile(tileX, tileY, self.tool.getName())
-        #self.display.Refresh()
 
     def onMapChanged(self, map):
         self.display.updateVirtualSize()

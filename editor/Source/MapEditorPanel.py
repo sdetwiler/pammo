@@ -13,7 +13,7 @@ class MapEditorPanel(wx.Panel):
     def __init__(self, parent, id):
         wx.Panel.__init__(self, parent, id)
         self.browser = ToolBrowser.ToolBrowser(self, -1)
-        self.mapNotebook = wx.Notebook(self)
+        self.mapNotebook = wx.Notebook(self, -1)
         self.Bind(wx.EVT_NOTEBOOK_PAGE_CHANGED, self.onMapNotebookPageChanged, self.mapNotebook)
 
         leftSizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -90,7 +90,7 @@ class MapEditorPanel(wx.Panel):
             self.newEditorForMap(map)
 
     def onOpenMenu(self, event):
-        base = os.getcwd()+"/Maps"
+        base = os.path.abspath(os.getcwd()+"/Maps")
         dialog = wx.FileDialog(self,
             message="Choose a map (This folder only!)",
             defaultDir=base, 
@@ -126,8 +126,8 @@ class MapEditorPanel(wx.Panel):
         if editor.getMap().getIsDirty():
             if not self.askSaveMap(editor.getMap(), "Save changes before closing?"): return
         self.mapNotebook.RemovePage(index)
-        editor.Destroy()
         self.onMapNotebookPageChanged(None)
+        editor.Destroy()
 
     def onSaveMenu(self, event):
         editor = self.mapNotebook.GetPage(self.mapNotebook.GetSelection())
@@ -139,8 +139,8 @@ class MapEditorPanel(wx.Panel):
         if not self.askDeleteMap(editor.getMap()): return
         os.remove(os.getcwd() + '/Maps/%s.map' % editor.getMap().getProperties().getName())
         self.mapNotebook.RemovePage(index)
-        editor.Destroy()
         self.onMapNotebookPageChanged(None)
+        editor.Destroy()
 
     def onPropertiesMenu(self, event):
         editor = self.mapNotebook.GetPage(self.mapNotebook.GetSelection())
@@ -172,7 +172,6 @@ class MapEditorPanel(wx.Panel):
             self.selectedEditor = self.mapNotebook.GetPage(self.mapNotebook.GetSelection())
         self.updateMenuState()
         self.browser.onEditorChanged(self.selectedEditor)
-        event.Skip()
 
     def onTimeToQuit(self):
         for i in range(self.mapNotebook.GetPageCount()):

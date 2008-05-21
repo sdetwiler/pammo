@@ -1,13 +1,19 @@
 #ifndef __PATHWIDGET_H__
 #define __PATHWIDGET_H__
 
+#include "pammo.h"
 #include "widget.h"
+
+namespace pammo
+{
+
+class World;
 
 class PathWidget : 
     public Widget
 {
 public:
-    PathWidget();
+    PathWidget(World* world);
     virtual ~PathWidget();
 
     virtual void draw();
@@ -19,9 +25,12 @@ protected:
     void clear();
 
 private:
-    typedef std::vector< Vector2 > Vector2Vec;
+    World* mWorld;
     Vector2Vec mPoints;
+    bool mBuilding;
 };
+
+}
 
 
 #endif __PATHWIDGET_H__

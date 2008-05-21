@@ -14,14 +14,19 @@ Game::~Game()
 
 int Game::init()
 {
+    int ret;
     World* world = new World(this);
+    ret = world->init();
+    if(ret < 0)
+        return ret;
+
     registerDrawable(world);
     registerTouchable(world);
     registerUpdateable(world);
 
     builder(world);
 
-    PathWidget* pathWidget = new PathWidget;
+    PathWidget* pathWidget = new PathWidget(world);
     pathWidget->setDrawPriority(100);
     pathWidget->setTouchPriority(1);
     registerDrawable(pathWidget);

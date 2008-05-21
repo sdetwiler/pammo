@@ -12,6 +12,7 @@
 
 #include "pammo.h"
 #include "widget.h"
+#include "vehicle.h"
 
 namespace pammo
 {
@@ -28,6 +29,10 @@ class World :
 		World(Game* game);
 		~World();
 		
+        int init();
+
+        void setPath(Vector2Vec const& path);
+
         virtual void draw();
         virtual bool touch(uint32_t count, Touch* touches);
         virtual void update(int delta);
@@ -43,6 +48,9 @@ class World :
 		Camera* mCamera;
         typedef vector< Entity* > EntityVector;
 		EntityVector mEntities;
+        Vehicle* mVehicle;
+        EntityVector mVehicles;
+        Touch::Phase mLastPhase;
 };
 
 }

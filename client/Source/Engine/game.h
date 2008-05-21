@@ -17,16 +17,12 @@ public:
 class Drawable
 {
 public:
-    Drawable(){mDirty = false;}
+    Drawable(){}
     virtual ~Drawable(){}
     virtual void draw() = 0;
     virtual uint32_t getDrawPriority() const = 0;
 
-    virtual void makeDirty(){mDirty = true;}
-    virtual bool isDirty() const {return mDirty;}
-
 private:
-    bool mDirty;
 };
 
 class Updateable

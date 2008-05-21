@@ -11,37 +11,42 @@
 #define __ENTITY_H__
  
 #include "pammo.h"
-#include "image.h"
+#include "game.h"
 
 namespace pammo
 {
 
-class Entity
+class Entity :
+    public Drawable
 {
-	public:
-		Entity(Image* image);
+    public:
+		Entity();
 		virtual ~Entity();
 		
-		virtual void draw();
-		
+		virtual void draw()=0;
+        virtual uint32_t getDrawPriority() const;
+
+        void setDrawPriority(uint32_t prio);
+		void setSize(Vector2 size);
+
 		void makeDirty();
 		
-		Image* mImage;
 		Vector2 mCenter;
 		Vector2 mSize;
 		float mRotation;
 		
-	private:
+	protected:
 		Transform2 const& getTransform();
 		Transform2 const& getInverseTransform();
-		
+
+    private:	
 		Transform2 mTransform;
 		bool mTransformDirty;
 		Transform2 mInverseTransform;
 		bool mInverseTransformDirty;
-};
+        uint32_t mDrawPriority;
 
-typedef vector<Entity*> EntityVector;
+};
 
 }
 

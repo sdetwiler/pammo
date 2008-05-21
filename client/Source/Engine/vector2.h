@@ -66,7 +66,7 @@ struct Vector2
 				default:
 					assert(0);
 			}
-		}
+        }
 		
 		float& operator[](uint32_t i)
 		{

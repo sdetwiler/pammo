@@ -53,7 +53,7 @@ Transform2 Camera::getTransform()
 		mTransform *= Transform2::createRotation(mRotation);
 		mTransform *= Transform2::createScale(Vector2(mFrameSize.x / mSize.x, mFrameSize.y / mSize.y));
 		mTransform *= Transform2::createTranslation(Vector2(-mCenter.x, -mCenter.y));
-		
+/**		
 		dprintf("Frame: %f, %f\n", mFrameSize.x, mFrameSize.y);
 		dprintf("Rotation: %f\n", mRotation);
 		dprintf("Center: %f, %f\n", mCenter.x, mCenter.y);
@@ -62,7 +62,7 @@ Transform2 Camera::getTransform()
 		dprintf("[ %f %f ]\n", mTransform[0], mTransform[1]);
 		dprintf("[ %f %f ]\n", mTransform[2], mTransform[3]);
 		dprintf("[ %f %f ]\n", mTransform[4], mTransform[5]);
-		
+		**/
 		mTransformDirty = false;
 	}
 	

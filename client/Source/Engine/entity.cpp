@@ -9,21 +9,34 @@
 
 #include "entity.h"
 
-Entity::Entity(Image* image)
-	: mImage(image),
-	mRotation(0)
+Entity::Entity()
+    : mRotation(0)
 {
 	mCenter.x = 0;
 	mCenter.y = 0;
 	
-	mSize = image->mSize;
-	
 	mTransformDirty = true;
 	mInverseTransformDirty = true;
+    mDrawPriority = 0;
 }
 
 Entity::~Entity()
 {
+}
+
+void Entity::setSize(Vector2 size)
+{
+    mSize = size;
+}
+
+void Entity::setDrawPriority(uint32_t prio)
+{
+    mDrawPriority = prio;
+}
+
+uint32_t Entity::getDrawPriority() const
+{
+    return mDrawPriority;
 }
 
 void Entity::makeDirty()
@@ -72,7 +85,3 @@ Transform2 const& Entity::getInverseTransform()
 	return mInverseTransform;
 }
 		
-void Entity::draw()
-{
-    drawImage(mImage, getTransform());
-}

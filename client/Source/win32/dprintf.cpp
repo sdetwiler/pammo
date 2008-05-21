@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <malloc.h>
-
+#include <stdio.h>
 void dprintf(char const* format, ...)
 {
 	va_list args;
@@ -16,4 +16,10 @@ void dprintf(char const* format, ...)
     vsprintf( buffer, format, args );
 
     va_end(args);	
+
+    FILE* f = fopen("pammo.txt", "a");
+    if(!f)
+        return;
+    fwrite(buffer, 1, len, f);
+    fclose(f);
 }

@@ -38,6 +38,9 @@ struct Touch
 	Phase mPhase;
 	Vector2 mLocation;
 };
+
+typedef std::vector< Vector2 > Vector2Vec;
+
 } // namespace pammo
 
 using namespace pammo;

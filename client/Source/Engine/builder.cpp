@@ -9,7 +9,7 @@
 
 #include "builder.h"
 #include "world.h"
-#include "entity.h"
+#include "imageEntity.h"
 #include "image.h"
 
 namespace pammo
@@ -32,13 +32,13 @@ void builder(World* world)
 
 void builder(World* world)
 {
-	Entity* entity;
+	ImageEntity* entity;
 	
     Image* image;
     image = openImage("ground.png");
 	if(image)
     {
-        entity = new Entity(image);
+        entity = new ImageEntity(image);
 	    entity->mSize.x = 2048;
 	    entity->mSize.y = 2048;
         world->addEntity(entity);
@@ -47,7 +47,7 @@ void builder(World* world)
     image = openImage("MagentaButton.png");
     if(image)
     {
-        entity = new Entity(image);
+        entity = new ImageEntity(image);
 	    world->addEntity(entity);
 	    entity->mSize.x = 512;
 	    entity->mSize.y = 512;
@@ -57,16 +57,16 @@ void builder(World* world)
     image = openImage("MagentaButton.png");
     if(image)
     {
-        entity = new Entity(image);
+        entity = new ImageEntity(image);
 	    world->addEntity(entity);
-	    entity->mCenter.x = 200;
-	    entity->mRotation = 0.7;
+	    entity->mCenter.x = (float)200;
+	    entity->mRotation = (float)0.7;
     }
 
     image = openImage("CyanButton.png");
     if(image)
     {
-        entity = new Entity(image);
+        entity = new ImageEntity(image);
 	    world->addEntity(entity);
 	    entity->mSize.x = 512;
 	    entity->mSize.y = 512;
@@ -75,27 +75,21 @@ void builder(World* world)
     image = openImage("CyanButton.png");
     if(image)
     {
-        entity = new Entity(image);
+        entity = new ImageEntity(image);
 	    world->addEntity(entity);
 	    entity->mCenter.y = -200;
-	    entity->mRotation = 0.7;
+	    entity->mRotation = (float)0.7;
     }	
     image = openImage("YellowButton.png");
     if(image)
     {
-        entity = new Entity(image);
+        entity = new ImageEntity(image);
 	    world->addEntity(entity);
 	    entity->mSize.x = 40;
 	    entity->mSize.y = 40;
 	    entity->mCenter.x = 100;
 	    entity->mCenter.y = 100;
     }	
-    image = openImage("flameTank.png");
-    if(image)
-    {
-        entity = new Entity(image);
-	    world->addEntity(entity);
-    }
 }
 
 #endif

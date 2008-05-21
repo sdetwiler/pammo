@@ -15,57 +15,109 @@ public:
     }
 
     int mDownState;
+    SDL_keysym mKeySym;
 
     void InputProcessor::update(Game* game)
     {
         SDL_Event event;
-        Touch touch;
         Vector2 location;
+        Touch touch[2];
 
         while(SDL_PollEvent(&event)) 
         {
             switch(event.type) 
             {
-                case SDL_MOUSEMOTION:
-                    if(mDownState == 0)
-                        break;
+            case SDL_KEYDOWN:
+                mKeySym = event.key.keysym;
+                break;
 
-                     // If this was the first down, advance to still down and start touch
-                    if(mDownState == 1)
-                    {
-                        touch.mPhase = Touch::PhaseBegin;
-                        mDownState = 2;
-                    }
-                    // If still down, touch move
-                    else if(mDownState == 2)
-                    {
-                        touch.mPhase = Touch::PhaseMove;
-                    }
-                    // If just up, touch end.
-                    else if(mDownState == 3)
-                    {
-                        touch.mPhase = Touch::PhaseEnd;
-                    }
+            case SDL_KEYUP:
+                memset(&mKeySym, 0, sizeof(mKeySym));
+                break;
 
-                    touch.mLocation.x = event.motion.x;
-                    touch.mLocation.y = event.motion.y;
-                    
-                    // Tell the game it's being touched.
-                    game->touches(1, &touch);
-
+            case SDL_MOUSEMOTION:
+                if(mDownState == 0)
                     break;
 
-                case SDL_MOUSEBUTTONDOWN:
-                    mDownState = 1;
-                    break;
+                 // If this was the first down, advance to still down and start touch
+                if(mDownState == 1)
+                {
+                    touch[0].mPhase = Touch::PhaseBegin;
+                    mDownState = 2;
+                }
+                // If still down, touch move
+                else if(mDownState == 2)
+                {
+                    touch[0].mPhase = Touch::PhaseMove;
+                }
 
-                case SDL_MOUSEBUTTONUP:
-                    mDownState = 3;
+                touch[0].mLocation.x = event.motion.x;
+                touch[0].mLocation.y = event.motion.y;
+                
+                // Tell the game it's being touched.
+                  
+                
+                // Two finger hack.
+                if(mKeySym.sym == SDLK_RALT || mKeySym.sym== SDLK_LALT)
+                {
+                    // SCD: This is wrong. We need to generate a touch end if only alt is released.
+                    touch[1].mLocation = touch[0].mLocation;
+                    touch[1].mPhase = touch[0].mPhase;
+                    game->touches(2, touch);
+                }
+                else
+                {
+                    game->touches(1, touch);
+                }
+                break;
 
-                    break;
+            case SDL_MOUSEBUTTONDOWN:
+                touch[0].mLocation.x = event.motion.x;
+                touch[0].mLocation.y = event.motion.y;
+                touch[0].mPhase = Touch::PhaseBegin;
+                if(mKeySym.sym == SDLK_RALT || mKeySym.sym== SDLK_LALT)
+                {
+                    dprintf("two finger touch/click\n");
+                    touch[1].mLocation.x = event.motion.x;
+                    touch[1].mLocation.y = event.motion.y;
+                    touch[1].mPhase = Touch::PhaseBegin;
+                    game->touches(2, touch);
 
-                case SDL_QUIT:
-                    exit(0);
+                }
+                else
+                {
+                    dprintf("touch/click\n");
+                    game->touches(1, touch);
+                }
+
+
+                mDownState = 1;
+                break;
+
+            case SDL_MOUSEBUTTONUP:
+                touch[0].mLocation.x = event.motion.x;
+                touch[0].mLocation.y = event.motion.y;
+                touch[0].mPhase = Touch::PhaseEnd;
+                if(mKeySym.sym == SDLK_RALT || mKeySym.sym== SDLK_LALT)
+                {
+                    dprintf("two finger touch/click\n");
+                    touch[1].mLocation.x = event.motion.x;
+                    touch[1].mLocation.y = event.motion.y;
+                    touch[1].mPhase = Touch::PhaseEnd;
+                    game->touches(2, touch);
+
+                }
+                else
+                {
+                    dprintf("touch/click\n");
+                    game->touches(1, touch);
+                }
+                mDownState = 0;
+
+                break;
+
+            case SDL_QUIT:
+                exit(0);
             }
         }    
     }

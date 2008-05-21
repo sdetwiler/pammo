@@ -1,8 +1,14 @@
 #include "types_platform.h"
 #include "pathWidget.h"
+#include "world.h"
 
-PathWidget::PathWidget()
+namespace pammo
 {
+
+PathWidget::PathWidget(World* world)
+{
+    mWorld = world;
+    mBuilding = false;
 }
 
 PathWidget::~PathWidget()
@@ -37,19 +43,29 @@ void PathWidget::draw()
 
 bool PathWidget::touch(uint32_t count, Touch* touches)
 {
+    bool ret = false;
     // Always only use first touch point.
     switch(touches[0].mPhase)
     {
     case Touch::PhaseBegin:
     case Touch::PhaseMove:
+        mBuilding = true;
         addPoint(touches[0].mLocation);
+        ret = true;
         break;
 
     case Touch::PhaseEnd:
-        clear();
+        if(mBuilding)
+        {
+            mWorld->setPath(mPoints);
+            clear();
+            mBuilding = false;
+            ret = true;
+        }
+        break;
     }
 
-    return true;
+    return ret;
 }
 
 void PathWidget::update(int delta)
@@ -60,11 +76,11 @@ void PathWidget::update(int delta)
 void PathWidget::addPoint(Vector2 const& point)
 {
     mPoints.push_back(point);
-    makeDirty();
 }
 
 void PathWidget::clear()
 {
     mPoints.clear();
-    makeDirty();
+}
+
 }

@@ -12,9 +12,6 @@
 
 #include "vector2.h"
 
-// For transform invert.
-//#include <CoreGraphics/CGContext.h>
-
 namespace pammo
 {
 
@@ -124,12 +121,14 @@ inline static float det(Transform2 const& t)
 
 inline static Transform2 inverse(Transform2 const& t)
 {
-	// This is extremely dirty and may not work.
-	// Cast a Transform2 to a CGAffineTransform and use quart's transform inversion.
-	Transform2 tmp(t);
-	dprintf("TODO: Transform2 inverse.\n");
-	//CGAffineTransform* ptmp = (CGAffineTransform*)&tmp;
-	//*ptmp = CGAffineTransformInvert(*ptmp);
+	Transform2 tmp;
+	float det = t[0]*t[3] - t[1]*t[2];
+	tmp[0] = t[3]/det;
+	tmp[1] = -t[1]/det;
+	tmp[2] = -t[2]/det;
+	tmp[3] = t[0]/det;
+	tmp[4] = (t[2]*t[5] - t[4]*t[3])/det;
+	tmp[5] = (t[1]*t[4] - t[5]*t[0])/det;
 	return tmp;
 }
 

@@ -20,11 +20,11 @@ class MapPropertiesDialog(wx.Dialog):
         btnsizer.Realize()
 
         sizer = wx.BoxSizer(wx.VERTICAL)
-        sizer.Add(nameBox, 0, wx.GROW | wx.ALIGN_CENTER_VERTICAL | wx.ALL, 5)
-        sizer.Add(sizeXBox, 0, wx.GROW | wx.ALIGN_CENTER_VERTICAL | wx.ALL, 5)
-        sizer.Add(sizeYBox, 0,wx.GROW | wx.ALIGN_CENTER_VERTICAL | wx.ALL, 5)
-        sizer.Add(line, 0, wx.GROW | wx.ALIGN_CENTER_VERTICAL | wx.RIGHT | wx.TOP, 5)
-        sizer.Add(btnsizer, 0, wx.ALIGN_CENTER_VERTICAL | wx.ALL, 5)
+        sizer.Add(nameBox, 0, wx.EXPAND | wx.ALL, 5)
+        sizer.Add(sizeXBox, 0, wx.EXPAND | wx.ALL, 5)
+        sizer.Add(sizeYBox, 0,wx.EXPAND | wx.ALL, 5)
+        sizer.Add(line, 0, wx.EXPAND| wx.ALL, 5)
+        sizer.Add(btnsizer, 0, wx.EXPAND | wx.ALL, 5)
         self.SetSizer(sizer)
         sizer.Fit(self)
 
@@ -39,8 +39,8 @@ class MapPropertiesDialog(wx.Dialog):
         box = wx.BoxSizer(wx.HORIZONTAL)
         labelText = wx.StaticText(self, -1, label)
         text = wx.TextCtrl(self, -1, value)
-        box.Add(labelText, 0, wx.ALIGN_CENTER | wx.ALL, 5)
-        box.Add(text, 1, wx.ALIGN_CENTER | wx.ALL, 5)
+        box.Add(labelText, 0, wx.ALIGN_CENTER | wx.RIGHT, 5)
+        box.Add(text, 1, wx.ALIGN_CENTER)
         text.Bind(wx.EVT_SET_FOCUS, self.onFieldFocus)
         return (text, box)
 

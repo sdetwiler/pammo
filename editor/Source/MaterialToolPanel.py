@@ -14,7 +14,7 @@ class MaterialToolPanel(wx.Panel):
 
         sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.Add(self.browser, 1, wx.EXPAND)
-        sizer.Add(button, 0, wx.CENTER)
+        sizer.Add(button, 0, wx.ALIGN_CENTER | wx.ALL, 2)
         self.SetSizer(sizer)
 
     def attachToEditor(self, editor):

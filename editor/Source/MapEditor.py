@@ -27,15 +27,19 @@ class MapEditor(wx.Panel, wx.FileDropTarget):
         gridButton = wx.CheckBox(self, -1, "Grid")
         gridButton.SetValue(self.display.getDrawGrid())
         self.Bind(wx.EVT_CHECKBOX, self.onToggleGrid, gridButton)
-        toolbar.Add(gridButton, 0, wx.CENTER)
+        toolbar.Add(gridButton, 0, wx.ALIGN_CENTER | wx.RIGHT, 5)
 
-        self.slider = wx.Slider(self, -1, 100, 25, 500, size=(200, 20), style=wx.SL_HORIZONTAL)
+        self.slider = wx.Slider(self, -1, 100, 25, 200, size=(200, 20), style=wx.SL_HORIZONTAL)
         self.Bind(wx.EVT_SCROLL, self.onChangeScale, self.slider)
-        toolbar.Add(self.slider, 0, wx.CENTER)
+        toolbar.Add(self.slider, 0, wx.ALIGN_CENTER | wx.RIGHT, 5)
+
+        zoomButton = wx.Button(self, -1, "100%")
+        self.Bind(wx.EVT_BUTTON, self.onZoomButton, zoomButton)
+        toolbar.Add(zoomButton, 0, wx.ALIGN_CENTER | wx.RIGHT, 5)
 
         sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.Add(self.display, 1, wx.EXPAND)
-        sizer.Add(toolbar, 0, wx.EXPAND)
+        sizer.Add(toolbar, 0, wx.EXPAND | wx.ALL, 2)
         self.SetSizer(sizer)
 
     def getMap(self): return self.map
@@ -60,4 +64,8 @@ class MapEditor(wx.Panel, wx.FileDropTarget):
 
     def onChangeScale(self, event):
         self.display.setDrawScale(self.slider.GetValue() / 100.)
+
+    def onZoomButton(self, event):
+        self.display.setDrawScale(1)
+        self.slider.SetValue(100)
 

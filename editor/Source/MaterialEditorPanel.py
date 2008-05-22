@@ -16,7 +16,7 @@ class MaterialEditorPanel(wx.Panel):
 
         sizer = wx.BoxSizer(wx.HORIZONTAL)
         sizer.Add(self.browser, 0, wx.EXPAND)
-        sizer.Add(toolbar, 1, wx.CENTER | wx.ALIGN_CENTER)
+        sizer.Add(toolbar, 1, wx.ALIGN_CENTER)
         self.SetSizer(sizer)
 
         menu1 = wx.Menu()

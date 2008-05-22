@@ -15,3 +15,4 @@ class MapPreviewDialog(wx.Dialog):
         sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.Add(self.display, 0, wx.ALIGN_CENTER)
         self.SetSizerAndFit(sizer)
+        

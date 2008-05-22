@@ -17,6 +17,7 @@ namespace pammo
 
 World::World(Game* game)
 {
+    mZoomedOut = false;
 	mGame = game;
     mLastPhase = Touch::PhaseBegin;
 }
@@ -30,6 +31,7 @@ int World::init()
 {
     int ret;
 	mCamera = new Camera(Vector2(0, 0), getFrameSize());
+    mTargetCameraSize = mCamera->mSize;
     mVehicle = new Vehicle;
     ret = mVehicle->init();
     if(ret < 0)
@@ -55,6 +57,8 @@ void World::addEntity(Entity* entity)
 
 void World::setPath(Vector2Vec const& path)
 {
+    zoomIn();
+
     Vector2Vec worldPath;
     for(Vector2Vec::const_iterator i = path.begin(); i!=path.end(); ++i)
     {
@@ -73,6 +77,18 @@ void World::draw()
     
     mVehicle->draw();
 
+    if(mTargetCameraSize != mCamera->mSize)
+    {
+        Vector2 step = (mCamera->mSize - mTargetCameraSize)/4.0;
+        if(fabs(step.x) < 0.5)
+        {
+            mCamera->mSize = mTargetCameraSize;
+        }
+        else
+        {
+            mCamera->mSize-= step;
+        }
+    }
     mCamera->mCenter = mVehicle->mCenter;
     mCamera->makeDirty();
     mCamera->set();
@@ -83,6 +99,30 @@ void World::update(int delta)
     mVehicle->update(delta);
 }
 
+bool World::isZoomedOut()
+{
+    return mZoomedOut;
+}
+
+void World::zoomOut()
+{
+    if(mZoomedOut)
+        return;
+
+    mTargetCameraSize = mCamera->mSize*3.0;
+    mZoomedOut = true;
+}
+
+void World::zoomIn()
+{
+    if(!mZoomedOut)
+        return;
+
+    mTargetCameraSize = mCamera->mSize/3.0;
+    mZoomedOut = false;
+}
+
+
 bool World::touch(uint32_t count, Touch* touches)
 {
     // Zoom out.
@@ -91,19 +131,30 @@ bool World::touch(uint32_t count, Touch* touches)
         // No motion occurred.
         if(mLastPhase == Touch::PhaseBegin && touches[0].mPhase == Touch::PhaseEnd)
         {
-            mLastPhase = touches[0].mPhase;
-            mCamera->mSize*=2;
+            if(!mZoomedOut)
+            {
+                mLastPhase = touches[0].mPhase;
+                zoomOut();
+            }
             return true;
         }
     }    
     // Zoom in.
 
-    else if(count == 1 && mLastPhase == Touch::PhaseBegin && touches[0].mPhase == Touch::PhaseEnd)
+    else if(count == 1)
     {
-        mLastPhase = touches[0].mPhase;
-        mCamera->mSize/=2;
-        return true;
+        if(mLastPhase == Touch::PhaseBegin && touches[0].mPhase == Touch::PhaseEnd)
+        {
+            if(mZoomedOut)
+            {
+                mLastPhase = touches[0].mPhase;
+                zoomIn();
+            }
+            return true;
+        }
     }
+
+    mLastPhase = touches[0].mPhase;
 
 //    else if(count == 1 touches[0].mPhase == Touch::PhaseMove)
 //    {
@@ -112,6 +163,7 @@ bool World::touch(uint32_t count, Touch* touches)
 
 
     mVehicle->touch(count, touches);
+
 
 
     return false;

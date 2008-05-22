@@ -43,15 +43,22 @@ void PathWidget::draw()
 
 bool PathWidget::touch(uint32_t count, Touch* touches)
 {
-    bool ret = false;
+    if(count != 1)
+        return false;
+
+    if(mWorld->isZoomedOut() == false)
+        return false;
+
     // Always only use first touch point.
     switch(touches[0].mPhase)
     {
     case Touch::PhaseBegin:
+        return false;
+
     case Touch::PhaseMove:
         mBuilding = true;
         addPoint(touches[0].mLocation);
-        ret = true;
+        return true;
         break;
 
     case Touch::PhaseEnd:
@@ -60,12 +67,11 @@ bool PathWidget::touch(uint32_t count, Touch* touches)
             mWorld->setPath(mPoints);
             clear();
             mBuilding = false;
-            ret = true;
+            return true;
         }
-        break;
     }
 
-    return ret;
+    return false;
 }
 
 void PathWidget::update(int delta)

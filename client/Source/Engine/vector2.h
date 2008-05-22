@@ -55,7 +55,12 @@ struct Vector2
 			return x == rhs.x && y == rhs.y;
 		}
 		
-		float operator[](uint32_t i) const
+		bool operator!=(Vector2 const& rhs) const
+		{
+			return !(x == rhs.x && y == rhs.y);
+		}
+
+        float operator[](uint32_t i) const
 		{
 			switch(i)
 			{

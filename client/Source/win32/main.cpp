@@ -7,130 +7,137 @@ class InputProcessor
 public:
     InputProcessor()
     {
-        mDownState = 0;
+        memset(&mDown, 0, sizeof(mDown));
     }
 
     ~InputProcessor()
     {
     }
 
-    int mDownState;
     SDL_keysym mKeySym;
+    bool mDown[5];
 
     void InputProcessor::update(Game* game)
     {
         SDL_Event event;
         Vector2 location;
-        Touch touch[2];
-
+        Touch touch[5];
+        bool altUp = false;
+        bool mouseUp = false;
         while(SDL_PollEvent(&event)) 
         {
             switch(event.type) 
             {
             case SDL_KEYDOWN:
                 mKeySym = event.key.keysym;
+                if(mKeySym.sym == SDLK_RALT || mKeySym.sym== SDLK_LALT)
+                {
+                    touch[1].mPhase = Touch::PhaseBegin;
+                    touch[1].mLocation = touch[0].mLocation;
+                    mDown[1] = true;
+                }
                 break;
 
             case SDL_KEYUP:
                 memset(&mKeySym, 0, sizeof(mKeySym));
+                if(mKeySym.sym == SDLK_RALT || mKeySym.sym== SDLK_LALT)
+                {
+                    touch[1].mPhase = Touch::PhaseEnd;
+                    touch[1].mLocation = touch[0].mLocation;
+                    altUp = true;
+                }
                 break;
 
             case SDL_MOUSEMOTION:
-                if(mDownState == 0)
+                if(mDown[0] == false)
                     break;
-
-                 // If this was the first down, advance to still down and start touch
-                if(mDownState == 1)
-                {
-                    touch[0].mPhase = Touch::PhaseBegin;
-                    mDownState = 2;
-                }
-                // If still down, touch move
-                else if(mDownState == 2)
+                
+                if(mDown[0])
                 {
                     touch[0].mPhase = Touch::PhaseMove;
+                    touch[0].mLocation.x = event.motion.x;
+                    touch[0].mLocation.y = event.motion.y;
                 }
 
-                touch[0].mLocation.x = event.motion.x;
-                touch[0].mLocation.y = event.motion.y;
-                
-                // Tell the game it's being touched.
-                  
-                
-                // Two finger hack.
-                if(mKeySym.sym == SDLK_RALT || mKeySym.sym== SDLK_LALT)
+                if(mDown[1])
                 {
-                    // SCD: This is wrong. We need to generate a touch end if only alt is released.
-                    touch[1].mLocation = touch[0].mLocation;
-                    touch[1].mPhase = touch[0].mPhase;
-                    game->touches(2, touch);
+                    touch[1].mPhase = Touch::PhaseMove;
+                    touch[1].mLocation.x = event.motion.x;
+                    touch[1].mLocation.y = event.motion.y;
                 }
-                else
-                {
-                    game->touches(1, touch);
-                }
+
                 break;
 
             case SDL_MOUSEBUTTONDOWN:
-                touch[0].mLocation.x = event.motion.x;
-                touch[0].mLocation.y = event.motion.y;
+                mDown[0] = true;
                 touch[0].mPhase = Touch::PhaseBegin;
-                if(mKeySym.sym == SDLK_RALT || mKeySym.sym== SDLK_LALT)
+                touch[0].mLocation.x = event.button.x;
+                touch[0].mLocation.y = event.button.y;
+                if(mDown[1])
                 {
-                    dprintf("two finger touch/click\n");
-                    touch[1].mLocation.x = event.motion.x;
-                    touch[1].mLocation.y = event.motion.y;
                     touch[1].mPhase = Touch::PhaseBegin;
-                    game->touches(2, touch);
-
+                    touch[1].mLocation.x = event.button.x;
+                    touch[1].mLocation.y = event.button.y;
                 }
-                else
-                {
-                    dprintf("touch/click\n");
-                    game->touches(1, touch);
-                }
-
-
-                mDownState = 1;
                 break;
 
             case SDL_MOUSEBUTTONUP:
-                touch[0].mLocation.x = event.motion.x;
-                touch[0].mLocation.y = event.motion.y;
+                mouseUp = true;
                 touch[0].mPhase = Touch::PhaseEnd;
-                if(mKeySym.sym == SDLK_RALT || mKeySym.sym== SDLK_LALT)
+                touch[0].mLocation.x = event.button.x;
+                touch[0].mLocation.y = event.button.y;
+                if(mDown[1])
                 {
-                    dprintf("two finger touch/click\n");
-                    touch[1].mLocation.x = event.motion.x;
-                    touch[1].mLocation.y = event.motion.y;
                     touch[1].mPhase = Touch::PhaseEnd;
-                    game->touches(2, touch);
-
+                    touch[1].mLocation.x = event.button.x;
+                    touch[1].mLocation.y = event.button.y;
                 }
-                else
-                {
-                    dprintf("touch/click\n");
-                    game->touches(1, touch);
-                }
-                mDownState = 0;
-
                 break;
 
             case SDL_QUIT:
                 exit(0);
+            }// switch
+
+            if(mDown[0] && mDown[1])
+            {
+                if(mouseUp)
+                {
+                    touch[1].mPhase = Touch::PhaseEnd;
+                }
+
+                game->touches(2, touch);
+
+                if(mouseUp)
+                {
+                    mDown[0] = false;
+                    mDown[1] = false;
+                }
+
+                if(altUp)
+                {
+                    mDown[1] = false;
+                }
             }
-        }    
+            else if(mDown[0] && !mDown[1])
+            {
+                game->touches(1, touch);
+                if(mouseUp)
+                {
+                    mDown[0] = false;
+                }
+            }
+        }// while    
     }
-};
+};// class
 
 int main(int argc, char *argv[]) 
 {
     SDL_Surface* screen;
     SDL_Init(SDL_INIT_VIDEO);
-    screen = SDL_SetVideoMode(getFrameSize().x, getFrameSize().y, 0, SDL_OPENGL);
+    screen = SDL_SetVideoMode((int)getFrameSize().x, (int)getFrameSize().y, 0, SDL_OPENGL);
     SDL_WM_SetCaption("PAMMO", NULL);
 
-    glViewport(0, 0, getFrameSize().x, getFrameSize().y);
+    glViewport(0, 0, (int)getFrameSize().x, (int)getFrameSize().y);
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glEnable(GL_BLEND);
     glDisable(GL_DEPTH_TEST);

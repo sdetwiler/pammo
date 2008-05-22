@@ -41,16 +41,23 @@ class World :
         virtual uint32_t getDrawPriority() const;
 
 		void addEntity(Entity* entity);
+
+        void zoomOut();
+        void zoomIn();
+        bool isZoomedOut();
     
     protected:
     private:
 		Game* mGame;
 		Camera* mCamera;
+        Vector2 mTargetCameraSize;
         typedef vector< Entity* > EntityVector;
 		EntityVector mEntities;
         Vehicle* mVehicle;
         EntityVector mVehicles;
         Touch::Phase mLastPhase;
+
+        bool mZoomedOut;
 };
 
 }

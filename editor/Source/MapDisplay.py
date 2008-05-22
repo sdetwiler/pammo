@@ -11,6 +11,7 @@ class MapDisplay(wx.ScrolledWindow):
         self.Bind(wx.EVT_LEFT_UP, self.onMouseEvent)
         self.Bind(wx.EVT_MOTION, self.onMouseEvent)
         self.Bind(wx.EVT_PAINT, self.OnPaint)
+        self.Bind(wx.EVT_WINDOW_DESTROY, self.onDestroy)
 
         self.mouseObservers = []
         self.drawObservers = []
@@ -21,6 +22,9 @@ class MapDisplay(wx.ScrolledWindow):
         self.map.addObserver(self.onMapChanged)
 
         self.updateVirtualSize()
+
+    def onDestroy(self, event):
+        self.map.removeObserver(self.onMapChanged)
 
     def getMap(self): return self.map
 
@@ -64,10 +68,17 @@ class MapDisplay(wx.ScrolledWindow):
         dc = wx.PaintDC(self)
         self.PrepareDC(dc)
         dc.BeginDrawing()
-
         gc = wx.GraphicsContext.Create(dc)
 
-        gc.PushState()
+        #print dir(self)
+        #print self.GetSize()
+        #print self.GetViewStart()
+        #buffer = wx.EmptyBitmap(self.GetSize()[0], self.GetSize()[1])
+        #bufferDC = wx.BufferedDC(None, buffer)
+        #self.PrepareDC(bufferDC)
+        #bufferDC.BeginDrawing()
+        #gc = wx.GraphicsContext.Create(bufferDC)
+
         gc.Scale(self.drawScale, self.drawScale)
         
         (sizeX, sizeY) = self.map.getProperties().getSize()
@@ -106,6 +117,12 @@ class MapDisplay(wx.ScrolledWindow):
 
         for observer in self.drawObservers: observer(self, gc)
 
-        gc.PopState()
+        #bufferDC.EndDrawing()
 
+        #dc = wx.PaintDC(self)
+        #self.PrepareDC(dc)
+        #dc.BeginDrawing()
+        #dc.DrawBitmap(buffer, -self.GetViewStart()[0], -self.GetViewStart()[1], False)
+        #dc.DrawBitmap(buffer, 0, 0, False)
+        
         dc.EndDrawing()

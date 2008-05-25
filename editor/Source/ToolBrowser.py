@@ -17,11 +17,11 @@ class ToolBrowser(wx.Panel):
         self.selectedTool = None
         self.selectedEditor = None
 
-        self.materialToolPanel = MaterialToolPanel.MaterialToolPanel(self.notebook, -1)
-        self.notebook.AddPage(self.materialToolPanel, "Materials")
-
         self.propToolPanel = PropToolPanel.PropToolPanel(self.notebook, -1)
         self.notebook.AddPage(self.propToolPanel, "Props")
+
+        self.materialToolPanel = MaterialToolPanel.MaterialToolPanel(self.notebook, -1)
+        self.notebook.AddPage(self.materialToolPanel, "Materials")
 
     def addObserver(self, observer): self.observers.append(observer)
     def removeObserver(self, observer): self.observers.remove(observer)
@@ -32,6 +32,7 @@ class ToolBrowser(wx.Panel):
         self.selectedTool = self.notebook.GetPage(self.notebook.GetSelection())
         if self.selectedEditor:
             self.selectedTool.attachToEditor(self.selectedEditor)
+            self.selectedEditor.Refresh()
 
     def onEditorChanged(self, editor):
         if self.selectedEditor:

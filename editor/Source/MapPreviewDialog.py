@@ -8,7 +8,6 @@ class MapPreviewDialog(wx.Dialog):
 
         self.map = map
         self.display = MapDisplay.MapDisplay(self, -1, map)
-        self.display.setDrawGrid(False)
 
         self.display.SetMinSize((320, 480))
 

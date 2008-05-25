@@ -16,7 +16,6 @@ class MapDisplay(wx.ScrolledWindow):
         self.mouseObservers = []
         self.drawObservers = []
 
-        self.drawGrid = True
         self.drawScale = 1
         self.map = map
         self.map.addObserver(self.onMapChanged)
@@ -34,12 +33,6 @@ class MapDisplay(wx.ScrolledWindow):
 
     def addDrawObserver(self, observer): self.drawObservers.append(observer)
     def removeDrawObserver(self, observer): self.drawObservers.remove(observer)
-
-    def getDrawGrid(self): return self.drawGrid
-
-    def setDrawGrid(self, drawGrid):
-        self.drawGrid = drawGrid
-        self.Refresh()
 
     def getDrawScale(self): return self.drawScale
     
@@ -88,13 +81,6 @@ class MapDisplay(wx.ScrolledWindow):
                 materialTile = MaterialLibrary.getMaterial(self.map.getMaterialTile(x, y))
                 if not materialTile: continue
                 gc.DrawBitmap(materialTile.getBitmap(), x*tileSize, y*tileSize, tileSize, tileSize)
-
-        if self.drawGrid:
-            gc.SetPen(wx.Pen("Black", 3))
-            for x in range(sizeX+1):
-                gc.StrokeLine(x*tileSize, 0, x*tileSize, sizeY*tileSize)
-            for y in range(sizeY+1):
-                gc.StrokeLine(0, y*tileSize, sizeX*tileSize, y*tileSize)
 
         for e in self.map.getEntities():
             s = e.getSprite()

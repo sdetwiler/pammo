@@ -58,3 +58,9 @@ class Entity:
         if self.rot != rot: notify = True
         self.rot = rot
         if notify: self._notify()
+
+    def getRect(self):
+        return(self.pos[0] - self.size[0]/2*self.scale,
+        self.pos[1] - self.size[1]/2*self.scale,
+        self.pos[0] + self.size[0]/2*self.scale,
+        self.pos[1] + self.size[1]/2*self.scale)

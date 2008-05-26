@@ -20,6 +20,8 @@ class MapDisplay(wx.ScrolledWindow):
         self.map = map
         self.map.addObserver(self.onMapChanged)
 
+        self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM)
+
         self.updateVirtualSize()
 
     def onDestroy(self, event):
@@ -51,33 +53,37 @@ class MapDisplay(wx.ScrolledWindow):
 
     def calcMapLocationFromScreen(self, x, y):
         wx, wy = self.CalcUnscrolledPosition(x, y)
-        wx, wy = wx / self.getDrawScale(), wy / self.getDrawScale()
+        wx, wy = wx / self.drawScale, wy / self.drawScale
         return wx, wy
 
     def onMapChanged(self, map):
         self.Refresh()
 
     def OnPaint(self, event):
-        dc = wx.PaintDC(self)
-        self.PrepareDC(dc)
-        dc.BeginDrawing()
-        gc = wx.GraphicsContext.Create(dc)
+        drawLeft = self.GetViewStart()[0] * self.GetScrollPixelsPerUnit()[0] / self.drawScale
+        drawTop = self.GetViewStart()[1] * self.GetScrollPixelsPerUnit()[1] / self.drawScale
+        drawRight = drawLeft + self.GetSize()[0] / self.drawScale
+        drawBottom = drawTop + self.GetSize()[1] / self.drawScale
+        drawRect = (drawLeft, drawTop, drawRight, drawBottom)
 
-        #print dir(self)
-        #print self.GetSize()
-        #print self.GetViewStart()
-        #buffer = wx.EmptyBitmap(self.GetSize()[0], self.GetSize()[1])
-        #bufferDC = wx.BufferedDC(None, buffer)
-        #self.PrepareDC(bufferDC)
-        #bufferDC.BeginDrawing()
-        #gc = wx.GraphicsContext.Create(bufferDC)
+        dc = wx.AutoBufferedPaintDCFactory(self)
+        dc.Clear()
+        self.PrepareDC(dc)
+        gc = wx.GraphicsContext.Create(dc)
 
         gc.Scale(self.drawScale, self.drawScale)
         
         (sizeX, sizeY) = self.map.getProperties().getSize()
         tileSize = MaterialLibrary.getMaterialSize()
-        for y in range(sizeY):
-            for x in range(sizeX):
+        startX = int(drawLeft // tileSize)
+        startY = int(drawTop // tileSize)
+        endX = int(drawRight // tileSize + 1)
+        endY = int(drawBottom // tileSize + 1)
+        if endX > sizeX: endX = sizeX
+        if endY > sizeY: endY = sizeY
+
+        for y in range(startY, endY):
+            for x in range(startX, endX):
                 materialTile = MaterialLibrary.getMaterial(self.map.getMaterialTile(x, y))
                 if not materialTile: continue
                 gc.DrawBitmap(materialTile.getBitmap(), x*tileSize, y*tileSize, tileSize, tileSize)
@@ -96,19 +102,9 @@ class MapDisplay(wx.ScrolledWindow):
             gc.PushState()
             gc.Translate(pos[0], pos[1])
             gc.Scale(scale, scale)
-            gc.Rotate(rot)
+            #gc.Rotate(rot)
             gc.Translate(-w/2, -h/2)
             gc.DrawBitmap(bitmap, 0, 0, w, h)
             gc.PopState()
 
-        for observer in self.drawObservers: observer(self, gc)
-
-        #bufferDC.EndDrawing()
-
-        #dc = wx.PaintDC(self)
-        #self.PrepareDC(dc)
-        #dc.BeginDrawing()
-        #dc.DrawBitmap(buffer, -self.GetViewStart()[0], -self.GetViewStart()[1], False)
-        #dc.DrawBitmap(buffer, 0, 0, False)
-        
-        dc.EndDrawing()
+        for observer in self.drawObservers: observer(self, gc, drawRect)

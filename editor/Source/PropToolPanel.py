@@ -261,18 +261,24 @@ class PropToolPanel(wx.Panel):
             self.tracking.setPos(pos)
             self.editor.Refresh()
 
-    def onMapDraw(self, display, gc):
+    def onMapDraw(self, display, gc, rect):
         if self.snapButton.GetValue():
             (worldX, worldY) = display.getMap().getProperties().getSize()
             (worldX, worldY) = (worldX*MaterialLibrary.getMaterialSize(), worldY*MaterialLibrary.getMaterialSize())
             
             tileSize = float(self.snapAmount.GetValue())
             sizeX, sizeY = (int(worldX // tileSize), int(worldY // tileSize))
+            startX = int(rect[0] // tileSize)
+            startY = int(rect[1] // tileSize)
+            endX = int(rect[2] // tileSize + 1)
+            endY = int(rect[3] // tileSize + 1)
+            if endX > sizeX: endX = sizeX
+            if endY > sizeY: endY = sizeY
 
             gc.SetPen(wx.Pen(wx.Color(0, 0, 0, 32), 2))
-            for x in range(sizeX + 1):
+            for x in range(startX, endX+1):
                 gc.StrokeLine(x*tileSize, 0, x*tileSize, sizeY*tileSize)
-            for y in range(sizeY + 1):
+            for y in range(startY, endY+1):
                 gc.StrokeLine(0, y*tileSize, sizeX*tileSize, y*tileSize)
 
         if self.outlineButton.GetValue():

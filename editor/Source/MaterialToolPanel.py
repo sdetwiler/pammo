@@ -54,16 +54,22 @@ class MaterialToolPanel(wx.Panel):
         self.drawGrid = event.IsChecked()
         if self.editor: self.editor.Refresh()
 
-    def onMapDraw(self, display, gc):
+    def onMapDraw(self, display, gc, rect):
         if not self.drawGrid: return
 
         (sizeX, sizeY) = display.getMap().getProperties().getSize()
         tileSize = MaterialLibrary.getMaterialSize()
+        startX = int(rect[0] // tileSize)
+        startY = int(rect[1] // tileSize)
+        endX = int(rect[2] // tileSize + 1)
+        endY = int(rect[3] // tileSize + 1)
+        if endX > sizeX: endX = sizeX
+        if endY > sizeY: endY = sizeY
 
         gc.SetPen(wx.Pen(wx.Color(0, 0, 0, 168), 3))
-        for x in range(sizeX+1):
+        for x in range(startX, endX + 1):
             gc.StrokeLine(x*tileSize, 0, x*tileSize, sizeY*tileSize)
-        for y in range(sizeY+1):
+        for y in range(startY, endY + 1):
             gc.StrokeLine(0, y*tileSize, sizeX*tileSize, y*tileSize)
         
         

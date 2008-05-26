@@ -255,7 +255,7 @@ class PropToolPanel(wx.Panel):
             pos = (self.initialPos[0] + x - self.initialClick[0], self.initialPos[1] + y - self.initialClick[1])
             if self.snapButton.GetValue():
                 snap = float(self.snapAmount.GetValue())
-                pos = (((pos[0] + snap/2.)//snap)*snap, ((pos[1] + snap/2.)//snap)*snap)
+                pos = (((pos[0] + snap)//snap)*snap-snap/2., ((pos[1] + snap)//snap)*snap - snap/2.)
             curPos = self.tracking.getPos()
             if curPos[0] == pos[0] and curPos[1] == pos[1]: return
             self.tracking.setPos(pos)

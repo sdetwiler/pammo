@@ -60,7 +60,8 @@ class Entity:
         if notify: self._notify()
 
     def getRect(self):
-        return(self.pos[0] - self.size[0]/2*self.scale,
-        self.pos[1] - self.size[1]/2*self.scale,
-        self.pos[0] + self.size[0]/2*self.scale,
-        self.pos[1] + self.size[1]/2*self.scale)
+        size = (self.getSprite().getBitmap().GetWidth(), self.getSprite().getBitmap().GetHeight())
+        return(self.pos[0] - size[0]/2*self.scale,
+        self.pos[1] - size[1]/2*self.scale,
+        self.pos[0] + size[0]/2*self.scale,
+        self.pos[1] + size[1]/2*self.scale)

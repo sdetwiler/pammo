@@ -252,17 +252,25 @@ class PropToolPanel(wx.Panel):
                 self.editor.Refresh()
         
         if event.LeftIsDown() and self.tracking:
-            pos = (self.initialPos[0] + x - self.initialClick[0], self.initialPos[1] + y - self.initialClick[1])
+            pos = [self.initialPos[0] + x - self.initialClick[0], self.initialPos[1] + y - self.initialClick[1]]
+            curPos = self.tracking.getPos()
             if self.snapButton.GetValue():
                 snap = float(self.snapAmount.GetValue())
-                pos = (((pos[0] + snap)//snap)*snap-snap/2., ((pos[1] + snap)//snap)*snap - snap/2.)
-            curPos = self.tracking.getPos()
+                rect = self.tracking.getRect()
+                offset = (pos[0] - curPos[0], pos[1] - curPos[1])
+                rect = (rect[0]+offset[0], rect[1]+offset[1], rect[2]+offset[0], rect[3]+offset[1])
+                snapRect = ((rect[0] + snap/2.) // snap * snap, (rect[1] + snap/2.) // snap * snap, (rect[2] + snap/2.) // snap * snap, (rect[3] + snap/2.) // snap * snap)
+                diffRect = (snapRect[0] - rect[0], snapRect[1] - rect[1], snapRect[2] - rect[2], snapRect[3] - rect[3])
+                if diffRect[0] < diffRect[2]: pos[0] += diffRect[0]
+                else: pos[0] += diffRect[2]
+                if diffRect[1] < diffRect[3]: pos[1] += diffRect[1]
+                else: pos[1] += diffRect[3]
             if curPos[0] == pos[0] and curPos[1] == pos[1]: return
             self.tracking.setPos(pos)
             self.editor.Refresh()
 
     def onMapDraw(self, display, gc, rect):
-        if self.snapButton.GetValue():
+        if self.snapButton.GetValue() and self.snapAmount.GetValue():
             (worldX, worldY) = display.getMap().getProperties().getSize()
             (worldX, worldY) = (worldX*MaterialLibrary.getMaterialSize(), worldY*MaterialLibrary.getMaterialSize())
             

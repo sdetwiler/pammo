@@ -8,6 +8,7 @@ import MapProperties
 import MapPropertiesDialog
 import MapPreviewDialog
 import ToolBrowser
+import BinaryMap
 
 class MapEditorPanel(wx.Panel):
     def __init__(self, parent, id):
@@ -61,10 +62,10 @@ class MapEditorPanel(wx.Panel):
         #map.setProperties(properties)
         #self.newEditorForMap(map)
 
-        #f = open("/Users/jmarr/Desktop/Pammo/editor/Maps/Desert.map")
-        #map = Map.Map()
-        #map.loadFromFile("Desert", f)
-        #self.newEditorForMap(map)
+        f = open("/Users/jmarr/Desktop/Pammo/editor/Maps/Desert.map")
+        map = Map.Map()
+        map.loadFromFile("Desert", f)
+        self.newEditorForMap(map)
 
     def onNewMenu(self, event):
         properties = MapProperties.MapProperties()
@@ -244,6 +245,8 @@ class MapEditorPanel(wx.Panel):
                 if res == wx.ID_NO: return False
         f = open(path, "w")
         map.saveToFile(f)
+        try: BinaryMap.save(map)
+        except: self.showMessage('Could not save map in client data folder')
         return True
 
     def updateMenuState(self):

@@ -143,7 +143,7 @@ class MapEditorPanel(wx.Panel):
         index = self.mapNotebook.GetSelection()
         editor = self.mapNotebook.GetPage(index)
         if not self.askDeleteMap(editor.getMap()): return
-        os.remove(os.getcwd() + '/Maps/%s.map' % editor.getMap().getProperties().getName())
+        os.remove(os.getcwd() + '/maps/%s.map' % editor.getMap().getProperties().getName())
         self.mapNotebook.RemovePage(index)
         self.onMapNotebookPageChanged(None)
         editor.Destroy()

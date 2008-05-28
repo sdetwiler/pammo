@@ -2,4 +2,4 @@
 
 cd $(dirname $0)
 
-python Source/PammoEditor.py
+python source/PammoEditor.py

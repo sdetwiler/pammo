@@ -57,8 +57,8 @@ void dprintf(char const* format, ...)
 	const int toggleOffset = 16;
 	mToggleButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
 	mToggleButton.frame =  CGRectMake(frame.size.width-toggleWidth-toggleOffset, frame.size.height-toggleHeight - toggleOffset, toggleWidth, toggleHeight);
-	[mToggleButton setTitle:@"Console" forStates: UIControlStateNormal];
-	[mToggleButton setTitleColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:1] forStates: UIControlStateNormal];
+	[mToggleButton setTitle:@"Console" forState: UIControlStateNormal];
+	[mToggleButton setTitleColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:1] forState: UIControlStateNormal];
     [mToggleButton addTarget:self action:@selector(toggleOutput:) forControlEvents:UIControlEventTouchUpInside]; 
 	[self addSubview:mToggleButton];
 	
@@ -104,12 +104,12 @@ void dprintf(char const* format, ...)
 	if(mOutput.hidden)
 	{
 		mOutput.hidden = NO;
-		[mToggleButton setTitleColor:[UIColor colorWithRed:1 green:0 blue:0 alpha:1] forStates: UIControlStateNormal];
+		[mToggleButton setTitleColor:[UIColor colorWithRed:1 green:0 blue:0 alpha:1] forState: UIControlStateNormal];
 	}
 	else
 	{
 		mOutput.hidden = YES;
-		[mToggleButton setTitleColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:1] forStates: UIControlStateNormal];
+		[mToggleButton setTitleColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:1] forState: UIControlStateNormal];
 	}
 }
 

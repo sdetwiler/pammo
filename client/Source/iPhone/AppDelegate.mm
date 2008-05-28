@@ -6,14 +6,14 @@
 //  Copyright __MyCompanyName__ 2008. All rights reserved.
 //
 
-#import "FlainAppDelegate.h"
-#import "MyView.h"
+#import "AppDelegate.h"
+#import "MainView.h"
 #import "debugConsole.h"
 
-@implementation FlainAppDelegate
+@implementation AppDelegate
 
 @synthesize mWindow;
-@synthesize mContentView;
+@synthesize mMainView;
 @synthesize mDebugConsole;
 
 - (void)applicationDidFinishLaunching:(UIApplication *)application
@@ -24,11 +24,11 @@
 	// Create debug console
 	self.mDebugConsole = [[[DebugConsole alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]] autorelease];
 	
-	// Create content view
-	self.mContentView = [[[MyView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]] autorelease];
+	// Create main view
+	self.mMainView = [[[MainView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]] autorelease];
     
-    // Set up content view
-	[mWindow addSubview:mContentView];
+    // Set up main view
+	[mWindow addSubview:mMainView];
 	
     // Set up debug console
 	[mWindow addSubview:mDebugConsole];
@@ -37,10 +37,20 @@
 	[mWindow makeKeyAndVisible];
 }
 
+- (void)applicationWillResignActive:(UIApplication *)application
+{
+	[self.mMainView stopAnimation];
+}
+
+- (void)applicationDidBecomeActive:(UIApplication *)application
+{
+	[self.mMainView startAnimation];
+}
+
 - (void)dealloc
 {
 	[mDebugConsole release];
-	[mContentView release];
+	[mMainView release];
 	[mWindow release];
 	[super dealloc];
 }

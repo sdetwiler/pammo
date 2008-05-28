@@ -9,18 +9,18 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 	
-@class MyView;
+@class MainView;
 @class DebugConsole;
 
-@interface FlainAppDelegate : NSObject
+@interface AppDelegate : NSObject
 {
     UIWindow *mWindow;
-    MyView *mContentView;
+    MainView *mMainView;
 	DebugConsole* mDebugConsole;
 }
 
 @property (nonatomic, retain) UIWindow *mWindow;
-@property (nonatomic, retain) MyView *mContentView;
+@property (nonatomic, retain) MainView *mMainView;
 @property (nonatomic, retain) DebugConsole *mDebugConsole;
 
 @end

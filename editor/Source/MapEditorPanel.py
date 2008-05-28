@@ -62,10 +62,10 @@ class MapEditorPanel(wx.Panel):
         #map.setProperties(properties)
         #self.newEditorForMap(map)
 
-        f = open("/Users/jmarr/Desktop/Pammo/editor/Maps/Desert.map")
-        map = Map.Map()
-        map.loadFromFile("Desert", f)
-        self.newEditorForMap(map)
+        #f = open("/Users/jmarr/Desktop/Pammo/editor/Maps/Desert.map")
+        #map = Map.Map()
+        #map.loadFromFile("Desert", f)
+        #self.newEditorForMap(map)
 
     def onNewMenu(self, event):
         properties = MapProperties.MapProperties()

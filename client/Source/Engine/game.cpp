@@ -1,7 +1,7 @@
 #include "game.h"
 #include "builder.h"
 #include "world.h"
-#include "pathWidget.h"
+#include "pathManager.h"
 
 Game::Game()
 {
@@ -26,12 +26,11 @@ int Game::init()
 
     builder(world);
 
-    PathWidget* pathWidget = new PathWidget(world);
-    pathWidget->setDrawPriority(100);
-    pathWidget->setTouchPriority(1);
-    registerDrawable(pathWidget);
-    registerTouchable(pathWidget);
-
+    PathManager* pathManager = new PathManager(world);
+    pathManager->setDrawPriority(100);
+    pathManager->setTouchPriority(1);
+    registerDrawable(pathManager);
+    registerTouchable(pathManager);
 
     return 0;
 }

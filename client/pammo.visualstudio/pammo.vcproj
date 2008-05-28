@@ -214,7 +214,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\Source\Engine\pathWidget.h"
+				RelativePath="..\Source\Engine\pathManager.h"
 				>
 			</File>
 			<File
@@ -290,7 +290,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\Source\Engine\pathWidget.cpp"
+				RelativePath="..\Source\Engine\pathManager.cpp"
 				>
 			</File>
 			<File

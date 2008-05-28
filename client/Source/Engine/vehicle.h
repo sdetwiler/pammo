@@ -35,6 +35,8 @@ private:
     bool mMoving;
     Vector2Vec::iterator mCurrTarget;
     Vector2 mPosition;
+
+    float mSpeed; // in meters/second.
 };
 
 }

@@ -6,6 +6,7 @@ namespace pammo
 Vehicle::Vehicle()
 {
     mImage = NULL;
+    mSpeed = 10.0f;
 }
 
 Vehicle::~Vehicle()
@@ -49,19 +50,50 @@ void Vehicle::update(int delta)
     if(mMoving == false)
         return;
 
+    float toTravel = mSpeed;// * (delta/30.0f);
 
-    float dx = mCenter.x - (*mCurrTarget).x;
-    float dy = mCenter.y - (*mCurrTarget).y;
-
-    float theta = atan(dy/dx);
-    mRotation = theta-(90.0*0.0174532925);
-
-    mCenter = *mCurrTarget;
-    ++mCurrTarget;
-    if(mCurrTarget == mPath.end())
+    // How much to translate.
+    float theta;
+    while(true)
     {
-        mMoving = false;
+        float dx = (*mCurrTarget).x - mCenter.x;
+        float dy = (*mCurrTarget).y - mCenter.y;
+        float hyp = sqrt((dx*dx) + (dy*dy));
+        theta = atan2(dy, dx);
+
+//        dprintf("dx: %.2f dy: %.2f hyp: %.2f c.x: %.2f c.y: %.2f t.x: %.2f t.y: %.2f theta: %.2f\n", dx, dy, hyp, mCenter.x, mCenter.y, (*mCurrTarget).x, (*mCurrTarget).y, theta);
+
+        if(hyp < toTravel)
+        {
+            ++mCurrTarget;
+            if(mCurrTarget == mPath.end())
+            {
+                mMoving = false;
+                mCenter.x -= cos(theta)*hyp;
+                mCenter.y -= sin(theta)*hyp;
+                break;
+            }
+        }
+        else if(hyp > toTravel)
+        {
+            mCenter.x += cos(theta)*toTravel;
+            mCenter.y += sin(theta)*toTravel;
+            break;
+        }
+        else
+        {
+            mCenter = *mCurrTarget;
+            ++mCurrTarget;
+            if(mCurrTarget == mPath.end())
+            {
+                mMoving = false;
+            }
+            break;
+        }
     }
+
+    mRotation = theta + (90.0*0.0174532925);
+
     makeDirty();
 }
 

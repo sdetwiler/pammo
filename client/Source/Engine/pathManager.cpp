@@ -1,22 +1,23 @@
-#include "types_platform.h"
-#include "pathWidget.h"
+#include "pathManager.h"
 #include "world.h"
 
 namespace pammo
 {
 
-PathWidget::PathWidget(World* world)
+PathManager::PathManager(World* world)
 {
     mWorld = world;
     mBuilding = false;
+    mDrawPriority = 1;
+    mTouchPriority = 1;
 }
 
-PathWidget::~PathWidget()
+PathManager::~PathManager()
 {
 
 }
 
-void PathWidget::draw()
+void PathManager::draw()
 {
     if(mPoints.size() < 2)
         return;
@@ -41,7 +42,7 @@ void PathWidget::draw()
     glPopMatrix();
 }
 
-bool PathWidget::touch(uint32_t count, Touch* touches)
+bool PathManager::touch(uint32_t count, Touch* touches)
 {
     if(count != 1)
         return false;
@@ -74,19 +75,35 @@ bool PathWidget::touch(uint32_t count, Touch* touches)
     return false;
 }
 
-void PathWidget::update(int delta)
-{
-
-}
-
-void PathWidget::addPoint(Vector2 const& point)
+void PathManager::addPoint(Vector2 const& point)
 {
     mPoints.push_back(point);
 }
 
-void PathWidget::clear()
+void PathManager::clear()
 {
     mPoints.clear();
 }
 
+uint32_t PathManager::getDrawPriority() const
+{
+    return mDrawPriority;
 }
+
+void PathManager::setDrawPriority(uint32_t p)
+{
+    mDrawPriority = p;
+}
+
+uint32_t PathManager::getTouchPriority() const
+{
+    return mTouchPriority;
+}
+
+void PathManager::setTouchPriority(uint32_t p)
+{
+    mTouchPriority = p;
+}
+
+} // namespace pammo.
+

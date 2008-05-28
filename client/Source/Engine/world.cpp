@@ -76,7 +76,8 @@ void World::draw()
 	}
     
     mVehicle->draw();
-
+    
+    // Zoom the camera if required.
     if(mTargetCameraSize != mCamera->mSize)
     {
         Vector2 step = (mCamera->mSize - mTargetCameraSize)/4.0;
@@ -125,7 +126,7 @@ void World::zoomIn()
 
 bool World::touch(uint32_t count, Touch* touches)
 {
-    // Zoom out.
+    // Two finger touch: zoom out.
     if(count == 2)
     {
         // No motion occurred.
@@ -139,10 +140,11 @@ bool World::touch(uint32_t count, Touch* touches)
             return true;
         }
     }    
-    // Zoom in.
 
+    // One finger touch: zoom in.
     else if(count == 1)
     {
+        // No motion occured.
         if(mLastPhase == Touch::PhaseBegin && touches[0].mPhase == Touch::PhaseEnd)
         {
             if(mZoomedOut)
@@ -156,15 +158,8 @@ bool World::touch(uint32_t count, Touch* touches)
 
     mLastPhase = touches[0].mPhase;
 
-//    else if(count == 1 touches[0].mPhase == Touch::PhaseMove)
-//    {
-        // 
-
-
 
     mVehicle->touch(count, touches);
-
-
 
     return false;
 }

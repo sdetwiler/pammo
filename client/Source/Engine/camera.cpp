@@ -8,6 +8,7 @@
  */
 
 #include "camera.h"
+#include "image.h"
 
 namespace pammo
 {
@@ -82,28 +83,29 @@ Transform2 Camera::getInverseTransform()
 		
 void Camera::set()
 {
-    getTransform();
-    glLoadIdentity();
-    float trans[16];
-    memset(trans, 0, sizeof(trans));
-    trans[0] = mTransform[0];
-    trans[1] = mTransform[1];
-    trans[4] = mTransform[2];
-    trans[5] = mTransform[3];
-    trans[10] = 1.0;
-    trans[12] = mTransform[4];
-    trans[13] = mTransform[5];
-    trans[15] = 1.0;
-
+	getTransform();
+	float trans[16];
+	memset(trans, 0, sizeof(trans));
+	trans[0] = mTransform[0];
+	trans[1] = mTransform[1];
+	trans[4] = mTransform[2];
+	trans[5] = mTransform[3];
+	trans[10] = 1.0;
+	trans[12] = mTransform[4];
+	trans[13] = mTransform[5];
+	trans[15] = 1.0;
+		
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
     glMultMatrixf(trans);
+	glMatrixMode(GL_MODELVIEW);
+}
 	
-	//CGContextConcatCTM(context, getTransform());
-	//CGContextTranslateCTM(context, -mCenter.x + mScale.width/2, -mCenter.y + mScale.height/2);
-	//CGContextRotateCTM(context, mRotation);
-	//CGContextTranslateCTM(context, -mScale.width/2, -mScale.height/2);
-	//CGContextScaleCTM(context, 320 / mScale.width, 480 / mScale.height);
-	
-	//dprintf("Set camera information");
+void Camera::unset()
+{
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+	glMatrixMode(GL_MODELVIEW);
 }
 
 Vector2 Camera::translateToScreen(Vector2 const& worldSpace)

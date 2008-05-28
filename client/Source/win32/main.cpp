@@ -137,20 +137,6 @@ int main(int argc, char *argv[])
     screen = SDL_SetVideoMode((int)getFrameSize().x, (int)getFrameSize().y, 0, SDL_OPENGL);
     SDL_WM_SetCaption("PAMMO", NULL);
 
-    glViewport(0, 0, (int)getFrameSize().x, (int)getFrameSize().y);
-    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-    glEnable(GL_BLEND);
-    glDisable(GL_DEPTH_TEST);
-    
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-
-    glOrtho(0, getFrameSize().x, getFrameSize().y, 0, -1.0, 1.0);
-
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-
     int ret;
     Game* game = new Game;
     ret = game->init(); 
@@ -167,7 +153,6 @@ int main(int argc, char *argv[])
 
         game->update(1);
 
-        glClear(GL_COLOR_BUFFER_BIT);		// Clear The Screen
         game->draw();
         SDL_GL_SwapBuffers();
 

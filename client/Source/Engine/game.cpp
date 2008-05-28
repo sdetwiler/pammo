@@ -45,6 +45,29 @@ void Game::update(int delta)
 
 void Game::draw()
 {
+	Vector2 frame = getFrameSize();
+	
+	glViewport(0, 0, (int)frame.x, (int)frame.y);
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	glClear(GL_COLOR_BUFFER_BIT);
+	
+	glEnable(GL_BLEND);
+	glDisable(GL_DEPTH_TEST);
+	glEnable(GL_TEXTURE_2D);
+	glEnable(GL_LINE_SMOOTH);
+	
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glOrthof(0, frame.x, frame.y, 0, -1.0, 1.0);
+	
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	
     for(DrawableMap::iterator i = mDrawable.begin(); i!= mDrawable.end(); ++i)
     {
         i->second->draw();

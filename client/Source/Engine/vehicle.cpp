@@ -16,7 +16,7 @@ Vehicle::~Vehicle()
 
 int Vehicle::init()
 {
-    Image* image = openImage("flameTank.png");
+    Image* image = openImage("data/vehicles/flameTank.png");
     if(!image)
     {
         return -1;

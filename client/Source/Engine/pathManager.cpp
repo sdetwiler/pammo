@@ -21,25 +21,30 @@ void PathManager::draw()
 {
     if(mPoints.size() < 2)
         return;
-
-    glPushMatrix();
-    glLoadIdentity();
-
-    glEnable(GL_LINE_SMOOTH);
-
+	
+	glLoadIdentity();
     glLineWidth(5.0);
     glColor4f(1.0, 0.0, 0.0, 0.5);
-
-    glBegin(GL_LINE_STRIP);
+	glDisable(GL_TEXTURE_2D);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	
+	uint32_t cur=0;
+	float* tmp = new float[mPoints.size()*2];
     for(Vector2Vec::iterator i = mPoints.begin(); i!=mPoints.end(); ++i)
     {
-        glVertex3f((*i).x, (*i).y, 0.0);
+		tmp[cur] = i->x;
+		tmp[cur + 1] = i->y;
+		cur += 2;
     }
-    glEnd();
-
-    glDisable(GL_LINE_SMOOTH);
-
-    glPopMatrix();
+	glVertexPointer(2, GL_FLOAT, 0, tmp);
+	
+	glDrawArrays(GL_LINE_STRIP, 0, mPoints.size());
+	
+	delete[] tmp;
+	
+	glEnable(GL_TEXTURE_2D);
+	glColor4f(1, 1, 1, 1);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 }
 
 bool PathManager::touch(uint32_t count, Touch* touches)

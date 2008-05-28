@@ -69,6 +69,24 @@ void World::setPath(Vector2Vec const& path)
 
 void World::draw()
 {
+		
+	// Zoom the camera if required.
+	if(mTargetCameraSize != mCamera->mSize)
+	{
+		Vector2 step = (mCamera->mSize - mTargetCameraSize)/4.0;
+		if(fabs(step.x) < 0.5)
+		{
+			mCamera->mSize = mTargetCameraSize;
+		}
+		else
+		{
+			mCamera->mSize-= step;
+		}
+	}
+	mCamera->mCenter = mVehicle->mCenter;
+	mCamera->makeDirty();
+	mCamera->set();
+		
 	EntityVector::iterator i;
 	for(i = mEntities.begin(); i != mEntities.end(); ++i)
 	{
@@ -76,23 +94,8 @@ void World::draw()
 	}
     
     mVehicle->draw();
-    
-    // Zoom the camera if required.
-    if(mTargetCameraSize != mCamera->mSize)
-    {
-        Vector2 step = (mCamera->mSize - mTargetCameraSize)/4.0;
-        if(fabs(step.x) < 0.5)
-        {
-            mCamera->mSize = mTargetCameraSize;
-        }
-        else
-        {
-            mCamera->mSize-= step;
-        }
-    }
-    mCamera->mCenter = mVehicle->mCenter;
-    mCamera->makeDirty();
-    mCamera->set();
+	
+	mCamera->unset();
 }
 
 void World::update(int delta)
@@ -122,7 +125,6 @@ void World::zoomIn()
     mTargetCameraSize = mCamera->mSize/3.0;
     mZoomedOut = false;
 }
-
 
 bool World::touch(uint32_t count, Touch* touches)
 {
@@ -157,7 +159,6 @@ bool World::touch(uint32_t count, Touch* touches)
     }
 
     mLastPhase = touches[0].mPhase;
-
 
     mVehicle->touch(count, touches);
 

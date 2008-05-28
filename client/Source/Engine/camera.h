@@ -24,6 +24,7 @@ class Camera
 		~Camera();
 		
 		void set();
+	    void unset();
 		
 		void makeDirty();
 		

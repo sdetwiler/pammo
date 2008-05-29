@@ -15,15 +15,126 @@
 namespace pammo
 {
 	
-#if 0
+#if 1
+    
+uint16_t readUInt16(char** cur, size_t* remain)
+{
+    uint16_t tmp;
+    assert(*remain >= sizeof(tmp));
+    memcpy(&tmp, *cur, sizeof(tmp));
+    *cur += sizeof(tmp);
+    *remain -= sizeof(tmp);
+    return htons(tmp);
+}
+    
+float readFloat(char** cur, size_t* remain)
+{
+    float tmp;
+    assert(*remain >= sizeof(tmp));
+    memcpy(&tmp, *cur, sizeof(tmp));
+    *cur += sizeof(tmp);
+    *remain -= sizeof(tmp);
+    
+    uint32_t* ptr = (uint32_t*)&tmp;
+    *ptr = htonl(*ptr);
+    return tmp;
+}
+    
+char* readString(char** cur, size_t* remain)
+{
+    char* tmp = *cur;
+    size_t len = 0;
+    while((*cur)[len] != 0)
+    {
+        ++len;
+        assert(*remain >= len + 1);
+    }
+    assert(*remain >= len + 1);
+    *cur += len+1;
+    *remain -= len+1;
+    return tmp;
+}
 	
 void buildFromMap(World* world, char const* name)
 {
 	FILE* f = fopen(name, "r");
+	if(!f)
+	{
+		dprintf("Error opening map %s", name);
+		return;
+	}
+    
+    // Read the entire map into memory.
+    fseek(f, 0, SEEK_END);
+    size_t remain = ftell(f);
+    rewind(f);
+    char* buffer = new char[remain];
+    fread(buffer, remain, 1, f);
+    fclose(f);
+    char* cur = buffer;
+    
+	// Read num materials.
+	uint16_t numMaterials = readUInt16(&cur, &remain);
+	dprintf("Materials: %d", numMaterials);
+    Image** materialLookup = new Image*[numMaterials];
 	
-	uint16_t numMaterials;
-	fread((void*)&numMaterials, sizeof(numMaterials), 1, f);
-	dprintf("%d", numMaterials);
+    // Load each material.
+	for(uint32_t i=0; i < numMaterials; ++i)
+	{
+        char* materialName = readString(&cur, &remain);
+        string materialPath = string("data/materials/") + materialName + ".png";
+        materialLookup[i] = openImage(materialPath.c_str());
+        dprintf("%d - %s", i, materialPath.c_str());
+	}
+    
+    // Load each tile.
+    uint16_t tilesX = readUInt16(&cur, &remain);
+    uint16_t tilesY = readUInt16(&cur, &remain);
+    for(uint16_t y=0; y < tilesY; ++y)
+    {
+        for(uint16_t x=0; x < tilesX; ++x)
+        {
+            uint16_t i = readUInt16(&cur, &remain);
+            ImageEntity* e = new ImageEntity(materialLookup[i]);
+            e->mCenter = Vector2(x*128 + 64, y*128 + 64);
+            world->addEntity(e);
+        }
+    }
+    
+	// Read num props.
+	uint16_t numProps = readUInt16(&cur, &remain);
+	dprintf("Props: %d", numProps);
+    Image** propLookup = new Image*[numProps];
+	
+    // Load each prop.
+	for(uint32_t i=0; i < numProps; ++i)
+	{
+        char* propName = readString(&cur, &remain);
+        string propPath = string("data/props/") + propName + ".png";
+        propLookup[i] = openImage(propPath.c_str());
+        dprintf("%d - %s", i, propPath.c_str());
+	}
+    
+    // Load each entity.
+    uint16_t numEntities = readUInt16(&cur, &remain);
+    for(uint16_t tmp=0; tmp < numEntities; ++tmp)
+    {
+        uint16_t i = readUInt16(&cur, &remain);
+        dprintf("Prop using %d", i);
+        float posX = readFloat(&cur, &remain);
+        float posY = readFloat(&cur, &remain);
+        float scale = readFloat(&cur, &remain);
+        float rot = readFloat(&cur, &remain);
+        
+        ImageEntity* e = new ImageEntity(propLookup[i]);
+        e->mCenter = Vector2(posX, posY);
+        e->mSize *= scale;
+        e->mRotation = rot;
+        world->addEntity(e);
+    }
+    
+    // Cleanup.
+    delete[] buffer;
 }
 	
 void builder(World* world)

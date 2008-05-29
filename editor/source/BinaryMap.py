@@ -30,10 +30,11 @@ def moveFile(name):
     f.write(lines)
 
 def accumulate(store, name):
-    if name in store: return store[name]
+    if name in store:
+        return store.index(name)
 
     l = len(store)
-    store[name] = l
+    store.append(name)
     return l
 
 def save(map):
@@ -42,20 +43,20 @@ def save(map):
     output = ''
 
     # Save tiles and materials.
-    store = {}
+    store = []
     body = output + pack('!2H', properties.getSizeX(), properties.getSizeY())
     for y in range(properties.getSizeY()):
         for x in range(properties.getSizeX()):
             n = accumulate(store, map.getMaterialTile(x, y))
             body += pack('!H', n)
     header = pack('!H', len(store))
-    for s in store.keys():
+    for s in store:
         header += s + pack('x')
         if s: moveFile('materials/' + s + '.png')
     output += header + body
 
     # Save entities and props
-    store = {}
+    store = []
     body = pack('!H', len(map.getEntities()))
     for e in map.getEntities():
         name = accumulate(store, e.getProp().getName())
@@ -63,7 +64,7 @@ def save(map):
         body += pack('!H4f', name, pos[0], pos[1], e.getScale(), e.getRot())
 
     header = pack('!H', len(store))
-    for s in store.keys():
+    for s in store:
         header += s + pack('x')
         if s: moveFile('props/' + s + '.png')
     output += header + body

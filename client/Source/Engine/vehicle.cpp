@@ -21,6 +21,8 @@ int Vehicle::init()
     {
         return -1;
     }
+    
+    mCenter = Vector2(350, 350);
 
     mImage = image;
     setSize(mImage->mSize);

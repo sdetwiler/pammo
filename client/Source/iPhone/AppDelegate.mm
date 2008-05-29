@@ -22,10 +22,10 @@
 	self.mWindow = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
 	
 	// Create debug console
-	self.mDebugConsole = [[[DebugConsole alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]] autorelease];
+	self.mDebugConsole = [[[DebugConsole alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
 	
 	// Create main view
-	self.mMainView = [[[MainView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]] autorelease];
+	self.mMainView = [[[MainView alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
     
     // Set up main view
 	[mWindow addSubview:mMainView];

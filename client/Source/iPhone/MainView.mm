@@ -30,8 +30,10 @@
 {
 	if(!(self = [super initWithFrame:frame]))
 		return self;
+    
+    self.multipleTouchEnabled = YES;
 	
-	[self buildInputUI:frame];
+	//[self buildInputUI:frame];
 	
 	CAEAGLLayer *eaglLayer = (CAEAGLLayer *)self.layer;
 	eaglLayer.opaque = YES;
@@ -144,6 +146,7 @@
 		if(cur == 2) break;
 		
 		CGPoint touchLocation = [touch locationInView:self];
+        dprintf("%f, %f", touchLocation.x, touchLocation.y);
 		output[cur].mLocation.x = touchLocation.x;
 		output[cur].mLocation.y = touchLocation.y;
 		if(touch.phase == 0) output[cur].mPhase = pammo::Touch::PhaseBegin;
@@ -264,36 +267,34 @@
 //    }
 //}
 //
-- (void)buildInputUI:(CGRect) frame
-{
-	const int toggleHeight = 32;
-	const int toggleWidth = 100;
-	const int toggleOffset = 16;
-	
-	// Add toggle button.
-	mTapButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-	mTapButton.frame =  CGRectMake(toggleOffset, frame.size.height - toggleHeight - toggleOffset, toggleWidth, toggleHeight);
-	[mTapButton setTitle:@"Tap" forState: UIControlStateNormal];
-    [mTapButton addTarget:self action:@selector(tapButton:) forControlEvents:UIControlEventTouchUpInside]; 
-	[self addSubview:mTapButton];
-}
-
-- (void)tapButton:(id) button
-{
-	pammo::Touch touches[2];
-	touches[0].mLocation.x = 0;
-	touches[0].mLocation.y = 0;
-	touches[1].mLocation.x = 1;
-	touches[1].mLocation.y = 1;
-	
-	touches[0].mPhase = touches[1].mPhase = pammo::Touch::PhaseBegin;
-	mGame->touches(2, touches);
-	
-	touches[0].mPhase = touches[1].mPhase = pammo::Touch::PhaseEnd;
-	mGame->touches(2, touches);
-}
-
-
+//- (void)buildInputUI:(CGRect) frame
+//{
+//	const int toggleHeight = 32;
+//	const int toggleWidth = 100;
+//	const int toggleOffset = 16;
+//	
+//	// Add toggle button.
+//	mTapButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+//	mTapButton.frame =  CGRectMake(toggleOffset, frame.size.height - toggleHeight - toggleOffset, toggleWidth, toggleHeight);
+//	[mTapButton setTitle:@"Tap" forState: UIControlStateNormal];
+//    [mTapButton addTarget:self action:@selector(tapButton:) forControlEvents:UIControlEventTouchUpInside]; 
+//	[self addSubview:mTapButton];
+//}
+//
+//- (void)tapButton:(id) button
+//{
+//	pammo::Touch touches[2];
+//	touches[0].mLocation.x = 0;
+//	touches[0].mLocation.y = 0;
+//	touches[1].mLocation.x = 1;
+//	touches[1].mLocation.y = 1;
+//	
+//	touches[0].mPhase = touches[1].mPhase = pammo::Touch::PhaseBegin;
+//	mGame->touches(2, touches);
+//	
+//	touches[0].mPhase = touches[1].mPhase = pammo::Touch::PhaseEnd;
+//	mGame->touches(2, touches);
+//}
 //
 //- (void)clearInputMode
 //{

@@ -24,9 +24,10 @@ def moveFile(name):
     there = os.path.abspath('../data/' + name)
     #print 'Move from %s to %s' % (here, there)
 
-    f = open(here, "r")
+    f = open(here, "rb")
     lines = f.read()
-    f = open(there, "w+")
+    print len(lines)
+    f = open(there, "w+b")
     f.write(lines)
 
 def accumulate(store, name):

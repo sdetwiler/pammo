@@ -34,9 +34,9 @@ class Entity :
 		Vector2 mCenter;
 		Vector2 mSize;
 		float mRotation;
+		Transform2 const& getTransform();
 		
 	protected:
-		Transform2 const& getTransform();
 		Transform2 const& getInverseTransform();
 
     private:	

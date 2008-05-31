@@ -13,6 +13,7 @@
 #include "pammo.h"
 #include "widget.h"
 #include "vehicle.h"
+#include "particleSystem.h"
 
 namespace pammo
 {
@@ -56,6 +57,8 @@ class World :
         Vehicle* mVehicle;
         EntityVector mVehicles;
         Touch::Phase mLastPhase;
+
+        ParticleSystem* mParticleSystem;
 
         bool mZoomedOut;
 };

@@ -24,7 +24,7 @@ uint16_t readUInt16(char** cur, size_t* remain)
     memcpy(&tmp, *cur, sizeof(tmp));
     *cur += sizeof(tmp);
     *remain -= sizeof(tmp);
-    return htons(tmp);
+    return ntohs(tmp);
 }
     
 float readFloat(char** cur, size_t* remain)
@@ -36,7 +36,7 @@ float readFloat(char** cur, size_t* remain)
     *remain -= sizeof(tmp);
     
     uint32_t* ptr = (uint32_t*)&tmp;
-    *ptr = htonl(*ptr);
+    *ptr = ntohl(*ptr);
     return tmp;
 }
     
@@ -95,9 +95,12 @@ void buildFromMap(World* world, char const* name)
         for(uint16_t x=0; x < tilesX; ++x)
         {
             uint16_t i = readUInt16(&cur, &remain);
-            ImageEntity* e = new ImageEntity(materialLookup[i]);
-            e->mCenter = Vector2(x*128 + 64, y*128 + 64);
-            world->addEntity(e);
+            if(materialLookup[i])
+            {
+                ImageEntity* e = new ImageEntity(materialLookup[i]);
+                e->mCenter = Vector2(x*128 + 64, y*128 + 64);
+                world->addEntity(e);
+            }
         }
     }
     
@@ -126,11 +129,20 @@ void buildFromMap(World* world, char const* name)
         float scale = readFloat(&cur, &remain);
         float rot = readFloat(&cur, &remain);
         
-        ImageEntity* e = new ImageEntity(propLookup[i]);
-        e->mCenter = Vector2(posX, posY);
-        e->mSize *= scale;
-        e->mRotation = rot;
-        world->addEntity(e);
+        if(i>numProps)
+        {
+            dprintf("Error in map format: prop %d is out of bounds. %d is max %d.\n", i, numProps, htons(i));
+            continue;
+        }
+
+        if(propLookup[i])
+        {
+            ImageEntity* e = new ImageEntity(propLookup[i]);
+            e->mCenter = Vector2(posX, posY);
+            e->mSize *= scale;
+            e->mRotation = rot;
+            world->addEntity(e);
+        }
     }
     
     // Cleanup.
@@ -139,7 +151,7 @@ void buildFromMap(World* world, char const* name)
 	
 void builder(World* world)
 {
-	buildFromMap(world, "./data/maps/Desert.bmap");
+	buildFromMap(world, "./data/maps/simple.bmap");
 }
 
 #elif 0

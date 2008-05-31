@@ -1,3 +1,4 @@
+#include "pammo.h"
 #include "game.h"
 #include "builder.h"
 #include "world.h"

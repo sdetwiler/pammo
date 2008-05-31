@@ -21,5 +21,6 @@ void dprintf(char const* format, ...)
     if(!f)
         return;
     fwrite(buffer, 1, len, f);
+    fwrite("\r\n", 1, 2, f);
     fclose(f);
 }

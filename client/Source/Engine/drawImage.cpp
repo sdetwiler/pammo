@@ -15,7 +15,7 @@ const GLshort spriteTexcoords[] = {
 1, 1,
 };
 
-void drawImage(Image* image, Transform2 const& transform)
+void drawImage(Image* image, Transform2 const& transform, float alpha)
 {
     float trans[16];
     memset(trans, 0, sizeof(trans));
@@ -33,6 +33,10 @@ void drawImage(Image* image, Transform2 const& transform)
 
     glLoadMatrixf(trans);
 
+    glColor4f(1.0f, 1.0f, 1.0f, alpha);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glBindTexture(GL_TEXTURE_2D, image->mTexture);
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+	glColor4f(1, 1, 1, 1);
+
 }

@@ -11,11 +11,14 @@ class ImageEntity :
     public Entity
 {
 public:
+    ImageEntity();
     ImageEntity(Image* image);
     virtual ~ImageEntity();
 
     virtual void draw();
 
+    void setImage(Image* image);
+    float mAlpha;
 protected:
     Image* mImage;
 

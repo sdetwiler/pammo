@@ -37,6 +37,7 @@ int World::init()
     if(ret < 0)
         return ret;
 
+    mParticleSystem = new ParticleSystem(1000);
     return 0;
 }
 	
@@ -92,14 +93,29 @@ void World::draw()
 	{
 		(*i)->draw();
 	}
+    mVehicle->getTransform();
     
+    Vector2 particleCenter = mVehicle->mCenter;
+    particleCenter.x += (-0.1f) + (rand()%20)/10.0;
+    particleCenter.y += (-0.1f) + (rand()%20)/10.0;
+    // Hack. Need to actually rotate about vehicle;
+//    particleCenter.y-=55;    
+//    particleCenter.x-=7;
+    float rad = 50;
+    float rot = mVehicle->mRotation-(90.0*0.0174532925);
+    particleCenter.y += rad*sin(rot);
+    particleCenter.x += rad*cos(rot);
+
+
+    mParticleSystem->initFireParticle(particleCenter, rot);
     mVehicle->draw();
-	
+    mParticleSystem->draw();	
 	mCamera->unset();
 }
 
 void World::update(int delta)
 {
+    mParticleSystem->update();
     mVehicle->update(delta);
 }
 

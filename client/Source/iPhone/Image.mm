@@ -32,9 +32,10 @@ Image* openImage(char const* path)
 	
 	// Allocated memory needed for the bitmap context
 	spriteData = (GLubyte *) malloc(image->mSize.x * image->mSize.y * 4);
-	spriteContext = CGBitmapContextCreate(spriteData, image->mSize.x, image->mSize.y, 8, image->mSize.x * 4, CGImageGetColorSpace(spriteImage), kCGImageAlphaPremultipliedLast);
+    memset(spriteData, 0, image->mSize.x*image->mSize.y*4);
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+	spriteContext = CGBitmapContextCreate(spriteData, image->mSize.x, image->mSize.y, 8, image->mSize.x * 4, colorSpace, kCGImageAlphaPremultipliedLast);
 	CGContextDrawImage(spriteContext, CGRectMake(0.0, 0.0, image->mSize.x, image->mSize.y), spriteImage);
-	CGContextRelease(spriteContext);
 	
 	// Use OpenGL ES to generate a name for the texture.
 	glGenTextures(1, &image->mTexture);
@@ -45,11 +46,14 @@ Image* openImage(char const* path)
     //glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP); // scale linearly when image smalled than texture
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image->mSize.x, image->mSize.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, spriteData);
 	
+	CGContextRelease(spriteContext);
+    CGColorSpaceRelease(colorSpace);
 	free(spriteData);
 	return image;
 }
 
-void closeImage(Image const* image)
+void closeImage(Image* image)
 {
     glDeleteTextures(1, &image->mTexture);
+    delete image;
 }

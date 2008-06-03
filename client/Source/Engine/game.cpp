@@ -1,12 +1,17 @@
-#include "pammo.h"
 #include "game.h"
 #include "builder.h"
+#include "imageLibrary.h"
 #include "world.h"
 #include "pathManager.h"
 
+namespace pammo
+{
+    
+Game* gGame;
+
 Game::Game()
 {
-
+    gGame = this;
 }
 
 Game::~Game()
@@ -16,22 +21,17 @@ Game::~Game()
 int Game::init()
 {
     int ret;
-    World* world = new World(this);
-    ret = world->init();
+    
+    gImageLibrary = new ImageLibrary();
+    
+    gWorld = new World();
+    ret = gWorld->init();
     if(ret < 0)
         return ret;
 
-    registerDrawable(world);
-    registerTouchable(world);
-    registerUpdateable(world);
+    builder(gWorld);
 
-    builder(world);
-
-    PathManager* pathManager = new PathManager(world);
-    pathManager->setDrawPriority(100);
-    pathManager->setTouchPriority(1);
-    registerDrawable(pathManager);
-    registerTouchable(pathManager);
+    PathManager* pathManager = new PathManager();
 
     return 0;
 }
@@ -121,4 +121,6 @@ void Game::registerUpdateable(Updateable* updateable)
 void Game::unregisterUpdateable(Updateable* updateable)
 {
 // 
+}
+
 }

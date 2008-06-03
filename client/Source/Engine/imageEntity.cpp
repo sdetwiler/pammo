@@ -25,6 +25,11 @@ void ImageEntity::setImage(Image* image)
     setSize(mImage->mSize);
     mAlpha = 1.0;
 }
+    
+Image* ImageEntity::getImage()
+{
+    return mImage;
+}
 
 void ImageEntity::draw()
 {

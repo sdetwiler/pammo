@@ -1,4 +1,5 @@
 #include "vehicle.h"
+#include "imageLibrary.h"
 
 namespace pammo
 {
@@ -16,7 +17,7 @@ Vehicle::~Vehicle()
 
 int Vehicle::init()
 {
-    Image* image = openImage("data/vehicles/flameTank.png");
+    Image* image = gImageLibrary->reference("data/vehicles/flameTank.png");
     if(!image)
     {
         return -1;

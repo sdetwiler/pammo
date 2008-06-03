@@ -12,6 +12,7 @@
 		115E19870DEBA14E00BD1F3A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 115E19860DEBA14E00BD1F3A /* AppDelegate.mm */; };
 		115E199E0DEBA2A100BD1F3A /* MainView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 115E199A0DEBA2A100BD1F3A /* MainView.mm */; };
 		115E1A3A0DEBAE8D00BD1F3A /* Image.mm in Sources */ = {isa = PBXBuildFile; fileRef = 115E1A390DEBAE8D00BD1F3A /* Image.mm */; };
+		118E43310DF11EB600E619A9 /* particleSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 118E432F0DF11EB600E619A9 /* particleSystem.cpp */; };
 		1198D6950DED3ED0006F673A /* pathManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1198D6930DED3ED0006F673A /* pathManager.cpp */; };
 		11CFA2120DEE8D1700279425 /* data in Resources */ = {isa = PBXBuildFile; fileRef = 11CFA1FE0DEE8D1700279425 /* data */; };
 		11EEB7210DEBC73F009F3B13 /* builder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11EEB7090DEBC73F009F3B13 /* builder.cpp */; };
@@ -23,6 +24,7 @@
 		11EEB7280DEBC73F009F3B13 /* vehicle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11EEB71B0DEBC73F009F3B13 /* vehicle.cpp */; };
 		11EEB7290DEBC73F009F3B13 /* widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11EEB71D0DEBC73F009F3B13 /* widget.cpp */; };
 		11EEB72A0DEBC73F009F3B13 /* world.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11EEB71F0DEBC73F009F3B13 /* world.cpp */; };
+		11F1374A0DF34A7F00651323 /* imageLibrary.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11F137490DF34A7F00651323 /* imageLibrary.cpp */; };
 		1D3623EC0D0F72F000981E51 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D3623EB0D0F72F000981E51 /* CoreGraphics.framework */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
@@ -39,6 +41,8 @@
 		115E19990DEBA2A100BD1F3A /* MainView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainView.h; sourceTree = "<group>"; };
 		115E199A0DEBA2A100BD1F3A /* MainView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MainView.mm; sourceTree = "<group>"; };
 		115E1A390DEBAE8D00BD1F3A /* Image.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Image.mm; sourceTree = "<group>"; };
+		118E432F0DF11EB600E619A9 /* particleSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = particleSystem.cpp; sourceTree = "<group>"; };
+		118E43300DF11EB600E619A9 /* particleSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = particleSystem.h; sourceTree = "<group>"; };
 		1198D6930DED3ED0006F673A /* pathManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = pathManager.cpp; sourceTree = "<group>"; };
 		1198D6940DED3ED0006F673A /* pathManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pathManager.h; sourceTree = "<group>"; };
 		11CFA1FE0DEE8D1700279425 /* data */ = {isa = PBXFileReference; lastKnownFileType = folder; name = data; path = ../data; sourceTree = SOURCE_ROOT; };
@@ -66,6 +70,8 @@
 		11EEB71F0DEBC73F009F3B13 /* world.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = world.cpp; sourceTree = "<group>"; };
 		11EEB7200DEBC73F009F3B13 /* world.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = world.h; sourceTree = "<group>"; };
 		11EEB7380DEBC769009F3B13 /* types_platform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = types_platform.h; sourceTree = "<group>"; };
+		11F137480DF34A7F00651323 /* imageLibrary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = imageLibrary.h; sourceTree = "<group>"; };
+		11F137490DF34A7F00651323 /* imageLibrary.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = imageLibrary.cpp; sourceTree = "<group>"; };
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1D3623EB0D0F72F000981E51 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		1D6058910D05DD3D006BFB54 /* pammo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = pammo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -112,6 +118,8 @@
 		11EEB7080DEBC73F009F3B13 /* Engine */ = {
 			isa = PBXGroup;
 			children = (
+				118E432F0DF11EB600E619A9 /* particleSystem.cpp */,
+				118E43300DF11EB600E619A9 /* particleSystem.h */,
 				1198D6930DED3ED0006F673A /* pathManager.cpp */,
 				1198D6940DED3ED0006F673A /* pathManager.h */,
 				11EEB7090DEBC73F009F3B13 /* builder.cpp */,
@@ -136,6 +144,8 @@
 				11EEB71E0DEBC73F009F3B13 /* widget.h */,
 				11EEB71F0DEBC73F009F3B13 /* world.cpp */,
 				11EEB7200DEBC73F009F3B13 /* world.h */,
+				11F137480DF34A7F00651323 /* imageLibrary.h */,
+				11F137490DF34A7F00651323 /* imageLibrary.cpp */,
 			);
 			name = Engine;
 			path = Source/Engine;
@@ -250,6 +260,8 @@
 				11EEB72A0DEBC73F009F3B13 /* world.cpp in Sources */,
 				1129D0D50DEBDE1F00F1D50B /* DebugConsole.mm in Sources */,
 				1198D6950DED3ED0006F673A /* pathManager.cpp in Sources */,
+				118E43310DF11EB600E619A9 /* particleSystem.cpp in Sources */,
+				11F1374A0DF34A7F00651323 /* imageLibrary.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

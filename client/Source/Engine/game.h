@@ -21,8 +21,6 @@ public:
     virtual ~Drawable(){}
     virtual void draw() = 0;
     virtual uint32_t getDrawPriority() const = 0;
-
-private:
 };
 
 class Updateable
@@ -66,6 +64,8 @@ private:
     typedef vector< Updateable* > UpdateableVector;
     UpdateableVector mUpdateable;
 };
+    
+extern Game* gGame;
 
 } // namespace pammo
 

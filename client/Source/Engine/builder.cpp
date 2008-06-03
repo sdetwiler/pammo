@@ -10,7 +10,7 @@
 #include "builder.h"
 #include "world.h"
 #include "imageEntity.h"
-#include "image.h"
+#include "imageLibrary.h"
 
 namespace pammo
 {
@@ -83,7 +83,7 @@ void buildFromMap(World* world, char const* name)
 	{
         char* materialName = readString(&cur, &remain);
         string materialPath = string("data/materials/") + materialName + ".png";
-        materialLookup[i] = openImage(materialPath.c_str());
+        materialLookup[i] = gImageLibrary->reference(materialPath.c_str());
         dprintf("%d - %s", i, materialPath.c_str());
 	}
     
@@ -114,7 +114,7 @@ void buildFromMap(World* world, char const* name)
 	{
         char* propName = readString(&cur, &remain);
         string propPath = string("data/props/") + propName + ".png";
-        propLookup[i] = openImage(propPath.c_str());
+        propLookup[i] = gImageLibrary->reference(propPath.c_str());
         dprintf("%d - %s", i, propPath.c_str());
 	}
     
@@ -151,7 +151,7 @@ void buildFromMap(World* world, char const* name)
 	
 void builder(World* world)
 {
-	buildFromMap(world, "./data/maps/simple.bmap");
+	buildFromMap(world, "./data/maps/Desert.bmap");
 }
 
 #elif 0

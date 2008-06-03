@@ -8,27 +8,8 @@ Vector2 getFrameSize()
     return Vector2(320, 480);
 }
 
-struct ImageRef
-{
-    Image* mImage;
-    uint32_t mRefCount;
-};
-
-typedef std::map< std::string, ImageRef*> StringImageRefMap;
-StringImageRefMap* gImages=NULL;
-
 Image* openImage(char const* path)
 {
-    if(gImages == NULL)
-        gImages = new StringImageRefMap;
-    std::string str = path;
-    StringImageRefMap::iterator i = gImages->find(str);
-    if(i!= gImages->end())
-    {
-        ++(i->second->mRefCount);
-        return i->second->mImage;
-    }
-
     Image* image = new Image;
     SDL_Surface* surface = IMG_Load(path);
     if(!surface)
@@ -61,31 +42,11 @@ Image* openImage(char const* path)
 
     SDL_FreeSurface(surface);
 
-    str = path;
-    ImageRef* ref = new ImageRef;
-    ref->mImage = image;
-    ref->mRefCount = 1;
-    gImages->insert(std::pair<std::string, ImageRef*>(str, ref));
-
     return image;
 }
 
 void closeImage(Image* image)
 {
-    // SCD TOTAL CRAP.
-    for(StringImageRefMap::iterator i = gImages->begin(); i!=gImages->end(); ++i)
-    {
-        if(i->second->mImage == image)
-        {
-            --(i->second->mRefCount);
-            if(!i->second->mRefCount)
-            {
-                glDeleteTextures(1, &i->second->mImage->mTexture);
-                delete i->second;
-                gImages->erase(i);
-                delete image;
-                return;
-            }
-        }
-    }
+    glDeleteTextures(1, &image->mTexture);
+    delete image;
 }

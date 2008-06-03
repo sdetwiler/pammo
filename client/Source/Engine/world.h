@@ -27,7 +27,7 @@ class World :
     public Updateable
 {
 	public:
-		World(Game* game);
+		World();
 		~World();
 		
         int init();
@@ -49,7 +49,6 @@ class World :
     
     protected:
     private:
-		Game* mGame;
 		Camera* mCamera;
         Vector2 mTargetCameraSize;
         typedef vector< Entity* > EntityVector;
@@ -62,6 +61,8 @@ class World :
 
         bool mZoomedOut;
 };
+    
+extern World* gWorld;
 
 }
 

@@ -18,6 +18,7 @@ public:
     virtual void draw();
 
     void setImage(Image* image);
+    Image* getImage();
     float mAlpha;
 protected:
     Image* mImage;

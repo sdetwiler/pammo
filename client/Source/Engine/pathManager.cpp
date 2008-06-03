@@ -4,12 +4,14 @@
 namespace pammo
 {
 
-PathManager::PathManager(World* world)
+PathManager::PathManager()
 {
-    mWorld = world;
     mBuilding = false;
-    mDrawPriority = 1;
+    mDrawPriority = 100;
     mTouchPriority = 1;
+    
+    gGame->registerDrawable(this);
+    gGame->registerTouchable(this);
 }
 
 PathManager::~PathManager()
@@ -52,7 +54,7 @@ bool PathManager::touch(uint32_t count, Touch* touches)
     if(count != 1)
         return false;
 
-    if(mWorld->isZoomedOut() == false)
+    if(gWorld->isZoomedOut() == false)
         return false;
 
     // Always only use first touch point.
@@ -70,7 +72,7 @@ bool PathManager::touch(uint32_t count, Touch* touches)
     case Touch::PhaseEnd:
         if(mBuilding)
         {
-            mWorld->setPath(mPoints);
+            gWorld->setPath(mPoints);
             clear();
             mBuilding = false;
             return true;

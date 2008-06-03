@@ -7,14 +7,12 @@
 namespace pammo
 {
 
-class World;
-
 class PathManager : 
     public Drawable,
     public Touchable
 {
 public:
-    PathManager(World* world);
+    PathManager();
     virtual ~PathManager();
 
     virtual void draw();
@@ -30,7 +28,6 @@ protected:
     void clear();
 
 private:
-    World* mWorld;
     Vector2Vec mPoints;
     bool mBuilding;
 

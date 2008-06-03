@@ -1,4 +1,5 @@
 #include "particleSystem.h"
+#include "imageLibrary.h"
 
 namespace pammo
 {
@@ -35,14 +36,30 @@ ParticleSystem::~ParticleSystem()
 
 void ParticleSystem::update()
 {
-    for(ParticleVector::iterator i = mUsed.begin(); i!=mUsed.end(); ++i)
+    typedef vector<int> IntVector;
+    IntVector removeParticles;
+    
+    // Iterator over each particle, making its callback. If callback returns true, puts its index into the removeParticles list.
+    for(uint32_t i = 0; i<mUsed.size(); ++i)
     {
-        Particle* p = *i;
+        Particle* p = mUsed[i];
         if(p->mCallback(p) == false)
         {
-            mAvailable.push_back(*i);
-            i = mUsed.erase(i);
+            removeParticles.push_back(i);
         }
+    }
+    
+    // Now iterate over remove list and the particles.
+    for(uint32_t i=0; i < removeParticles.size(); ++i)
+    {
+        // Get a reference the particle. Every iteratation is going to remove one particle.
+        // Which means the indexes stored in removeParticles are wrong.
+        // To adjust, subtract from the stored index the number of particels we have already removed.
+        uint32_t indexInUsed = removeParticles[i] - i;
+        Particle* p = mUsed[indexInUsed];
+        gImageLibrary->unreference(p->mImage.getImage());
+        mUsed.erase(mUsed.begin() + indexInUsed);
+        mAvailable.push_back(p);
     }
 }
 
@@ -69,7 +86,7 @@ void ParticleSystem::initFireParticle(Vector2 const& position, float theta)
     p->mVelocity.x = velocity*cos(theta);
     p->mVelocity.y = velocity*sin(theta);
     p->mMass = 0;
-    p->mImage.setImage(openImage("data/materials/flame.png"));
+    p->mImage.setImage(gImageLibrary->reference("data/materials/flame.png"));
     p->mImage.mCenter = position;
     p->mImage.mRotation = theta;
     p->mAlpha = 1.0f;

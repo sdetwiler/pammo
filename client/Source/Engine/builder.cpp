@@ -151,7 +151,7 @@ void buildFromMap(World* world, char const* name)
 	
 void builder(World* world)
 {
-	buildFromMap(world, "./data/maps/Desert.bmap");
+	buildFromMap(world, "./data/bmaps/Desert.bmap");
 }
 
 #elif 0

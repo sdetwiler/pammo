@@ -7,7 +7,7 @@ observers = []
 def reloadFromFilesystem():
     global materials
     materials = {}
-    materialsDir = 'materials'
+    materialsDir = os.path.abspath('../data/materials')
     for f in os.listdir(materialsDir):
         path = materialsDir + '/' + f
         name = Material.pathToName(path)

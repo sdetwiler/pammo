@@ -19,17 +19,6 @@ def dumpHex(str):
         print ('%.2x ' % ord(i)),
     print ''
 
-def moveFile(name):
-    here = os.path.abspath('./' + name)
-    there = os.path.abspath('../data/' + name)
-    #print 'Move from %s to %s' % (here, there)
-
-    f = open(here, "rb")
-    lines = f.read()
-    print len(lines)
-    f = open(there, "w+b")
-    f.write(lines)
-
 def accumulate(store, name):
     if name in store:
         return store.index(name)
@@ -53,7 +42,6 @@ def save(map):
     header = pack('!H', len(store))
     for s in store:
         header += s + pack('x')
-        if s: moveFile('materials/' + s + '.png')
     output += header + body
 
     # Save entities and props
@@ -67,9 +55,8 @@ def save(map):
     header = pack('!H', len(store))
     for s in store:
         header += s + pack('x')
-        if s: moveFile('props/' + s + '.png')
     output += header + body
         
-    path = os.path.abspath("../data/maps/%s.bmap" % properties.getName())
+    path = os.path.abspath("../data/bmaps/%s.bmap" % properties.getName())
     f = open(path, "w+")
     f.write(output)

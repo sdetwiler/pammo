@@ -96,7 +96,7 @@ class MapEditorPanel(wx.Panel):
             self.newEditorForMap(map)
 
     def onOpenMenu(self, event):
-        base = os.path.abspath(os.getcwd()+"/maps")
+        base = os.path.abspath("../data/maps")
         dialog = wx.FileDialog(self,
             message="Choose a map (This folder only!)",
             defaultDir=base, 
@@ -143,7 +143,7 @@ class MapEditorPanel(wx.Panel):
         index = self.mapNotebook.GetSelection()
         editor = self.mapNotebook.GetPage(index)
         if not self.askDeleteMap(editor.getMap()): return
-        os.remove(os.getcwd() + '/maps/%s.map' % editor.getMap().getProperties().getName())
+        os.remove(os.path.abspath('../data/maps/%s.map' % editor.getMap().getProperties().getName()))
         self.mapNotebook.RemovePage(index)
         self.onMapNotebookPageChanged(None)
         editor.Destroy()
@@ -234,7 +234,7 @@ class MapEditorPanel(wx.Panel):
         self.showMessage('You are already editing a map named "%s".' % name)
 
     def trySaveMap(self, map):
-        path = os.getcwd() + '/maps/%s.map' % map.getProperties().getName()
+        path = os.path.abspath('../data/maps/%s.map' % map.getProperties().getName())
         if not map.getHasSavedOnce():
             if os.path.exists(path):
                 dialog = wx.MessageDialog(self, '',
@@ -246,7 +246,7 @@ class MapEditorPanel(wx.Panel):
         f = open(path, "w")
         map.saveToFile(f)
         try: BinaryMap.save(map)
-        except: self.showMessage('Could not save map in client data folder')
+        except: self.showMessage('Could not save map in binary format')
         return True
 
     def updateMenuState(self):

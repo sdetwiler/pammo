@@ -4,7 +4,7 @@ import os, os.path
 class Prop:
     def __init__(self, name):
         self.name = name
-        path = os.path.abspath('./props/' + name + '.png')
+        path = os.path.abspath('../data/props/' + name + '.png')
         self.bitmap = wx.Image(path, wx.BITMAP_TYPE_PNG).ConvertToBitmap()
         
     def getName(self):
@@ -14,7 +14,7 @@ class Prop:
         return self.bitmap
 
 def pathToName(path):
-    base = os.path.abspath('./props/')
+    base = os.path.abspath('../data/props/')
     path = os.path.abspath(path)
     if path[-4:] != '.png': return None
     if path.find(base) == -1: return None

@@ -72,7 +72,7 @@ void ParticleSystem::draw()
     }
 }
 
-void ParticleSystem::initFireParticle(Vector2 const& position, float theta)
+void ParticleSystem::initFireParticle(Vector2 const& position, Vector2 const& baseVelocity, float theta)
 {
     if(mAvailable.size() == 0)
         return;
@@ -81,12 +81,13 @@ void ParticleSystem::initFireParticle(Vector2 const& position, float theta)
     mAvailable.pop_back();
     mUsed.push_back(p);
 
-    float velocity = 20.0f;
+    float velocity = 10.0f;
     p->mCallback = fireParticleCb;
     p->mVelocity.x = velocity*cos(theta);
     p->mVelocity.y = velocity*sin(theta);
+    p->mVelocity += baseVelocity;
     p->mMass = 0;
-    p->mImage.setImage(gImageLibrary->reference("data/materials/flame.png"));
+    p->mImage.setImage(gImageLibrary->reference("data/particles/flame.png"));
     p->mImage.mCenter = position;
     p->mImage.mRotation = theta;
     p->mAlpha = 1.0f;

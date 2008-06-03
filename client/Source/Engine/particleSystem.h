@@ -16,7 +16,7 @@ bool fireParticleCb(Particle* p);
 
 struct Particle
 {
-    ParticleCb  mCallback;
+    ParticleCb   mCallback;
     Vector2      mVelocity;
     float        mMass;
 
@@ -33,7 +33,7 @@ public:
 
     void update();
     void draw();
-    void initFireParticle(Vector2 const& position, float theta);
+    void initFireParticle(Vector2 const& position, Vector2 const& baseVelocity, float theta);
 
 protected:
 private:

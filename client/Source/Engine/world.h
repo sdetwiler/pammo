@@ -47,6 +47,8 @@ class World :
         void zoomIn();
         bool isZoomedOut();
     
+        ParticleSystem* getParticleSystem();
+
     protected:
     private:
 		Camera* mCamera;

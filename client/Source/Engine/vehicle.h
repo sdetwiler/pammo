@@ -5,8 +5,10 @@
 #include "entity.h"
 #include "image.h"
 
+
 namespace pammo
 {
+class World;
 
 class Vehicle : 
     public Entity,
@@ -14,10 +16,10 @@ class Vehicle :
     public Updateable
 {
 public:
-    Vehicle();
+    Vehicle(World* world);
     virtual ~Vehicle();
 
-    int init();
+    virtual int init();
 
     void setPath(Vector2Vec const& points);
 
@@ -28,15 +30,16 @@ public:
 
 
 protected:
+    World* mWorld;
+    Image* mImage;
+    float mSpeed; // in meters/second.
+    bool mMoving;
 
 private:
-    Image* mImage;
     Vector2Vec mPath;
-    bool mMoving;
     Vector2Vec::iterator mCurrTarget;
     Vector2 mPosition;
 
-    float mSpeed; // in meters/second.
 };
 
 }

@@ -11,6 +11,7 @@
 #include "camera.h"
 #include "entity.h"
 #include "image.h"
+#include "flameTankVehicle.h"
 
 namespace pammo
 {
@@ -34,9 +35,9 @@ World::~World()
 int World::init()
 {
     int ret;
-	mCamera = new Camera(Vector2(0, 0), getFrameSize());
+	mCamera = new Camera(Vector2(0, 0), getFrameSize()/1.5);
     mTargetCameraSize = mCamera->mSize;
-    mVehicle = new Vehicle;
+    mVehicle = new FlameTankVehicle(this);
     ret = mVehicle->init();
     if(ret < 0)
         return ret;
@@ -53,6 +54,11 @@ uint32_t World::getDrawPriority() const
 uint32_t World::getTouchPriority() const
 {
     return 2;
+}
+
+ParticleSystem* World::getParticleSystem()
+{
+    return mParticleSystem;
 }
 
 void World::addEntity(Entity* entity)
@@ -96,21 +102,7 @@ void World::draw()
 	for(i = mEntities.begin(); i != mEntities.end(); ++i)
 	{
 		(*i)->draw();
-	}
-    mVehicle->getTransform();
-    
-    Vector2 particleCenter = mVehicle->mCenter;
-    particleCenter.x += (-0.1f) + (rand()%20)/10.0;
-    particleCenter.y += (-0.1f) + (rand()%20)/10.0;
-    
-//    particleCenter.x-=7;
-    float rad = 50;
-    float rot = mVehicle->mRotation-(90.0*0.0174532925);
-    particleCenter.y += rad*sin(rot);
-    particleCenter.x += rad*cos(rot);
-
-
-    mParticleSystem->initFireParticle(particleCenter, rot);
+	}    
     mVehicle->draw();
     mParticleSystem->draw();	
 	mCamera->unset();

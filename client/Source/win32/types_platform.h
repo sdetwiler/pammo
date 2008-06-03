@@ -7,7 +7,10 @@
 #include <gl/gl.h>
 
 #define glOrthof glOrtho
+#define snprintf _snprintf
 
 #include <SDL.h>
+
+#include <dirent.h>
 
 #endif // __TYPES_PLATFORM_H__

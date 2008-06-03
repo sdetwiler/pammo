@@ -4,8 +4,9 @@
 namespace pammo
 {
 
-Vehicle::Vehicle()
+Vehicle::Vehicle(World* world)
 {
+    mWorld = world;
     mImage = NULL;
     mSpeed = 10.0f;
 }
@@ -17,17 +18,6 @@ Vehicle::~Vehicle()
 
 int Vehicle::init()
 {
-    Image* image = gImageLibrary->reference("data/vehicles/flameTank.png");
-    if(!image)
-    {
-        return -1;
-    }
-    
-    mCenter = Vector2(350, 350);
-
-    mImage = image;
-    setSize(mImage->mSize);
-
     mMoving = false;
 
     return 0;

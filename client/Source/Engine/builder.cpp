@@ -11,11 +11,10 @@
 #include "world.h"
 #include "imageEntity.h"
 #include "imageLibrary.h"
+#include "tileMap.h"
 
 namespace pammo
 {
-	
-#if 1
     
 uint16_t readUInt16(char** cur, size_t* remain)
 {
@@ -57,7 +56,8 @@ char* readString(char** cur, size_t* remain)
 	
 void buildFromMap(World* world, char const* name)
 {
-	FILE* f = fopen(name, "rb");
+    string fullName = string("data/bmaps/") + name + ".bmap";
+	FILE* f = fopen(fullName.c_str(), "rb");
 	if(!f)
 	{
 		dprintf("Error opening map %s", name);
@@ -73,10 +73,15 @@ void buildFromMap(World* world, char const* name)
     fclose(f);
     char* cur = buffer;
     
+    // Get a pointer to the tileMap to fill in as we go... in that style.
+    TileMap* tileMap = world->getTileMap();
+    
 	// Read num materials.
 	uint16_t numMaterials = readUInt16(&cur, &remain);
 	dprintf("Materials: %d", numMaterials);
     Image** materialLookup = new Image*[numMaterials];
+    
+    tileMap->setNumMaterials(numMaterials);
 	
     // Load each material.
 	for(uint32_t i=0; i < numMaterials; ++i)
@@ -85,11 +90,14 @@ void buildFromMap(World* world, char const* name)
         string materialPath = string("data/materials/") + materialName + ".png";
         materialLookup[i] = gImageLibrary->reference(materialPath.c_str());
         dprintf("%d - %s", i, materialPath.c_str());
+        
+        tileMap->setMaterial(i, materialPath.c_str());
 	}
     
     // Load each tile.
     uint16_t tilesX = readUInt16(&cur, &remain);
     uint16_t tilesY = readUInt16(&cur, &remain);
+    tileMap->setNumTiles(tilesX, tilesY);
     for(uint16_t y=0; y < tilesY; ++y)
     {
         for(uint16_t x=0; x < tilesX; ++x)
@@ -99,8 +107,9 @@ void buildFromMap(World* world, char const* name)
             {
                 ImageEntity* e = new ImageEntity(materialLookup[i]);
                 e->mCenter = Vector2(x*128 + 64, y*128 + 64);
-                world->addEntity(e);
+                //world->addEntity(e);
             }
+            tileMap->setTile(x, y, i);
         }
     }
     
@@ -108,7 +117,7 @@ void buildFromMap(World* world, char const* name)
 	uint16_t numProps = readUInt16(&cur, &remain);
 	dprintf("Props: %d", numProps);
     Image** propLookup = new Image*[numProps];
-	
+
     // Load each prop.
 	for(uint32_t i=0; i < numProps; ++i)
 	{
@@ -148,13 +157,11 @@ void buildFromMap(World* world, char const* name)
     // Cleanup.
     delete[] buffer;
 }
+    
+    
+    
+#if 0
 	
-void builder(World* world)
-{
-	buildFromMap(world, "./data/bmaps/Desert.bmap");
-}
-
-#elif 0
 void builder(World* world)
 {
 	Entity* entity;

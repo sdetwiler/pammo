@@ -17,7 +17,7 @@ namespace pammo
 
 class World;
 
-void builder(World* world);
+void buildFromMap(World* world, char const* mapName);
 
 }
 

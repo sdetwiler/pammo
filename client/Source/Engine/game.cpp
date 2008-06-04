@@ -1,8 +1,7 @@
 #include "game.h"
-#include "builder.h"
+#include "image.h"
 #include "imageLibrary.h"
-#include "world.h"
-#include "pathManager.h"
+#include "lobbyView.h"
 
 namespace pammo
 {
@@ -20,18 +19,14 @@ Game::~Game()
 
 int Game::init()
 {
-    int ret;
+    // Let the image subroutine precompile vert arrays.
+    initImage();
     
+    // Initialize the image library.
     gImageLibrary = new ImageLibrary();
     
-    gWorld = new World();
-    ret = gWorld->init();
-    if(ret < 0)
-        return ret;
-
-    builder(gWorld);
-
-    PathManager* pathManager = new PathManager();
+    // Create the lobby view.
+    new LobbyView();
 
     return 0;
 }

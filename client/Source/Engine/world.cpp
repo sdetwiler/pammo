@@ -12,6 +12,9 @@
 #include "entity.h"
 #include "image.h"
 #include "flameTankVehicle.h"
+#include "builder.h"
+#include "tileMap.h"
+#include "pathManager.h"
 
 namespace pammo
 {
@@ -32,20 +35,25 @@ World::~World()
 {
 }
 
-int World::init()
+int World::init(char const* mapName)
 {
     int ret;
-    mParticleSystem = new ParticleSystem(1000);
 
     mCamera = new Camera(Vector2(0, 0), getFrameSize());
     mCamera->mSize*=2;
     mTargetCameraSize = mCamera->mSize;
+    
+    mParticleSystem = new ParticleSystem(1000);
+    mTileMap = new TileMap;
+    mPathManager = new PathManager();
+    
+    buildFromMap(this, mapName);
+    
     mVehicle = new FlameTankVehicle(this);
-
     ret = mVehicle->init();
     if(ret < 0)
         return ret;
-
+    
     return 0;
 }
 	
@@ -62,6 +70,11 @@ uint32_t World::getTouchPriority() const
 ParticleSystem* World::getParticleSystem()
 {
     return mParticleSystem;
+}
+    
+TileMap* World::getTileMap()
+{
+    return mTileMap;
 }
 
 void World::addEntity(Entity* entity)
@@ -83,7 +96,25 @@ void World::setPath(Vector2Vec const& path)
 
 void World::draw()
 {
+	mCamera->set();
+    
+    mTileMap->draw(mCamera);
 		
+	EntityVector::iterator i;
+	for(i = mEntities.begin(); i != mEntities.end(); ++i)
+	{
+		(*i)->draw();
+	}
+    mVehicle->draw();
+    mParticleSystem->draw();	
+	mCamera->unset();
+}
+
+void World::update(int delta)
+{
+    mParticleSystem->update();
+    mVehicle->update(delta);
+    
 	// Zoom the camera if required.
 	if(mTargetCameraSize != mCamera->mSize)
 	{
@@ -99,22 +130,6 @@ void World::draw()
 	}
 	mCamera->mCenter = mVehicle->mCenter;
 	mCamera->makeDirty();
-	mCamera->set();
-		
-	EntityVector::iterator i;
-	for(i = mEntities.begin(); i != mEntities.end(); ++i)
-	{
-		(*i)->draw();
-	}    
-    mVehicle->draw();
-    mParticleSystem->draw();	
-	mCamera->unset();
-}
-
-void World::update(int delta)
-{
-    mParticleSystem->update();
-    mVehicle->update(delta);
 }
 
 bool World::isZoomedOut()

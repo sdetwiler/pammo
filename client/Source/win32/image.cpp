@@ -45,8 +45,3 @@ Image* openImage(char const* path)
     return image;
 }
 
-void closeImage(Image* image)
-{
-    glDeleteTextures(1, &image->mTexture);
-    delete image;
-}

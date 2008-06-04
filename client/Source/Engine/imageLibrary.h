@@ -7,15 +7,15 @@
  *
  */
 
-#include "pammo.h"
-
 #ifndef __IMAGE_LIBRARY_H__
 #define __IMAGE_LIBRARY_H__
 
-struct Image;
+#include "pammo.h"
 
 namespace pammo
 {
+    
+struct Image;
  
 class ImageLibrary
 {

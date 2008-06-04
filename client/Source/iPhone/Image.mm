@@ -12,6 +12,9 @@
 #import <OpenGLES/ES1/gl.h>
 #import <QuartzCore/QuartzCore.h>
 
+namespace pammo
+{
+
 Vector2 getFrameSize()
 {
     return Vector2(320, 480);
@@ -51,9 +54,5 @@ Image* openImage(char const* path)
 	free(spriteData);
 	return image;
 }
-
-void closeImage(Image* image)
-{
-    glDeleteTextures(1, &image->mTexture);
-    delete image;
+    
 }

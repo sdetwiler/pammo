@@ -20,6 +20,8 @@ namespace pammo
 
 class Entity;
 class Camera;
+class TileMap;
+class PathManager;
 
 class World : 
     public Drawable,
@@ -30,7 +32,7 @@ class World :
 		World();
 		~World();
 		
-        int init();
+        int init(char const* mapName);
 
         void setPath(Vector2Vec const& path);
 
@@ -48,6 +50,7 @@ class World :
         bool isZoomedOut();
     
         ParticleSystem* getParticleSystem();
+        TileMap* getTileMap();
 
     protected:
     private:
@@ -60,6 +63,8 @@ class World :
         Touch::Phase mLastPhase;
 
         ParticleSystem* mParticleSystem;
+        TileMap* mTileMap;
+        PathManager* mPathManager;
 
         bool mZoomedOut;
 };

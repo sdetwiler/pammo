@@ -1,5 +1,8 @@
 #include "image.h"
 
+namespace pammo
+{
+
 const GLfloat spriteVertices[] = {
 0, 0,
 1, 0,
@@ -15,6 +18,16 @@ const GLshort spriteTexcoords[] = {
 1, 1,
 };
 
+void initImage()
+{
+}
+
+void closeImage(Image* image)
+{
+    glDeleteTextures(1, &image->mTexture);
+    delete image;
+}
+
 void drawImage(Image* image, Transform2 const& transform, float alpha)
 {
     float trans[16];
@@ -27,16 +40,16 @@ void drawImage(Image* image, Transform2 const& transform, float alpha)
     trans[12] = transform[4];
     trans[13] = transform[5];
     trans[15] = 1.0;
-	
-	glVertexPointer(2, GL_FLOAT, 0, spriteVertices);
-	glTexCoordPointer(2, GL_SHORT, 0, spriteTexcoords);
 
     glLoadMatrixf(trans);
+    
+    glVertexPointer(2, GL_FLOAT, 0, spriteVertices);
+    glTexCoordPointer(2, GL_SHORT, 0, spriteTexcoords);
 
     glColor4f(1.0f, 1.0f, 1.0f, alpha);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glBindTexture(GL_TEXTURE_2D, image->mTexture);
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 	glColor4f(1, 1, 1, 1);
+}
 
 }

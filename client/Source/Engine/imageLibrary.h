@@ -12,7 +12,7 @@
 #ifndef __IMAGE_LIBRARY_H__
 #define __IMAGE_LIBRARY_H__
 
-class Image;
+struct Image;
 
 namespace pammo
 {

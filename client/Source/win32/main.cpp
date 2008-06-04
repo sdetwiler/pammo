@@ -132,6 +132,21 @@ public:
 
 int main(int argc, char *argv[]) 
 {
+    char path[256];
+    if(getcwd(path, sizeof(path)) == NULL)
+        return -1;
+
+    if(strstr(path, "releases"))
+    {
+        dprintf("In releases directory, setting current directory two levels up.\n");
+        chdir("..\\..\\");
+    }
+    else
+    {
+        dprintf("Not changing current working directory.\n");
+    }
+           
+
     SDL_Surface* screen;
     SDL_Init(SDL_INIT_VIDEO);
     screen = SDL_SetVideoMode((int)getFrameSize().x, (int)getFrameSize().y, 0, SDL_OPENGL);

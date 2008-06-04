@@ -9,7 +9,18 @@ bool fireParticleCb(Particle* p)
     p->mImage.mCenter.x += p->mVelocity.x;
     p->mImage.mCenter.y += p->mVelocity.y;
     p->mImage.makeDirty();
-    p->mAlpha-=0.085f;
+    p->mAlpha-=0.05f;
+    if(p->mAlpha<=0)
+        return false;
+    return true;
+}
+
+bool smokeParticleCb(Particle* p)
+{
+    p->mImage.mCenter.x += p->mVelocity.x;
+    p->mImage.mCenter.y += p->mVelocity.y;
+    p->mImage.makeDirty();
+    p->mAlpha-=0.05f;
     if(p->mAlpha<=0)
         return false;
     return true;
@@ -93,5 +104,26 @@ void ParticleSystem::initFireParticle(Vector2 const& position, Vector2 const& ba
     p->mAlpha = 1.0f;
 }
 
+
+void ParticleSystem::initSmokeParticle(Vector2 const& position, Vector2 const& baseVelocity, float theta)
+{
+    if(mAvailable.size() == 0)
+        return;
+
+    Particle* p = mAvailable.back();
+    mAvailable.pop_back();
+    mUsed.push_back(p);
+
+    float velocity = 4.0f;
+    p->mCallback = smokeParticleCb;
+    p->mVelocity.x = velocity*cos(theta);
+    p->mVelocity.y = velocity*sin(theta);
+    p->mVelocity += baseVelocity;
+    p->mMass = 0;
+    p->mImage.setImage(gImageLibrary->reference("data/particles/smoke00.png"));
+    p->mImage.mCenter = position;
+    p->mImage.mRotation = theta;
+    p->mAlpha = 0.9f;
+}
 
 } // namespace pammo

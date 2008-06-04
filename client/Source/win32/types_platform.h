@@ -6,8 +6,12 @@
 #include <windows.h>
 #include <gl/gl.h>
 
-#define glOrthof glOrtho
-#define snprintf _snprintf
+#include <direct.h>
+
+#define glOrthof  glOrtho
+#define snprintf  _snprintf
+#define getcwd    _getcwd
+#define chdir     _chdir
 
 #include <SDL.h>
 

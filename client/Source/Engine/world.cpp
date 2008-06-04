@@ -35,14 +35,17 @@ World::~World()
 int World::init()
 {
     int ret;
-	mCamera = new Camera(Vector2(0, 0), getFrameSize()/1.5);
+    mParticleSystem = new ParticleSystem(1000);
+
+    mCamera = new Camera(Vector2(0, 0), getFrameSize());
+    mCamera->mSize*=2;
     mTargetCameraSize = mCamera->mSize;
     mVehicle = new FlameTankVehicle(this);
+
     ret = mVehicle->init();
     if(ret < 0)
         return ret;
 
-    mParticleSystem = new ParticleSystem(1000);
     return 0;
 }
 	
@@ -124,7 +127,7 @@ void World::zoomOut()
     if(mZoomedOut)
         return;
 
-    mTargetCameraSize = mCamera->mSize*3.0;
+    mTargetCameraSize = mCamera->mSize*4.0;
     mZoomedOut = true;
 }
 
@@ -133,7 +136,7 @@ void World::zoomIn()
     if(!mZoomedOut)
         return;
 
-    mTargetCameraSize = mCamera->mSize/3.0;
+    mTargetCameraSize = mCamera->mSize/4.0;
     mZoomedOut = false;
 }
 

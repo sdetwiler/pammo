@@ -9,6 +9,7 @@ Vehicle::Vehicle(World* world)
     mWorld = world;
     mImage = NULL;
     mSpeed = 10.0f;
+    mOldTheta = 0;
 }
 
 Vehicle::~Vehicle()
@@ -53,6 +54,9 @@ void Vehicle::update(int delta)
         float dy = (*mCurrTarget).y - mCenter.y;
         float hyp = sqrt((dx*dx) + (dy*dy));
         theta = atan2(dy, dx);
+
+        mOldTheta = theta;
+        
 
 //        dprintf("dx: %.2f dy: %.2f hyp: %.2f c.x: %.2f c.y: %.2f t.x: %.2f t.y: %.2f theta: %.2f\n", dx, dy, hyp, mCenter.x, mCenter.y, (*mCurrTarget).x, (*mCurrTarget).y, theta);
 

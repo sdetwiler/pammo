@@ -90,12 +90,9 @@ void Game::registerDrawable(Drawable* drawable)
     pair<DrawableMap::iterator, bool> i = mDrawable.insert(DrawableMap::value_type(drawable->getDrawPriority(), drawable));
     if(i.second == false)
     {
-        int* a;
-        *a = 0;
+        assert(0);
     }
 }
-
-
 
 void Game::unregisterDrawable(Drawable* drawable)
 {

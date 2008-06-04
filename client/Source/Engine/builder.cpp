@@ -57,7 +57,7 @@ char* readString(char** cur, size_t* remain)
 	
 void buildFromMap(World* world, char const* name)
 {
-	FILE* f = fopen(name, "r");
+	FILE* f = fopen(name, "rb");
 	if(!f)
 	{
 		dprintf("Error opening map %s", name);

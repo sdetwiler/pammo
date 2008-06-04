@@ -84,24 +84,56 @@ void FlameTankVehicle::update(int delta)
 
     getTransform();
 
-    // Add new flame particle.
-    Vector2 particleCenter = mCenter;
-    particleCenter.x += (-0.1f) + (rand()%20)/10.0;
-    particleCenter.y += (-0.1f) + (rand()%20)/10.0;
-    float rad = 55; // Distance from center of tank to end of nozzle.
-    float rot = mRotation-(90.0*0.0174532925);
-   
-    particleCenter.y += rad*sin(rot);
-    particleCenter.x += rad*cos(rot);
 
-    Vector2 baseVelocity;
-    if(mMoving)
+
+    // Fire.
+    int width=2;
+    for(int i= -width; i<width; ++i)
     {
-        baseVelocity.y += mSpeed*sin(rot);
-        baseVelocity.x += mSpeed*cos(rot);
+        // Add new flame particle.
+        Vector2 particleCenter = mCenter;
+        particleCenter.x += (-0.1f) + (rand()%20)/10.0;
+        particleCenter.y += (-0.1f) + (rand()%20)/10.0;
+        float rad = 55; // Distance from center of tank to end of nozzle.
+        float rot = mRotation-(90.0*0.0174532925)+(i*.04f)+ ((rand()%3)/20.0);
+       
+        particleCenter.y += rad*sin(rot);
+        particleCenter.x += rad*cos(rot);
+
+        Vector2 baseVelocity;
+        if(mMoving)
+        {
+            baseVelocity.y += mSpeed*sin(rot);
+            baseVelocity.x += mSpeed*cos(rot);
+        }
+
+        mWorld->getParticleSystem()->initFireParticle(particleCenter, baseVelocity, rot);
     }
 
-    mWorld->getParticleSystem()->initFireParticle(particleCenter, baseVelocity, rot);
+    // Smoke.
+    width=1;
+    for(int i= -width; i<=width; ++i)
+    {
+        // Add new flame particle.
+        Vector2 particleCenter = mCenter;
+        particleCenter.x += (-0.1f) + (rand()%20)/10.0;
+        particleCenter.y += (-0.1f) + (rand()%20)/10.0;
+        float rad = 55; // Distance from center of tank to end of nozzle.
+        float rot;
+        rot = mRotation-(90.0*0.0174532925)+(i*.06f) + (-0.3f +(rand()%10)/15.0);
+        particleCenter.y += rad*sin(rot);
+        particleCenter.x += rad*cos(rot);
+
+        Vector2 baseVelocity;
+        if(mMoving)
+        {
+            baseVelocity.y += mSpeed*sin(rot);
+            baseVelocity.x += mSpeed*cos(rot);
+        }
+
+        mWorld->getParticleSystem()->initSmokeParticle(particleCenter, baseVelocity, rot);
+    }
+
 }
 
 

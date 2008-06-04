@@ -71,6 +71,8 @@ struct Vector2
 				default:
 					assert(0);
 			}
+            // To make win32 compiler happy.
+            return x;
         }
 		
 		float& operator[](uint32_t i)
@@ -84,7 +86,9 @@ struct Vector2
 				default:
 					assert(0);
 			}
-		}
+            // To make win32 compiler happy.
+            return x;
+        }
 		
 		Vector2 operator-() const
 		{

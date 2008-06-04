@@ -35,6 +35,8 @@ protected:
     float mSpeed; // in meters/second.
     bool mMoving;
 
+    float mOldTheta;
+
 private:
     Vector2Vec mPath;
     Vector2Vec::iterator mCurrTarget;

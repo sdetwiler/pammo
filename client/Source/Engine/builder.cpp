@@ -78,20 +78,16 @@ void buildFromMap(World* world, char const* name)
     
 	// Read num materials.
 	uint16_t numMaterials = readUInt16(&cur, &remain);
-	dprintf("Materials: %d", numMaterials);
-    Image** materialLookup = new Image*[numMaterials];
-    
     tileMap->setNumMaterials(numMaterials);
+	dprintf("Materials: %d", numMaterials);
 	
     // Load each material.
 	for(uint32_t i=0; i < numMaterials; ++i)
 	{
         char* materialName = readString(&cur, &remain);
         string materialPath = string("data/materials/") + materialName + ".png";
-        materialLookup[i] = gImageLibrary->reference(materialPath.c_str());
-        dprintf("%d - %s", i, materialPath.c_str());
-        
         tileMap->setMaterial(i, materialPath.c_str());
+        dprintf("%d - %s", i, materialPath.c_str());
 	}
     
     // Load each tile.
@@ -103,12 +99,6 @@ void buildFromMap(World* world, char const* name)
         for(uint16_t x=0; x < tilesX; ++x)
         {
             uint16_t i = readUInt16(&cur, &remain);
-            if(materialLookup[i])
-            {
-                ImageEntity* e = new ImageEntity(materialLookup[i]);
-                e->mCenter = Vector2(x*128 + 64, y*128 + 64);
-                //world->addEntity(e);
-            }
             tileMap->setTile(x, y, i);
         }
     }

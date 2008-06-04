@@ -107,8 +107,10 @@ void TileMap::draw(Camera* camera)
     uint16_t endX = ceilf(lr.x);
     uint16_t endY = ceilf(lr.y);
     
-    Transform2 curYTrans = Transform2::createTranslation(Vector2(startX*mSizeMaterial, startY*mSizeMaterial)) *
-                           Transform2::createScale(Vector2(mSizeMaterial + 0.5, mSizeMaterial + 0.5));
+    float offset = 0.5;
+    
+    Transform2 curYTrans = Transform2::createTranslation(Vector2(startX*mSizeMaterial - offset/2, startY*mSizeMaterial - offset/2)) *
+                           Transform2::createScale(Vector2(mSizeMaterial + offset, mSizeMaterial + offset));
     Transform2 curXTrans;
     
     for(uint16_t y=startY; y < endY; ++y)

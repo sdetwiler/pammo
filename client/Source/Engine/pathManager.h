@@ -8,6 +8,8 @@ namespace pammo
 {
 
 class PathManager : 
+    public Initable,
+    public Deleteable,
     public Drawable,
     public Touchable
 {
@@ -15,13 +17,11 @@ public:
     PathManager();
     virtual ~PathManager();
 
+    virtual void init();
     virtual void draw();
-    virtual uint32_t getDrawPriority() const;
-    virtual void setDrawPriority(uint32_t p);
-
     virtual bool touch(uint32_t count, Touch* touches);
-    virtual uint32_t getTouchPriority() const;
-    virtual void setTouchPriority(uint32_t p);
+    virtual uint32_t getDrawPriority() const {return 100;}
+    virtual uint32_t getTouchPriority() const {return 1;}
 
 protected:
     void addPoint(Vector2 const& point);
@@ -30,12 +30,8 @@ protected:
 private:
     Vector2Vec mPoints;
     bool mBuilding;
-
-    uint32_t mDrawPriority;
-    uint32_t mTouchPriority;
 };
 
 }
-
 
 #endif __PATHMANAGER_H__

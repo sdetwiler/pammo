@@ -2,6 +2,7 @@
 #include "image.h"
 #include "imageLibrary.h"
 #include "lobbyView.h"
+#include "world.h"
 
 namespace pammo
 {
@@ -25,14 +26,21 @@ int Game::init()
     // Initialize the image library.
     gImageLibrary = new ImageLibrary();
     
+#if 0
     // Create the lobby view.
     new LobbyView();
+#else
+    // Or create the world view with a map.
+    new World("Desert");
+#endif
 
     return 0;
 }
 
 void Game::update(int delta)
 {
+    initAndDelete();
+    
     for(UpdateableVector::iterator i=mUpdateable.begin(); i!=mUpdateable.end(); ++i)
     {
         (*i)->update(delta);
@@ -41,6 +49,8 @@ void Game::update(int delta)
 
 void Game::draw()
 {
+    initAndDelete();
+    
 	Vector2 frame = getFrameSize();
 	
 	glViewport(0, 0, (int)frame.x, (int)frame.y);
@@ -72,14 +82,25 @@ void Game::draw()
 
 void Game::touches(uint32_t count, Touch* touches)
 {
+    initAndDelete();
+    
     for(TouchableMap::iterator i=mTouchable.begin(); i!=mTouchable.end(); ++i)
     {
         if(i->second->touch(count, touches))
             return;
     }
 }
+    
+void Game::queueInitable(Initable* initable)
+{
+    mInitable.push_back(initable);
+}
 
-
+void Game::queueDeleteable(Deleteable* deleteable)
+{
+    mDeleteable.push_back(deleteable);
+}
+    
 void Game::registerDrawable(Drawable* drawable)
 {
     pair<DrawableMap::iterator, bool> i = mDrawable.insert(DrawableMap::value_type(drawable->getDrawPriority(), drawable));
@@ -91,8 +112,15 @@ void Game::registerDrawable(Drawable* drawable)
 
 void Game::unregisterDrawable(Drawable* drawable)
 {
-    // Linear seeky.
-
+    for(DrawableMap::iterator i=mDrawable.begin(); i != mDrawable.end(); ++i)
+    {
+        if(i->second == drawable)
+        {
+            mDrawable.erase(i);
+            return;
+        }
+    }
+    assert(0);
 }
 
 void Game::registerTouchable(Touchable* touchable)
@@ -102,7 +130,15 @@ void Game::registerTouchable(Touchable* touchable)
 
 void Game::unregisterTouchable(Touchable* touchable)
 {
-    // suck, a linear seek.
+    for(TouchableMap::iterator i=mTouchable.begin(); i != mTouchable.end(); ++i)
+    {
+        if(i->second == touchable)
+        {
+            mTouchable.erase(i);
+            return;
+        }
+    }
+    assert(0);
 }
 
 void Game::registerUpdateable(Updateable* updateable)
@@ -112,7 +148,34 @@ void Game::registerUpdateable(Updateable* updateable)
 
 void Game::unregisterUpdateable(Updateable* updateable)
 {
-// 
+    for(UpdateableVector::iterator i=mUpdateable.begin(); i != mUpdateable.end(); ++i)
+    {
+        if(*i == updateable)
+        {
+            mUpdateable.erase(i);
+            return;
+        }
+    }
+    assert(0);
+}
+    
+void Game::initAndDelete()
+{
+    if(mInitable.size() == 0 && mDeleteable.size() == 0) return;
+    
+    DeleteableVector deleteableTmp = mDeleteable;
+    mDeleteable.clear();
+    for(DeleteableVector::iterator i = deleteableTmp.begin();  i != deleteableTmp.end(); ++i)
+    {
+        delete *i;
+    }
+    
+    InitableVector initableTmp = mInitable;
+    mInitable.clear();
+    for(InitableVector::iterator i = initableTmp.begin(); i != initableTmp.end(); ++i)
+    {
+        (*i)->init();
+    }
 }
 
 }

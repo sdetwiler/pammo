@@ -23,25 +23,22 @@ class Camera;
 class TileMap;
 class PathManager;
 
-class World : 
-    public Drawable,
-    public Touchable,
-    public Updateable
+class World : public View
 {
 	public:
-		World();
-		~World();
+		World(char const* mapeName);
+		virtual ~World();
 		
-        int init(char const* mapName);
-
-        void setPath(Vector2Vec const& path);
+        virtual void init();
 
         virtual void draw();
         virtual bool touch(uint32_t count, Touch* touches);
         virtual void update(int delta);
 
-        virtual uint32_t getTouchPriority() const;
-        virtual uint32_t getDrawPriority() const;
+        virtual uint32_t getTouchPriority() const {return 2;}
+        virtual uint32_t getDrawPriority() const {return 2;}
+
+        void setPath(Vector2Vec const& path);
 
 		void addEntity(Entity* entity);
 
@@ -54,6 +51,8 @@ class World :
 
     protected:
     private:
+        void gotoLobby();
+    
 		Camera* mCamera;
         Vector2 mTargetCameraSize;
         typedef vector< Entity* > EntityVector;
@@ -61,6 +60,8 @@ class World :
         Vehicle* mVehicle;
         EntityVector mVehicles;
         Touch::Phase mLastPhase;
+        
+        ImageEntity* mBackButton;
 
         ParticleSystem* mParticleSystem;
         TileMap* mTileMap;

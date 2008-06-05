@@ -15,29 +15,23 @@
 #include "builder.h"
 #include "tileMap.h"
 #include "pathManager.h"
+#include "lobbyView.h"
+#include "imageLibrary.h"
 
 namespace pammo
 {
     
 World* gWorld = NULL;
 
-World::World()
+World::World(char const* mapName)
 {
+    gWorld = this;
+
+    int ret;
+    gGame->queueInitable(this);
+    
     mZoomedOut = false;
     mLastPhase = Touch::PhaseBegin;
-    
-    gGame->registerDrawable(this);
-    gGame->registerTouchable(this);
-    gGame->registerUpdateable(this);
-}
-
-World::~World()
-{
-}
-
-int World::init(char const* mapName)
-{
-    int ret;
 
     mCamera = new Camera(Vector2(0, 0), getFrameSize());
     mCamera->mSize*=2;
@@ -51,20 +45,32 @@ int World::init(char const* mapName)
     
     mVehicle = new FlameTankVehicle(this);
     ret = mVehicle->init();
-    if(ret < 0)
-        return ret;
+    assert(ret == 0);
     
-    return 0;
-}
-	
-uint32_t World::getDrawPriority() const
-{
-    return 2;
+    mBackButton = new ImageEntity(gImageLibrary->reference("data/interface/Back.png"));
+    mBackButton->mCenter = Vector2(mBackButton->mSize/2 + Vector2(32, 32));
 }
 
-uint32_t World::getTouchPriority() const
+World::~World()
 {
-    return 2;
+    delete mVehicle;
+    delete mPathManager;
+    delete mTileMap;
+    delete mParticleSystem;
+    delete mCamera;
+    
+    gGame->unregisterDrawable(this);
+    gGame->unregisterTouchable(this);
+    gGame->unregisterUpdateable(this);
+    
+    gWorld = NULL;
+}
+
+void World::init(void)
+{
+    gGame->registerDrawable(this);
+    gGame->registerTouchable(this);
+    gGame->registerUpdateable(this);
 }
 
 ParticleSystem* World::getParticleSystem()
@@ -108,6 +114,8 @@ void World::draw()
     mVehicle->draw();
     mParticleSystem->draw();	
 	mCamera->unset();
+    
+    mBackButton->draw();
 }
 
 void World::update(int delta)
@@ -157,6 +165,21 @@ void World::zoomIn()
 
 bool World::touch(uint32_t count, Touch* touches)
 {
+    // Check if the user clicked in the back button.
+    if(count >= 1)
+    {
+        Vector2 pos = touches[0].mLocation;
+        Vector2 ul = mBackButton->mCenter - mBackButton->mSize/2;
+        Vector2 lr = mBackButton->mCenter + mBackButton->mSize/2;
+        
+        if(pos.x > ul.x && pos.y > ul.y
+            && pos.x < lr.x && pos.y < lr.y)
+        {
+            gotoLobby();
+            return true;
+        }
+    }
+    
     // Two finger touch: zoom out.
     if(count == 2)
     {
@@ -192,6 +215,15 @@ bool World::touch(uint32_t count, Touch* touches)
     mVehicle->touch(count, touches);
 
     return false;
+}
+
+void World::gotoLobby()
+{
+    // Create lobby.
+    new LobbyView();
+    
+    // Delete self.
+    gGame->queueDeleteable(this);
 }
 
 } //namespace pammo

@@ -29,7 +29,7 @@ class ParticleSystem
 {
 public:
     ParticleSystem(uint32_t numParticles);
-    ~ParticleSystem();
+    virtual ~ParticleSystem();
 
     void update();
     void draw();

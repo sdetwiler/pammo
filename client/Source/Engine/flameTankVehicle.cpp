@@ -12,7 +12,7 @@
 namespace pammo
 {
 
-    FlameTankVehicle::FlameTankVehicle(World* world)
+FlameTankVehicle::FlameTankVehicle(World* world)
     : Vehicle(world)
 {
 

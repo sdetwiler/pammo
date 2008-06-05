@@ -146,7 +146,6 @@
 		if(cur == 2) break;
 		
 		CGPoint touchLocation = [touch locationInView:self];
-        dprintf("%f, %f", touchLocation.x, touchLocation.y);
 		output[cur].mLocation.x = touchLocation.x;
 		output[cur].mLocation.y = touchLocation.y;
 		if(touch.phase == 0) output[cur].mPhase = pammo::Touch::PhaseBegin;

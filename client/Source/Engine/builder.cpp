@@ -60,7 +60,7 @@ void buildFromMap(World* world, char const* name)
 	FILE* f = fopen(fullName.c_str(), "rb");
 	if(!f)
 	{
-		dprintf("Error opening map %s", name);
+		dprintf("Error opening map %s / %s", name, fullName.c_str());
 		return;
 	}
     

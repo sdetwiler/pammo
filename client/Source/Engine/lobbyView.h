@@ -16,18 +16,36 @@
 namespace pammo
 {
 
-class LobbyView : public Widget
+class Image;
+
+class LobbyView : public View
 {
 public:
     LobbyView();
-    ~LobbyView();
+    virtual ~LobbyView();
     
+    virtual void init();
     virtual void draw();
     virtual bool touch(uint32_t count, Touch* touches);
     virtual void update(int delta);
     
+    virtual uint32_t getTouchPriority() const { return 200;}
+    virtual uint32_t getDrawPriority() const { return 200;}
+    
 private:
-    void createWorld();
+    void gotoWorld(char const* mapName);
+    
+    Image* mBackground;
+    
+    struct Room
+    {
+        string mMapName;
+        Vector2 mCenter;
+        Vector2 mSize;
+        Image* mImage;
+    };
+    typedef vector< Room* > RoomVector;
+    RoomVector mRooms;
 };
     
 }

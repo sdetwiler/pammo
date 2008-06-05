@@ -44,8 +44,8 @@
 }
 
 //- (void)buildWorld:(CGRect) frame;
-- (void)buildInputUI:(CGRect) frame;
-- (void)tapButton:(id) button;
+//- (void)buildInputUI:(CGRect) frame;
+//- (void)tapButton:(id) button;
 
 //- (void)clearInputMode;
 //- (void)setNormalInputMode:(id) button;

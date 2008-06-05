@@ -7,16 +7,20 @@ namespace pammo
 PathManager::PathManager()
 {
     mBuilding = false;
-    mDrawPriority = 100;
-    mTouchPriority = 1;
     
-    gGame->registerDrawable(this);
-    gGame->registerTouchable(this);
+    gGame->queueInitable(this);
 }
 
 PathManager::~PathManager()
 {
+    gGame->unregisterDrawable(this);
+    gGame->unregisterTouchable(this);
+}
 
+void PathManager::init()
+{
+    gGame->registerDrawable(this);
+    gGame->registerTouchable(this);
 }
 
 void PathManager::draw()
@@ -92,25 +96,25 @@ void PathManager::clear()
     mPoints.clear();
 }
 
-uint32_t PathManager::getDrawPriority() const
-{
-    return mDrawPriority;
-}
-
-void PathManager::setDrawPriority(uint32_t p)
-{
-    mDrawPriority = p;
-}
-
-uint32_t PathManager::getTouchPriority() const
-{
-    return mTouchPriority;
-}
-
-void PathManager::setTouchPriority(uint32_t p)
-{
-    mTouchPriority = p;
-}
+//uint32_t PathManager::getDrawPriority() const
+//{
+//    return mDrawPriority;
+//}
+//
+//void PathManager::setDrawPriority(uint32_t p)
+//{
+//    mDrawPriority = p;
+//}
+//
+//uint32_t PathManager::getTouchPriority() const
+//{
+//    return mTouchPriority;
+//}
+//
+//void PathManager::setTouchPriority(uint32_t p)
+//{
+//    mTouchPriority = p;
+//}
 
 } // namespace pammo.
 

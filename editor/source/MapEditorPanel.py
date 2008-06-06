@@ -62,7 +62,7 @@ class MapEditorPanel(wx.Panel):
         #map.setProperties(properties)
         #self.newEditorForMap(map)
 
-        #f = open("/Users/jmarr/Desktop/Pammo/editor/maps/Desert.map")
+        #f = open("/Users/jmarr/Desktop/Pammo/data/maps/Desert.map")
         #map = Map.Map()
         #map.loadFromFile("Desert", f)
         #self.newEditorForMap(map)

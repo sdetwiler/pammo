@@ -9,6 +9,7 @@ class Map:
         self.hasSavedOnce = False
         self.observers = []
         self.entities = []
+        self.collisionGroups = []
 
     def addObserver(self, observer):
         self.observers.append(observer)
@@ -36,6 +37,8 @@ class Map:
             entities.append(s.saveToDic())
         output['entities'] = entities
 
+        output['collisionGroups'] = self.collisionGroups
+
         f.write(str(output))
 
         self.isDirty = False
@@ -58,6 +61,10 @@ class Map:
             e.loadFromDic(s)
             e.addObserver(self.onEntityChanged)
             self.entities.append(e)
+
+        # Load collision groups if they exist.
+        if 'collisionGroups' in dic:
+            self.collisionGroups = dic['collisionGroups']
 
         self.isDirty = False
         self.hasSavedOnce = True
@@ -118,3 +125,11 @@ class Map:
 
     def getEntities(self):
         return self.entities
+
+    def getCollisionGroups(self):
+        return self.collisionGroups
+
+    def setCollisionGroups(self, collisionGroups):
+        self.collisionGroups = collisionGroups
+        self.isDirty = True
+        self._notify()

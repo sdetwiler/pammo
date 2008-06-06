@@ -2,6 +2,7 @@ import wx
 
 import PropToolPanel
 import MaterialToolPanel
+import CollisionToolPanel
 
 class ToolBrowser(wx.Panel):
     def __init__(self, parent, id):
@@ -22,6 +23,9 @@ class ToolBrowser(wx.Panel):
 
         self.materialToolPanel = MaterialToolPanel.MaterialToolPanel(self.notebook, -1)
         self.notebook.AddPage(self.materialToolPanel, "Materials")
+
+        self.collisionToolPanel = CollisionToolPanel.CollisionToolPanel(self.notebook, -1)
+        self.notebook.AddPage(self.collisionToolPanel, "Collision")
 
     def addObserver(self, observer): self.observers.append(observer)
     def removeObserver(self, observer): self.observers.remove(observer)

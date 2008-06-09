@@ -14,6 +14,7 @@
 #include "widget.h"
 #include "vehicle.h"
 #include "particleSystem.h"
+#include "player.h"
 
 namespace pammo
 {
@@ -48,6 +49,7 @@ class World : public View
     
         ParticleSystem* getParticleSystem();
         TileMap* getTileMap();
+        Camera* getCamera();
 
     protected:
     private:
@@ -57,7 +59,6 @@ class World : public View
         Vector2 mTargetCameraSize;
         typedef vector< Entity* > EntityVector;
 		EntityVector mEntities;
-        Vehicle* mVehicle;
         EntityVector mVehicles;
         Touch::Phase mLastPhase;
         
@@ -65,7 +66,8 @@ class World : public View
 
         ParticleSystem* mParticleSystem;
         TileMap* mTileMap;
-        PathManager* mPathManager;
+
+        Player* mPlayer;
 
         bool mZoomedOut;
 };

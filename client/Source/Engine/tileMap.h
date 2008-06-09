@@ -16,7 +16,7 @@ namespace pammo
 {
     
 class Camera;
-class Image;
+struct Image;
     
 class TileMap
 {

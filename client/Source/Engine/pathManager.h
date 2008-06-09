@@ -6,6 +6,7 @@
 
 namespace pammo
 {
+class Player;
 
 class PathManager : 
     public Initable,
@@ -14,7 +15,7 @@ class PathManager :
     public Touchable
 {
 public:
-    PathManager();
+    PathManager(Player* player);
     virtual ~PathManager();
 
     virtual void init();
@@ -28,6 +29,7 @@ protected:
     void clear();
 
 private:
+    Player* mPlayer;
     Vector2Vec mPoints;
     bool mBuilding;
 };

@@ -103,11 +103,7 @@ void Game::queueDeleteable(Deleteable* deleteable)
     
 void Game::registerDrawable(Drawable* drawable)
 {
-    pair<DrawableMap::iterator, bool> i = mDrawable.insert(DrawableMap::value_type(drawable->getDrawPriority(), drawable));
-    if(i.second == false)
-    {
-        assert(0);
-    }
+    mDrawable.insert(DrawableMap::value_type(drawable->getDrawPriority(), drawable));
 }
 
 void Game::unregisterDrawable(Drawable* drawable)

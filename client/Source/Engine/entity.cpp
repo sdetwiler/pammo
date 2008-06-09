@@ -45,6 +45,15 @@ void Entity::makeDirty()
 	mInverseTransformDirty = true;
 }
 
+void Entity::setTransform(Transform2 const& trans)
+{
+    mTransform = trans;
+    mCenter.x = mTransform[4];
+    mCenter.y = mTransform[5];
+    mTransformDirty = false;
+    mInverseTransformDirty = true;
+}
+
 Transform2 const& Entity::getTransform()
 {
 	if(mTransformDirty)

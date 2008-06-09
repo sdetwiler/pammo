@@ -11,10 +11,9 @@
 #include "camera.h"
 #include "entity.h"
 #include "image.h"
-#include "flameTankVehicle.h"
 #include "builder.h"
 #include "tileMap.h"
-#include "pathManager.h"
+#include "player.h"
 #include "lobbyView.h"
 #include "imageLibrary.h"
 
@@ -39,22 +38,23 @@ World::World(char const* mapName)
     
     mParticleSystem = new ParticleSystem(1000);
     mTileMap = new TileMap;
-    mPathManager = new PathManager();
     
     buildFromMap(this, mapName);
     
-    mVehicle = new FlameTankVehicle(this);
-    ret = mVehicle->init();
+    mPlayer = new Player;
+    ret = mPlayer->init();
     assert(ret == 0);
-    
+
+
     mBackButton = new ImageEntity(gImageLibrary->reference("data/interface/Back.png"));
     mBackButton->mCenter = Vector2(mBackButton->mSize/2 + Vector2(32, 32));
 }
 
 World::~World()
 {
-    delete mVehicle;
-    delete mPathManager;
+//    delete mVehicle;
+//    delete mPathManager;
+    delete mPlayer;
     delete mTileMap;
     delete mParticleSystem;
     delete mCamera;
@@ -77,6 +77,11 @@ ParticleSystem* World::getParticleSystem()
 {
     return mParticleSystem;
 }
+
+Camera* World::getCamera()
+{
+    return mCamera;
+}
     
 TileMap* World::getTileMap()
 {
@@ -86,18 +91,6 @@ TileMap* World::getTileMap()
 void World::addEntity(Entity* entity)
 {
 	mEntities.push_back(entity);
-}
-
-void World::setPath(Vector2Vec const& path)
-{
-    zoomIn();
-
-    Vector2Vec worldPath;
-    for(Vector2Vec::const_iterator i = path.begin(); i!=path.end(); ++i)
-    {
-        worldPath.push_back(mCamera->translateToWorld(*i));
-    }
-    mVehicle->setPath(worldPath);
 }
 
 void World::draw()
@@ -111,7 +104,7 @@ void World::draw()
 	{
 		(*i)->draw();
 	}
-    mVehicle->draw();
+    mPlayer->draw();
     mParticleSystem->draw();	
 	mCamera->unset();
     
@@ -121,7 +114,7 @@ void World::draw()
 void World::update(int delta)
 {
     mParticleSystem->update();
-    mVehicle->update(delta);
+    mPlayer->update(delta);
     
 	// Zoom the camera if required.
 	if(mTargetCameraSize != mCamera->mSize)
@@ -136,7 +129,7 @@ void World::update(int delta)
 			mCamera->mSize-= step;
 		}
 	}
-	mCamera->mCenter = mVehicle->mCenter;
+	mCamera->mCenter = mPlayer->getCenter();
 	mCamera->makeDirty();
 }
 
@@ -212,9 +205,7 @@ bool World::touch(uint32_t count, Touch* touches)
 
     mLastPhase = touches[0].mPhase;
 
-    mVehicle->touch(count, touches);
-
-    return false;
+    return mPlayer->touch(count, touches);
 }
 
 void World::gotoLobby()

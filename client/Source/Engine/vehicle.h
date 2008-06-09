@@ -3,8 +3,7 @@
 
 #include "pammo.h"
 #include "entity.h"
-#include "image.h"
-
+#include "animationEntity.h"
 
 namespace pammo
 {
@@ -16,7 +15,7 @@ class Vehicle :
     public Updateable
 {
 public:
-    Vehicle(World* world);
+    Vehicle();
     virtual ~Vehicle();
 
     virtual int init();
@@ -24,14 +23,14 @@ public:
     void setPath(Vector2Vec const& points);
 
     virtual void draw();
+
     virtual bool touch(uint32_t count, Touch* touches);
     virtual uint32_t getTouchPriority() const;
     virtual void update(int delta);
 
-
 protected:
     World* mWorld;
-    Image* mImage;
+    AnimationEntity mAnimation;
     float mSpeed; // in meters/second.
     bool mMoving;
 

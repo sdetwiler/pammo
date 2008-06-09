@@ -3,6 +3,9 @@
 #include <string>
 #include <SDL_image.h>
 
+namespace pammo
+{
+
 Vector2 getFrameSize()
 {
     return Vector2(320, 480);
@@ -45,3 +48,4 @@ Image* openImage(char const* path)
     return image;
 }
 
+}

@@ -34,6 +34,7 @@ class Entity :
 		Vector2 mCenter;
 		Vector2 mSize;
 		float mRotation;
+        void setTransform(Transform2 const& trans);
 		Transform2 const& getTransform();
 		
 	protected:

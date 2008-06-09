@@ -4,8 +4,9 @@
 namespace pammo
 {
 
-PathManager::PathManager()
+PathManager::PathManager(Player* player)
 {
+    mPlayer = player;
     mBuilding = false;
     
     gGame->queueInitable(this);
@@ -76,7 +77,7 @@ bool PathManager::touch(uint32_t count, Touch* touches)
     case Touch::PhaseEnd:
         if(mBuilding)
         {
-            gWorld->setPath(mPoints);
+            mPlayer->setPath(mPoints);
             clear();
             mBuilding = false;
             return true;

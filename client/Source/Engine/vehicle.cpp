@@ -1,13 +1,13 @@
+#include "game.h"
 #include "vehicle.h"
 #include "imageLibrary.h"
+#include "animationEntity.h"
 
 namespace pammo
 {
 
-Vehicle::Vehicle(World* world)
+Vehicle::Vehicle()
 {
-    mWorld = world;
-    mImage = NULL;
     mSpeed = 10.0f;
     mOldTheta = 0;
 }
@@ -21,12 +21,15 @@ int Vehicle::init()
 {
     mMoving = false;
 
+   // gGame->registerDrawable(this);
+
     return 0;
 }
 
 void Vehicle::draw()
 {
-    drawImage(mImage, getTransform());
+    mAnimation.setTransform(getTransform());
+    mAnimation.draw();
 }
 
 bool Vehicle::touch(uint32_t count, Touch* touches)
@@ -44,7 +47,7 @@ void Vehicle::update(int delta)
     if(mMoving == false)
         return;
 
-    float toTravel = mSpeed;// * (delta/30.0f);
+    float toTravel = mSpeed;
 
     // How much to translate.
     float theta;
@@ -92,6 +95,7 @@ void Vehicle::update(int delta)
     mRotation = theta + (90.0*0.0174532925);
 
     makeDirty();
+//    mAnimation.setTransform(getTransform());
 }
 
 void Vehicle::setPath(Vector2Vec const& points)

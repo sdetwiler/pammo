@@ -83,7 +83,7 @@ void ParticleSystem::draw()
     }
 }
 
-void ParticleSystem::initFireParticle(Vector2 const& position, Vector2 const& baseVelocity, float theta)
+void ParticleSystem::initFireParticle(Transform2 const& transform, Vector2 const& initialVelocity)
 {
     if(mAvailable.size() == 0)
         return;
@@ -94,18 +94,19 @@ void ParticleSystem::initFireParticle(Vector2 const& position, Vector2 const& ba
 
     float velocity = 10.0f;
     p->mCallback = fireParticleCb;
-    p->mVelocity.x = velocity*cos(theta);
-    p->mVelocity.y = velocity*sin(theta);
-    p->mVelocity += baseVelocity;
+
+    p->mVelocity.x = velocity*transform[0];
+    p->mVelocity.y = velocity*transform[1];
+
+    p->mVelocity += initialVelocity;
     p->mMass = 0;
     p->mImage.setImage(gImageLibrary->reference("data/particles/flame.png"));
-    p->mImage.mCenter = position;
-    p->mImage.mRotation = theta;
+    p->mImage.setTransform(transform);
     p->mAlpha = 1.0f;
 }
 
 
-void ParticleSystem::initSmokeParticle(Vector2 const& position, Vector2 const& baseVelocity, float theta)
+void ParticleSystem::initSmokeParticle(Transform2 const& transform, Vector2 const& initialVelocity)
 {
     if(mAvailable.size() == 0)
         return;
@@ -116,14 +117,15 @@ void ParticleSystem::initSmokeParticle(Vector2 const& position, Vector2 const& b
 
     float velocity = 4.0f;
     p->mCallback = smokeParticleCb;
-    p->mVelocity.x = velocity*cos(theta);
-    p->mVelocity.y = velocity*sin(theta);
-    p->mVelocity += baseVelocity;
+
+    p->mVelocity.x = velocity*transform[0];
+    p->mVelocity.y = velocity*transform[1];
+
+    p->mVelocity += initialVelocity;
     p->mMass = 0;
     p->mImage.setImage(gImageLibrary->reference("data/particles/smoke00.png"));
-    p->mImage.mCenter = position;
-    p->mImage.mRotation = theta;
-    p->mAlpha = 0.9f;
+    p->mImage.setTransform(transform);
+    p->mAlpha = 1.0f;
 }
 
 } // namespace pammo

@@ -15,14 +15,19 @@ class MaterialToolPanel(wx.Panel):
         gridButton.SetValue(self.drawGrid)
         self.Bind(wx.EVT_CHECKBOX, self.onToggleGrid, gridButton)
 
-        button = wx.Button(self, 10, "Reload Materials");
-        self.Bind(wx.EVT_BUTTON, self.onReloadMaterials, button)
-        button.SetSize(button.GetBestSize())
+        fill = wx.Button(self, -1, "Fill with Material");
+        self.Bind(wx.EVT_BUTTON, self.onFillMap, fill)
+        fill.SetSize(fill.GetBestSize())
+
+        reload = wx.Button(self, -1, "Reload Materials");
+        self.Bind(wx.EVT_BUTTON, self.onReloadMaterials, reload)
+        reload.SetSize(reload.GetBestSize())
 
         sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.Add(self.browser, 1, wx.EXPAND)
         sizer.Add(gridButton, 0, wx.ALIGN_CENTER | wx.ALL, 2)
-        sizer.Add(button, 0, wx.ALIGN_CENTER | wx.ALL, 2)
+        sizer.Add(fill, 0, wx.ALIGN_CENTER | wx.ALL, 2)
+        sizer.Add(reload, 0, wx.ALIGN_CENTER | wx.ALL, 2)
         self.SetSizer(sizer)
 
     def attachToEditor(self, editor):
@@ -53,6 +58,15 @@ class MaterialToolPanel(wx.Panel):
     def onToggleGrid(self, event):
         self.drawGrid = event.IsChecked()
         if self.editor: self.editor.Refresh()
+
+    def onFillMap(self, event):
+        if not self.editor: return
+
+        mat = self.browser.getSelectedMaterial().getName()
+        sizeX, sizeY = self.editor.getMap().getProperties().getSize()
+        for y in range(sizeY):
+            for x in range(sizeX):
+                self.editor.getMap().setMaterialTile(x, y, mat)
 
     def onMapDraw(self, display, gc, rect):
         if not self.drawGrid: return

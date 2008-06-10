@@ -247,6 +247,7 @@ class MapEditorPanel(wx.Panel):
         map.saveToFile(f)
         try: BinaryMap.save(map)
         except: self.showMessage('Could not save map in binary format')
+        #BinaryMap.save(map)
         return True
 
     def updateMenuState(self):

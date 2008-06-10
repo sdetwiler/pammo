@@ -16,6 +16,7 @@
 #include "player.h"
 #include "lobbyView.h"
 #include "imageLibrary.h"
+#include "collisionMap.h"
 
 namespace pammo
 {
@@ -38,6 +39,7 @@ World::World(char const* mapName)
     
     mParticleSystem = new ParticleSystem(1000);
     mTileMap = new TileMap;
+    mCollisionMap = new CollisionMap;
     
     buildFromMap(this, mapName);
     
@@ -52,8 +54,7 @@ World::World(char const* mapName)
 
 World::~World()
 {
-//    delete mVehicle;
-//    delete mPathManager;
+    delete mCollisionMap;
     delete mPlayer;
     delete mTileMap;
     delete mParticleSystem;
@@ -88,6 +89,11 @@ TileMap* World::getTileMap()
     return mTileMap;
 }
 
+CollisionMap* World::getCollisionMap()
+{
+    return mCollisionMap;
+}
+
 void World::addEntity(Entity* entity)
 {
 	mEntities.push_back(entity);
@@ -105,7 +111,8 @@ void World::draw()
 		(*i)->draw();
 	}
     mPlayer->draw();
-    mParticleSystem->draw();	
+    mParticleSystem->draw();
+    mCollisionMap->draw();
 	mCamera->unset();
     
     mBackButton->draw();

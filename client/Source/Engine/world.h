@@ -23,6 +23,7 @@ class Entity;
 class Camera;
 class TileMap;
 class PathManager;
+class CollisionMap;
 
 class World : public View
 {
@@ -49,6 +50,7 @@ class World : public View
     
         ParticleSystem* getParticleSystem();
         TileMap* getTileMap();
+        CollisionMap* getCollisionMap();
         Camera* getCamera();
 
     protected:
@@ -66,6 +68,7 @@ class World : public View
 
         ParticleSystem* mParticleSystem;
         TileMap* mTileMap;
+        CollisionMap* mCollisionMap;
 
         Player* mPlayer;
 

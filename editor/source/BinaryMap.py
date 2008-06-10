@@ -1,7 +1,7 @@
 import os
 from struct import *
 
-# File Format
+# Map File Format
 # uint16_t numMaterials
 #    char* materialName\0
 # uint16_t sizeX
@@ -13,6 +13,12 @@ from struct import *
 #    uint16_t propId
 #    float posx, posy
 #    float size, rot
+
+# Collision File Format
+# uint16_t numShapes
+#   uint16_t numPoints
+#     float x
+#     float y
 
 def dumpHex(str):
     for i in str:
@@ -28,6 +34,10 @@ def accumulate(store, name):
     return l
 
 def save(map):
+    saveMap(map)
+    saveCollision(map)
+
+def saveMap(map):
     properties = map.getProperties()
 
     output = ''
@@ -58,5 +68,19 @@ def save(map):
     output += header + body
         
     path = os.path.abspath("../data/bmaps/%s.bmap" % properties.getName())
-    f = open(path, "w+")
+    f = open(path, "w+b")
+    f.write(output)
+
+def saveCollision(map):
+    output = ''
+
+    groups = map.getCollisionGroups()
+    output += pack('!H', len(groups))
+    for group in groups:
+        output += pack('!H', len(group))
+        for x, y in group:
+            output += pack('!2f', x, y)
+    
+    path = os.path.abspath("../data/collision/%s.col" % map.getProperties().getName())
+    f = open(path, "w+b")
     f.write(output)

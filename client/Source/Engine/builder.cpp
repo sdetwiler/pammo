@@ -12,6 +12,7 @@
 #include "imageEntity.h"
 #include "imageLibrary.h"
 #include "tileMap.h"
+#include "collisionMap.h"
 
 namespace pammo
 {
@@ -54,7 +55,7 @@ char* readString(char** cur, size_t* remain)
     return tmp;
 }
 	
-void buildFromMap(World* world, char const* name)
+void buildTileMap(World* world, char const* name)
 {
     string fullName = string("data/bmaps/") + name + ".bmap";
 	FILE* f = fopen(fullName.c_str(), "rb");
@@ -147,7 +148,58 @@ void buildFromMap(World* world, char const* name)
     // Cleanup.
     delete[] buffer;
 }
+
+void buildCollisionMap(World* world, char const* mapName)
+{
+    string fullName = string("data/collision/") + mapName + ".col";
+	FILE* f = fopen(fullName.c_str(), "rb");
+	if(!f)
+	{
+		dprintf("Error opening collision map %s / %s", mapName, fullName.c_str());
+		return;
+	}
     
+    // Read the entire collision map into memory.
+    fseek(f, 0, SEEK_END);
+    size_t remain = ftell(f);
+    rewind(f);
+    char* buffer = new char[remain];
+    fread(buffer, remain, 1, f);
+    fclose(f);
+    char* cur = buffer;
+    
+    // Get a pointer to the collision map.
+    CollisionMap* collisionMap = world->getCollisionMap();
+    
+    // Read num shapes.
+    uint16_t numShapes = readUInt16(&cur, &remain);
+    dprintf("Collision Shapes: %d", numShapes);
+    
+    // Read each shape.
+    for(uint32_t shape=0; shape < numShapes; ++shape)
+    {
+        uint16_t numPoints = readUInt16(&cur, &remain);
+        dprintf(" Points: %d", numPoints);
+        Vector2* points = new Vector2[numPoints];
+        for(uint32_t i=0; i < numPoints; ++i)
+        {
+            points[i].x = readFloat(&cur, &remain);
+            points[i].y = readFloat(&cur, &remain);
+            dprintf("  (%f, %f)", points[i].x, points[i].y);
+        }
+        collisionMap->addShape(numPoints, points);
+        delete[] points;
+    }
+    
+    // Free the buffer;
+    delete[] buffer;
+}
+    
+void buildFromMap(World* world, char const* mapName)
+{
+    buildTileMap(world, mapName);
+    buildCollisionMap(world, mapName);
+}
     
     
 #if 0

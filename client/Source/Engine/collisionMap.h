@@ -23,7 +23,8 @@ public:
     
     void addShape(uint16_t numPoints, Vector2* points);
     
-    bool intersect(Vector2 startPos, Vector2 endPos, float radius, Vector2& hit);
+    bool raycast(Vector2 startPos, Vector2 endPos, float radius, Vector2& hit);
+    bool route(Vector2 startPos, Vector2 endPos, float radius, vector< Vector2 >& newPath);
     void draw();
     
 public:
@@ -34,6 +35,15 @@ public:
     };
     typedef vector< Shape* > ShapeVector;
     ShapeVector mShapes;
+    
+    struct IntersectResult
+    {
+        Vector2 hit;
+        Vector2 farHit;
+        Shape* shape;
+        uint16_t face;
+    };
+    bool intersect(Vector2 startPos, Vector2 endPos, float radius, IntersectResult& result);
 };
 
 }

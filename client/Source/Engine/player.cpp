@@ -76,7 +76,7 @@ void Player::setPath(Vector2Vec const& path)
     Vector2Vec worldPath;
     for(Vector2Vec::const_iterator i = path.begin(); i!=path.end(); ++i)
     {
-        worldPath.push_back(gWorld->getCamera()->translateToWorld(*i));
+        worldPath.push_back(*i);
     }
     mVehicle->setPath(worldPath);
 }

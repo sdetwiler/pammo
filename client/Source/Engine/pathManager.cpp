@@ -1,5 +1,7 @@
 #include "pathManager.h"
 #include "world.h"
+#include "camera.h"
+#include "collisionMap.h"
 
 namespace pammo
 {
@@ -30,6 +32,8 @@ void PathManager::draw()
         return;
 	
 	glLoadIdentity();
+    gWorld->getCamera()->set();
+    
     glLineWidth(5.0);
     glColor4f(1.0, 0.0, 0.0, 0.5);
 	glDisable(GL_TEXTURE_2D);
@@ -52,6 +56,8 @@ void PathManager::draw()
 	glEnable(GL_TEXTURE_2D);
 	glColor4f(1, 1, 1, 1);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    
+    gWorld->getCamera()->unset();
 }
 
 bool PathManager::touch(uint32_t count, Touch* touches)
@@ -66,11 +72,11 @@ bool PathManager::touch(uint32_t count, Touch* touches)
     switch(touches[0].mPhase)
     {
     case Touch::PhaseBegin:
-        return false;
+        return true;
 
     case Touch::PhaseMove:
         mBuilding = true;
-        addPoint(touches[0].mLocation);
+        addPoint(gWorld->getCamera()->translateToWorld(touches[0].mLocation));
         return true;
         break;
 
@@ -90,7 +96,21 @@ bool PathManager::touch(uint32_t count, Touch* touches)
 
 void PathManager::addPoint(Vector2 const& point)
 {
-    mPoints.push_back(point);
+    Vector2 newPoint = point;
+    if(mPoints.size() > 0)
+    {
+        Vector2 worldStart = mPoints[mPoints.size()-1];
+        Vector2 worldEnd = point;
+        vector< Vector2 > newPath;
+        
+        gWorld->getCollisionMap()->route(worldStart, worldEnd, 1, newPath);
+        for(uint32_t i=0; i < newPath.size(); ++i)
+            mPoints.push_back(newPath[i]);
+    }
+    else
+    {
+        mPoints.push_back(newPoint);
+    }
 }
 
 void PathManager::clear()

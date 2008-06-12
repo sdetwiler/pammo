@@ -22,6 +22,7 @@
 		11C097230DFE56C700EF4A97 /* targetRingWidget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11C0971F0DFE56C700EF4A97 /* targetRingWidget.cpp */; };
 		11C097290DFE5AB900EF4A97 /* collisionMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11C097280DFE5AB900EF4A97 /* collisionMap.cpp */; };
 		11CFA2120DEE8D1700279425 /* data in Resources */ = {isa = PBXBuildFile; fileRef = 11CFA1FE0DEE8D1700279425 /* data */; };
+		11DBE28C0E010AEE00E589A9 /* npcManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11DBE28A0E010AEE00E589A9 /* npcManager.cpp */; };
 		11EEB7210DEBC73F009F3B13 /* builder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11EEB7090DEBC73F009F3B13 /* builder.cpp */; };
 		11EEB7220DEBC73F009F3B13 /* camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11EEB70B0DEBC73F009F3B13 /* camera.cpp */; };
 		11EEB7230DEBC73F009F3B13 /* drawImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11EEB70E0DEBC73F009F3B13 /* drawImage.cpp */; };
@@ -68,6 +69,8 @@
 		11C097280DFE5AB900EF4A97 /* collisionMap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = collisionMap.cpp; sourceTree = "<group>"; };
 		11CFA1FE0DEE8D1700279425 /* data */ = {isa = PBXFileReference; lastKnownFileType = folder; name = data; path = ../data; sourceTree = SOURCE_ROOT; };
 		11D631F00DEB9E6400CA2A0A /* Platform.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Platform.pch; sourceTree = "<group>"; };
+		11DBE28A0E010AEE00E589A9 /* npcManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = npcManager.cpp; sourceTree = "<group>"; };
+		11DBE28B0E010AEE00E589A9 /* npcManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = npcManager.h; sourceTree = "<group>"; };
 		11EEB7090DEBC73F009F3B13 /* builder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = builder.cpp; sourceTree = "<group>"; };
 		11EEB70A0DEBC73F009F3B13 /* builder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = builder.h; sourceTree = "<group>"; };
 		11EEB70B0DEBC73F009F3B13 /* camera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = camera.cpp; sourceTree = "<group>"; };
@@ -139,6 +142,8 @@
 		11EEB7080DEBC73F009F3B13 /* Engine */ = {
 			isa = PBXGroup;
 			children = (
+				11DBE28A0E010AEE00E589A9 /* npcManager.cpp */,
+				11DBE28B0E010AEE00E589A9 /* npcManager.h */,
 				11C0971B0DFE56C700EF4A97 /* animationEntity.cpp */,
 				11C0971C0DFE56C700EF4A97 /* animationEntity.h */,
 				11C0971D0DFE56C700EF4A97 /* player.cpp */,
@@ -304,6 +309,7 @@
 				11C097220DFE56C700EF4A97 /* player.cpp in Sources */,
 				11C097230DFE56C700EF4A97 /* targetRingWidget.cpp in Sources */,
 				11C097290DFE5AB900EF4A97 /* collisionMap.cpp in Sources */,
+				11DBE28C0E010AEE00E589A9 /* npcManager.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -121,7 +121,7 @@
 
 - (void)drawView
 {
-	mGame->update(1);
+	mGame->update();
 	[EAGLContext setCurrentContext:mContext];
 	glBindFramebufferOES(GL_FRAMEBUFFER_OES, mFramebuffer);
 	

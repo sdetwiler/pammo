@@ -10,6 +10,7 @@ Vehicle::Vehicle()
 {
     mSpeed = 10.0f;
     mOldTheta = 0;
+    mMoving = false;
 }
 
 Vehicle::~Vehicle()
@@ -19,11 +20,12 @@ Vehicle::~Vehicle()
 
 int Vehicle::init()
 {
-    mMoving = false;
-
-   // gGame->registerDrawable(this);
-
     return 0;
+}
+
+bool Vehicle::isMoving()
+{
+    return mMoving;
 }
 
 void Vehicle::draw()
@@ -42,7 +44,7 @@ uint32_t Vehicle::getTouchPriority() const
     return 0;
 }
 
-void Vehicle::update(int delta)
+void Vehicle::update()
 {
     if(mMoving == false)
         return;

@@ -34,6 +34,14 @@ int Player::init()
     return 0;
 }
 
+bool Player::isMoving()
+{
+    if(!mVehicle)
+        return false;
+
+    return mVehicle->isMoving();
+}
+
 bool Player::touch(uint32_t count, Touch* touches)
 {
     if(mPathManager->touch(count, touches) == true)
@@ -47,9 +55,9 @@ uint32_t Player::getTouchPriority() const
     return 0;
 }
 
-void Player::update(int delta)
+void Player::update()
 {
-    mVehicle->update(delta);
+    mVehicle->update();
 }
 
 Vector2 const& Player::getCenter() const
@@ -64,7 +72,6 @@ void Player::draw()
 
 void Player::setPath(Vector2Vec const& path)
 {
-    gWorld->zoomIn();
 
     Vector2Vec worldPath;
     for(Vector2Vec::const_iterator i = path.begin(); i!=path.end(); ++i)

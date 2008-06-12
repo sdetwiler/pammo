@@ -1,3 +1,4 @@
+#include "types_platform.h"
 #include "dprintf.h"
 #include <stdio.h>
 #include <stdarg.h>
@@ -5,6 +6,18 @@
 #include <stdio.h>
 void dprintf(char const* format, ...)
 {
+    // Get a debug console for win32. Yea.
+    if(AllocConsole())
+    {
+        freopen("CONOUT$", "wt", stdout);
+        SetConsoleTitle(L"PAMMO : Debug Console");
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_RED);
+        // Truncate the file since this is a new process.
+        FILE* f = fopen("pammo.txt", "w");
+        fclose(f);
+    }
+
+
 	va_list args;
     int     len;
     char* buffer;
@@ -23,4 +36,6 @@ void dprintf(char const* format, ...)
     fwrite(buffer, 1, len, f);
     fwrite("\r\n", 1, 2, f);
     fclose(f);
+
+    printf("%s\n", buffer);
 }

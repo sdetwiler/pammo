@@ -16,6 +16,8 @@
 #include "particleSystem.h"
 #include "player.h"
 
+#include "npcManager.h"
+
 namespace pammo
 {
 
@@ -35,7 +37,7 @@ class World : public View
 
         virtual void draw();
         virtual bool touch(uint32_t count, Touch* touches);
-        virtual void update(int delta);
+        virtual void update();
 
         virtual uint32_t getTouchPriority() const {return 2;}
         virtual uint32_t getDrawPriority() const {return 2;}
@@ -71,6 +73,8 @@ class World : public View
         CollisionMap* mCollisionMap;
 
         Player* mPlayer;
+
+        NpcManager* mNpcManager;
 
         bool mZoomedOut;
 };

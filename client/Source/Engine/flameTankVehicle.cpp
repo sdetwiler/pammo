@@ -37,7 +37,7 @@ int FlameTankVehicle::init()
     if(ret < 0)
         return -1;
 
-    ret = mAnimation.init("data/vehicles/flameTank/");
+    ret = mAnimation.init("data/vehicles/flameTank3/");
     if(ret < 0)
         return -1;
 
@@ -62,9 +62,9 @@ void FlameTankVehicle::setFireDirection(float rads)
     mFireAngle = rads;
 }
 
-void FlameTankVehicle::update(int delta)
+void FlameTankVehicle::update()
 {
-    Vehicle::update(delta);
+    Vehicle::update();
 
     getTransform();
 
@@ -138,7 +138,7 @@ bool FlameTankVehicle::touch(uint32_t count, Touch* touches)
     float hyp = sqrt(x*x + y*y);
 
     // Inside of vehicle.
-    if(hyp < 64.0f)
+    if(hyp < 32.0f)
     {
         toggleTargetRing();
     }

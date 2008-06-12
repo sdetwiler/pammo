@@ -77,6 +77,7 @@ bool PathManager::touch(uint32_t count, Touch* touches)
     case Touch::PhaseEnd:
         if(mBuilding)
         {
+            gWorld->zoomIn();
             mPlayer->setPath(mPoints);
             clear();
             mBuilding = false;

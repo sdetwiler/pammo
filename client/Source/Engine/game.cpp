@@ -4,6 +4,8 @@
 #include "lobbyView.h"
 #include "world.h"
 
+#include <time.h>
+
 namespace pammo
 {
     
@@ -20,6 +22,7 @@ Game::~Game()
 
 int Game::init()
 {
+    srand(time(NULL));
     // Let the image subroutine precompile vert arrays.
     initImage();
     
@@ -37,13 +40,13 @@ int Game::init()
     return 0;
 }
 
-void Game::update(int delta)
+void Game::update()
 {
     initAndDelete();
     
     for(UpdateableVector::iterator i=mUpdateable.begin(); i!=mUpdateable.end(); ++i)
     {
-        (*i)->update(delta);
+        (*i)->update();
     }
 }
 

@@ -16,7 +16,7 @@ public:
 
     virtual int init();
     virtual void draw();
-    virtual void update(int delta);
+    virtual void update();
     virtual bool touch(uint32_t count, Touch* touches);
     
     void setFireDirection(float rads);

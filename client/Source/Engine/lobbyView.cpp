@@ -121,7 +121,7 @@ bool LobbyView::touch(uint32_t count, Touch* touches)
     return false;
 }
 
-void LobbyView::update(int delta)
+void LobbyView::update()
 {}
 
 void LobbyView::gotoWorld(char const* mapName)

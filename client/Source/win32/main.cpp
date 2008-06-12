@@ -166,7 +166,7 @@ int main(int argc, char *argv[])
     {
         input.update(game);
 
-        game->update(1);
+        game->update();
 
         game->draw();
         SDL_GL_SwapBuffers();

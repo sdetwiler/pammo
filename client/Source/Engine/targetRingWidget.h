@@ -21,8 +21,10 @@ public:
 protected:
 
 private:
+    bool mHighlighted;
     Vehicle* mVehicle;
     Image* mImage;
+    Image* mHighlightImage;
     float mAngle;
 };
 

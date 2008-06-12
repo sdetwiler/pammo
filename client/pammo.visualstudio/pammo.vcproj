@@ -195,6 +195,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\Source\Engine\collisionMap.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\external-libs\dirent\dirent.h"
 				>
 			</File>
@@ -228,6 +232,10 @@
 			</File>
 			<File
 				RelativePath="..\Source\Engine\lobbyView.h"
+				>
+			</File>
+			<File
+				RelativePath="..\Source\Engine\npcManager.h"
 				>
 			</File>
 			<File
@@ -303,6 +311,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\Source\Engine\collisionMap.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\external-libs\dirent\dirent.c"
 				>
 			</File>
@@ -344,6 +356,10 @@
 			</File>
 			<File
 				RelativePath="..\Source\win32\main.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\Source\Engine\npcManager.cpp"
 				>
 			</File>
 			<File

@@ -26,7 +26,9 @@ public:
 
     virtual bool touch(uint32_t count, Touch* touches);
     virtual uint32_t getTouchPriority() const;
-    virtual void update(int delta);
+    virtual void update();
+
+    bool isMoving();
 
 protected:
     World* mWorld;

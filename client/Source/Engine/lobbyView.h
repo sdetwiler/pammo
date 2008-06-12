@@ -16,7 +16,7 @@
 namespace pammo
 {
 
-class Image;
+struct Image;
 
 class LobbyView : public View
 {
@@ -27,7 +27,7 @@ public:
     virtual void init();
     virtual void draw();
     virtual bool touch(uint32_t count, Touch* touches);
-    virtual void update(int delta);
+    virtual void update();
     
     virtual uint32_t getTouchPriority() const { return 200;}
     virtual uint32_t getDrawPriority() const { return 200;}

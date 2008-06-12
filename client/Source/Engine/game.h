@@ -39,7 +39,7 @@ class Updateable
 {
 public:
     virtual ~Updateable(){};
-    virtual void update(int delta) = 0;
+    virtual void update() = 0;
 };
 
 class View
@@ -62,7 +62,7 @@ public:
     int init();
 
     void touches(uint32_t count, Touch* touches);
-    void update(int delta);
+    void update();
 
     void draw();
     

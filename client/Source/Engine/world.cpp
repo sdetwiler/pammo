@@ -34,7 +34,7 @@ World::World(char const* mapName)
     mLastPhase = Touch::PhaseBegin;
 
     mCamera = new Camera(Vector2(0, 0), getFrameSize());
-    mCamera->mSize*=2;
+    //mCamera->mSize*=2;
     mTargetCameraSize = mCamera->mSize;
     
     mParticleSystem = new ParticleSystem(1000);
@@ -45,6 +45,10 @@ World::World(char const* mapName)
     
     mPlayer = new Player;
     ret = mPlayer->init();
+    assert(ret == 0);
+
+    mNpcManager = new NpcManager;
+    ret = mNpcManager->init(5);
     assert(ret == 0);
 
 
@@ -111,6 +115,9 @@ void World::draw()
 		(*i)->draw();
 	}
     mPlayer->draw();
+    
+    mNpcManager->draw();
+
     mParticleSystem->draw();
     mCollisionMap->draw();
 	mCamera->unset();
@@ -118,11 +125,11 @@ void World::draw()
     mBackButton->draw();
 }
 
-void World::update(int delta)
+void World::update()
 {
     mParticleSystem->update();
-    mPlayer->update(delta);
-    
+    mPlayer->update();
+    mNpcManager->update();
 	// Zoom the camera if required.
 	if(mTargetCameraSize != mCamera->mSize)
 	{
@@ -136,6 +143,7 @@ void World::update(int delta)
 			mCamera->mSize-= step;
 		}
 	}
+
 	mCamera->mCenter = mPlayer->getCenter();
 	mCamera->makeDirty();
 }

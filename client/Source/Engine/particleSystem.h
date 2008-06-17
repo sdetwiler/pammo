@@ -22,6 +22,8 @@ struct Particle
 
     ImageEntity  mImage;
     float        mAlpha;
+    Vector2      mEndPosition;
+    float        mOldMag;
 };
 
 

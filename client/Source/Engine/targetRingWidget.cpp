@@ -38,17 +38,21 @@ bool TargetRingWidget::touch(uint32_t count, Touch* touches)
 {
     // Always only use first touch point.
     Vector2 loc = gWorld->getCamera()->translateToWorld(touches[0].mLocation);
+    
+    // See if the touch is within the ring that surrounds the vehicle.
     float x = mVehicle->mCenter.x - loc.x;
     float y = mVehicle->mCenter.y - loc.y;
     float hyp = sqrt(x*x + y*y);
     dprintf("TargetRingWidget::touch x: %.2f y: %.2f hyp: %.2f\n", x, y, hyp);
     mHighlighted = false;
-    // Outside of ring.
-    if(hyp > 64.0)
+    // Outside of ring. 
+    // These numbers are corrected for the odd scaling bug. Should be 64.
+    if(hyp > 76.0)
         return false;
 
     // Inside of ring.
-    if(hyp < 48.0f)
+    // Corrected for scaling bug. Should be 48.
+    if(hyp < 55.0f)
         return false;
     dprintf("inside ring\n");
     mHighlighted = true;
@@ -66,8 +70,11 @@ void TargetRingWidget::draw()
 {
     Transform2 trans;
     trans*= Transform2::createTranslation(mVehicle->mCenter);
+    float angle =((FlameTankVehicle*)mVehicle)->getFireDirection();
+   // trans*= Transform2::createRotation(angle);
+
     trans*= Transform2::createRotation(mAngle);
-	trans*= Transform2::createScale(Vector2(2,2));
+	trans*= Transform2::createScale(Vector2(4,4));
     Vector2 back;
     back.x = -mVehicle->mCenter.x;
     back.y = -mVehicle->mCenter.y;

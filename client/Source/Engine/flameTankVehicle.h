@@ -20,6 +20,7 @@ public:
     virtual bool touch(uint32_t count, Touch* touches);
     
     void setFireDirection(float rads);
+    float getFireDirection();
 
     void toggleTargetRing();
 

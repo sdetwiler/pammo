@@ -48,7 +48,7 @@ World::World(char const* mapName)
     assert(ret == 0);
 
     mNpcManager = new NpcManager;
-    ret = mNpcManager->init(5);
+    ret = mNpcManager->init(0);
     assert(ret == 0);
 
 

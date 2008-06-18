@@ -1,4 +1,4 @@
-import os
+import osfix
 from struct import *
 
 # Map File Format
@@ -67,7 +67,7 @@ def saveMap(map):
         header += s + pack('x')
     output += header + body
         
-    path = os.path.abspath("../data/bmaps/%s.bmap" % properties.getName())
+    path = osfix.path("../data/bmaps/%s.bmap" % properties.getName())
     f = open(path, "w+b")
     f.write(output)
 
@@ -81,6 +81,6 @@ def saveCollision(map):
         for x, y in group:
             output += pack('!2f', x, y)
     
-    path = os.path.abspath("../data/collision/%s.col" % map.getProperties().getName())
+    path = osfix.path("../data/collision/%s.col" % map.getProperties().getName())
     f = open(path, "w+b")
     f.write(output)

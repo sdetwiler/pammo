@@ -1,4 +1,4 @@
-import os
+import os, osfix
 import Material
 
 materials = {}
@@ -7,7 +7,7 @@ observers = []
 def reloadFromFilesystem():
     global materials
     materials = {}
-    materialsDir = os.path.abspath('../data/materials')
+    materialsDir = osfix.path('../data/materials')
     for f in os.listdir(materialsDir):
         path = materialsDir + '/' + f
         name = Material.pathToName(path)

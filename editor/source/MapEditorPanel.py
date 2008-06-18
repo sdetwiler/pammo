@@ -1,6 +1,7 @@
 import wx
 
 import os
+import osfix
 
 import Map
 import MapEditor
@@ -96,7 +97,7 @@ class MapEditorPanel(wx.Panel):
             self.newEditorForMap(map)
 
     def onOpenMenu(self, event):
-        base = os.path.abspath("../data/maps")
+        base = osfix.path("../data/maps")
         dialog = wx.FileDialog(self,
             message="Choose a map (This folder only!)",
             defaultDir=base, 
@@ -143,7 +144,7 @@ class MapEditorPanel(wx.Panel):
         index = self.mapNotebook.GetSelection()
         editor = self.mapNotebook.GetPage(index)
         if not self.askDeleteMap(editor.getMap()): return
-        os.remove(os.path.abspath('../data/maps/%s.map' % editor.getMap().getProperties().getName()))
+        os.remove(osfix.path('../data/maps/%s.map' % editor.getMap().getProperties().getName()))
         self.mapNotebook.RemovePage(index)
         self.onMapNotebookPageChanged(None)
         editor.Destroy()
@@ -234,7 +235,7 @@ class MapEditorPanel(wx.Panel):
         self.showMessage('You are already editing a map named "%s".' % name)
 
     def trySaveMap(self, map):
-        path = os.path.abspath('../data/maps/%s.map' % map.getProperties().getName())
+        path = osfix.path('../data/maps/%s.map' % map.getProperties().getName())
         if not map.getHasSavedOnce():
             if os.path.exists(path):
                 dialog = wx.MessageDialog(self, '',

@@ -72,6 +72,7 @@ class MapDisplay(wx.ScrolledWindow):
         gc = wx.GraphicsContext.Create(dc)
 
         gc.Scale(self.drawScale, self.drawScale)
+        #gc.Translate(-drawLeft, -drawTop)
         
         (sizeX, sizeY) = self.map.getProperties().getSize()
         tileSize = MaterialLibrary.getMaterialSize()

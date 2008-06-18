@@ -54,6 +54,10 @@ World::World(char const* mapName)
 
     mBackButton = new ImageEntity(gImageLibrary->reference("data/interface/Back.png"));
     mBackButton->mCenter = Vector2(mBackButton->mSize/2 + Vector2(32, 32));
+
+    mHealthMeter = new HealthMeter;
+    mHealthMeter->init();
+    mPlayer->setObserver(mHealthMeter);
 }
 
 World::~World()
@@ -119,10 +123,11 @@ void World::draw()
     mNpcManager->draw();
 
     mParticleSystem->draw();
-    mCollisionMap->draw();
+    // SCD mCollisionMap->draw();
 	mCamera->unset();
     
     mBackButton->draw();
+    mHealthMeter->draw();
 }
 
 void World::update()

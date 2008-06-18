@@ -219,6 +219,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\Source\Engine\healthMeter.h"
+				>
+			</File>
+			<File
 				RelativePath="..\Source\Engine\image.h"
 				>
 			</File>
@@ -336,6 +340,10 @@
 			</File>
 			<File
 				RelativePath="..\Source\Engine\game.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\Source\Engine\healthMeter.cpp"
 				>
 			</File>
 			<File

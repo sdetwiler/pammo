@@ -10,6 +10,8 @@ Player::Player()
 {
     mVehicle = NULL;
     mPathManager = NULL;
+    mObserver = NULL;
+    mHealth = 100.0f;
 }
 
 Player::~Player()
@@ -32,6 +34,23 @@ int Player::init()
         return ret;
 
     return 0;
+}
+
+void Player::setObserver(PlayerObserver* o)
+{
+    mObserver = o;
+    if(mObserver)
+        mObserver->onHealthChanged(this, mHealth);
+}
+
+void Player::setHealth(float h)
+{
+    mHealth = h;
+}
+
+float Player::getHealth() const
+{
+    return mHealth;
 }
 
 bool Player::isMoving()

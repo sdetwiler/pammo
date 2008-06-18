@@ -6,6 +6,14 @@
 
 namespace pammo
 {
+class Player;
+
+class PlayerObserver
+{
+public:
+    virtual ~PlayerObserver(){}
+    virtual void onHealthChanged(Player* player, float health)=0;
+};
 
 class Player : 
     public Touchable,
@@ -17,6 +25,8 @@ public:
 
     int init();
 
+    void setObserver(PlayerObserver* o);
+
     virtual bool touch(uint32_t count, Touch* touches);
     virtual uint32_t getTouchPriority() const;
     virtual void update();
@@ -25,6 +35,8 @@ public:
     void draw();
 
     void setPath(Vector2Vec const& path);
+    void setHealth(float h);
+    float getHealth() const;
 
     Vector2 const& getCenter() const;
 
@@ -33,6 +45,10 @@ protected:
 private:
     PathManager* mPathManager;
     Vehicle*     mVehicle;
+
+    float  mHealth;
+
+    PlayerObserver* mObserver;
 };
 
 } // namespace pammo

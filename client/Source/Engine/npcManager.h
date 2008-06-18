@@ -17,6 +17,8 @@ public:
     virtual void update();
     virtual void draw();
 
+    Player* hitTest(Vector2 startPos, Vector2 endPos, float radius);
+
 protected:
 
 private:

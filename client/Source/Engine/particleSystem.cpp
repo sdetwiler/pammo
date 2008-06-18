@@ -22,9 +22,9 @@ bool fireParticleCb(Particle* p)
     // Passed it.
     if(p->mOldMag && (mag > p->mOldMag))
         return false;
-    //p->mAlpha-=0.05f;
-//    if(p->mAlpha<=0)
-//       return false;
+    p->mAlpha-=0.05f;
+    if(p->mAlpha<=0)
+       return false;
 
     p->mOldMag = mag;
     return true;
@@ -109,8 +109,8 @@ void ParticleSystem::initFireParticle(Vector2 const& initialPosition, float init
     mUsed.push_back(p);
         
     // Properties about fire particles.
-    float velocity = 10.0f;
-    float maxDistance = 250.0f;
+    float velocity = 8.0f;
+    float maxDistance = 125.0f;
     float particleRadius = 1.0f;
 
     // Set basic particle properties.
@@ -153,7 +153,7 @@ void ParticleSystem::initSmokeParticle(Vector2 const& initialPosition, float ini
     mUsed.push_back(p);
         
     // Properties about smoke particles.
-    float velocity = 4.0f;
+    float velocity = 2.0f;
 
     // Set basic particle properties.
     p->mCallback = smokeParticleCb;

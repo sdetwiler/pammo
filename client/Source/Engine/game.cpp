@@ -34,7 +34,7 @@ int Game::init()
     new LobbyView();
 #else
     // Or create the world view with a map.
-    new World("Desert");
+    new World("fallenCity");
 #endif
 
     return 0;

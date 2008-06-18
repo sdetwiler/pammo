@@ -37,7 +37,7 @@ int FlameTankVehicle::init()
     if(ret < 0)
         return -1;
 
-    ret = mAnimation.init("data/vehicles/flameTank4/");
+    ret = mAnimation.init("data/vehicles/flameTank5/");
     if(ret < 0)
         return -1;
 
@@ -77,12 +77,12 @@ void FlameTankVehicle::update()
 
     // Fire.
     int width=1;
-    int i=0;
+    int i=1;
     for(int i= -width; i<width; ++i)
     {
         // Add new flame particle.
         float rad = 20.0f; // Distance from center of tank to end of nozzle.
-        float rot = mFireAngle - 90.0f*0.0174532925f +(i*.04f);// + ((rand()%3)/20.0f);
+        float rot = mFireAngle - 90.0f*0.0174532925f +(i*.02f) + ((rand()%3)/40.0f);
         
         // Calculate center. Vehicle center plus nozzle rad rotated for direction.
         Vector2 center = mCenter + Vector2(rad, 0) * Transform2::createRotation(rot) + Vector2((rand()%6)-3, (rand()%6)-3);
@@ -93,8 +93,7 @@ void FlameTankVehicle::update()
         else
             baseVelocity = Vector2(0, 0);
 
-       // if(!(rand()%100))
-            gWorld->getParticleSystem()->initFireParticle(center, rot, baseVelocity);
+        gWorld->getParticleSystem()->initFireParticle(center, rot, baseVelocity);
     }
 
     // Smoke.

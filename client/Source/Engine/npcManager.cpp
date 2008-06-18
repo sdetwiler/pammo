@@ -1,6 +1,7 @@
 #include "npcManager.h"
 #include "pathManager.h"
 #include "player.h"
+#include "world.h"
 
 namespace pammo
 {
@@ -76,4 +77,11 @@ void NpcManager::draw()
         mPlayers[i].draw();
     }
 }
+Player* NpcManager::hitTest(Vector2 startPos, Vector2 endPos, float radius)
+{
+    //gWorld->getCollisionMap()->myMagicFunction();
+    return NULL;
+}
+
+
 } // namespace pammo

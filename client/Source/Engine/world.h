@@ -16,6 +16,8 @@
 #include "particleSystem.h"
 #include "player.h"
 
+#include "healthMeter.h"
+
 #include "npcManager.h"
 
 namespace pammo
@@ -67,6 +69,7 @@ class World : public View
         Touch::Phase mLastPhase;
         
         ImageEntity* mBackButton;
+        HealthMeter* mHealthMeter;
 
         ParticleSystem* mParticleSystem;
         TileMap* mTileMap;

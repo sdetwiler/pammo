@@ -2,12 +2,13 @@
 #include "imageLibrary.h"
 #include "world.h"
 #include "collisionMap.h"
+#include "collisionDynamics.h"
 #include "camera.h"
 
 namespace pammo
 {
 
-bool fireParticleCb(Particle* p)
+bool fireParticleCb(Particle* p, ParticleSystem* system)
 {
     p->mImage.mCenter.x += p->mVelocity.x;
     p->mImage.mCenter.y += p->mVelocity.y;
@@ -17,24 +18,41 @@ bool fireParticleCb(Particle* p)
    // dprintf("mag: %.2f", mag);
     // Really close to dest.
     if(mag < 10)
+    {
+        if(p->mHitsObject) system->initHitParticle(p->mEndPosition);
         return false;
+    }
 
     // Passed it.
     if(p->mOldMag && (mag > p->mOldMag))
+    {
+        if(p->mHitsObject) system->initHitParticle(p->mEndPosition);
         return false;
+    }
     p->mAlpha-=0.05f;
     if(p->mAlpha<=0)
+    {
+        if(p->mHitsObject) system->initHitParticle(p->mEndPosition);
        return false;
+    }
 
     p->mOldMag = mag;
     return true;
 }
 
-bool smokeParticleCb(Particle* p)
+bool smokeParticleCb(Particle* p, ParticleSystem* system)
 {
     p->mImage.mCenter.x += p->mVelocity.x;
     p->mImage.mCenter.y += p->mVelocity.y;
     p->mImage.makeDirty();
+    p->mAlpha-=0.05f;
+    if(p->mAlpha<=0)
+        return false;
+    return true;
+}
+
+bool hitParticleCb(Particle* p, ParticleSystem* system)
+{
     p->mAlpha-=0.05f;
     if(p->mAlpha<=0)
         return false;
@@ -69,7 +87,7 @@ void ParticleSystem::update()
     for(uint32_t i = 0; i<mUsed.size(); ++i)
     {
         Particle* p = mUsed[i];
-        if(p->mCallback(p) == false)
+        if(p->mCallback(p, this) == false)
         {
             removeParticles.push_back(i);
         }
@@ -117,6 +135,7 @@ void ParticleSystem::initFireParticle(Vector2 const& initialPosition, float init
     p->mCallback = fireParticleCb;
     p->mOldMag = 0;
     p->mMass = 0;
+    p->mHitsObject = false;
     p->mAlpha = 1.0f;
     
     // Setup image.
@@ -131,11 +150,27 @@ void ParticleSystem::initFireParticle(Vector2 const& initialPosition, float init
     // Calculate unblocked end position. Start position plus maxDistance rotated for direction.
     p->mEndPosition = initialPosition + Vector2(maxDistance, 0) * Transform2::createRotation(initialRotation);
 
-    Vector2 hit;
     //dprintf("World\n  start: [%.2f, %.2f]\n  end:  [%.2f, %.2f]", initialPosition.x, initialPosition.y, p->mEndPosition.x, p->mEndPosition.y);
     
-    if(gWorld->getCollisionMap()->raycast(initialPosition, p->mEndPosition, particleRadius, hit))
-        p->mEndPosition = hit;
+    // Collide with collision map.
+    CollisionMap::RaycastResult mapResult;
+    gWorld->getCollisionMap()->raycast(initialPosition, p->mEndPosition, particleRadius, mapResult);
+    
+    // Collide with collision dynamics.
+    CollisionDynamics::RaycastResult dynamicsResult;
+    gWorld->getCollisionDynamics()->raycast(initialPosition, p->mEndPosition, particleRadius, velocity, 0, dynamicsResult);
+    
+    // Determine which was closer.
+    if(mapResult.mHit && (!dynamicsResult.mHit || mapResult.mDistance < dynamicsResult.mDistance))
+    {
+        p->mEndPosition = mapResult.mPosition;
+        p->mHitsObject = true;
+    }
+    else if(dynamicsResult.mHit)
+    {
+        p->mEndPosition = dynamicsResult.mPosition;
+        p->mHitsObject = true;
+    }
 
     //dprintf("hit:  [%.2f, %.2f]", p->mEndPosition.x, p->mEndPosition.y);
 
@@ -168,6 +203,27 @@ void ParticleSystem::initSmokeParticle(Vector2 const& initialPosition, float ini
     
     // Setup velocity. InitialVelocity from vehicle plus particle speed rotated for direction.
     p->mVelocity = initialVelocity + Vector2(velocity, 0) * Transform2::createRotation(initialRotation);
+}
+
+void ParticleSystem::initHitParticle(Vector2 const& initialPosition)
+{
+    if(mAvailable.size() == 0)
+        return;
+
+    // Grab a particle.
+    Particle* p = mAvailable.back();
+    mAvailable.pop_back();
+    mUsed.push_back(p);
+
+    // Set basic particle properties.
+    p->mCallback = hitParticleCb;
+    p->mMass = 0;
+    p->mAlpha = 1.0f;
+
+    // Setup image.
+    p->mImage.setImage(gImageLibrary->reference("data/particles/smoke00.png"));
+    p->mImage.mCenter = initialPosition + Vector2(rand()%10, rand()%10);
+    p->mImage.makeDirty();
 }
 
 } // namespace pammo

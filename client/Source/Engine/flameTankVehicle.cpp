@@ -2,6 +2,7 @@
 #include "imageLibrary.h"
 #include "world.h"
 #include "flameTankVehicle.h"
+#include "collisionDynamics.h"
 #include "camera.h"
 
 #include <stdio.h>
@@ -22,7 +23,7 @@ FlameTankVehicle::FlameTankVehicle()
 
 FlameTankVehicle::~FlameTankVehicle()
 {
-
+    gWorld->getCollisionDynamics()->removeVehicle(this);
 }
 
 int FlameTankVehicle::init()
@@ -43,6 +44,9 @@ int FlameTankVehicle::init()
 
     mAnimation.setDrawPriority(100);
     setSize(mAnimation.getSize());
+    
+    gWorld->getCollisionDynamics()->addVehicle(this);
+    
     // SCD TEMP
     //mCenter = Vector2(350, 350);
     return 0;

@@ -29,6 +29,9 @@ public:
     virtual void update();
 
     bool isMoving();
+    
+    uint32_t getCollisionBodyMask();
+    float getCollisionBodyRadius(); 
 
 protected:
     World* mWorld;
@@ -37,6 +40,9 @@ protected:
     bool mMoving;
 
     float mOldTheta;
+    
+    uint32_t mCollisionBodyMask;
+    float mCollisionBodyRadius;
 
 private:
     Vector2Vec mPath;

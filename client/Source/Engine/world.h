@@ -28,6 +28,7 @@ class Camera;
 class TileMap;
 class PathManager;
 class CollisionMap;
+class CollisionDynamics;
 
 class World : public View
 {
@@ -55,6 +56,7 @@ class World : public View
         ParticleSystem* getParticleSystem();
         TileMap* getTileMap();
         CollisionMap* getCollisionMap();
+        CollisionDynamics* getCollisionDynamics();
         Camera* getCamera();
 
     protected:
@@ -74,6 +76,7 @@ class World : public View
         ParticleSystem* mParticleSystem;
         TileMap* mTileMap;
         CollisionMap* mCollisionMap;
+        CollisionDynamics* mCollisionDynamics;
 
         Player* mPlayer;
 

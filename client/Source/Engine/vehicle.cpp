@@ -11,6 +11,8 @@ Vehicle::Vehicle()
     mSpeed = 10.0f;
     mOldTheta = 0;
     mMoving = false;
+    mCollisionBodyMask = 0;
+    mCollisionBodyRadius = 40;
 }
 
 Vehicle::~Vehicle()
@@ -26,6 +28,16 @@ int Vehicle::init()
 bool Vehicle::isMoving()
 {
     return mMoving;
+}
+
+uint32_t Vehicle::getCollisionBodyMask()
+{
+    return mCollisionBodyMask;
+}
+
+float Vehicle::getCollisionBodyRadius()
+{
+    return mCollisionBodyRadius;
 }
 
 void Vehicle::draw()

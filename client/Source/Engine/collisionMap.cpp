@@ -67,43 +67,33 @@ void CollisionMap::addShape(uint16_t numPoints, Vector2* points)
     mShapes.push_back(s);
 }
 
-bool CollisionMap::raycast(Vector2 startPos, Vector2 endPos, float radius, Vector2& hit)
-{
-    IntersectResult result;
-    if(intersect(startPos, endPos, radius, result))
-    {
-        hit = result.hit;
-        return true;
-    }
-    
-    return false;
-}
-
 bool CollisionMap::route(Vector2 startPos, Vector2 endPos, float radius, vector< Vector2 >& newPath)
 {
     Vector2 hit;
     newPath.push_back(startPos);
     
-    IntersectResult result;
-    if(!intersect(startPos, endPos, radius, result))
+    RaycastResult result;
+    raycast(startPos, endPos, radius, result);
+    if(!result.mHit)
     {
         newPath.push_back(endPos);
         return true;
     }
     
-    IntersectResult result2;
-    if(!intersect(result.farHit, endPos, radius, result2) || result.shape != result2.shape)
+    RaycastResult result2;
+    raycast(result.mFarPosition, endPos, radius, result2);
+    if(!result2.mHit || result.mShape != result2.mShape)
     {
-        newPath.push_back(result.hit);
+        newPath.push_back(result.mPosition);
         return true;
     }
     
-    uint32_t curFace = result.face;
-    while(curFace != result2.face)
+    uint32_t curFace = result.mFace;
+    while(curFace != result2.mFace)
     {
-        newPath.push_back(result.shape->mPoints[curFace]);
+        newPath.push_back(result.mShape->mPoints[curFace]);
         if(curFace == 0)
-            curFace = result.shape->mNumPoints-1;
+            curFace = result.mShape->mNumPoints-1;
         else
             curFace -= 1;
     }
@@ -113,10 +103,9 @@ bool CollisionMap::route(Vector2 startPos, Vector2 endPos, float radius, vector<
     return true;
 }
     
-bool CollisionMap::intersect(Vector2 startPos, Vector2 endPos, float radius, IntersectResult& result)
+void CollisionMap::raycast(Vector2 startPos, Vector2 endPos, float radius, RaycastResult& result)
 {
-    bool anyHits = false;
-    float bestDist;
+    result.mHit = false;
     
     for(ShapeVector::iterator shape = mShapes.begin(); shape != mShapes.end(); ++shape)
     {
@@ -129,20 +118,18 @@ bool CollisionMap::intersect(Vector2 startPos, Vector2 endPos, float radius, Int
                 (*shape)->mPoints[(i+1) % (*shape)->mNumPoints], curHit, curDist, curFarHit))
                 continue;
                 
-            if(!anyHits || curDist < bestDist)
+            if(!result.mHit || curDist < result.mDistance)
             {
-                bestDist = curDist;
-                anyHits = true;
+                result.mHit = true;
                 
-                result.hit = curHit;
-                result.farHit = curFarHit;
-                result.shape = *shape;
-                result.face = i;
+                result.mDistance = curDist;
+                result.mPosition = curHit;
+                result.mFarPosition = curFarHit;
+                result.mShape = *shape;
+                result.mFace = i;
             }
         }
     }
-    
-    return anyHits;
 }
 
 void CollisionMap::draw()

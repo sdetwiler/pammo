@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		11156B8B0E08E52C00B55584 /* healthMeter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11156B890E08E52C00B55584 /* healthMeter.cpp */; };
+		11156BF60E08F25F00B55584 /* collisionDynamics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11156BF50E08F25F00B55584 /* collisionDynamics.cpp */; };
 		1129D0D50DEBDE1F00F1D50B /* DebugConsole.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1129D0D40DEBDE1F00F1D50B /* DebugConsole.mm */; };
 		113B2C080DF5BFFC0095A737 /* flameTankVehicle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 113B2C060DF5BFFC0095A737 /* flameTankVehicle.cpp */; };
 		113B2C2D0DF65EB20095A737 /* tileMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 113B2C2C0DF65EB20095A737 /* tileMap.cpp */; };
@@ -41,6 +43,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		11156B890E08E52C00B55584 /* healthMeter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = healthMeter.cpp; sourceTree = "<group>"; };
+		11156B8A0E08E52C00B55584 /* healthMeter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = healthMeter.h; sourceTree = "<group>"; };
+		11156BF40E08F25F00B55584 /* collisionDynamics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = collisionDynamics.h; sourceTree = "<group>"; };
+		11156BF50E08F25F00B55584 /* collisionDynamics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = collisionDynamics.cpp; sourceTree = "<group>"; };
 		1129D0D30DEBDE1F00F1D50B /* DebugConsole.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DebugConsole.h; sourceTree = "<group>"; };
 		1129D0D40DEBDE1F00F1D50B /* DebugConsole.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DebugConsole.mm; sourceTree = "<group>"; };
 		113B2C060DF5BFFC0095A737 /* flameTankVehicle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = flameTankVehicle.cpp; sourceTree = "<group>"; };
@@ -142,6 +148,8 @@
 		11EEB7080DEBC73F009F3B13 /* Engine */ = {
 			isa = PBXGroup;
 			children = (
+				11156B890E08E52C00B55584 /* healthMeter.cpp */,
+				11156B8A0E08E52C00B55584 /* healthMeter.h */,
 				11DBE28A0E010AEE00E589A9 /* npcManager.cpp */,
 				11DBE28B0E010AEE00E589A9 /* npcManager.h */,
 				11C0971B0DFE56C700EF4A97 /* animationEntity.cpp */,
@@ -186,6 +194,8 @@
 				113B2D250DF673650095A737 /* lobbyView.cpp */,
 				11C097270DFE5AB900EF4A97 /* collisionMap.h */,
 				11C097280DFE5AB900EF4A97 /* collisionMap.cpp */,
+				11156BF40E08F25F00B55584 /* collisionDynamics.h */,
+				11156BF50E08F25F00B55584 /* collisionDynamics.cpp */,
 			);
 			name = Engine;
 			path = Source/Engine;
@@ -310,6 +320,8 @@
 				11C097230DFE56C700EF4A97 /* targetRingWidget.cpp in Sources */,
 				11C097290DFE5AB900EF4A97 /* collisionMap.cpp in Sources */,
 				11DBE28C0E010AEE00E589A9 /* npcManager.cpp in Sources */,
+				11156B8B0E08E52C00B55584 /* healthMeter.cpp in Sources */,
+				11156BF60E08F25F00B55584 /* collisionDynamics.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

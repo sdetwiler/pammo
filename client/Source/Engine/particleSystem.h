@@ -9,10 +9,11 @@ namespace pammo
 {
 
 struct Particle;
+class ParticleSystem;
     // Return false if particle should be expired. True if not.
-typedef bool (*ParticleCb)(Particle* p);
+typedef bool (*ParticleCb)(Particle* p, ParticleSystem* system);
 
-bool fireParticleCb(Particle* p);
+bool fireParticleCb(Particle* p, ParticleSystem* system);
 
 struct Particle
 {
@@ -24,6 +25,7 @@ struct Particle
     float        mAlpha;
     Vector2      mEndPosition;
     float        mOldMag;
+    bool         mHitsObject;
 };
 
 
@@ -38,6 +40,7 @@ public:
 
     void initFireParticle(Vector2 const& initialPosition, float initialRotation, Vector2 const& initialVelocity);
     void initSmokeParticle(Vector2 const& initialPosition, float initialRotation, Vector2 const& initialVelocity);
+    void initHitParticle(Vector2 const& initialPosition);
 
 protected:
 private:

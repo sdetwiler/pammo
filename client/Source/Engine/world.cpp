@@ -17,6 +17,7 @@
 #include "lobbyView.h"
 #include "imageLibrary.h"
 #include "collisionMap.h"
+#include "collisionDynamics.h"
 
 namespace pammo
 {
@@ -40,6 +41,7 @@ World::World(char const* mapName)
     mParticleSystem = new ParticleSystem(1000);
     mTileMap = new TileMap;
     mCollisionMap = new CollisionMap;
+    mCollisionDynamics = new CollisionDynamics;
     
     buildFromMap(this, mapName);
     
@@ -100,6 +102,11 @@ TileMap* World::getTileMap()
 CollisionMap* World::getCollisionMap()
 {
     return mCollisionMap;
+}
+
+CollisionDynamics* World::getCollisionDynamics()
+{
+    return mCollisionDynamics;
 }
 
 void World::addEntity(Entity* entity)

@@ -2,21 +2,13 @@
 
 namespace pammo
 {
-/***
-const GLfloat spriteVertices[] = {
-0, 0,
-1, 0,
-0, 1,
-1, 1,
-};
-***/
-const GLfloat spriteVertices[] = {
--0.1, -0.1,
-1.1, -0.1,
--0.1, 1.1,
-1.1, 1.1,
-};
 
+const GLfloat spriteVertices[] = {
+0.0, 0.0,
+1.0, 0.0,
+0.0, 1.0,
+1.0, 1.0,
+};
 
 // Sets up an array of values for the texture coordinates.
 const GLfloat spriteTexcoords[] = {

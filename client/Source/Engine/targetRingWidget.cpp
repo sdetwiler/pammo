@@ -46,13 +46,11 @@ bool TargetRingWidget::touch(uint32_t count, Touch* touches)
     dprintf("TargetRingWidget::touch x: %.2f y: %.2f hyp: %.2f\n", x, y, hyp);
     mHighlighted = false;
     // Outside of ring. 
-    // These numbers are corrected for the odd scaling bug. Should be 64.
-    if(hyp > 76.0)
+    if(hyp > 64.0)
         return false;
 
     // Inside of ring.
-    // Corrected for scaling bug. Should be 48.
-    if(hyp < 55.0f)
+    if(hyp < 48.0f)
         return false;
     dprintf("inside ring\n");
     mHighlighted = true;
@@ -68,20 +66,18 @@ bool TargetRingWidget::touch(uint32_t count, Touch* touches)
 
 void TargetRingWidget::draw()
 {
+    // Cache x,y for faster typing.
+    float x = mHighlightImage->mSize.x;
+    float y = mHighlightImage->mSize.y;
+
+    // Create transform, cribbed from entity.cpp transform setup. Position about center, scale and rotate appropriately.
+    // This probably should just use an imageEntity.
     Transform2 trans;
-    trans*= Transform2::createTranslation(mVehicle->mCenter);
-    float angle =((FlameTankVehicle*)mVehicle)->getFireDirection();
-   // trans*= Transform2::createRotation(angle);
-
-    trans*= Transform2::createRotation(mAngle);
-	trans*= Transform2::createScale(Vector2(4,4));
-    Vector2 back;
-    back.x = -mVehicle->mCenter.x;
-    back.y = -mVehicle->mCenter.y;
-    trans*= Transform2::createTranslation(back);
-    trans*= mVehicle->getTransform();
-
-
+    trans *= Transform2::createTranslation(mVehicle->mCenter);
+    trans *= Transform2::createRotation(mAngle);
+    trans *= Transform2::createTranslation(Vector2(-x/2, -y/2));
+	trans *= Transform2::createScale(Vector2(x, y));
+    
     if(mHighlighted)
         drawImage(mHighlightImage, trans, 0.5f);
     else

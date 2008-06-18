@@ -25,10 +25,11 @@ bool intersectLineAndLine(Vector2 p1, Vector2 p2, Vector2 p3, Vector2 p4, Vector
     float alpha = ((p4.x - p3.x)*(p1.y - p3.y) - (p4.y - p3.y)*(p1.x - p3.x))/det;
     float beta = ((p2.x - p1.x)*(p1.y - p3.y) - (p2.y - p1.y)*(p1.x - p3.x))/det;
     
+    const float offset = 0.01;
+    
     if(alpha < 0 || alpha > 1 || beta < 0 || beta > 1)
         return false;
     
-    const float offset = 0.01;
     alpha -= offset;
     
     dist = alpha * len;
@@ -69,7 +70,7 @@ void CollisionMap::addShape(uint16_t numPoints, Vector2* points)
 bool CollisionMap::raycast(Vector2 startPos, Vector2 endPos, float radius, Vector2& hit)
 {
     IntersectResult result;
-    if(!intersect(startPos, endPos, radius, result))
+    if(intersect(startPos, endPos, radius, result))
     {
         hit = result.hit;
         return true;

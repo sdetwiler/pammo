@@ -78,34 +78,23 @@ void FlameTankVehicle::update()
     // Fire.
     int width=1;
     int i=0;
-    //for(int i= -width; i<width; ++i)
+    for(int i= -width; i<width; ++i)
     {
         // Add new flame particle.
         float rad = 20.0f; // Distance from center of tank to end of nozzle.
-        float rot = mFireAngle + mRotation-(90.0f*0.0174532925f)+(i*.04f) ;//+ ((rand()%3)/20.0f);
-       
-        Transform2 trans;
-        Vector2 center = mCenter;
-//        center.x +=((rand()%6)-3);
-//        center.y +=((rand()%6)-3);
+        float rot = mFireAngle - 90.0f*0.0174532925f +(i*.04f);// + ((rand()%3)/20.0f);
         
+        // Calculate center. Vehicle center plus nozzle rad rotated for direction.
+        Vector2 center = mCenter + Vector2(rad, 0) * Transform2::createRotation(rot) + Vector2((rand()%6)-3, (rand()%6)-3);
 
-        trans *= Transform2::createTranslation(center);
-        trans *= Transform2::createRotation(rot);
-        
-        // Position of the tip of the nozzle.
-        trans*= Transform2::createTranslation(Vector2(rad,0));
-
-        baseVelocity.x=0;
-        baseVelocity.y=0;
+        // Calculate base / initial velocity. Vehicle speed rotated for direction.
         if(mMoving)
-        {
-            baseVelocity.x = mSpeed;
-            baseVelocity *= Transform2::createRotation(rot);
-        }
+            baseVelocity = Vector2(mSpeed, 0) * Transform2::createRotation(rot);
+        else
+            baseVelocity = Vector2(0, 0);
 
        // if(!(rand()%100))
-            gWorld->getParticleSystem()->initFireParticle(trans, baseVelocity);
+            gWorld->getParticleSystem()->initFireParticle(center, rot, baseVelocity);
     }
 
     // Smoke.
@@ -113,25 +102,18 @@ void FlameTankVehicle::update()
     for(int i= -width; i<=width; ++i)
     {
         float rad = 20; // Distance from center of tank to end of nozzle.
-        //float rot = mRotation-(90.0*0.0174532925)+(i*.04f) + ((rand()%3)/20.0);
-        float rot = mFireAngle + mRotation-(90.0f*0.0174532925f)+(i*.06f) + (-0.3f +(rand()%10)/15.0f);
-       
-        Transform2 trans;
-        trans = Transform2::createTranslation(mCenter);
-        trans*= Transform2::createRotation(rot);
+        float rot = mFireAngle - 90.0f*0.0174532925f+ (i*.06f) + (-0.3f +(rand()%10)/15.0f);
         
-        // Position of the tip of the nozzle.
-        trans*= Transform2::createTranslation(Vector2(rad,0));
+        // Calculate center. Vehicle center plus nozzle rad rotated for direction.
+        Vector2 center = mCenter + Vector2(rad, 0) * Transform2::createRotation(rot);
 
-        baseVelocity.x=0;
-        baseVelocity.y=0;
+        // Calculate base / initial velocity. Vehicle speed rotated for direction.
         if(mMoving)
-        {
-            baseVelocity.x = mSpeed;
-            baseVelocity *= Transform2::createRotation(rot);
-        }
+            baseVelocity = Vector2(mSpeed, 0) * Transform2::createRotation(rot);
+        else
+            baseVelocity = Vector2(0, 0);
 
-        gWorld->getParticleSystem()->initSmokeParticle(trans, baseVelocity);
+        gWorld->getParticleSystem()->initSmokeParticle(center, rot, baseVelocity);
     }
 
 }

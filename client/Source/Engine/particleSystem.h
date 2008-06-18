@@ -36,8 +36,8 @@ public:
     void update();
     void draw();
 
-    void initFireParticle(Transform2 const& transform, Vector2 const& initialVelocity);
-    void initSmokeParticle(Transform2 const& transform, Vector2 const& initialVelocity);
+    void initFireParticle(Vector2 const& initialPosition, float initialRotation, Vector2 const& initialVelocity);
+    void initSmokeParticle(Vector2 const& initialPosition, float initialRotation, Vector2 const& initialVelocity);
 
 protected:
 private:

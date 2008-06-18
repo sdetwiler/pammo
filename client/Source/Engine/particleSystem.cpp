@@ -98,67 +98,76 @@ void ParticleSystem::draw()
     }
 }
 
-void ParticleSystem::initFireParticle(Transform2 const& transform, Vector2 const& initialVelocity)
+void ParticleSystem::initFireParticle(Vector2 const& initialPosition, float initialRotation, Vector2 const& initialVelocity)
 {
     if(mAvailable.size() == 0)
         return;
 
+    // Grab a particle.
     Particle* p = mAvailable.back();
     mAvailable.pop_back();
     mUsed.push_back(p);
+        
+    // Properties about fire particles.
+    float velocity = 10.0f;
+    float maxDistance = 250.0f;
+    float particleRadius = 1.0f;
 
-    Vector2 start;
-    start = start * transform;
-
+    // Set basic particle properties.
     p->mCallback = fireParticleCb;
     p->mOldMag = 0;
-    float velocity = 10.0f;
-//    p->mVelocity = normalize(velocity * transform);
-    p->mVelocity.x = velocity*transform[0];
-    p->mVelocity.y = velocity*transform[1];
-    //p->mVelocity += initialVelocity;
-
     p->mMass = 0;
-    p->mImage.setImage(gImageLibrary->reference("data/particles/flame.png"));
-    p->mImage.setTransform(transform);
     p->mAlpha = 1.0f;
     
-    float maxDistance = 40.0f;
-    // Is this sane? dv/dt in a unit vector direction.
-    p->mEndPosition = start + (normalize(start)*(p->mVelocity*20.0f));
-
-    float particleRadius = 1.0f;
-    Vector2 hit;
-    dprintf("World\n  start: [%.2f, %.2f]\n  end:  [%.2f, %.2f]", start.x, start.y, p->mEndPosition.x, p->mEndPosition.y);
+    // Setup image.
+    p->mImage.setImage(gImageLibrary->reference("data/particles/flame.png"));
+    p->mImage.mCenter = initialPosition;
+    p->mImage.mRotation = initialRotation;
+    p->mImage.makeDirty();
     
-    if(gWorld->getCollisionMap()->raycast(start, p->mEndPosition, particleRadius, hit))
+    // Setup velocity. InitialVelocity from vehicle plus particle speed rotated for direction.
+    p->mVelocity = initialVelocity + Vector2(velocity, 0) * Transform2::createRotation(initialRotation);
+    
+    // Calculate unblocked end position. Start position plus maxDistance rotated for direction.
+    p->mEndPosition = initialPosition + Vector2(maxDistance, 0) * Transform2::createRotation(initialRotation);
+
+    Vector2 hit;
+    //dprintf("World\n  start: [%.2f, %.2f]\n  end:  [%.2f, %.2f]", initialPosition.x, initialPosition.y, p->mEndPosition.x, p->mEndPosition.y);
+    
+    if(gWorld->getCollisionMap()->raycast(initialPosition, p->mEndPosition, particleRadius, hit))
         p->mEndPosition = hit;
 
-    dprintf("hit:  [%.2f, %.2f]\n", p->mEndPosition.x, p->mEndPosition.y);
+    //dprintf("hit:  [%.2f, %.2f]", p->mEndPosition.x, p->mEndPosition.y);
 
 }
 
 
-void ParticleSystem::initSmokeParticle(Transform2 const& transform, Vector2 const& initialVelocity)
+void ParticleSystem::initSmokeParticle(Vector2 const& initialPosition, float initialRotation, Vector2 const& initialVelocity)
 {
     if(mAvailable.size() == 0)
         return;
 
+    // Grab a particle.
     Particle* p = mAvailable.back();
     mAvailable.pop_back();
     mUsed.push_back(p);
-
+        
+    // Properties about smoke particles.
     float velocity = 4.0f;
+
+    // Set basic particle properties.
     p->mCallback = smokeParticleCb;
-
-    p->mVelocity.x = velocity*transform[0];
-    p->mVelocity.y = velocity*transform[1];
-
-    p->mVelocity += initialVelocity;
     p->mMass = 0;
-    p->mImage.setImage(gImageLibrary->reference("data/particles/smoke00.png"));
-    p->mImage.setTransform(transform);
     p->mAlpha = 1.0f;
+
+    // Setup image.
+    p->mImage.setImage(gImageLibrary->reference("data/particles/smoke00.png"));
+    p->mImage.mCenter = initialPosition;
+    p->mImage.mRotation = initialRotation;
+    p->mImage.makeDirty();
+    
+    // Setup velocity. InitialVelocity from vehicle plus particle speed rotated for direction.
+    p->mVelocity = initialVelocity + Vector2(velocity, 0) * Transform2::createRotation(initialRotation);
 }
 
 } // namespace pammo

@@ -77,13 +77,12 @@ void CollisionDynamics::removeVehicle(Vehicle* vehicle)
             return;
         }
     }
-    assert(0);
 }
 
 void CollisionDynamics::raycast(Vector2 const& startPosition, Vector2 const& endPosition, float radius, float speed, uint32_t mask, RaycastResult& result)
 {
     result.mHit = false;
-    return;
+    //return;
     
     for(DynamicBodyVector::iterator i = mBodies.begin(); i != mBodies.end(); ++i)
     {
@@ -92,7 +91,10 @@ void CollisionDynamics::raycast(Vector2 const& startPosition, Vector2 const& end
         case DynamicBody::VehicleType:
         {
             Vehicle* vehicle = (*i)->mVehicle;
-            
+
+            if(!(mask & vehicle->getCollisionBodyMask()))
+                continue;
+
             Vector2 hit, farHit;
             float dist;
             

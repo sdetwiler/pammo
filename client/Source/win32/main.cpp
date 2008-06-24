@@ -130,6 +130,8 @@ public:
     }
 };// class
 
+
+
 int main(int argc, char *argv[]) 
 {
     char path[256];
@@ -162,6 +164,11 @@ int main(int argc, char *argv[])
 
     InputProcessor input;
 
+    // 1 ms accuracy for timer.
+    timeBeginPeriod(5);
+    DWORD start = timeGetTime();
+    DWORD now;
+    uint32_t frames = 0;
     while(true)
     {
         input.update(game);
@@ -170,8 +177,18 @@ int main(int argc, char *argv[])
 
         game->draw();
         SDL_GL_SwapBuffers();
+        ++frames;
 
-        Sleep(1000/30);
+        Sleep(33);
+
+        now = timeGetTime();
+        
+        if(now - start > 5000)
+        {
+            dprintf("%.2f fps", (float)(now-start)/(float)frames);
+            frames = 0;
+            start = now;
+        }
     }
 
     delete game;

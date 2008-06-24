@@ -27,6 +27,9 @@ struct DynamicBody
     Vehicle* mVehicle;
 };
 
+#define LOCALPLAYER    1
+#define REMOTEPLAYER   2
+
 class CollisionDynamics
 {
     public:

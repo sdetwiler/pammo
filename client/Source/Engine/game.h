@@ -9,20 +9,20 @@ namespace pammo
 class Initable
 {
 public:
-    virtual ~Initable(){};
+    virtual ~Initable(){}
     virtual void init() = 0;
 };
 
 class Deleteable
 {
 public:
-    virtual ~Deleteable(){};
+    virtual ~Deleteable(){}
 };
 
 class Touchable
 {
 public:
-    virtual ~Touchable(){};
+    virtual ~Touchable(){}
     virtual bool touch(uint32_t count, Touch* touches) = 0;
     virtual uint32_t getTouchPriority() const = 0;
 };
@@ -30,7 +30,7 @@ public:
 class Drawable
 {
 public:
-    virtual ~Drawable(){};
+    virtual ~Drawable(){}
     virtual void draw() = 0;
     virtual uint32_t getDrawPriority() const = 0;
 };
@@ -38,7 +38,7 @@ public:
 class Updateable
 {
 public:
-    virtual ~Updateable(){};
+    virtual ~Updateable(){}
     virtual void update() = 0;
 };
 

@@ -4,6 +4,7 @@
 #include "pammo.h"
 #include "image.h"
 #include "imageEntity.h"
+#include "vehicle.h"
 
 namespace pammo
 {
@@ -13,19 +14,29 @@ class ParticleSystem;
     // Return false if particle should be expired. True if not.
 typedef bool (*ParticleCb)(Particle* p, ParticleSystem* system);
 
+typedef void (*ParticleHitCb)(Vehicle* vehicle, void* arg);
+
+
 bool fireParticleCb(Particle* p, ParticleSystem* system);
+
 
 struct Particle
 {
-    ParticleCb   mCallback;
-    Vector2      mVelocity;
-    float        mMass;
+    uint32_t     mSerialNum;
+    ParticleCb   mCallback;             // Callback to modify particle on each update.
+
+    ParticleHitCb mHitCallback;         // Callback function when hit occurs.
+    void*         mHitCallbackArg;      // Argument to pass to mHitCallback.
+    Vehicle*      mHitVehicle;          // What vehicle will be hit by this particle.
+
+    Vector2      mVelocity;             // Velocity of particle.
+    float        mMass;                 // Mass of particle.
 
     ImageEntity  mImage;
     float        mAlpha;
     Vector2      mEndPosition;
     float        mOldMag;
-    bool         mHitsObject;
+    bool         mHitsObject;           // Will the particle hit an object.
 };
 
 
@@ -38,9 +49,22 @@ public:
     void update();
     void draw();
 
-    void initFireParticle(Vector2 const& initialPosition, float initialRotation, Vector2 const& initialVelocity);
+    struct InitFireParticleArgs
+    {
+        Vehicle const*  emitter;
+        Vector2         initialPosition;
+        float           initialRotation;
+        Vector2         initialVelocity;
+        ParticleHitCb   hitCallback;
+        void*           hitCallbackArg;
+    };
+    void initFireParticle(InitFireParticleArgs const& args);
+
+    void removeVehicleTarget(Vehicle* vehicle);
+
     void initSmokeParticle(Vector2 const& initialPosition, float initialRotation, Vector2 const& initialVelocity);
     void initHitParticle(Vector2 const& initialPosition);
+    void initExplosionParticle(Vector2 const& initialPosition);
 
 protected:
 private:

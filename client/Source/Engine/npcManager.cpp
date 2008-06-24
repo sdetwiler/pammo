@@ -2,6 +2,7 @@
 #include "pathManager.h"
 #include "player.h"
 #include "world.h"
+#include "collisionMap.h"
 
 namespace pammo
 {
@@ -28,7 +29,7 @@ int NpcManager::init(uint32_t numPlayers)
 
     for(uint32_t i=0; i<mNumPlayers; ++i)
     {
-        ret = mPlayers[i].init();
+        ret = mPlayers[i].init(Player::Remote);
         if(ret < 0)
         {
             delete mPlayers;
@@ -43,15 +44,27 @@ void NpcManager::generatePath(Player* player)
 {
     Vector2Vec path;
 
-// BRAIN DEAD!
-    int max = 400;
+    Vector2 lastPos;
+    Vector2 newPos;
+
+    lastPos = player->getCenter();
+
+    int max = 800;
     for(uint32_t i=0; i<5; ++i)
     {
-        float x = (rand()%max)-(max/2) + 300;
-        float y = (rand()%max)-(max/2) + 300;
+        newPos.x =(rand()%max);//-(max/2); 
+        newPos.y =(rand()%max);//-(max/2); 
 
-        dprintf("x: %.2f y: %.2f", x, y);
-        path.push_back( Vector2(x,y) );
+        Vector2Vec newPath;
+        if(gWorld->getCollisionMap()->route(lastPos, newPos, 20, newPath))
+        {
+            for(Vector2Vec::iterator j = newPath.begin(); j!=newPath.end(); ++j)
+                path.push_back( *j );
+        }
+        else
+            path.push_back(newPos);
+
+        lastPos = newPos;
     }
     dprintf("");
     player->setPath(path);
@@ -61,11 +74,13 @@ void NpcManager::update()
 {
     for(uint32_t i=0; i<mNumPlayers; ++i)
     {
-        if(mPlayers[i].isMoving() == false)
+        if(mPlayers[i].getState() == Player::Alive || mPlayers[i].getState() == Player::Spawning)
         {
-            generatePath(mPlayers+i);
-        }
-        
+            if(mPlayers[i].isMoving() == false)
+            {
+                generatePath(mPlayers+i);
+            }
+        }        
         mPlayers[i].update();
     }
 }
@@ -74,7 +89,10 @@ void NpcManager::draw()
 {
     for(uint32_t i=0; i<mNumPlayers; ++i)
     {
-        mPlayers[i].draw();
+        if(mPlayers[i].getState() == Player::Alive || mPlayers[i].getState() == Player::Spawning)
+        {
+            mPlayers[i].draw();
+        }
     }
 }
 Player* NpcManager::hitTest(Vector2 startPos, Vector2 endPos, float radius)

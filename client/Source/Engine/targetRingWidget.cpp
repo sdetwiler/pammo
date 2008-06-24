@@ -43,7 +43,7 @@ bool TargetRingWidget::touch(uint32_t count, Touch* touches)
     float x = mVehicle->mCenter.x - loc.x;
     float y = mVehicle->mCenter.y - loc.y;
     float hyp = sqrt(x*x + y*y);
-    dprintf("TargetRingWidget::touch x: %.2f y: %.2f hyp: %.2f\n", x, y, hyp);
+    //dprintf("TargetRingWidget::touch x: %.2f y: %.2f hyp: %.2f\n", x, y, hyp);
     mHighlighted = false;
     // Outside of ring. 
     if(hyp > 64.0)
@@ -52,7 +52,7 @@ bool TargetRingWidget::touch(uint32_t count, Touch* touches)
     // Inside of ring.
     if(hyp < 48.0f)
         return false;
-    dprintf("inside ring\n");
+    //dprintf("inside ring\n");
     mHighlighted = true;
 
     float theta = atan2(y, x);

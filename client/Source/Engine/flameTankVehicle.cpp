@@ -44,9 +44,7 @@ int FlameTankVehicle::init()
 
     mAnimation.setDrawPriority(100);
     setSize(mAnimation.getSize());
-    
-    gWorld->getCollisionDynamics()->addVehicle(this);
-    
+
     // SCD TEMP
     //mCenter = Vector2(350, 350);
     return 0;
@@ -82,11 +80,11 @@ void FlameTankVehicle::update()
     // Fire.
     int width=1;
     int i=1;
-    for(int i= -width; i<width; ++i)
+    //for(int i= 0; i<width; ++i)
     {
         // Add new flame particle.
-        float rad = 20.0f; // Distance from center of tank to end of nozzle.
-        float rot = mFireAngle - 90.0f*0.0174532925f +(i*.02f) + ((rand()%3)/40.0f);
+        float rad = 32.0f; // Distance from center of tank to end of nozzle.
+        float rot = mFireAngle - 90.0f*0.0174532925f +(i*.02f) + ((rand()%3)/60.0f);
         
         // Calculate center. Vehicle center plus nozzle rad rotated for direction.
         Vector2 center = mCenter + Vector2(rad, 0) * Transform2::createRotation(rot) + Vector2((rand()%6)-3, (rand()%6)-3);
@@ -97,12 +95,20 @@ void FlameTankVehicle::update()
         else
             baseVelocity = Vector2(0, 0);
 
-        gWorld->getParticleSystem()->initFireParticle(center, rot, baseVelocity);
+        ParticleSystem::InitFireParticleArgs args;
+        args.emitter = this;
+        args.hitCallback = particleHitCb;
+        args.hitCallbackArg = this;
+        args.initialPosition = center;
+        args.initialRotation = rot;
+        args.initialVelocity = baseVelocity;
+
+        gWorld->getParticleSystem()->initFireParticle(args);
     }
 
     // Smoke.
     width=1;
-    for(int i= -width; i<=width; ++i)
+    //for(int i= 0; i<=width; ++i)
     {
         float rad = 20; // Distance from center of tank to end of nozzle.
         float rot = mFireAngle - 90.0f*0.0174532925f+ (i*.06f) + (-0.3f +(rand()%10)/15.0f);
@@ -135,7 +141,7 @@ bool FlameTankVehicle::touch(uint32_t count, Touch* touches)
     float hyp = sqrt(x*x + y*y);
 
     // Inside of vehicle.
-    if(hyp < 32.0f)
+    if(hyp < 16.0f)
     {
         toggleTargetRing();
     }
@@ -145,5 +151,25 @@ bool FlameTankVehicle::touch(uint32_t count, Touch* touches)
     return false;
 }
 
+void FlameTankVehicle::destroy()
+{
+}
+
+void FlameTankVehicle::hit(float damage)
+{
+    if(getObserver())
+        getObserver()->onHit(this, damage);
+}
+
+void FlameTankVehicle::onParticleHit(Vehicle* vehicle)
+{
+    if(vehicle)
+        vehicle->hit(5.0f);
+}
+
+void FlameTankVehicle::particleHitCb(Vehicle* vehicle, void* arg)
+{
+    ((FlameTankVehicle*)arg)->onParticleHit(vehicle);
+}
 
 } // namespace pammo

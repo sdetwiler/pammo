@@ -18,15 +18,18 @@ public:
     virtual void draw();
     virtual void update();
     virtual bool touch(uint32_t count, Touch* touches);
-    
+    virtual void hit(float damage);
+    virtual void destroy();
+
+    static void particleHitCb(Vehicle* vehicle, void* arg);
+
     void setFireDirection(float rads);
     float getFireDirection();
 
     void toggleTargetRing();
 
 protected:
-//    Image** mImages;
-//    int mCurrImageIndex;
+    void onParticleHit(Vehicle* vehicle);
 
 private:
     TargetRingWidget* mTargetRing;

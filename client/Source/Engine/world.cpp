@@ -38,7 +38,7 @@ World::World(char const* mapName)
     //mCamera->mSize*=2;
     mTargetCameraSize = mCamera->mSize;
     
-    mParticleSystem = new ParticleSystem(1000);
+    mParticleSystem = new ParticleSystem(200);
     mTileMap = new TileMap;
     mCollisionMap = new CollisionMap;
     mCollisionDynamics = new CollisionDynamics;
@@ -46,11 +46,11 @@ World::World(char const* mapName)
     buildFromMap(this, mapName);
     
     mPlayer = new Player;
-    ret = mPlayer->init();
+    ret = mPlayer->init(Player::Local);
     assert(ret == 0);
 
     mNpcManager = new NpcManager;
-    ret = mNpcManager->init(0);
+    ret = mNpcManager->init(3);
     assert(ret == 0);
 
 
@@ -156,7 +156,10 @@ void World::update()
 		}
 	}
 
-	mCamera->mCenter = mPlayer->getCenter();
+    // If the player is not destroyed move the camera, else hold current position.
+    if(mPlayer->getState() != Player::Destroyed)
+	    mCamera->mCenter = mPlayer->getCenter();
+
 	mCamera->makeDirty();
 }
 

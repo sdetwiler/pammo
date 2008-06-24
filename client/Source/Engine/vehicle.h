@@ -8,6 +8,14 @@
 namespace pammo
 {
 class World;
+class Vehicle;
+
+class VehicleObserver
+{
+public:
+    virtual ~VehicleObserver(){}
+    virtual void onHit(Vehicle* vehicle, float damage) = 0;
+};
 
 class Vehicle : 
     public Entity,
@@ -28,10 +36,21 @@ public:
     virtual uint32_t getTouchPriority() const;
     virtual void update();
 
-    bool isMoving();
+    // Called when vehicle is hit to cause damage.
+    virtual void hit(float damage)=0;
     
-    uint32_t getCollisionBodyMask();
-    float getCollisionBodyRadius(); 
+    // Destroys the vehicle... in the ka-blooie! sense, not the memory, garbage collection sense.
+    virtual void destroy() = 0;
+
+    void setObserver(VehicleObserver* o);
+    VehicleObserver* getObserver();
+
+    bool isMoving();
+
+    void setCollisionBodyMask(uint32_t mask);
+    
+    uint32_t getCollisionBodyMask() const;
+    float getCollisionBodyRadius() const; 
 
 protected:
     World* mWorld;
@@ -48,7 +67,7 @@ private:
     Vector2Vec mPath;
     Vector2Vec::iterator mCurrTarget;
     Vector2 mPosition;
-
+    VehicleObserver* mObserver;
 };
 
 }

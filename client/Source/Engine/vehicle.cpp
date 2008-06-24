@@ -8,11 +8,12 @@ namespace pammo
 
 Vehicle::Vehicle()
 {
-    mSpeed = 10.0f;
+    mSpeed = 5.0f;
     mOldTheta = 0;
     mMoving = false;
     mCollisionBodyMask = 0;
-    mCollisionBodyRadius = 40;
+    mCollisionBodyRadius = 16;
+    mObserver = 0;
 }
 
 Vehicle::~Vehicle()
@@ -30,12 +31,17 @@ bool Vehicle::isMoving()
     return mMoving;
 }
 
-uint32_t Vehicle::getCollisionBodyMask()
+void Vehicle::setCollisionBodyMask(uint32_t mask)
+{
+    mCollisionBodyMask = mask;
+}
+
+uint32_t Vehicle::getCollisionBodyMask() const
 {
     return mCollisionBodyMask;
 }
 
-float Vehicle::getCollisionBodyRadius()
+float Vehicle::getCollisionBodyRadius() const
 {
     return mCollisionBodyRadius;
 }
@@ -127,6 +133,17 @@ void Vehicle::setPath(Vector2Vec const& points)
     {
         mMoving = false;
     }
+}
+
+
+void Vehicle::setObserver(VehicleObserver* o)
+{
+    mObserver = o;
+}
+
+VehicleObserver* Vehicle::getObserver()
+{
+    return mObserver;
 }
 
 

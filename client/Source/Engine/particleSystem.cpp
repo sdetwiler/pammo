@@ -58,6 +58,66 @@ bool fireParticleCb(Particle* p, ParticleSystem* system)
     return true;
 }
 
+bool ballParticleCb(Particle* p, ParticleSystem* system)
+{
+    p->mImage.mCenter.x += p->mVelocity.x;
+    p->mImage.mCenter.y += p->mVelocity.y;
+    p->mImage.makeDirty();
+
+    float mag = magnitude(p->mImage.mCenter - p->mEndPosition);
+   // dprintf("mag: %.2f", mag);
+    // Really close to dest.
+    if(mag < 10)
+    {
+        if(p->mHitsObject)
+        {
+            system->initExplosionParticle(p->mEndPosition);
+            if(p->mHitCallback)
+                p->mHitCallback(p->mHitVehicle, p->mHitCallbackArg);
+        }
+        else
+        {
+            system->initHitParticle(p->mEndPosition);
+        }
+        return false;
+    }
+
+    // Passed it.
+    if(p->mOldMag && (mag > p->mOldMag))
+    {
+        if(p->mHitsObject)
+        {
+            system->initExplosionParticle(p->mEndPosition);
+
+            if(p->mHitCallback)
+                p->mHitCallback(p->mHitVehicle, p->mHitCallbackArg);
+        }
+        else
+        {
+            system->initHitParticle(p->mEndPosition);
+        }
+
+        return false;
+    }
+//    p->mAlpha-=0.02f;
+/**
+    if(p->mAlpha<=0)
+    {
+        if(p->mHitsObject) 
+        {
+            system->initHitParticle(p->mEndPosition);
+            if(p->mHitCallback)
+                p->mHitCallback(p->mHitVehicle, p->mHitCallbackArg);
+        }
+       return false;
+    }
+    **/
+
+    p->mOldMag = mag;
+    return true;
+}
+
+
 bool smokeParticleCb(Particle* p, ParticleSystem* system)
 {
     p->mImage.mCenter.x += p->mVelocity.x;
@@ -79,6 +139,7 @@ bool hitParticleCb(Particle* p, ParticleSystem* system)
 
 bool explosionParticleCb(Particle* p, ParticleSystem* system)
 {
+
     p->mImage.mSize*=1.07;
     p->mImage.mRotation+= ((float)(rand()%10)-5.0f)/100.0f;
     p->mImage.makeDirty();
@@ -310,6 +371,78 @@ void ParticleSystem::initExplosionParticle(Vector2 const& initialPosition)
     p->mImage.mCenter = initialPosition + Vector2(rand()%20, rand()%20);
     p->mImage.makeDirty();
 }
+
+void ParticleSystem::initBallParticle(InitBallParticleArgs const& args)
+{
+    if(mAvailable.size() == 0)
+        return;
+
+    // Grab a particle.
+    Particle* p = mAvailable.back();
+    mAvailable.pop_back();
+    mUsed.push_back(p);
+        
+    // Properties about ball particles.
+    float velocity = 10.0f;
+    float maxDistance = 150.0f;
+    float particleRadius = 8.0f;
+
+    // Set basic particle properties.
+    p->mCallback = ballParticleCb;
+    p->mOldMag = 0;
+    p->mMass = 0;
+    p->mHitsObject = false;
+    p->mAlpha = 1.0f;
+    p->mHitCallback = args.hitCallback;
+    p->mHitCallbackArg = args.hitCallbackArg;
+    p->mHitVehicle = NULL;
+    
+    // Setup image.
+    p->mImage.setImage(gImageLibrary->reference("data/particles/ball.png"));
+    p->mImage.mCenter = args.initialPosition;
+    p->mImage.mRotation = args.initialRotation;
+    p->mImage.makeDirty();
+    
+    // Setup velocity. InitialVelocity from vehicle plus particle speed rotated for direction.
+    p->mVelocity = args.initialVelocity + Vector2(velocity, 0) * Transform2::createRotation(args.initialRotation);
+    
+    // Calculate unblocked end position. Start position plus maxDistance rotated for direction.
+    p->mEndPosition = args.initialPosition + Vector2(maxDistance, 0) * Transform2::createRotation(args.initialRotation);
+
+    //dprintf("World\n  start: [%.2f, %.2f]\n  end:  [%.2f, %.2f]", initialPosition.x, initialPosition.y, p->mEndPosition.x, p->mEndPosition.y);
+    
+    // Collide with collision map.
+    CollisionMap::RaycastResult mapResult;
+    gWorld->getCollisionMap()->raycast(args.initialPosition, p->mEndPosition, particleRadius, mapResult);
+    
+    // Collide with collision dynamics.
+    CollisionDynamics::RaycastResult dynamicsResult;
+    uint32_t flags;
+    if(args.emitter->getCollisionBodyMask() & LOCALPLAYER)
+        flags = REMOTEPLAYER;
+    else
+        flags = LOCALPLAYER;
+
+    gWorld->getCollisionDynamics()->raycast(args.initialPosition, p->mEndPosition, particleRadius, velocity, flags, dynamicsResult);
+    
+    // Determine which was closer.
+    if(mapResult.mHit && (!dynamicsResult.mHit || mapResult.mDistance < dynamicsResult.mDistance))
+    {
+        p->mEndPosition = mapResult.mPosition;
+        p->mHitsObject = true;
+    }
+    else if(dynamicsResult.mHit)
+    {
+        p->mEndPosition = dynamicsResult.mPosition;
+        p->mHitVehicle = dynamicsResult.mBody->mVehicle;
+        p->mHitsObject = true;
+    }
+
+    //dprintf("hit:  [%.2f, %.2f]", p->mEndPosition.x, p->mEndPosition.y);
+
+}
+
+
 
 
 } // namespace pammo

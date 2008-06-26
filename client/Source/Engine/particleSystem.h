@@ -58,13 +58,24 @@ public:
         ParticleHitCb   hitCallback;
         void*           hitCallbackArg;
     };
-    void initFireParticle(InitFireParticleArgs const& args);
 
     void removeVehicleTarget(Vehicle* vehicle);
 
+    void initFireParticle(InitFireParticleArgs const& args);
     void initSmokeParticle(Vector2 const& initialPosition, float initialRotation, Vector2 const& initialVelocity);
     void initHitParticle(Vector2 const& initialPosition);
     void initExplosionParticle(Vector2 const& initialPosition);
+    
+    struct InitBallParticleArgs
+    {
+        Vehicle const*  emitter;
+        Vector2         initialPosition;
+        float           initialRotation;
+        Vector2         initialVelocity;
+        ParticleHitCb   hitCallback;
+        void*           hitCallbackArg;
+    };
+    void initBallParticle(InitBallParticleArgs const& args); 
 
 protected:
 private:

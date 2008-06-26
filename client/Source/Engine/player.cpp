@@ -2,6 +2,7 @@
 #include "world.h"
 #include "camera.h"
 #include "flameTankVehicle.h"
+#include "trebuchetVehicle.h"
 #include "collisionDynamics.h"
 
 namespace pammo
@@ -82,7 +83,18 @@ void Player::spawn()
     setHealth(100.0f);
 
     // Wouldn't it be great if this selected from many vehicle types?
-    mVehicle = new FlameTankVehicle;
+    
+    if(mType == Local)
+        mVehicle = new TrebuchetVehicle;//FlameTankVehicle;
+    else
+    {
+        if(rand()%2)
+        {
+            mVehicle = new FlameTankVehicle;
+        }
+        else
+            mVehicle = new TrebuchetVehicle;
+    }
     mVehicle->setObserver(this);
     ret = mVehicle->init();
     if(ret < 0)

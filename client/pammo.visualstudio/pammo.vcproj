@@ -243,6 +243,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\Source\Engine\magnitudeWidget.h"
+				>
+			</File>
+			<File
 				RelativePath="..\Source\Engine\npcManager.h"
 				>
 			</File>
@@ -272,6 +276,10 @@
 			</File>
 			<File
 				RelativePath="..\Source\Engine\transform2.h"
+				>
+			</File>
+			<File
+				RelativePath="..\Source\Engine\trebuchetVehicle.h"
 				>
 			</File>
 			<File
@@ -371,6 +379,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\Source\Engine\magnitudeWidget.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\Source\win32\main.cpp"
 				>
 			</File>
@@ -396,6 +408,10 @@
 			</File>
 			<File
 				RelativePath="..\Source\Engine\tileMap.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\Source\Engine\trebuchetVehicle.cpp"
 				>
 			</File>
 			<File

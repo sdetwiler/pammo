@@ -11,6 +11,7 @@
 #include "world.h"
 #include "image.h"
 #include "imageLibrary.h"
+#include "flameTankVehicle.h"
 
 namespace pammo
 {
@@ -127,7 +128,7 @@ void LobbyView::update()
 void LobbyView::gotoWorld(char const* mapName)
 {
     // Now create the world.
-    new World(mapName);
+    new World(mapName, VEHICLE_FLAMETANK);
     
     // Delete ourselves.
     gGame->queueDeleteable(this);

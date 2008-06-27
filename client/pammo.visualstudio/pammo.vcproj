@@ -295,6 +295,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\Source\Engine\vehicleSelectView.h"
+				>
+			</File>
+			<File
 				RelativePath="..\Source\Engine\widget.h"
 				>
 			</File>
@@ -416,6 +420,10 @@
 			</File>
 			<File
 				RelativePath="..\Source\Engine\vehicle.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\Source\Engine\vehicleSelectView.cpp"
 				>
 			</File>
 			<File

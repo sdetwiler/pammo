@@ -11,6 +11,7 @@ namespace pammo
 Player::Player()
 {
     mVehicle = NULL;
+    mVehicleType = 0;
     mPathManager = NULL;
     mObserver = NULL;
     mHealth = 100.0f;
@@ -42,6 +43,16 @@ void Player::setObserver(PlayerObserver* o)
     mObserver = o;
     if(mObserver)
         mObserver->onHealthChanged(this, mHealth);
+}
+
+void Player::setVehicleType(uint32_t type)
+{
+    mVehicleType = type;
+}
+
+uint32_t Player::getVehicleType() const
+{
+    return mVehicleType;
 }
 
 void Player::setHealth(float h)
@@ -82,10 +93,25 @@ void Player::spawn()
 
     setHealth(100.0f);
 
-    // Wouldn't it be great if this selected from many vehicle types?
     
     if(mType == Local)
-        mVehicle = new TrebuchetVehicle;//FlameTankVehicle;
+    {
+        switch(mVehicleType)
+        {
+        case VEHICLE_FLAMETANK:
+            mVehicle = new FlameTankVehicle;
+            break;
+
+        case VEHICLE_TREBUCHET:
+            mVehicle = new TrebuchetVehicle;
+            break;
+        
+        default:
+            dprintf("Unknown vehicle type %u\n", mVehicleType);
+            assert(0);
+        }
+    }
+
     else
     {
         if(rand()%2)

@@ -19,12 +19,14 @@
 #include "collisionMap.h"
 #include "collisionDynamics.h"
 
+#include "vehicleSelectView.h"
+
 namespace pammo
 {
     
 World* gWorld = NULL;
 
-World::World(char const* mapName)
+World::World(char const* mapName, uint32_t vehicleType)
 {
     gWorld = this;
 
@@ -35,7 +37,6 @@ World::World(char const* mapName)
     mLastPhase = Touch::PhaseBegin;
 
     mCamera = new Camera(Vector2(0, 0), getFrameSize());
-    //mCamera->mSize*=2;
     mTargetCameraSize = mCamera->mSize;
     
     mParticleSystem = new ParticleSystem(200);
@@ -46,6 +47,7 @@ World::World(char const* mapName)
     buildFromMap(this, mapName);
     
     mPlayer = new Player;
+    mPlayer->setVehicleType(vehicleType);
     ret = mPlayer->init(Player::Local);
     assert(ret == 0);
 
@@ -82,6 +84,11 @@ void World::init(void)
     gGame->registerDrawable(this);
     gGame->registerTouchable(this);
     gGame->registerUpdateable(this);
+}
+
+void World::setVehicleType(uint32_t type)
+{
+    mPlayer->setVehicleType(type);
 }
 
 ParticleSystem* World::getParticleSystem()
@@ -241,7 +248,8 @@ bool World::touch(uint32_t count, Touch* touches)
 void World::gotoLobby()
 {
     // Create lobby.
-    new LobbyView();
+    //new LobbyView();
+    new VehicleSelectView();
     
     // Delete self.
     gGame->queueDeleteable(this);

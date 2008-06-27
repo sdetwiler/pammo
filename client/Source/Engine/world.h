@@ -33,7 +33,7 @@ class CollisionDynamics;
 class World : public View
 {
 	public:
-		World(char const* mapeName);
+		World(char const* mapeName, uint32_t vehicleType);
 		virtual ~World();
 		
         virtual void init();
@@ -53,6 +53,8 @@ class World : public View
         void zoomIn();
         bool isZoomedOut();
     
+        void setVehicleType(uint32_t type);
+
         ParticleSystem* getParticleSystem();
         TileMap* getTileMap();
         CollisionMap* getCollisionMap();
@@ -78,7 +80,7 @@ class World : public View
         CollisionMap* mCollisionMap;
         CollisionDynamics* mCollisionDynamics;
 
-        Player* mPlayer;
+        Player* mPlayer;  // Local player.
 
         NpcManager* mNpcManager;
 

@@ -7,6 +7,7 @@
 namespace pammo
 {
 
+#define VEHICLE_TREBUCHET 2
 class TrebuchetVehicle : 
     public Vehicle
 {

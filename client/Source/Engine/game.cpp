@@ -2,6 +2,7 @@
 #include "image.h"
 #include "imageLibrary.h"
 #include "lobbyView.h"
+#include "vehicleSelectView.h"
 #include "world.h"
 
 #include <time.h>
@@ -33,8 +34,9 @@ int Game::init()
     // Create the lobby view.
     new LobbyView();
 #else
+    new VehicleSelectView();
     // Or create the world view with a map.
-    new World("fallenCity");
+    //new World("fallenCity");
 #endif
 
     return 0;

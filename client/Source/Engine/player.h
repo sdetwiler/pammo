@@ -51,7 +51,11 @@ public:
     bool isMoving();
     void draw();
 
+    void setVehicleType(uint32_t type);
+    uint32_t getVehicleType() const;
+
     void setPath(Vector2Vec const& path);
+    
     void setHealth(float h);
     float getHealth() const;
 
@@ -69,8 +73,11 @@ protected:
 private:
     PathManager* mPathManager;
     Vehicle*     mVehicle;
+    uint32_t     mVehicleType;
+
     Type         mType;
     State        mState;
+
 
     uint64_t     mSpawnFrame;  // Frame number was spawned.
     uint64_t     mFrameCount;  // Count of frames since created.

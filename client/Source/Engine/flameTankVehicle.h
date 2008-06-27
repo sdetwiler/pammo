@@ -6,7 +6,7 @@
 
 namespace pammo
 {
-
+#define VEHICLE_FLAMETANK 1
 class FlameTankVehicle : 
     public Vehicle
 {

@@ -10,8 +10,9 @@
 namespace pammo
 {
 
-VehicleSelectView::VehicleSelectView()
+VehicleSelectView::VehicleSelectView(char const* mapName)
 {
+    mMapName = mapName;
     gGame->queueInitable(this);
     
     // Load background.
@@ -104,7 +105,7 @@ bool VehicleSelectView::touch(uint32_t count, Touch* touches)
 
 void VehicleSelectView::selectVehicle(uint32_t type)
 {
-    new World("fallenCity", type);
+    new World(mMapName.c_str(), type);
 
     // Delete ourselves.
     gGame->queueDeleteable(this);

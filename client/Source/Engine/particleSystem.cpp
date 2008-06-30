@@ -62,6 +62,10 @@ bool ballParticleCb(Particle* p, ParticleSystem* system)
 {
     p->mImage.mCenter.x += p->mVelocity.x;
     p->mImage.mCenter.y += p->mVelocity.y;
+
+    float distance = magnitude(p->mImage.mCenter - p->mStartPosition)/magnitude(p->mEndPosition - p->mStartPosition);
+    p->mImage.mSize = -(distance*distance) + 2.0;
+
     p->mImage.makeDirty();
 
     float mag = magnitude(p->mImage.mCenter - p->mEndPosition);
@@ -396,6 +400,7 @@ void ParticleSystem::initBallParticle(InitBallParticleArgs const& args)
     p->mHitCallback = args.hitCallback;
     p->mHitCallbackArg = args.hitCallbackArg;
     p->mHitVehicle = NULL;
+    p->mStartPosition = args.initialPosition;
     
     // Setup image.
     p->mImage.setImage(gImageLibrary->reference("data/particles/ball.png"));

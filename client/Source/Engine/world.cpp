@@ -248,8 +248,7 @@ bool World::touch(uint32_t count, Touch* touches)
 void World::gotoLobby()
 {
     // Create lobby.
-    //new LobbyView();
-    new VehicleSelectView();
+    new LobbyView();
     
     // Delete self.
     gGame->queueDeleteable(this);

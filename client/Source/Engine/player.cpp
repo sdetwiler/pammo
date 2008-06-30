@@ -100,6 +100,7 @@ void Player::spawn()
         {
         case VEHICLE_FLAMETANK:
             mVehicle = new FlameTankVehicle;
+            ((FlameTankVehicle*)mVehicle)->setTargetRingState(true);
             break;
 
         case VEHICLE_TREBUCHET:

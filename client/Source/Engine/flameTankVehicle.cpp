@@ -18,12 +18,17 @@ FlameTankVehicle::FlameTankVehicle()
     : Vehicle()
 {
     mFireAngle = 0;
-    mTargetRingEnabled = 0;
+    mTargetRingEnabled = false;
 }
 
 FlameTankVehicle::~FlameTankVehicle()
 {
     gWorld->getCollisionDynamics()->removeVehicle(this);
+}
+
+void FlameTankVehicle::setTargetRingState(bool enabled)
+{
+    mTargetRingEnabled = enabled;
 }
 
 int FlameTankVehicle::init()
@@ -124,31 +129,11 @@ void FlameTankVehicle::update()
 
         gWorld->getParticleSystem()->initSmokeParticle(center, rot, baseVelocity);
     }
-
-}
-
-void FlameTankVehicle::toggleTargetRing()
-{
-    mTargetRingEnabled = !mTargetRingEnabled;
 }
 
 bool FlameTankVehicle::touch(uint32_t count, Touch* touches)
 {
-    // Always only use first touch point.
-    Vector2 loc = gWorld->getCamera()->translateToWorld(touches[0].mLocation);
-    float x = mCenter.x - loc.x;
-    float y = mCenter.y - loc.y;
-    float hyp = sqrt(x*x + y*y);
-
-    // Inside of vehicle.
-    if(hyp < 16.0f)
-    {
-        toggleTargetRing();
-    }
-    if(mTargetRingEnabled)
-        return mTargetRing->touch(count, touches);
-
-    return false;
+    return mTargetRing->touch(count, touches);
 }
 
 void FlameTankVehicle::destroy()

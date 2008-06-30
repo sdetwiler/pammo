@@ -26,15 +26,15 @@ public:
     void setFireDirection(float rads);
     float getFireDirection();
 
-    void toggleTargetRing();
+    void setTargetRingState(bool enabled);
 
 protected:
     void onParticleHit(Vehicle* vehicle);
 
 private:
     TargetRingWidget* mTargetRing;
-    float mFireAngle;
     bool mTargetRingEnabled;
+    float mFireAngle;
 };
 
 } // namespace pammo

@@ -29,6 +29,7 @@ struct Particle
     void*         mHitCallbackArg;      // Argument to pass to mHitCallback.
     Vehicle*      mHitVehicle;          // What vehicle will be hit by this particle.
 
+    Vector2      mStartPosition;
     Vector2      mVelocity;             // Velocity of particle.
     float        mMass;                 // Mass of particle.
 

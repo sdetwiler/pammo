@@ -30,13 +30,13 @@ int Game::init()
     // Initialize the image library.
     gImageLibrary = new ImageLibrary();
     
-#if 0
+#if 1
     // Create the lobby view.
     new LobbyView();
 #else
-    new VehicleSelectView();
+    //new VehicleSelectView();
     // Or create the world view with a map.
-    //new World("fallenCity");
+    new World("fallenCity");
 #endif
 
     return 0;

@@ -12,7 +12,7 @@ struct Image;
 class VehicleSelectView : public View
 {
 public:
-    VehicleSelectView();
+    VehicleSelectView(char const* mapName);
     virtual ~VehicleSelectView();
     
     virtual void init();
@@ -37,6 +37,7 @@ private:
     };
     typedef vector< VehicleDesc* > VehicleDescVector;
     VehicleDescVector mVehicles;
+    std::string mMapName; // Selected map from map view.
 };
     
 }

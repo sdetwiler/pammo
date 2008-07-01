@@ -5,6 +5,8 @@
 #include "vehicleSelectView.h"
 #include "world.h"
 
+#include "trebuchetVehicle.h"
+
 #include <time.h>
 
 namespace pammo
@@ -36,7 +38,7 @@ int Game::init()
 #else
     //new VehicleSelectView();
     // Or create the world view with a map.
-    new World("fallenCity");
+    new World("fallenCity", VEHICLE_TREBUCHET);
 #endif
 
     return 0;

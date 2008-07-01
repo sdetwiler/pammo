@@ -44,7 +44,6 @@ class CollisionDynamics
             bool mHit;
             DynamicBody* mBody;
             Vector2 mPosition;
-            Vector2 mFarPosition;
             float mDistance;
             uint32_t mTime;
         };

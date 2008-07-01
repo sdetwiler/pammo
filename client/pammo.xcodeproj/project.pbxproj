@@ -10,9 +10,12 @@
 		11156B8B0E08E52C00B55584 /* healthMeter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11156B890E08E52C00B55584 /* healthMeter.cpp */; };
 		11156BF60E08F25F00B55584 /* collisionDynamics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11156BF50E08F25F00B55584 /* collisionDynamics.cpp */; };
 		1129D0D50DEBDE1F00F1D50B /* DebugConsole.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1129D0D40DEBDE1F00F1D50B /* DebugConsole.mm */; };
+		112C7BDF0E14170600C8C0B2 /* magnitudeWidget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 112C7BDD0E14170600C8C0B2 /* magnitudeWidget.cpp */; };
+		112C7BEB0E14175000C8C0B2 /* trebuchetVehicle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 112C7BE90E14175000C8C0B2 /* trebuchetVehicle.cpp */; };
 		113B2C080DF5BFFC0095A737 /* flameTankVehicle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 113B2C060DF5BFFC0095A737 /* flameTankVehicle.cpp */; };
 		113B2C2D0DF65EB20095A737 /* tileMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 113B2C2C0DF65EB20095A737 /* tileMap.cpp */; };
 		113B2D260DF673650095A737 /* lobbyView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 113B2D250DF673650095A737 /* lobbyView.cpp */; };
+		11460CBA0E19B07E0094DB74 /* vehicleSelectView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11460CB80E19B07E0094DB74 /* vehicleSelectView.cpp */; };
 		115E19840DEBA13700BD1F3A /* Main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 115E19830DEBA13700BD1F3A /* Main.mm */; };
 		115E19870DEBA14E00BD1F3A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 115E19860DEBA14E00BD1F3A /* AppDelegate.mm */; };
 		115E199E0DEBA2A100BD1F3A /* MainView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 115E199A0DEBA2A100BD1F3A /* MainView.mm */; };
@@ -49,12 +52,18 @@
 		11156BF50E08F25F00B55584 /* collisionDynamics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = collisionDynamics.cpp; sourceTree = "<group>"; };
 		1129D0D30DEBDE1F00F1D50B /* DebugConsole.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DebugConsole.h; sourceTree = "<group>"; };
 		1129D0D40DEBDE1F00F1D50B /* DebugConsole.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DebugConsole.mm; sourceTree = "<group>"; };
+		112C7BDD0E14170600C8C0B2 /* magnitudeWidget.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = magnitudeWidget.cpp; sourceTree = "<group>"; };
+		112C7BDE0E14170600C8C0B2 /* magnitudeWidget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = magnitudeWidget.h; sourceTree = "<group>"; };
+		112C7BE90E14175000C8C0B2 /* trebuchetVehicle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = trebuchetVehicle.cpp; sourceTree = "<group>"; };
+		112C7BEA0E14175000C8C0B2 /* trebuchetVehicle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = trebuchetVehicle.h; sourceTree = "<group>"; };
 		113B2C060DF5BFFC0095A737 /* flameTankVehicle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = flameTankVehicle.cpp; sourceTree = "<group>"; };
 		113B2C070DF5BFFC0095A737 /* flameTankVehicle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = flameTankVehicle.h; sourceTree = "<group>"; };
 		113B2C2B0DF65EB20095A737 /* tileMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tileMap.h; sourceTree = "<group>"; };
 		113B2C2C0DF65EB20095A737 /* tileMap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tileMap.cpp; sourceTree = "<group>"; };
 		113B2D240DF673650095A737 /* lobbyView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lobbyView.h; sourceTree = "<group>"; };
 		113B2D250DF673650095A737 /* lobbyView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lobbyView.cpp; sourceTree = "<group>"; };
+		11460CB80E19B07E0094DB74 /* vehicleSelectView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = vehicleSelectView.cpp; sourceTree = "<group>"; };
+		11460CB90E19B07E0094DB74 /* vehicleSelectView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vehicleSelectView.h; sourceTree = "<group>"; };
 		115E19830DEBA13700BD1F3A /* Main.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Main.mm; sourceTree = "<group>"; };
 		115E19850DEBA14E00BD1F3A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		115E19860DEBA14E00BD1F3A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; };
@@ -148,6 +157,12 @@
 		11EEB7080DEBC73F009F3B13 /* Engine */ = {
 			isa = PBXGroup;
 			children = (
+				11460CB80E19B07E0094DB74 /* vehicleSelectView.cpp */,
+				11460CB90E19B07E0094DB74 /* vehicleSelectView.h */,
+				112C7BE90E14175000C8C0B2 /* trebuchetVehicle.cpp */,
+				112C7BEA0E14175000C8C0B2 /* trebuchetVehicle.h */,
+				112C7BDD0E14170600C8C0B2 /* magnitudeWidget.cpp */,
+				112C7BDE0E14170600C8C0B2 /* magnitudeWidget.h */,
 				11156B890E08E52C00B55584 /* healthMeter.cpp */,
 				11156B8A0E08E52C00B55584 /* healthMeter.h */,
 				11DBE28A0E010AEE00E589A9 /* npcManager.cpp */,
@@ -322,6 +337,9 @@
 				11DBE28C0E010AEE00E589A9 /* npcManager.cpp in Sources */,
 				11156B8B0E08E52C00B55584 /* healthMeter.cpp in Sources */,
 				11156BF60E08F25F00B55584 /* collisionDynamics.cpp in Sources */,
+				112C7BDF0E14170600C8C0B2 /* magnitudeWidget.cpp in Sources */,
+				112C7BEB0E14175000C8C0B2 /* trebuchetVehicle.cpp in Sources */,
+				11460CBA0E19B07E0094DB74 /* vehicleSelectView.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

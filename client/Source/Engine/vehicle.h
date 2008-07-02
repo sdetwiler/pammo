@@ -51,6 +51,8 @@ public:
     
     uint32_t getCollisionBodyMask() const;
     float getCollisionBodyRadius() const; 
+    float getSpeed() const;
+    float getDirection() const;
 
 protected:
     World* mWorld;

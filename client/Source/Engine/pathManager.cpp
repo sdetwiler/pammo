@@ -103,7 +103,7 @@ void PathManager::addPoint(Vector2 const& point)
         Vector2 worldEnd = point;
         vector< Vector2 > newPath;
         
-        gWorld->getCollisionMap()->route(worldStart, worldEnd, 1, newPath);
+        gWorld->getCollisionMap()->route(worldStart, worldEnd, mPlayer->getVehicle()->getCollisionBodyRadius(), newPath);
         for(uint32_t i=0; i < newPath.size(); ++i)
             mPoints.push_back(newPath[i]);
     }

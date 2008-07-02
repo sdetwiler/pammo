@@ -55,6 +55,11 @@ uint32_t Player::getVehicleType() const
     return mVehicleType;
 }
 
+Vehicle* Player::getVehicle() const
+{
+    return mVehicle;
+}
+
 void Player::setHealth(float h)
 {
     mHealth = h;

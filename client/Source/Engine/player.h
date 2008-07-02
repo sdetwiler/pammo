@@ -53,6 +53,8 @@ public:
 
     void setVehicleType(uint32_t type);
     uint32_t getVehicleType() const;
+    
+    Vehicle* getVehicle() const;
 
     void setPath(Vector2Vec const& path);
     

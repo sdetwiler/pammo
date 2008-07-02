@@ -32,6 +32,7 @@ struct Particle
     Vector2      mStartPosition;
     Vector2      mVelocity;             // Velocity of particle.
     float        mMass;                 // Mass of particle.
+    float        mRadius;               // JEM Used for debugging of collision sysmte... This is a hack!
 
     ImageEntity  mImage;
     float        mAlpha;

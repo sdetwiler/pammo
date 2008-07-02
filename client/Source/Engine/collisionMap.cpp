@@ -50,19 +50,22 @@ CollisionMap::~CollisionMap()
     for(ShapeVector::iterator i=mShapes.begin(); i != mShapes.end(); ++i)
     {
         delete[] (*i)->mPoints;
+        delete[] (*i)->mNormals;
         delete *i;
     }
 }
     
-void CollisionMap::addShape(uint16_t numPoints, Vector2* points)
+void CollisionMap::addShape(uint16_t numPoints, Vector2* points, Vector2* normals)
 {
     Shape* s = new Shape();
     s->mNumPoints = numPoints;
     s->mPoints = new Vector2[numPoints];
+    s->mNormals = new Vector2[numPoints];
     
     for(uint16_t i=0; i < numPoints; ++i)
     {
         s->mPoints[i] = points[i];
+        s->mNormals[i] = normals[i];
     }
     mShapes.push_back(s);
 }
@@ -91,7 +94,7 @@ bool CollisionMap::route(Vector2 startPos, Vector2 endPos, float radius, vector<
     uint32_t curFace = result.mFace;
     while(curFace != result2.mFace)
     {
-        newPath.push_back(result.mShape->mPoints[curFace]);
+        newPath.push_back(result.mShape->mPoints[curFace] + result.mShape->mNormals[curFace]*radius);
         if(curFace == 0)
             curFace = result.mShape->mNumPoints-1;
         else
@@ -114,8 +117,12 @@ void CollisionMap::raycast(Vector2 startPos, Vector2 endPos, float radius, Rayca
             float curDist;
             Vector2 curHit, curFarHit;
             
-            if(!intersectLineAndLine(startPos, endPos, (*shape)->mPoints[i],
-                (*shape)->mPoints[(i+1) % (*shape)->mNumPoints], curHit, curDist, curFarHit))
+            uint32_t iPlusOne = (i+1) % (*shape)->mNumPoints;
+            
+            if(!intersectLineAndLine(startPos, endPos,
+                (*shape)->mPoints[i] + (*shape)->mNormals[i]*radius,
+                (*shape)->mPoints[iPlusOne] + (*shape)->mNormals[iPlusOne]*radius,
+                curHit, curDist, curFarHit))
                 continue;
                 
             if(!result.mHit || curDist < result.mDistance)
@@ -143,6 +150,19 @@ void CollisionMap::draw()
     {
         glVertexPointer(2, GL_FLOAT, 0, (float*)(*shape)->mPoints);
         glDrawArrays(GL_TRIANGLE_FAN, 0, (*shape)->mNumPoints);
+        
+        //continue;
+        
+        // Draw expanded shape.
+        glColor4f(0, 0.5, 0.5, .25);
+        Vector2* points = new Vector2[(*shape)->mNumPoints];
+        
+        for(uint32_t i=0; i < (*shape)->mNumPoints; ++i)
+            points[i] = (*shape)->mPoints[i] + (*shape)->mNormals[i]*16;
+        glVertexPointer(2, GL_FLOAT, 0, (float*)points);
+        glDrawArrays(GL_TRIANGLE_FAN, 0, (*shape)->mNumPoints);
+        delete[] points;
+        glColor4f(0, 1, 0, .25);
     }
     
     glColor4f(1, 1, 1, 1);

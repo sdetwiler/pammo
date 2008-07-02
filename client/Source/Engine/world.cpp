@@ -137,7 +137,8 @@ void World::draw()
     mNpcManager->draw();
 
     mParticleSystem->draw();
-    // SCD mCollisionMap->draw();
+    //mCollisionMap->draw();
+    //mCollisionDynamics->draw();
 	mCamera->unset();
     
     mBackButton->draw();

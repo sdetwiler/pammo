@@ -50,6 +50,8 @@ class CollisionDynamics
         
         void raycast(Vector2 const& startPosition, Vector2 const& endPosition, float radius, float speed, uint32_t mask, RaycastResult& result);
         
+        void draw();
+        
     private:
         typedef vector< DynamicBody* > DynamicBodyVector;
         DynamicBodyVector mBodies;

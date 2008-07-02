@@ -46,6 +46,17 @@ float Vehicle::getCollisionBodyRadius() const
     return mCollisionBodyRadius;
 }
 
+float Vehicle::getSpeed() const
+{
+    if(mMoving) return mSpeed;
+    else return 0;
+}
+
+float Vehicle::getDirection() const
+{
+    return mOldTheta;
+}
+
 void Vehicle::draw()
 {
     mAnimation.setTransform(getTransform());

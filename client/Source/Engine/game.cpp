@@ -6,6 +6,7 @@
 #include "world.h"
 
 #include "trebuchetVehicle.h"
+#include "flametankVehicle.h"
 
 #include <time.h>
 
@@ -38,7 +39,7 @@ int Game::init()
 #else
     //new VehicleSelectView();
     // Or create the world view with a map.
-    new World("fallenCity", VEHICLE_TREBUCHET);
+    new World("fallenCity", VEHICLE_FLAMETANK);
 #endif
 
     return 0;

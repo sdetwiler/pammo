@@ -43,6 +43,13 @@ int NpcManager::init(uint32_t numPlayers)
 void NpcManager::generatePath(Player* player)
 {
     Vector2Vec path;
+    
+    //path.push_back(Vector2(100, 100));
+    //path.push_back(Vector2(-100, 140));
+    //path.push_back(Vector2(100, 100));
+    //path.push_back(Vector2(-100, 140));
+    //player->setPath(path);
+    //return;
 
     Vector2 lastPos;
     Vector2 newPos;

@@ -224,20 +224,43 @@ void ParticleSystem::draw()
 {
     for(ParticleVector::iterator i = mUsed.begin(); i!=mUsed.end(); ++i)
     {
+        //if((*i)->mRadius != 0) continue;
+        
         (*i)->mImage.mAlpha = (*i)->mAlpha;
         (*i)->mImage.draw();
     }
+    
+    return;
+    
+    // Draw debug collision information.
+    glLoadIdentity();
+    glDisable(GL_TEXTURE_2D);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+    glColor4f(1, 0, 0, .25);
+    
+    for(ParticleVector::iterator i = mUsed.begin(); i!=mUsed.end(); ++i)
+    {
+        Particle* p = (*i);
+        if(p->mRadius == 0) continue;
+        
+        uint32_t num = 8;
+        Vector2 points[num];
+        for(uint32_t j=0; j < num; ++j)
+            points[j] = p->mImage.mCenter + Vector2(p->mRadius, 0) * Transform2::createRotation(3.1415/4*j);
+            
+        glVertexPointer(2, GL_FLOAT, 0, (float*)points);
+        glDrawArrays(GL_TRIANGLE_FAN, 0, num);
+    }
+    
+    glColor4f(1, 1, 1, 1);
+    glEnable(GL_TEXTURE_2D);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 }
 
 void ParticleSystem::initFireParticle(InitFireParticleArgs const& args)
 {
     if(mAvailable.size() == 0)
         return;
-
-    if(mAvailable.size() == 1)
-    {
-        int* d = NULL;
-    }
 
     // Grab a particle.
     Particle* p = mAvailable.back();
@@ -247,12 +270,13 @@ void ParticleSystem::initFireParticle(InitFireParticleArgs const& args)
     // Properties about fire particles.
     float velocity = 10.0f;
     float maxDistance = 150.0f;
-    float particleRadius = 1.0f;
+    float particleRadius = 10.0f;
 
     // Set basic particle properties.
     p->mCallback = fireParticleCb;
     p->mOldMag = 0;
     p->mMass = 0;
+    p->mRadius = particleRadius;
     p->mHitsObject = false;
     p->mAlpha = 1.0f;
     p->mHitCallback = args.hitCallback;
@@ -321,6 +345,7 @@ void ParticleSystem::initSmokeParticle(Vector2 const& initialPosition, float ini
     // Set basic particle properties.
     p->mCallback = smokeParticleCb;
     p->mMass = 0;
+    p->mRadius = 0;
     p->mAlpha = 1.0f;
 
     // Setup image.
@@ -346,6 +371,7 @@ void ParticleSystem::initHitParticle(Vector2 const& initialPosition)
     // Set basic particle properties.
     p->mCallback = hitParticleCb;
     p->mMass = 0;
+    p->mRadius = 0;
     p->mAlpha = 1.0f;
 
     // Setup image.
@@ -368,6 +394,7 @@ void ParticleSystem::initExplosionParticle(Vector2 const& initialPosition)
     // Set basic particle properties.
     p->mCallback = explosionParticleCb;
     p->mMass = 0;
+    p->mRadius = 0;
     p->mAlpha = 1.0f;
 
     // Setup image.
@@ -395,6 +422,7 @@ void ParticleSystem::initBallParticle(InitBallParticleArgs const& args)
     p->mCallback = ballParticleCb;
     p->mOldMag = 0;
     p->mMass = 0;
+    p->mRadius = particleRadius;
     p->mHitsObject = false;
     p->mAlpha = 1.0f;
     p->mHitCallback = args.hitCallback;

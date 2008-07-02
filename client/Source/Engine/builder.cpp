@@ -181,14 +181,40 @@ void buildCollisionMap(World* world, char const* mapName)
         uint16_t numPoints = readUInt16(&cur, &remain);
         dprintf(" Points: %d", numPoints);
         Vector2* points = new Vector2[numPoints];
+        Vector2* normals = new Vector2[numPoints];
         for(uint32_t i=0; i < numPoints; ++i)
         {
             points[i].x = readFloat(&cur, &remain);
             points[i].y = readFloat(&cur, &remain);
             dprintf("  (%f, %f)", points[i].x, points[i].y);
         }
-        collisionMap->addShape(numPoints, points);
+        
+        // Calculate normals.
+        for(uint32_t i=1; i < numPoints+1; ++i)
+        {
+            Vector2 p0 = points[i-1];
+            Vector2 p1 = points[i%numPoints];
+            Vector2 p2 = points[(i+1)%numPoints];
+            
+            Vector2 A = p1 - p0;
+            Vector2 B = p2 - p1;
+            
+            float magA = sqrt(A.x*A.x + A.y*A.y);
+            float magB = sqrt(B.x*B.x + B.y*B.y);
+            
+            float theta = acos(dot(A, B) / (magA * magB));
+            
+            Vector2 normal = A / magA * Transform2::createRotation(theta/2);
+            
+            // Adjust normal so that the width is constant... Create odd edges.
+            //normal = normal / cos(theta/2);
+            
+            normals[i%numPoints] = normal;
+        }
+        
+        collisionMap->addShape(numPoints, points, normals);
         delete[] points;
+        delete[] normals;
     }
     
     // Free the buffer;

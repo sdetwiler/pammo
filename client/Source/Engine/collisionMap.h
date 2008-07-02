@@ -21,12 +21,13 @@ public:
     CollisionMap();
     ~CollisionMap();
     
-    void addShape(uint16_t numPoints, Vector2* points);
+    void addShape(uint16_t numPoints, Vector2* points, Vector2* normals);
     
     struct Shape
     {
         uint16_t mNumPoints;
         Vector2* mPoints;
+        Vector2* mNormals;
     };
     
     struct RaycastResult

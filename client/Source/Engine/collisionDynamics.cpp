@@ -15,12 +15,8 @@ namespace pammo
 {
 
 // Intersect a line segment with a circle
-bool intersectLineAndCircle(Vector2 p1t, Vector2 p2t, Vector2 c, float r, Vector2& hit, float& dist)
+bool intersectLineAndCircle(Vector2 p1, Vector2 p2, float r, Vector2& hit, float& alpha)
 {
-    // Offset p1t and p2t into collision space. This assumes that the circle is at the origin.
-    Vector2 p1 = p1t - c;
-    Vector2 p2 = p2t - c;
-    
     // First itneresect a line segment with a sphere.
     // http://mathworld.wolfram.com/Circle-LineIntersection.html
     float dx = p2.x - p1.x;
@@ -44,7 +40,7 @@ bool intersectLineAndCircle(Vector2 p1t, Vector2 p2t, Vector2 c, float r, Vector
     // End dense-math reference section.
     
     // Calculate how far along the ray both hit and farHit are.
-    float alpha, farAlpha;
+    float farAlpha;
     if(p2.x - p1.x != 0)
     {
         alpha = (hit.x - p1.x)/(p2.x - p1.x);
@@ -64,20 +60,13 @@ bool intersectLineAndCircle(Vector2 p1t, Vector2 p2t, Vector2 c, float r, Vector
     // If both out, this is not a hit.
     if(!alphaIn && !farAlphaIn)
         return false;
-        
-    // Calculate the distances from p1 to hit and farHit.
-    dist = sqrt((hit.x - p1t.x)*(hit.x - p1t.x) + (hit.y - p1t.y)*(hit.y - p1t.y));
-    float farDist = sqrt((farHit.x - p1t.x)*(farHit.x - p1t.x) + (farHit.y - p1t.y)*(farHit.y - p1t.y));
     
     // Choose "farHit" if it is closer to p1 or if hit is not in segment.
-    if((dist > farDist && farAlphaIn) || !alphaIn)
+    if((alpha > farAlpha && farAlphaIn) || !alphaIn)
     {
         hit = farHit;
-        dist = farDist;
+        alpha = farAlpha;
     }
-    
-    // Offset hit back into non-collision space.
-    hit += c;
     
     return true;
 }
@@ -116,7 +105,10 @@ void CollisionDynamics::removeVehicle(Vehicle* vehicle)
 void CollisionDynamics::raycast(Vector2 const& startPosition, Vector2 const& endPosition, float radius, float speed, uint32_t mask, RaycastResult& result)
 {
     result.mHit = false;
-    //return;
+    
+    // Determine duration of time. Distance / speed.
+    float length = sqrt((startPosition.x - endPosition.x)*(startPosition.x - endPosition.x) + (startPosition.y - endPosition.y)*(startPosition.y - endPosition.y));
+    float eventTime =  length / speed;
     
     for(DynamicBodyVector::iterator i = mBodies.begin(); i != mBodies.end(); ++i)
     {
@@ -128,12 +120,17 @@ void CollisionDynamics::raycast(Vector2 const& startPosition, Vector2 const& end
 
             if(!(mask & vehicle->getCollisionBodyMask()))
                 continue;
+            
+            Vector2 vehicleMovement = Vector2(vehicle->getSpeed() * eventTime, 0) * Transform2::createRotation(vehicle->getDirection());
 
             Vector2 hit;
-            float dist;
+            float alpha;
             
-            if(intersectLineAndCircle(startPosition, endPosition, vehicle->mCenter, vehicle->getCollisionBodyRadius(), hit, dist))
+            if(intersectLineAndCircle(startPosition - vehicle->mCenter, endPosition - vehicle->mCenter - vehicleMovement, vehicle->getCollisionBodyRadius() + radius, hit, alpha))
             {
+                hit = startPosition + (endPosition - startPosition) * alpha;
+                float dist = sqrt((startPosition.x - hit.x)*(startPosition.x - hit.x) + (startPosition.y - hit.y)*(startPosition.y - hit.y));
+                
                 if(!result.mHit || dist < result.mDistance)
                 {
                     result.mHit = true;
@@ -149,6 +146,32 @@ void CollisionDynamics::raycast(Vector2 const& startPosition, Vector2 const& end
             assert(0);
         }
     }
+}
+
+void CollisionDynamics::draw()
+{
+    glLoadIdentity();
+    glDisable(GL_TEXTURE_2D);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+    glColor4f(0, 0, 1, .25);
+    
+    for(DynamicBodyVector::iterator i = mBodies.begin(); i != mBodies.end(); ++i)
+    {
+        if((*i)->mType != DynamicBody::VehicleType) continue;
+        
+        Vehicle* vehicle = (*i)->mVehicle;
+        uint32_t num = 8;
+        Vector2 points[num];
+        for(uint32_t j=0; j < num; ++j)
+            points[j] = vehicle->mCenter + Vector2(vehicle->getCollisionBodyRadius(), 0) * Transform2::createRotation(3.1415/4*j);
+            
+        glVertexPointer(2, GL_FLOAT, 0, (float*)points);
+        glDrawArrays(GL_TRIANGLE_FAN, 0, num);
+    }
+    
+    glColor4f(1, 1, 1, 1);
+    glEnable(GL_TEXTURE_2D);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 }
 
 }

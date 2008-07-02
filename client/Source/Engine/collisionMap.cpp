@@ -21,7 +21,8 @@ bool intersectLineAndLine(Vector2 p1, Vector2 p2, Vector2 p3, Vector2 p4, Vector
     float det = (p4.y - p3.y)*(p2.x - p1.x) - (p4.x - p3.x)*(p2.y - p1.y);
     if(det == 0) return false;
     
-    float len = sqrt((p2.x - p1.x)*(p2.x - p1.x) + (p2.y - p1.y)*(p2.y - p1.y));
+    //float len = sqrt((p2.x - p1.x)*(p2.x - p1.x) + (p2.y - p1.y)*(p2.y - p1.y));
+    float len = magnitude(p2 - p1);
     float alpha = ((p4.x - p3.x)*(p1.y - p3.y) - (p4.y - p3.y)*(p1.x - p3.x))/det;
     float beta = ((p2.x - p1.x)*(p1.y - p3.y) - (p2.y - p1.y)*(p1.x - p3.x))/det;
     

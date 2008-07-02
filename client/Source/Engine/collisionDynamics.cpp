@@ -129,7 +129,8 @@ void CollisionDynamics::raycast(Vector2 const& startPosition, Vector2 const& end
             if(intersectLineAndCircle(startPosition - vehicle->mCenter, endPosition - vehicle->mCenter - vehicleMovement, vehicle->getCollisionBodyRadius() + radius, hit, alpha))
             {
                 hit = startPosition + (endPosition - startPosition) * alpha;
-                float dist = sqrt((startPosition.x - hit.x)*(startPosition.x - hit.x) + (startPosition.y - hit.y)*(startPosition.y - hit.y));
+                float dist = magnitude(startPosition - hit);
+                //float dist = sqrt((startPosition.x - hit.x)*(startPosition.x - hit.x) + (startPosition.y - hit.y)*(startPosition.y - hit.y));
                 
                 if(!result.mHit || dist < result.mDistance)
                 {

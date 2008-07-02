@@ -199,15 +199,14 @@ void buildCollisionMap(World* world, char const* mapName)
             Vector2 A = p1 - p0;
             Vector2 B = p2 - p1;
             
-            float magA = sqrt(A.x*A.x + A.y*A.y);
-            float magB = sqrt(B.x*B.x + B.y*B.y);
+            Vector2 NA(-A.y, A.x);
+            Vector2 NB(-B.y, B.x);
             
-            float theta = acos(dot(A, B) / (magA * magB));
-            
-            Vector2 normal = A / magA * Transform2::createRotation(theta/2);
+            Vector2 normal = normalize((normalize(NA) + normalize(NB))/2);
             
             // Adjust normal so that the width is constant... Create odd edges.
-            //normal = normal / cos(theta/2);
+            float theta = acos(dot(A, B) / (magnitude(A) * magnitude(B)));
+            normal = normal / cos(theta/2);
             
             normals[i%numPoints] = normal;
         }

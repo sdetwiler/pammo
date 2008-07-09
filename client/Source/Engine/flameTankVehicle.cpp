@@ -50,6 +50,12 @@ int FlameTankVehicle::init()
     mAnimation.setDrawPriority(100);
     setSize(mAnimation.getSize());
 
+    mTurretImage = gImageLibrary->reference("data/vehicles/flameTank5/turret/00.png");
+    if(!mTurretImage)
+        return -1;
+
+    mCenterImage = gImageLibrary->reference("data/vehicles/center.png");
+
     // SCD TEMP
     //mCenter = Vector2(350, 350);
     return 0;
@@ -60,8 +66,42 @@ void FlameTankVehicle::draw()
 {
     Vehicle::draw();
 
+    Transform2 trans;
+    Vector2 center = mCenter + (Vector2(0, -8) * Transform2::createRotation(mRotation)); // Center of turret.
+    trans*= Transform2::createTranslation(center);         // Go to center of vehicle.
+    trans*= Transform2::createRotation(mFireAngle);        // Rotate in firing direction.
+    trans*= Transform2::createTranslation(Vector2(-8, -8)); // Translate to center of turret image.
+    trans*= Transform2::createScale(16); // scale image to correct size.
+    
+    drawImage(mTurretImage, trans, 1.0f);
+    
+
     if(mTargetRingEnabled)
         mTargetRing->draw();
+    
+    // SCD Debug Max fire distance begin.
+    /***
+    float maxDistance = 150.0f;
+    Vector2 end = mCenter + Vector2(maxDistance, 0) * Transform2::createRotation(mFireAngle- 90.0f*0.0174532925f);
+    glPushMatrix();
+    glLoadIdentity();
+    glLineWidth(5.0);
+    glColor4f(0.0, 1.0, 0.0, 0.5);
+	glDisable(GL_TEXTURE_2D);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	float tmp[2*2];// = new float[2*2];
+    tmp[0] = this->mCenter.x+10;
+    tmp[1] = this->mCenter.y-16;
+    tmp[2] = end.x+10;
+    tmp[3] = end.y-16;
+    glVertexPointer(2, GL_FLOAT, 0, tmp);
+	glDrawArrays(GL_LINE_STRIP, 0, 2);
+    glPopMatrix();
+	glEnable(GL_TEXTURE_2D);
+	glColor4f(1, 1, 1, 1);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    // SCD Debug end.
+    ***/
 }
 
 void FlameTankVehicle::setFireDirection(float rads)
@@ -82,53 +122,33 @@ void FlameTankVehicle::update()
 
     Vector2 baseVelocity;
 
-    // Fire.
-    int width=1;
-    int i=1;
-    //for(int i= 0; i<width; ++i)
-    {
-        // Add new flame particle.
-        float rad = 32.0f; // Distance from center of tank to end of nozzle.
-        float rot = mFireAngle - 90.0f*0.0174532925f +(i*.02f) + ((rand()%3)/60.0f);
-        
-        // Calculate center. Vehicle center plus nozzle rad rotated for direction.
-        Vector2 center = mCenter + Vector2(rad, 0) * Transform2::createRotation(rot) + Vector2((rand()%6)-3, (rand()%6)-3);
+    float rot = mFireAngle + ((rand()%3)/90.0f);
 
-        // Calculate base / initial velocity. Vehicle speed rotated for direction.
-        if(mMoving)
-            baseVelocity = Vector2(mSpeed, 0) * Transform2::createRotation(rot);
-        else
-            baseVelocity = Vector2(0, 0);
+    Transform2 trans;
+    Vector2 center = mCenter + (Vector2(0, -8) * Transform2::createRotation(mRotation)) + Vector2((rand()%6)-3, (rand()%6)-3); // Center of turret.
+    trans*= Transform2::createTranslation(center);         // Go to center of vehicle.
+    trans*= Transform2::createRotation(rot);        // Rotate in firing direction.
+    trans*= Transform2::createTranslation(Vector2(0, -24)); // Translate to center of turret image.
+    trans*= Transform2::createScale(16); // scale image to correct size.
 
-        ParticleSystem::InitFireParticleArgs args;
-        args.emitter = this;
-        args.hitCallback = particleHitCb;
-        args.hitCallbackArg = this;
-        args.initialPosition = center;
-        args.initialRotation = rot;
-        args.initialVelocity = baseVelocity;
+    Vector2 start;
+    start = start * trans;
 
-        gWorld->getParticleSystem()->initFireParticle(args);
-    }
+    if(mMoving)
+        baseVelocity = Vector2(mSpeed, 0) * Transform2::createRotation(mFireAngle - 90.0f*0.0174532925f);
+    else
+        baseVelocity = Vector2(0, 0);
 
-    // Smoke.
-    width=1;
-    //for(int i= 0; i<=width; ++i)
-    {
-        float rad = 20; // Distance from center of tank to end of nozzle.
-        float rot = mFireAngle - 90.0f*0.0174532925f+ (i*.06f) + (-0.3f +(rand()%10)/15.0f);
-        
-        // Calculate center. Vehicle center plus nozzle rad rotated for direction.
-        Vector2 center = mCenter + Vector2(rad, 0) * Transform2::createRotation(rot);
+    ParticleSystem::InitFireParticleArgs args;
+    args.emitter = this;
+    args.hitCallback = particleHitCb;
+    args.hitCallbackArg = this;
+    args.initialPosition = start;
+    args.initialRotation = mFireAngle - 90.0f*0.0174532925f;
+    args.initialVelocity = baseVelocity;
 
-        // Calculate base / initial velocity. Vehicle speed rotated for direction.
-        if(mMoving)
-            baseVelocity = Vector2(mSpeed, 0) * Transform2::createRotation(rot);
-        else
-            baseVelocity = Vector2(0, 0);
-
-        gWorld->getParticleSystem()->initSmokeParticle(center, rot, baseVelocity);
-    }
+    gWorld->getParticleSystem()->initSmokeParticle(start, mFireAngle - 90.0f*0.0174532925f, baseVelocity);
+    gWorld->getParticleSystem()->initFireParticle(args);
 }
 
 bool FlameTankVehicle::touch(uint32_t count, Touch* touches)

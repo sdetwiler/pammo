@@ -39,7 +39,7 @@ World::World(char const* mapName, uint32_t vehicleType)
     mCamera = new Camera(Vector2(0, 0), getFrameSize());
     mTargetCameraSize = mCamera->mSize;
     
-    mParticleSystem = new ParticleSystem(200);
+    mParticleSystem = new ParticleSystem(500);
     mTileMap = new TileMap;
     mCollisionMap = new CollisionMap;
     mCollisionDynamics = new CollisionDynamics;
@@ -52,7 +52,7 @@ World::World(char const* mapName, uint32_t vehicleType)
     assert(ret == 0);
 
     mNpcManager = new NpcManager;
-    ret = mNpcManager->init(3);
+    ret = mNpcManager->init(1);
     assert(ret == 0);
 
 

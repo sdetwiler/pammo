@@ -32,6 +32,8 @@ protected:
     void onParticleHit(Vehicle* vehicle);
 
 private:
+    Image* mTurretImage;
+    Image* mCenterImage;
     TargetRingWidget* mTargetRing;
     bool mTargetRingEnabled;
     float mFireAngle;

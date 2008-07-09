@@ -161,7 +161,7 @@ void CollisionDynamics::draw()
         if((*i)->mType != DynamicBody::VehicleType) continue;
         
         Vehicle* vehicle = (*i)->mVehicle;
-        uint32_t num = 8;
+        uint32_t const num = 8;
         Vector2 points[num];
         for(uint32_t j=0; j < num; ++j)
             points[j] = vehicle->mCenter + Vector2(vehicle->getCollisionBodyRadius(), 0) * Transform2::createRotation(3.1415/4*j);

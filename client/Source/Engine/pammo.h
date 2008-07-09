@@ -10,8 +10,9 @@
 #ifndef __PAMMO_H__
 #define __PAMMO_H__
 
-#include "dprintf.h"
 #include "types_platform.h"
+#include "timer_platform.h"
+#include "dprintf.h"
 
 #include <vector>
 #include <set>

@@ -12,12 +12,13 @@ bool fireParticleCb(Particle* p, ParticleSystem* system)
 {
     p->mImage.mCenter.x += p->mVelocity.x;
     p->mImage.mCenter.y += p->mVelocity.y;
+    p->mImage.mRotation += 0.05f;
     p->mImage.makeDirty();
 
     float mag = magnitude(p->mImage.mCenter - p->mEndPosition);
    // dprintf("mag: %.2f", mag);
     // Really close to dest.
-    if(mag < 10)
+    if(mag < 5)
     {
         if(p->mHitsObject)
         {
@@ -34,25 +35,13 @@ bool fireParticleCb(Particle* p, ParticleSystem* system)
         if(p->mHitsObject)
         {
             system->initHitParticle(p->mEndPosition);
-
             if(p->mHitCallback)
                 p->mHitCallback(p->mHitVehicle, p->mHitCallbackArg);
         }
         return false;
     }
-    p->mAlpha-=0.02f;
-/**
-    if(p->mAlpha<=0)
-    {
-        if(p->mHitsObject) 
-        {
-            system->initHitParticle(p->mEndPosition);
-            if(p->mHitCallback)
-                p->mHitCallback(p->mHitVehicle, p->mHitCallbackArg);
-        }
-       return false;
-    }
-    **/
+    
+    p->mAlpha-=0.03f;
 
     p->mOldMag = mag;
     return true;
@@ -63,8 +52,8 @@ bool ballParticleCb(Particle* p, ParticleSystem* system)
     p->mImage.mCenter.x += p->mVelocity.x;
     p->mImage.mCenter.y += p->mVelocity.y;
 
-    float distance = magnitude(p->mImage.mCenter - p->mStartPosition)/magnitude(p->mEndPosition - p->mStartPosition);
-    p->mImage.mSize = -(distance*distance) + 2.0;
+//    float distance = magnitude(p->mImage.mCenter - p->mStartPosition)/magnitude(p->mEndPosition - p->mStartPosition);
+//    p->mImage.mSize = -(distance*distance) + 2.0;
 
     p->mImage.makeDirty();
 
@@ -154,9 +143,10 @@ bool explosionParticleCb(Particle* p, ParticleSystem* system)
     return true;
 }
 
-
 ParticleSystem::ParticleSystem(uint32_t numParticles)
 {
+    mMonitor = new PerformanceMonitor("Used Particles", 30);
+
     for(uint32_t i=0; i<numParticles; i++)
     {
         Particle* p = new Particle;
@@ -193,6 +183,8 @@ void ParticleSystem::removeVehicleTarget(Vehicle* vehicle)
 
 void ParticleSystem::update()
 {
+    mMonitor->addSample(mUsed.size());
+
     typedef vector<int> IntVector;
     IntVector removeParticles;
     
@@ -243,7 +235,7 @@ void ParticleSystem::draw()
         Particle* p = (*i);
         if(p->mRadius == 0) continue;
         
-        uint32_t num = 8;
+        uint32_t const num = 8;
         Vector2 points[num];
         for(uint32_t j=0; j < num; ++j)
             points[j] = p->mImage.mCenter + Vector2(p->mRadius, 0) * Transform2::createRotation(3.1415/4*j);
@@ -284,9 +276,9 @@ void ParticleSystem::initFireParticle(InitFireParticleArgs const& args)
     p->mHitVehicle = NULL;
     
     // Setup image.
-    p->mImage.setImage(gImageLibrary->reference("data/particles/flame.png"));
+    p->mImage.setImage(gImageLibrary->reference("data/particles/flame01.png"));
     p->mImage.mCenter = args.initialPosition;
-    p->mImage.mRotation = args.initialRotation;
+    p->mImage.mRotation = args.initialRotation + (rand()%10);
     p->mImage.makeDirty();
     
     // Setup velocity. InitialVelocity from vehicle plus particle speed rotated for direction.
@@ -340,7 +332,7 @@ void ParticleSystem::initSmokeParticle(Vector2 const& initialPosition, float ini
     mUsed.push_back(p);
         
     // Properties about smoke particles.
-    float velocity = 2.0f;
+    float velocity = 5.0f;
 
     // Set basic particle properties.
     p->mCallback = smokeParticleCb;

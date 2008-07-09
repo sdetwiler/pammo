@@ -6,6 +6,8 @@
 #include "imageEntity.h"
 #include "vehicle.h"
 
+#include "performanceMonitor.h"
+
 namespace pammo
 {
 
@@ -67,7 +69,7 @@ public:
     void initSmokeParticle(Vector2 const& initialPosition, float initialRotation, Vector2 const& initialVelocity);
     void initHitParticle(Vector2 const& initialPosition);
     void initExplosionParticle(Vector2 const& initialPosition);
-    
+
     struct InitBallParticleArgs
     {
         Vehicle const*  emitter;
@@ -85,6 +87,8 @@ private:
     typedef vector< Particle* > ParticleVector;
     ParticleVector mAvailable;
     ParticleVector mUsed;
+
+    PerformanceMonitor* mMonitor;
 };
 
 

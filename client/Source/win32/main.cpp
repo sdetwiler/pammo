@@ -69,15 +69,28 @@ public:
                 break;
 
             case SDL_MOUSEBUTTONDOWN:
-                mDown[0] = true;
-                touch[0].mPhase = Touch::PhaseBegin;
-                touch[0].mLocation.x = event.button.x;
-                touch[0].mLocation.y = event.button.y;
-                if(mDown[1])
+                if(event.button.button == SDL_BUTTON_LEFT)
                 {
+                    mDown[0] = true;
+                    touch[0].mPhase = Touch::PhaseBegin;
+                    touch[0].mLocation.x = event.button.x;
+                    touch[0].mLocation.y = event.button.y;
+                    if(mDown[1])
+                    {
+                        touch[1].mPhase = Touch::PhaseBegin;
+                        touch[1].mLocation.x = event.button.x;
+                        touch[1].mLocation.y = event.button.y;
+                    }
+                }
+                else if(SDL_BUTTON_RIGHT)
+                {
+                    touch[0].mPhase = Touch::PhaseBegin;
+                    touch[0].mLocation = touch[0].mLocation;
+                    mDown[0] = true;
+                    
                     touch[1].mPhase = Touch::PhaseBegin;
-                    touch[1].mLocation.x = event.button.x;
-                    touch[1].mLocation.y = event.button.y;
+                    touch[1].mLocation = touch[0].mLocation;
+                    mDown[1] = true;
                 }
                 break;
 
@@ -92,6 +105,18 @@ public:
                     touch[1].mLocation.x = event.button.x;
                     touch[1].mLocation.y = event.button.y;
                 }
+
+                else if(SDL_BUTTON_RIGHT)
+                {
+                    touch[0].mPhase = Touch::PhaseEnd;
+                    touch[0].mLocation.x = event.button.x;
+                    touch[0].mLocation.y = event.button.y;
+                    
+                    touch[1].mPhase = Touch::PhaseEnd;
+                    touch[1].mLocation.x = event.button.x;
+                    touch[1].mLocation.y = event.button.y;
+                }
+
                 break;
 
             case SDL_QUIT:
@@ -132,8 +157,15 @@ public:
 
 
 
+
 int main(int argc, char *argv[]) 
 {
+    Timer timer;
+    if(initTimer(&timer) < 0)
+    {
+        return -1;
+    }
+
     char path[256];
     if(getcwd(path, sizeof(path)) == NULL)
         return -1;
@@ -166,8 +198,8 @@ int main(int argc, char *argv[])
 
     // 1 ms accuracy for timer.
     timeBeginPeriod(5);
-    DWORD start = timeGetTime();
-    DWORD now;
+    uint64_t start = getTime(&timer);
+    uint64_t now;
     uint32_t frames = 0;
     while(true)
     {
@@ -181,11 +213,14 @@ int main(int argc, char *argv[])
 
         Sleep(33);
 
-        now = timeGetTime();
+        now = getTime(&timer);
         
-        if(now - start > 5000)
+        if(now - start > 2000000)
         {
-            dprintf("%.2f fps", (float)(now-start)/(float)frames);
+            float delta = now-start;
+            float seconds = (delta)/1000000.0f;
+            dprintf("%.2f FPS", (float)frames/seconds);
+
             frames = 0;
             start = now;
         }

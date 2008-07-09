@@ -263,6 +263,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\Source\Engine\performanceMonitor.h"
+				>
+			</File>
+			<File
 				RelativePath="..\Source\Engine\player.h"
 				>
 			</File>
@@ -272,6 +276,10 @@
 			</File>
 			<File
 				RelativePath="..\Source\Engine\tileMap.h"
+				>
+			</File>
+			<File
+				RelativePath="..\Source\win32\timer_platform.h"
 				>
 			</File>
 			<File
@@ -412,6 +420,10 @@
 			</File>
 			<File
 				RelativePath="..\Source\Engine\tileMap.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\Source\win32\timer_platform.cpp"
 				>
 			</File>
 			<File

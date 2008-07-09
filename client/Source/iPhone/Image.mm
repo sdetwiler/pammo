@@ -43,8 +43,8 @@ Image* openImage(char const* path)
 	// Use OpenGL ES to generate a name for the texture.
 	glGenTextures(1, &image->mTexture);
 	glBindTexture(GL_TEXTURE_2D, image->mTexture);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR); // scale linearly when image bigger than texture
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR); // scale linearly when image smalled than texture
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST); // scale linearly when image bigger than texture
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST); // scale linearly when image smalled than texture
     //glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP); // scale linearly when image bigger than texture
     //glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP); // scale linearly when image smalled than texture
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image->mSize.x, image->mSize.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, spriteData);

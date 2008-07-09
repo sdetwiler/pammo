@@ -9,7 +9,7 @@
 #import "MainView.h"
 
 #import <QuartzCore/QuartzCore.h>
-#import <OpenGLES/EAGLDisplay.h>
+#import <OpenGLES/EAGLDrawable.h>
 
 @interface MainView()
 
@@ -37,10 +37,10 @@
 	
 	CAEAGLLayer *eaglLayer = (CAEAGLLayer *)self.layer;
 	eaglLayer.opaque = YES;
-	eaglLayer.surfaceProperties = [NSDictionary dictionaryWithObjectsAndKeys:
-								   [NSNumber numberWithBool:FALSE], EAGLViewPropertyRetainedBacking, [NSNumber numberWithUnsignedInt:GL_RGBA8_OES], EAGLViewPropertyColorFormat, nil];
-	
-	mContext = [[EAGLContext alloc] initWithAPI:EAGLRenderingAPI_GLES_1];
+	eaglLayer.drawableProperties = [NSDictionary dictionaryWithObjectsAndKeys:
+								   [NSNumber numberWithBool:FALSE], kEAGLDrawablePropertyRetainedBacking, kEAGLColorFormatRGBA8, kEAGLDrawablePropertyColorFormat, nil];
+                                   
+	mContext = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES1];
 	
 	if(!mContext || ![EAGLContext setCurrentContext:mContext] || ![self createFramebuffer])
 	{
@@ -63,7 +63,7 @@
 	
 	glBindFramebufferOES(GL_FRAMEBUFFER_OES, mFramebuffer);
 	glBindRenderbufferOES(GL_RENDERBUFFER_OES, mRenderbuffer);
-	[mContext renderbufferStorage:GL_RENDERBUFFER_OES fromView:self.layer];
+	[mContext renderbufferStorage:GL_RENDERBUFFER_OES fromDrawable:(id<EAGLDrawable>)self.layer];
 	glFramebufferRenderbufferOES(GL_FRAMEBUFFER_OES, GL_COLOR_ATTACHMENT0_OES, GL_RENDERBUFFER_OES, mRenderbuffer);
 	
 	glGetRenderbufferParameterivOES(GL_RENDERBUFFER_OES, GL_RENDERBUFFER_WIDTH_OES, &mWidth);

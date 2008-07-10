@@ -1,11 +1,13 @@
 import osfix
 from struct import *
+import POI
 
-# Map File Format
+# Visuals File Format
+# 0x50 0x49 0x56 0x01 // 'PIV' 1 (Paradise Irradiated Visuals 1)
 # uint16_t numMaterials
 #    char* materialName\0
-# uint16_t sizeX
-# uint16_t sizeY
+# uint16_t tilesX
+# uint16_t tilesY
 #    uint16_t tiles
 # uint16_t numProps
 #    char* propName\0
@@ -14,11 +16,16 @@ from struct import *
 #    float posx, posy
 #    float size, rot
 
-# Collision File Format
-# uint16_t numShapes
+# Overlays File Format
+# 0x50 0x49 0x4F 0x01 // 'PIO' 1 (Paradise Irradiated Overlays 1)
+# uint16_t numCollisionShapes
+#   uint16_t properties
 #   uint16_t numPoints
 #     float x
 #     float y
+# uint16_t numPOIs
+#   uint16_t properties
+#   float x, y
 
 def dumpHex(str):
     for i in str:
@@ -34,17 +41,19 @@ def accumulate(store, name):
     return l
 
 def save(map):
-    saveMap(map)
-    saveCollision(map)
+    saveVisuals(map)
+    saveOverlays(map)
 
-def saveMap(map):
+def saveVisuals(map):
     properties = map.getProperties()
-
     output = ''
 
-    # Save tiles and materials.
+    # Visuals headers.
+    output += pack('4B', 0x50, 0x49, 0x56, 0x01)
+
+    # Tiles and materials.
     store = []
-    body = output + pack('!2H', properties.getSizeX(), properties.getSizeY())
+    body = pack('!2H', properties.getSizeX(), properties.getSizeY())
     for y in range(properties.getSizeY()):
         for x in range(properties.getSizeX()):
             n = accumulate(store, map.getMaterialTile(x, y))
@@ -54,33 +63,51 @@ def saveMap(map):
         header += s + pack('x')
     output += header + body
 
-    # Save entities and props
+    # Entities and props
     store = []
     body = pack('!H', len(map.getEntities()))
     for e in map.getEntities():
         name = accumulate(store, e.getProp().getName())
         pos = e.getPos()
         body += pack('!H4f', name, pos[0], pos[1], e.getScale(), e.getRot())
-
     header = pack('!H', len(store))
     for s in store:
         header += s + pack('x')
     output += header + body
-        
-    path = osfix.path("../data/bmaps/%s.bmap" % properties.getName())
+
+    # Save file.
+    path = osfix.path("../data/maps/%s.vmap" % properties.getName())
     f = open(path, "w+b")
     f.write(output)
 
-def saveCollision(map):
+def saveOverlays(map):
     output = ''
 
+    # Overlays headers.
+    output += pack('4B', 0x50, 0x49, 0x4F, 0x01)
+
+    # Collions shapes.
     groups = map.getCollisionGroups()
     output += pack('!H', len(groups))
     for group in groups:
+        output += pack('!H', 0)
         output += pack('!H', len(group))
         for x, y in group:
             output += pack('!2f', x, y)
+
+    # Spawn points.
+    count = 0
+    poisOutput = ''
+    for poi in map.getPOIs():
+        if poi.getType() == POI.DisabledTypeName: continue
+        count += 1
+        pos = poi.getPos()
+        poisOutput += pack('!H', 0)
+        poisOutput += pack('!2f', pos[0], pos[1])
+    output += pack('!H', count)
+    output += poisOutput
     
-    path = osfix.path("../data/collision/%s.col" % map.getProperties().getName())
+    # Save file.
+    path = osfix.path("../data/maps/%s.omap" % map.getProperties().getName())
     f = open(path, "w+b")
     f.write(output)

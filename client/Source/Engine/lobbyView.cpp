@@ -26,10 +26,10 @@ LobbyView::LobbyView()
     
     // Open bmap directory.
     DIR* dir;
-    dir = opendir("data/bmaps/");
+    dir = opendir("data/maps/");
     if(!dir)
     {
-        dprintf("Failed to open data/bmaps/");
+        dprintf("Failed to open data/maps/");
         assert(0);
     }
     
@@ -40,7 +40,7 @@ LobbyView::LobbyView()
     while((item = readdir(dir)) != NULL)
     {
         int len = strlen(item->d_name);
-        if(strcmp(&(item->d_name[len-5]), ".bmap")) continue;
+        if(strcmp(&(item->d_name[len-5]), ".vmap")) continue;
         
         Room* room = new Room;
         room->mMapName = string(item->d_name).substr(0, len-5);

@@ -1,5 +1,6 @@
 import MapProperties
 import Entity
+import POI
 
 class Map:
     def __init__(self):
@@ -10,6 +11,7 @@ class Map:
         self.observers = []
         self.entities = []
         self.collisionGroups = []
+        self.pois = []
 
     def addObserver(self, observer):
         self.observers.append(observer)
@@ -28,8 +30,12 @@ class Map:
         self.isDirty = True
         self._notify()
 
+    def onPOIChanged(self, poi):
+        self.isDirty = True
+        self._notify()
+
     def saveToFile(self, f):
-        output = {"version":3, "sizeX": self.properties.getSizeX(), "sizeY": self.properties.getSizeY()}
+        output = {"version":4, "sizeX": self.properties.getSizeX(), "sizeY": self.properties.getSizeY()}
         output["materialTiles"] = self.materialTiles
         
         entities = []
@@ -38,6 +44,11 @@ class Map:
         output['entities'] = entities
 
         output['collisionGroups'] = self.collisionGroups
+
+        pois = []
+        for s in self.pois:
+            pois.append(s.saveToDic())
+        output['pois'] = pois
 
         f.write(str(output))
 
@@ -50,7 +61,7 @@ class Map:
         
         dic = eval(f.readline())
         
-        if dic['version'] != 3: raise ''
+        if dic['version'] < 3: raise ''
         self.resizeMaterialTiles(dic['sizeX'] - self.properties.getSizeX(), dic['sizeY'] - self.properties.getSizeY())
         self.properties.setSize(dic['sizeX'], dic['sizeY'])
 
@@ -65,6 +76,14 @@ class Map:
         # Load collision groups if they exist.
         if 'collisionGroups' in dic:
             self.collisionGroups = dic['collisionGroups']
+
+        # Load pois if they exist.
+        if 'pois' in dic:
+            for s in dic['pois']:
+                p = POI.POI()
+                p.loadFromDic(s)
+                p.addObserver(self.onPOIChanged)
+                self.pois.append(p)
 
         self.isDirty = False
         self.hasSavedOnce = True
@@ -133,3 +152,18 @@ class Map:
         self.collisionGroups = collisionGroups
         self.isDirty = True
         self._notify()
+
+    def addPOI(self, poi):
+        self.pois.append(poi)
+        poi.addObserver(self.onPOIChanged)
+        self.isDirty = True
+        self._notify()
+
+    def removePOI(self, poi):
+        poi.removeObserver(self.onPOIChanged)
+        self.pois.remove(poi)
+        self.isDirty = True
+        self._notify()
+
+    def getPOIs(self):
+        return self.pois

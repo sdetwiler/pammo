@@ -57,7 +57,7 @@ char* readString(char** cur, size_t* remain)
 	
 void buildTileMap(World* world, char const* name)
 {
-    string fullName = string("data/bmaps/") + name + ".bmap";
+    string fullName = string("data/maps/") + name + ".vmap";
 	FILE* f = fopen(fullName.c_str(), "rb");
 	if(!f)
 	{
@@ -76,6 +76,11 @@ void buildTileMap(World* world, char const* name)
     
     // Get a pointer to the tileMap to fill in as we go... in that style.
     TileMap* tileMap = world->getTileMap();
+    
+    // Verify the map header.
+    assert(cur[0] == 'P' && cur[1] == 'I' && cur[2] == 'V' && cur[3] == 1);
+    cur += 4;
+    remain -= 4;
     
 	// Read num materials.
 	uint16_t numMaterials = readUInt16(&cur, &remain);
@@ -151,7 +156,7 @@ void buildTileMap(World* world, char const* name)
 
 void buildCollisionMap(World* world, char const* mapName)
 {
-    string fullName = string("data/collision/") + mapName + ".col";
+    string fullName = string("data/maps/") + mapName + ".omap";
 	FILE* f = fopen(fullName.c_str(), "rb");
 	if(!f)
 	{
@@ -171,6 +176,11 @@ void buildCollisionMap(World* world, char const* mapName)
     // Get a pointer to the collision map.
     CollisionMap* collisionMap = world->getCollisionMap();
     
+    // Verify the map header.
+    assert(cur[0] == 'P' && cur[1] == 'I' && cur[2] == 'O' && cur[3] == 1);
+    cur += 4;
+    remain -= 4;
+    
     // Read num shapes.
     uint16_t numShapes = readUInt16(&cur, &remain);
     dprintf("Collision Shapes: %d", numShapes);
@@ -178,6 +188,7 @@ void buildCollisionMap(World* world, char const* mapName)
     // Read each shape.
     for(uint32_t shape=0; shape < numShapes; ++shape)
     {
+        uint16_t properties = readUInt16(&cur, &remain);
         uint16_t numPoints = readUInt16(&cur, &remain);
         dprintf(" Points: %d", numPoints);
         Vector2* points = new Vector2[numPoints];
@@ -214,6 +225,27 @@ void buildCollisionMap(World* world, char const* mapName)
         collisionMap->addShape(numPoints, points, normals);
         delete[] points;
         delete[] normals;
+    }
+    
+    // Read num POIs.
+    uint16_t numPOIs = readUInt16(&cur, &remain);
+    dprintf("POIs: %d", numPOIs);
+    
+    // Read each poi.
+    for(uint32_t poi=0; poi<numPOIs; ++poi)
+    {
+        uint16_t properties = readUInt16(&cur, &remain);
+        float x = readFloat(&cur, &remain);
+        float y = readFloat(&cur, &remain);
+        dprintf("Spawn Point: %f, %f", x, y);
+        
+        world->addSpawnPoint(Vector2(x, y));
+    }
+    
+    // Add a default POI if non are defined in the file.
+    if(numPOIs == 0)
+    {
+        world->addSpawnPoint(Vector2(0, 0));
     }
     
     // Free the buffer;

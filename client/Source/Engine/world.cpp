@@ -246,6 +246,16 @@ bool World::touch(uint32_t count, Touch* touches)
     return mPlayer->touch(count, touches);
 }
 
+void World::addSpawnPoint(Vector2 spawnPoint)
+{
+    mSpawnPoints.push_back(spawnPoint);
+}
+
+Vector2 World::getRandomSpawnPoint()
+{
+    return mSpawnPoints[rand() % mSpawnPoints.size()];
+}
+
 void World::gotoLobby()
 {
     // Create lobby.

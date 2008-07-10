@@ -15,6 +15,16 @@
 namespace pammo
 {
 
+int initTimer(Timer* timer)
+{
+    return 0;
+}
+
+uint64_t getTime(Timer* timer)
+{
+    return 0;
+}
+
 Vector2 getFrameSize()
 {
     return Vector2(320, 480);

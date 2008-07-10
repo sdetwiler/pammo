@@ -60,6 +60,9 @@ class World : public View
         CollisionMap* getCollisionMap();
         CollisionDynamics* getCollisionDynamics();
         Camera* getCamera();
+        
+        void addSpawnPoint(Vector2 spawnPoint);
+        Vector2 getRandomSpawnPoint();
 
     protected:
     private:
@@ -71,6 +74,8 @@ class World : public View
 		EntityVector mEntities;
         EntityVector mVehicles;
         Touch::Phase mLastPhase;
+        
+        vector< Vector2 > mSpawnPoints;
         
         ImageEntity* mBackButton;
         HealthMeter* mHealthMeter;

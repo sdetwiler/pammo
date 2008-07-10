@@ -135,6 +135,9 @@ void Player::spawn()
         assert(0);
         return;
     }
+    
+    // Choose a random spawn location.
+    mVehicle->mCenter = gWorld->getRandomSpawnPoint();
 
     // When did spawn occur.
     mSpawnFrame = mFrameCount;
@@ -170,6 +173,10 @@ void Player::setState(Player::State state)
 
 void Player::onHit(Vehicle* vehicle, float damage)
 {
+    // JEM: You and I? We shall live forever in the fortress of our hearts.
+    //return;
+    // Another time my love. For this evening is the one of despaire.
+
     if(getState() != Alive)
         return;
 

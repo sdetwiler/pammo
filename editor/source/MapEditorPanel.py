@@ -107,7 +107,7 @@ class MapEditorPanel(wx.Panel):
         res = dialog.ShowModal()
         if res != wx.ID_OK: return
 
-        path = dialog.GetPath()
+        path = osfix.path(dialog.GetPath())
         (newBase, name) = os.path.split(path)
 
         if newBase != base or name[-4:] != '.map':
@@ -145,6 +145,8 @@ class MapEditorPanel(wx.Panel):
         editor = self.mapNotebook.GetPage(index)
         if not self.askDeleteMap(editor.getMap()): return
         os.remove(osfix.path('../data/maps/%s.map' % editor.getMap().getProperties().getName()))
+        os.remove(osfix.path('../data/maps/%s.vmap' % editor.getMap().getProperties().getName()))
+        os.remove(osfix.path('../data/maps/%s.omap' % editor.getMap().getProperties().getName()))
         self.mapNotebook.RemovePage(index)
         self.onMapNotebookPageChanged(None)
         editor.Destroy()

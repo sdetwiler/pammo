@@ -5,4 +5,6 @@
 
 #include <dirent.h>
 
+#include <stdint.h>
+
 #endif // __TYPES_PLATFORM_H__

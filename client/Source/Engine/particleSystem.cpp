@@ -286,6 +286,7 @@ void ParticleSystem::initFireParticle(InitFireParticleArgs const& args)
     float r = 1.0/f - ((rand()%100)/(f*50)) ;
     
     // Setup image.
+    //p->mImage.setImage(gImageLibrary->reference("data/particles/flame2-01.png"));
     p->mImage.setImage(gImageLibrary->reference("data/particles/flame01.png"));
     p->mImage.mCenter = args.initialPosition;
     p->mImage.mRotation = args.initialRotation + r;

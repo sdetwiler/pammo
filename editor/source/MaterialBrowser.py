@@ -6,7 +6,7 @@ border = 8
 
 class MaterialBrowser(wx.VListBox):
     def __init__(self, parent, id):
-        wx.VListBox.__init__(self, parent, id, size=(MaterialLibrary.getMaterialSize()+border*2 + 14, 100), style=wx.BORDER_SUNKEN)
+        wx.VListBox.__init__(self, parent, id, size=(MaterialLibrary.getMaterialSize()+border*2 + 24, 100), style=wx.BORDER_SUNKEN)
         self.Bind(wx.EVT_LISTBOX, self.OnSelected, self)
 
         self.observers = []

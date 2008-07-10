@@ -191,6 +191,8 @@ bool Player::touch(uint32_t count, Touch* touches)
 {
     if(mPathManager->touch(count, touches) == true)
         return true;
+    if(gWorld->isZoomedOut() == true)
+        return false;
 
     if(mVehicle)
         return mVehicle->touch(count, touches);

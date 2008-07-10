@@ -78,6 +78,7 @@ public:
         Vector2         initialVelocity;
         ParticleHitCb   hitCallback;
         void*           hitCallbackArg;
+        float           maxDistance;
     };
     void initBallParticle(InitBallParticleArgs const& args); 
 

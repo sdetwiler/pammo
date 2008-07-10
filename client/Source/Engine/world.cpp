@@ -181,7 +181,7 @@ void World::zoomOut()
     if(mZoomedOut)
         return;
 
-    mTargetCameraSize = mCamera->mSize*4.0;
+    mTargetCameraSize = Vector2(320,480)*4.0;
     mZoomedOut = true;
 }
 
@@ -190,7 +190,7 @@ void World::zoomIn()
     if(!mZoomedOut)
         return;
 
-    mTargetCameraSize = mCamera->mSize/4.0;
+    mTargetCameraSize = Vector2(320,480);//mCamera->mSize/4.0;
     mZoomedOut = false;
 }
 

@@ -12,7 +12,8 @@ bool fireParticleCb(Particle* p, ParticleSystem* system)
 {
     p->mImage.mCenter.x += p->mVelocity.x;
     p->mImage.mCenter.y += p->mVelocity.y;
-    p->mImage.mRotation += 0.05f;
+    p->mImage.mRotation += 0.08f;
+    p->mImage.mSize *= 1.05;
     p->mImage.makeDirty();
 
     float mag = magnitude(p->mImage.mCenter - p->mEndPosition);
@@ -41,7 +42,7 @@ bool fireParticleCb(Particle* p, ParticleSystem* system)
         return false;
     }
     
-    p->mAlpha-=0.03f;
+    p->mAlpha-=0.05f;
 
     p->mOldMag = mag;
     return true;
@@ -52,9 +53,14 @@ bool ballParticleCb(Particle* p, ParticleSystem* system)
     p->mImage.mCenter.x += p->mVelocity.x;
     p->mImage.mCenter.y += p->mVelocity.y;
 
-//    float distance = magnitude(p->mImage.mCenter - p->mStartPosition)/magnitude(p->mEndPosition - p->mStartPosition);
-//    p->mImage.mSize = -(distance*distance) + 2.0;
+    float distance = magnitude(p->mImage.mCenter - p->mStartPosition)/magnitude(p->mEndPosition - p->mStartPosition);
+    //dprintf("Distance: %.2f", distance);
 
+    float x = (distance-0.5)*1.5;
+    float y = (-(x*x))+1;
+    //dprintf("Scale: %.2f", y);
+    p->mImage.mSize = 16 * y;
+    
     p->mImage.makeDirty();
 
     float mag = magnitude(p->mImage.mCenter - p->mEndPosition);
@@ -116,6 +122,7 @@ bool smokeParticleCb(Particle* p, ParticleSystem* system)
     p->mImage.mCenter.x += p->mVelocity.x;
     p->mImage.mCenter.y += p->mVelocity.y;
     p->mImage.makeDirty();
+    p->mImage.mSize *= 1.03;
     p->mAlpha-=0.05f;
     if(p->mAlpha<=0)
         return false;
@@ -274,18 +281,22 @@ void ParticleSystem::initFireParticle(InitFireParticleArgs const& args)
     p->mHitCallback = args.hitCallback;
     p->mHitCallbackArg = args.hitCallbackArg;
     p->mHitVehicle = NULL;
+
+    float f = 8.0;
+    float r = 1.0/f - ((rand()%100)/(f*50)) ;
     
     // Setup image.
     p->mImage.setImage(gImageLibrary->reference("data/particles/flame01.png"));
     p->mImage.mCenter = args.initialPosition;
-    p->mImage.mRotation = args.initialRotation + (rand()%10);
+    p->mImage.mRotation = args.initialRotation + r;
     p->mImage.makeDirty();
     
+
     // Setup velocity. InitialVelocity from vehicle plus particle speed rotated for direction.
-    p->mVelocity = args.initialVelocity + Vector2(velocity, 0) * Transform2::createRotation(args.initialRotation);
+    p->mVelocity = args.initialVelocity + Vector2(velocity, 0) * Transform2::createRotation(args.initialRotation+r);
     
     // Calculate unblocked end position. Start position plus maxDistance rotated for direction.
-    p->mEndPosition = args.initialPosition + Vector2(maxDistance, 0) * Transform2::createRotation(args.initialRotation);
+    p->mEndPosition = args.initialPosition + Vector2(maxDistance, 0) * Transform2::createRotation(args.initialRotation+r);
 
     //dprintf("World\n  start: [%.2f, %.2f]\n  end:  [%.2f, %.2f]", initialPosition.x, initialPosition.y, p->mEndPosition.x, p->mEndPosition.y);
     
@@ -407,7 +418,7 @@ void ParticleSystem::initBallParticle(InitBallParticleArgs const& args)
         
     // Properties about ball particles.
     float velocity = 10.0f;
-    float maxDistance = 150.0f;
+   // float maxDistance = 150.0f;
     float particleRadius = 8.0f;
 
     // Set basic particle properties.
@@ -432,7 +443,7 @@ void ParticleSystem::initBallParticle(InitBallParticleArgs const& args)
     p->mVelocity = args.initialVelocity + Vector2(velocity, 0) * Transform2::createRotation(args.initialRotation);
     
     // Calculate unblocked end position. Start position plus maxDistance rotated for direction.
-    p->mEndPosition = args.initialPosition + Vector2(maxDistance, 0) * Transform2::createRotation(args.initialRotation);
+    p->mEndPosition = args.initialPosition + Vector2(args.maxDistance, 0) * Transform2::createRotation(args.initialRotation);
 
     //dprintf("World\n  start: [%.2f, %.2f]\n  end:  [%.2f, %.2f]", initialPosition.x, initialPosition.y, p->mEndPosition.x, p->mEndPosition.y);
     

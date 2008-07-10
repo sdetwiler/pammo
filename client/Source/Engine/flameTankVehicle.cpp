@@ -125,7 +125,7 @@ void FlameTankVehicle::update()
     float rot = mFireAngle + ((rand()%3)/90.0f);
 
     Transform2 trans;
-    Vector2 center = mCenter + (Vector2(0, -8) * Transform2::createRotation(mRotation)) + Vector2((rand()%6)-3, (rand()%6)-3); // Center of turret.
+    Vector2 center = mCenter + (Vector2(0, -8) * Transform2::createRotation(mRotation));// + Vector2((rand()%6)-3, (rand()%6)-3); // Center of turret.
     trans*= Transform2::createTranslation(center);         // Go to center of vehicle.
     trans*= Transform2::createRotation(rot);        // Rotate in firing direction.
     trans*= Transform2::createTranslation(Vector2(0, -24)); // Translate to center of turret image.

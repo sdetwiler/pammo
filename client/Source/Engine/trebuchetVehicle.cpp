@@ -175,6 +175,7 @@ void TrebuchetVehicle::fire()
     args.initialPosition = center;
     args.initialRotation = rot;
     args.initialVelocity = baseVelocity;
+    args.maxDistance = this->getFireMagnitude();
 
     gWorld->getParticleSystem()->initBallParticle(args);
 

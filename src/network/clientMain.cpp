@@ -1,8 +1,8 @@
+#include "types.h"
 #include "gameClient.h"
 
 #include <stdio.h>
 #include <signal.h>
-#include <unistd.h>
 
 bool gRunning;
 
@@ -14,6 +14,15 @@ void signalHandler(int signal)
 
 int main(int argc, char** argv)
 {
+#ifdef WIN32
+    WSADATA wsaData;
+    int ret = WSAStartup(MAKEWORD(2,2), &wsaData);
+    if(ret!= NO_ERROR)
+    {
+        printf("Failed to initialize networking.\n");
+        return 1;
+    }
+#endif
     gRunning = true;
     
     signal(SIGINT, signalHandler);
@@ -43,7 +52,7 @@ int main(int argc, char** argv)
     
     while(client.isConnected() && gRunning)
     {
-        sleep(1);
+        usleep(1000000);
         printf(".");
         fflush(stdout);
     }

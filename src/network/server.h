@@ -1,10 +1,7 @@
 #ifndef SERVER_H
 #define SERVER_H
 
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
+#include "types_platform.h"
 #include <pthread.h>
 #include <map>
 
@@ -46,8 +43,14 @@ class Server :
     protected:
     private:
 
-        int addSocket(int s, int events);
-        int removeSocket(int s);
+        enum SocketEvent
+        {
+            READ = 1,
+            WRITE = 2
+        };
+
+        int addSocket(SOCKET s, int events);
+        int removeSocket(SOCKET s);
 
         static void* threadBootFunc(void* arg);
         void threadFunc();
@@ -56,16 +59,18 @@ class Server :
 
         ServerObserver* mObserver;
         
-        int mSocket;
-        int mNotifySocket;
+        SOCKET mSocket;
+        SOCKET mNotifySocket;
         struct sockaddr_in mNotifyAddr;
         
-        
-        int mPoller;
+//        int mPoller;
+        fd_set mReadFds;
+        fd_set mWriteFds;
+        SOCKET mHighFd;        
 
         //        pthread_mutex_t mLock;
-        typedef std::map< int, Connection* > IntConnectionMap;
-        IntConnectionMap mConnections;
+        typedef std::map< SOCKET, Connection* > SocketConnectionMap;
+        SocketConnectionMap mConnections;
         
         pthread_t mThread;
         bool mRunning;

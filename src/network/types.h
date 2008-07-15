@@ -1,7 +1,7 @@
 #ifndef TYPES_H
 #define TYPES_H
 
-#include <stdint.h>
+#include <types_platform.h>
 
 #define PAMMO_OK                        0
 #define PAMMO_ERROR_UNKNOWNMAP         -1

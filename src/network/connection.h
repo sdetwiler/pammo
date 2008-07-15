@@ -1,11 +1,7 @@
 #ifndef CONNECTION_H
 #define CONNECTION_H
 
-#include <stdint.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
+#include "types.h"
 
 class Connection;
 class Server;
@@ -64,8 +60,8 @@ class Connection
         // Tell connection to notify it's owner.
         void notifyOwner();
         
-        void setSocket(int socket);
-        int getSocket();
+        void setSocket(SOCKET socket);
+        SOCKET const& getSocket();
 
         void setAddress(struct sockaddr_in const* addr);
         struct sockaddr_in const* getAddress();
@@ -78,7 +74,7 @@ class Connection
         ConnectionObserver* mObserver;
         
         struct sockaddr_in mAddress;
-        int mSocket;
+        SOCKET mSocket;
 
         bool mReadable;
         bool mWritable;

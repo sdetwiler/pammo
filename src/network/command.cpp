@@ -1,8 +1,6 @@
 #include "types.h"
 #include "command.h"
 #include <stdlib.h>
-#include <arpa/inet.h>
-
 #include <stdio.h>
 
 ///////////////////////////////////////////////////////////////////////////////

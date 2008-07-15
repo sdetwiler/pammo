@@ -1,14 +1,8 @@
-#include <stdint.h>
+#include "types.h"
 #include <stdio.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <sys/epoll.h>
 #include <pthread.h>
 #include <fcntl.h>
 #include <errno.h>
-#include <unistd.h>
 
 #include "client.h"
 
@@ -17,7 +11,9 @@ Client::Client()
     mObserver = 0;
     mSocket = 0;
     mNotifySocket = 0;
-    mThread = 0;
+    mHighFd = 0;
+    mThreadInitialized = false;
+    
     mRunning = false;
     mConnection = NULL;
 }
@@ -34,14 +30,6 @@ int Client::connect(char const* address, short port)
 {
     int ret;
 
-    // Create epoll.
-    mPoller = epoll_create(16);
-    if(mPoller < 0)
-    {
-        disconnect();
-        return ret;
-    }
-    
     // socket
     mSocket = socket(PF_INET, SOCK_STREAM, 0);
 
@@ -72,7 +60,7 @@ int Client::connect(char const* address, short port)
     }
 
     // Get notify socket address.
-    uint32_t addrLen = sizeof(mNotifyAddr);
+    int32_t addrLen = sizeof(mNotifyAddr);
     ret = getsockname(mNotifySocket, (struct sockaddr*)&mNotifyAddr, &addrLen);
     if(ret < 0)
     {
@@ -81,7 +69,7 @@ int Client::connect(char const* address, short port)
     }
 
     // Add socket to poller.
-    ret = addSocket(mSocket, EPOLLIN|EPOLLOUT);
+    ret = addSocket(mSocket, READ|WRITE);
     if(ret < 0)
     {
         disconnect();
@@ -89,7 +77,7 @@ int Client::connect(char const* address, short port)
     }
 
     // Add notify socket to poller.
-    ret = addSocket(mNotifySocket, EPOLLIN);
+    ret = addSocket(mNotifySocket, READ);
     if(ret < 0)
     {
         disconnect();
@@ -114,6 +102,7 @@ int Client::connect(char const* address, short port)
         disconnect();
         return ret;
     }
+    mThreadInitialized = true;
 
     pthread_attr_destroy(&attr);
     if(ret < 0)
@@ -134,23 +123,19 @@ int Client::disconnect()
 
         notify();
 
-        if(mThread)
+        if(mThreadInitialized)
             pthread_join(mThread, NULL);
-        mThread = 0;
+        mThreadInitialized = false;
     }
     
     if(mSocket)
-        close(mSocket);
+        closesocket(mSocket);  // stupid win32
 
     if(mNotifySocket)
-        close(mNotifySocket);
-
-    if(mPoller)
-        close(mPoller);
+        closesocket(mNotifySocket);
 
     mSocket = 0;
     mNotifySocket = 0;
-    mPoller = 0;
 
     if(mObserver)
         mObserver->onClientDisconnected(this, mConnection);
@@ -168,49 +153,47 @@ ClientObserver* Client::getObserver()
     return mObserver;
 }
 
-int Client::addSocket(int s, int events)
+int Client::addSocket(SOCKET const& s, int events)
 {
+    if(s > mHighFd)
+        mHighFd = s;
+
     int ret;
+    if(events & READ)
+        FD_SET(s, &mReadFds); 
+    if(events & WRITE)
+        FD_SET(s, &mWriteFds);
 
     // Make non-blocking.
+
+#ifdef WIN32
+    ret = ioctlsocket(s, FIONBIO, 0);
+#else
     int flags;
     flags = fcntl(s, F_GETFL, 0);
     if(flags < 0)
     {
         return ret;
     }
-            
     ret = fcntl(s, F_SETFL, flags | O_NONBLOCK);
     if(ret < 0)
     {
         return ret;
     }
-    
-    struct epoll_event event;
-    memset(&event, 0, sizeof(event));
-    
-    event.events = events|EPOLLET;
-    event.data.fd = s;
-    
-    ret = epoll_ctl(mPoller, EPOLL_CTL_ADD, s, &event);
-    if(ret < 0)
-    {
-        return ret;
-    }
+#endif
 
     return 0;
 }
 
-int Client::removeSocket(int s)
+int Client::removeSocket(SOCKET const& s)
 {
-    int ret;
-    
-    ret = epoll_ctl(mPoller, EPOLL_CTL_DEL, s, NULL);
-    if(ret < 0)
-    {
-        return ret;
-    }
+    FD_CLR(s, &mReadFds);
+    FD_CLR(s, &mWriteFds);
 
+    if(s == mHighFd)
+    {
+        // TODO: Find new high fd.
+    }
     return 0;
 }
 
@@ -218,7 +201,7 @@ void Client::notify()
 {
     int ret;
     int foo = 0;
-    ret = sendto(mNotifySocket, &foo, sizeof(foo), 0, (struct sockaddr*)&mNotifyAddr, sizeof(mNotifyAddr));
+    ret = sendto(mNotifySocket, (char const*)&foo, sizeof(foo), 0, (struct sockaddr*)&mNotifyAddr, sizeof(mNotifyAddr));
 }
 
 void* Client::threadBootFunc(void* arg)
@@ -231,14 +214,46 @@ void Client::threadFunc()
 {
     printf("Client::threadFunc\n");
 
-    int ret;
-    
     mConnection = new Connection(this);
     mConnection->setSocket(mSocket);
     
     if(mObserver)
         mObserver->onClientConnected(this, mConnection);
-    
+
+    while(1)
+    {
+        fd_set readFds = mReadFds;
+        fd_set writeFds = mWriteFds;
+        fd_set errorFds;
+        FD_ZERO(&errorFds);
+
+        // Cast to in for win32 compatibility.
+        int count = select((int)mHighFd, &readFds, &writeFds, &errorFds, NULL);
+        for(int i=0; i<count; ++i)
+        {
+            if(FD_ISSET(i, &readFds))
+            {
+                if(i == mNotifySocket)
+                {
+                    int foo;
+                    recv(i, (char*)&foo, sizeof(foo), 0);
+
+                    // Check if should shut down.
+                    if(!mRunning)
+                    {
+                        return;
+                    }
+                }
+
+                mConnection->onReadable();
+            }
+            if(FD_ISSET(i, &writeFds))
+            {
+                mConnection->onWritable();
+            }
+        }
+    }
+    /*****    
     // SCD should use a sane size.
     uint32_t numEvents = 16;
     struct epoll_event* events = new struct epoll_event[16];
@@ -301,6 +316,7 @@ void Client::threadFunc()
     }
     
     delete[] events;
+    ****/
 }
 
 
@@ -313,6 +329,7 @@ void Client::closeConnection(Connection* connection)
         mObserver->onClientDisconnected(this, mConnection);
     }
 
+    removeSocket(mSocket);
     mSocket = 0;
     delete mConnection;
     mConnection = 0;

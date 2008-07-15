@@ -1,14 +1,7 @@
-#include <stdint.h>
+#include "types_platform.h"
+
 #include <stdio.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <sys/epoll.h>
 #include <pthread.h>
-#include <fcntl.h>
-#include <errno.h>
-#include <unistd.h>
 
 #include "server.h"
 
@@ -17,8 +10,10 @@ Server::Server()
     mObserver = 0;
     mSocket = 0;
     mNotifySocket = 0;
-    mPoller = 0;
     mRunning = false;
+
+    FD_ZERO(&mReadFds);
+    FD_ZERO(&mWriteFds);
 
     //    pthread_mutex_init(&mLock, NULL);
 }
@@ -44,14 +39,6 @@ ServerObserver* Server::getObserver()
 int Server::start(char const* address, short port)
 {
     int ret;
-
-    // Create epoll.
-    mPoller = epoll_create(16);
-    if(mPoller < 0)
-    {
-        stop();
-        return ret;
-    }
     
     // socket
     mSocket = socket(PF_INET, SOCK_STREAM, 0);
@@ -83,7 +70,7 @@ int Server::start(char const* address, short port)
     }
 
     // Get notify socket address.
-    uint32_t addrLen = sizeof(mNotifyAddr);
+    int addrLen = sizeof(mNotifyAddr);
     ret = getsockname(mNotifySocket, (struct sockaddr*)&mNotifyAddr, &addrLen);
     if(ret < 0)
     {
@@ -92,7 +79,7 @@ int Server::start(char const* address, short port)
     }
 
     // Add listen socket to poller.
-    ret = addSocket(mSocket, EPOLLIN);
+    ret = addSocket(mSocket, READ);
     if(ret < 0)
     {
         stop();
@@ -100,7 +87,7 @@ int Server::start(char const* address, short port)
     }
 
     // Add notify socket to poller.
-    ret = addSocket(mNotifySocket, EPOLLIN);
+    ret = addSocket(mNotifySocket, READ);
     if(ret < 0)
     {
         stop();
@@ -152,7 +139,7 @@ int Server::stop()
     }
     
     
-    for(IntConnectionMap::iterator i=mConnections.begin();
+    for(SocketConnectionMap::iterator i=mConnections.begin();
         i!=mConnections.end();
         i=mConnections.begin()) // Because calling close removes the connection from the map, reset.
     {
@@ -165,68 +152,62 @@ int Server::stop()
     mConnections.clear();
 
     if(mSocket)
-        close(mSocket);
+        closesocket(mSocket);
 
     if(mNotifySocket)
-        close(mNotifySocket);
-
-    if(mPoller)
-        close(mPoller);
+        closesocket(mNotifySocket);
 
     mSocket = 0;
     mNotifySocket = 0;
-    mPoller = 0;
     
     return 0;
 }
 
 //////////////////////////////////////////////////
 
-int Server::addSocket(int s, int events)
+int Server::addSocket(SOCKET s, int events)
 {
+    if(s > mHighFd)
+        mHighFd = s;
+
     int ret;
+    if(events & READ)
+        FD_SET(s, &mReadFds); 
+    if(events & WRITE)
+        FD_SET(s, &mWriteFds);
 
     // Make non-blocking.
+
+#ifdef WIN32
+    ret = ioctlsocket(s, FIONBIO, 0);
+#else
     int flags;
     flags = fcntl(s, F_GETFL, 0);
     if(flags < 0)
     {
         return ret;
     }
-            
     ret = fcntl(s, F_SETFL, flags | O_NONBLOCK);
     if(ret < 0)
     {
         return ret;
     }
-    
-    struct epoll_event event;
-    memset(&event, 0, sizeof(event));
-    
-    event.events = events|EPOLLET;
-    event.data.fd = s;
-    
-    ret = epoll_ctl(mPoller, EPOLL_CTL_ADD, s, &event);
-    if(ret < 0)
-    {
-        return ret;
-    }
+#endif
 
     return 0;
 }
 
 //////////////////////////////////////////////////
 
-int Server::removeSocket(int s)
+int Server::removeSocket(SOCKET s)
 {
-    int ret;
-    
-    ret = epoll_ctl(mPoller, EPOLL_CTL_DEL, s, NULL);
-    if(ret < 0)
-    {
-        return ret;
-    }
+    FD_CLR(s, &mReadFds);
+    FD_CLR(s, &mWriteFds);
 
+    if(s == mHighFd)
+    {
+        // TODO: Find new high fd.
+    }
     return 0;
 }
 
@@ -236,7 +217,7 @@ void Server::notify()
 {
     int ret;
     int foo = 0;
-    ret = sendto(mNotifySocket, &foo, sizeof(foo), 0, (struct sockaddr*)&mNotifyAddr, sizeof(mNotifyAddr));
+    ret = sendto(mNotifySocket, (char*)&foo, sizeof(foo), 0, (struct sockaddr*)&mNotifyAddr, sizeof(mNotifyAddr));
 }
 
 //////////////////////////////////////////////////
@@ -251,6 +232,73 @@ void* Server::threadBootFunc(void* arg)
 
 void Server::threadFunc()
 {
+    int ret;
+
+    printf("Server::threadFunc\n");
+
+    // listen
+    ret = listen(mSocket, 128);
+    if(ret < 0)
+    {
+        printf("listen failed %d\n", ret);
+        return;
+    }
+
+    while(1)
+    {
+        fd_set readFds = mReadFds;
+        fd_set writeFds = mWriteFds;
+        fd_set errorFds;
+        FD_ZERO(&errorFds);
+        
+        SocketConnectionMap::iterator it;
+
+        printf("%d connections\n", mConnections.size());
+
+        // Cast to in for win32 compatibility.
+        int count = select((int)mHighFd, &readFds, &writeFds, &errorFds, NULL);
+        for(int i=0; i<count; ++i)
+        {
+            if(FD_ISSET(i+1, &readFds))
+            {
+                if(i == mNotifySocket)
+                {
+                    int foo;
+                    recv(i, (char*)&foo, sizeof(foo), 0);
+
+                    // Check if should shut down.
+                    if(!mRunning)
+                    {
+                        return;
+                    }
+                }
+                
+                else if(i == mSocket)
+                {
+                    onNewConnection();
+                }
+                else
+                {
+                    it = mConnections.find(i);
+                    if(it != mConnections.end())
+                    {
+                        it->second->onReadable();
+                    }
+                }
+            }
+
+            if(FD_ISSET(i, &writeFds))
+            {
+                it = mConnections.find(i);
+                if(it != mConnections.end())
+                {
+                    it->second->onWritable();
+                }
+            }
+        }
+    }
+
+/**
     int ret;
     
     // listen
@@ -341,6 +389,7 @@ void Server::threadFunc()
     }
     
     delete[] events;
+    ****/
 }
 
 //////////////////////////////////////////////////
@@ -354,14 +403,14 @@ int Server::onNewConnection()
     {
         Connection* conn = new Connection(this);  
         struct sockaddr_in addr;
-        socklen_t addrLen = sizeof(addr);
-        int newSock = accept(mSocket, (struct sockaddr*)&addr, &addrLen);
+        int addrLen = sizeof(addr);
+        SOCKET newSock = accept(mSocket, (struct sockaddr*)&addr, &addrLen);
         if(newSock < 0)
         {
             //   closeConnection(conn);
             delete conn;
 
-            int e = errno;
+            int e = getSocketError();
             switch(e)
             {
             case EWOULDBLOCK:
@@ -377,7 +426,7 @@ int Server::onNewConnection()
         conn->setSocket(newSock);
         conn->setAddress(&addr);
         
-        addSocket(conn->getSocket(), EPOLLIN|EPOLLOUT);
+        addSocket(conn->getSocket(), READ|WRITE);
         mConnections[conn->getSocket()] = conn;
 
         if(mObserver)

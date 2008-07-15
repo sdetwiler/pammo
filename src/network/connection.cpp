@@ -1,4 +1,4 @@
-#include <unistd.h>
+#include "types.h"
 #include <errno.h>
 #include <stdio.h>
 #include <string.h>
@@ -17,7 +17,7 @@ Connection::Connection(ConnectionOwner* owner)
 Connection::~Connection()
 {
     if(mSocket)
-        ::close(mSocket);
+        closesocket(mSocket);
 
 }
 
@@ -58,8 +58,8 @@ int Connection::read(uint8_t* buf, uint32_t bufLen, uint32_t& numRead)
     
     if(!mReadable)
         return -1;
-    
-    ssize_t read = recv(mSocket, buf, bufLen, 0);
+
+    ssize_t read = recv(mSocket, (char*)buf, bufLen, 0);
     //    printf("recv returned %d\n", read);
 
     if(read == 0)
@@ -97,7 +97,7 @@ int Connection::write(uint8_t* buf, uint32_t bufLen, uint32_t& numWritten)
     if(!mWritable)
         return -1;
     
-    ssize_t sent = send(mSocket, buf, bufLen, 0);
+    ssize_t sent = send(mSocket, (char*)buf, bufLen, 0);
     if(sent < 0)
     {
         int e = errno;
@@ -124,12 +124,12 @@ void Connection::notifyOwner()
     mOwner->notify();
 }
 
-void Connection::setSocket(int socket)
+void Connection::setSocket(SOCKET socket)
 {
     mSocket = socket;
 }
 
-int Connection::getSocket()
+SOCKET const& Connection::getSocket()
 {
     return mSocket;
 }

@@ -1,10 +1,7 @@
 #ifndef CLIENT_H
 #define CLIENT_H
+#include "types.h"
 
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
 #include <pthread.h>
 #include <map>
 
@@ -45,8 +42,13 @@ class Client :
     protected:
     private:
 
-        int addSocket(int s, int events);
-        int removeSocket(int s);
+        enum SocketEvent
+        {
+            READ = 1,
+            WRITE = 2
+        };
+        int addSocket(SOCKET const& s, int events);
+        int removeSocket(SOCKET const& s);
 
         static void* threadBootFunc(void* arg);
         void threadFunc();
@@ -55,13 +57,18 @@ class Client :
 
         Connection* mConnection;
         
-        int mSocket;
-        int mNotifySocket;
+        SOCKET mSocket;
+        SOCKET mNotifySocket;
         struct sockaddr_in mNotifyAddr;
         
-        int mPoller;
-        
+        //int mPoller;
+        fd_set mReadFds;
+        fd_set mWriteFds;
+        SOCKET mHighFd;        
+
+
         pthread_t mThread;
+        bool mThreadInitialized;
         bool mRunning;
 };
 

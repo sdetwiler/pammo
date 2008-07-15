@@ -65,6 +65,7 @@ public:
     void setState(State state);
 
     Vector2 const& getCenter() const;
+    void setCenter(Vector2 const& center);
 
 
 protected:

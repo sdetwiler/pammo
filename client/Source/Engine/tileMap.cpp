@@ -128,5 +128,20 @@ void TileMap::draw(Camera* camera)
         curYTrans[5] += mSizeMaterial;
     }
 }
-    
+
+uint16_t TileMap::getSizeX() const
+{
+    return mSizeX;
+}
+uint16_t TileMap::getSizeY() const
+{
+    return mSizeY;
+}
+
+uint16_t TileMap::getSizeMaterial() const
+{
+    return mSizeMaterial;
+}
+
+
 }

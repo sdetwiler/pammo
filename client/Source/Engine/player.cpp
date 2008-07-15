@@ -243,6 +243,11 @@ Vector2 const& Player::getCenter() const
     return mVehicle->mCenter;
 }
 
+void Player::setCenter(Vector2 const& center)
+{
+    mVehicle->mCenter = center;
+}
+
 void Player::draw()
 {
     if(mVehicle)

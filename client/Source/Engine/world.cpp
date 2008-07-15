@@ -52,7 +52,7 @@ World::World(char const* mapName, uint32_t vehicleType)
     assert(ret == 0);
 
     mNpcManager = new NpcManager;
-    ret = mNpcManager->init(1);
+    ret = mNpcManager->init(10);
     assert(ret == 0);
 
 

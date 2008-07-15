@@ -3,6 +3,7 @@
 #include "player.h"
 #include "world.h"
 #include "collisionMap.h"
+#include "tileMap.h"
 
 namespace pammo
 {
@@ -35,6 +36,7 @@ int NpcManager::init(uint32_t numPlayers)
             delete mPlayers;
             mNumPlayers = 0;
         }
+        mPlayers[i].setCenter(gWorld->getRandomSpawnPoint());
     }
 
     return 0;
@@ -56,11 +58,12 @@ void NpcManager::generatePath(Player* player)
 
     lastPos = player->getCenter();
 
-    int max = 800;
+    int maxX = gWorld->getTileMap()->getSizeX() * gWorld->getTileMap()->getSizeMaterial();
+    int maxY = gWorld->getTileMap()->getSizeY() * gWorld->getTileMap()->getSizeMaterial();
     for(uint32_t i=0; i<5; ++i)
     {
-        newPos.x =(rand()%max);//-(max/2); 
-        newPos.y =(rand()%max);//-(max/2); 
+        newPos.x =(rand()%maxX);
+        newPos.y =(rand()%maxY); 
 
         Vector2Vec newPath;
         if(gWorld->getCollisionMap()->route(lastPos, newPos, 20, newPath))

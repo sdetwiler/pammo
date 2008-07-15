@@ -32,6 +32,10 @@ public:
     
     void draw(Camera* camera);
     
+    uint16_t getSizeX() const;
+    uint16_t getSizeY() const;
+    uint16_t getSizeMaterial() const;
+
 protected:
     uint16_t mNumMaterials;
     Image** mMaterials;

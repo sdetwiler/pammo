@@ -26,6 +26,16 @@ void PathManager::init()
     gGame->registerTouchable(this);
 }
 
+uint32_t PathManager::getDrawPriority() const
+{
+    return 100;
+}
+
+uint32_t PathManager::getTouchPriority() const
+{
+    return 1;
+}
+
 void PathManager::draw()
 {
     if(mPoints.size() < 2)

@@ -42,8 +42,8 @@ class World : public View
         virtual bool touch(uint32_t count, Touch* touches);
         virtual void update();
 
-        virtual uint32_t getTouchPriority() const {return 2;}
-        virtual uint32_t getDrawPriority() const {return 2;}
+        virtual uint32_t getTouchPriority() const;
+        virtual uint32_t getDrawPriority() const;
 
         void setPath(Vector2Vec const& path);
 

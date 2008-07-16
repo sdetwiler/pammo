@@ -16,7 +16,7 @@ VehicleSelectView::VehicleSelectView(char const* mapName)
     gGame->queueInitable(this);
     
     // Load background.
-    mBackground = gImageLibrary->reference("data/interface/VehicleSelectBackground.png");
+    mBackground = gImageLibrary->reference("data/interface/vehicleSelectBackground.png");
     
     float border = 12;
     Vector2 pos(border+15, 135);
@@ -51,6 +51,16 @@ VehicleSelectView::~VehicleSelectView()
         gImageLibrary->unreference((*i)->mImage);
         delete *i;
     }
+}
+    
+uint32_t VehicleSelectView::getTouchPriority() const
+{
+    return 200;
+}
+
+uint32_t VehicleSelectView::getDrawPriority() const
+{
+    return 200;
 }
 
 void VehicleSelectView::init()

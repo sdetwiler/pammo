@@ -47,7 +47,7 @@ bool MagnitudeWidget::touch(uint32_t count, Touch* touches)
     {
         // Check if touch is on vehicle.
         // Outside of vehicle. 
-        if(hyp > 16.0)
+        if(hyp > 42.0)
             return false;
         
         mTracking = true;

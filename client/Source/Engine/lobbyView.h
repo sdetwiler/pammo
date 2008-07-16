@@ -29,8 +29,8 @@ public:
     virtual bool touch(uint32_t count, Touch* touches);
     virtual void update();
     
-    virtual uint32_t getTouchPriority() const { return 200;}
-    virtual uint32_t getDrawPriority() const { return 200;}
+    virtual uint32_t getTouchPriority() const;
+    virtual uint32_t getDrawPriority() const;
     
 private:
     void gotoWorld(char const* mapName);

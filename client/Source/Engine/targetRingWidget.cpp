@@ -46,11 +46,11 @@ bool TargetRingWidget::touch(uint32_t count, Touch* touches)
     //dprintf("TargetRingWidget::touch x: %.2f y: %.2f hyp: %.2f\n", x, y, hyp);
     mHighlighted = false;
     // Outside of ring. 
-    if(hyp > 64.0f)
+    if(hyp > 92.0f)
         return false;
 
     // Inside of ring.
-    if(hyp < 48.0f)
+    if(hyp < 32.0f)
         return false;
     //dprintf("inside ring\n");
     mHighlighted = true;

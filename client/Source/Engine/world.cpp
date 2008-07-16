@@ -55,7 +55,6 @@ World::World(char const* mapName, uint32_t vehicleType)
     ret = mNpcManager->init(10);
     assert(ret == 0);
 
-
     mBackButton = new ImageEntity(gImageLibrary->reference("data/interface/Back.png"));
     mBackButton->mCenter = Vector2(mBackButton->mSize/2 + Vector2(12, 32));
 
@@ -66,6 +65,9 @@ World::World(char const* mapName, uint32_t vehicleType)
 
 World::~World()
 {
+    delete mHealthMeter;
+    delete mBackButton;
+    delete mNpcManager;
     delete mCollisionMap;
     delete mPlayer;
     delete mTileMap;
@@ -84,6 +86,16 @@ void World::init(void)
     gGame->registerDrawable(this);
     gGame->registerTouchable(this);
     gGame->registerUpdateable(this);
+}
+
+uint32_t World::getTouchPriority() const
+{
+    return 2;
+}
+
+uint32_t World::getDrawPriority() const
+{
+    return 2;
 }
 
 void World::setVehicleType(uint32_t type)
@@ -197,7 +209,7 @@ void World::zoomIn()
 bool World::touch(uint32_t count, Touch* touches)
 {
     // Check if the user clicked in the back button.
-    if(count >= 1)
+    if(count == 1 && touches[0].mPhase == Touch::PhaseEnd)
     {
         Vector2 pos = touches[0].mLocation;
         Vector2 ul = mBackButton->mCenter - mBackButton->mSize/2;
@@ -215,10 +227,11 @@ bool World::touch(uint32_t count, Touch* touches)
     if(count == 2)
     {
         // No motion occurred.
-        if(mLastPhase == Touch::PhaseBegin && touches[0].mPhase == Touch::PhaseEnd)
+        //if(mLastPhase == Touch::PhaseBegin && touches[0].mPhase == Touch::PhaseEnd)
         {
             if(!mZoomedOut)
             {
+                //dprintf("Zooming out");
                 mLastPhase = touches[0].mPhase;
                 zoomOut();
             }

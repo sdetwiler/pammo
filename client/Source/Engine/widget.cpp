@@ -1,6 +1,9 @@
 #include "widget.h"
 
 Widget::Widget()
+    : Drawable(),
+    Touchable(),
+    Updateable()
 {
     mTouchPriority = 100;
     mDrawPriority = 100;

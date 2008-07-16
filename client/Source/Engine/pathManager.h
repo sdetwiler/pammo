@@ -21,8 +21,8 @@ public:
     virtual void init();
     virtual void draw();
     virtual bool touch(uint32_t count, Touch* touches);
-    virtual uint32_t getDrawPriority() const {return 100;}
-    virtual uint32_t getTouchPriority() const {return 1;}
+    virtual uint32_t getDrawPriority() const;
+    virtual uint32_t getTouchPriority() const;
 
 protected:
     void addPoint(Vector2 const& point);

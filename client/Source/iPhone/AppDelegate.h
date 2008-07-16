@@ -10,17 +10,17 @@
 #import <UIKit/UIKit.h>
 	
 @class MainView;
-@class DebugConsole;
+//@class DebugConsole;
 
 @interface AppDelegate : NSObject
 {
     UIWindow *mWindow;
     MainView *mMainView;
-	DebugConsole* mDebugConsole;
+	//DebugConsole* mDebugConsole;
 }
 
 @property (nonatomic, retain) UIWindow *mWindow;
 @property (nonatomic, retain) MainView *mMainView;
-@property (nonatomic, retain) DebugConsole *mDebugConsole;
+//@property (nonatomic, retain) DebugConsole *mDebugConsole;
 
 @end

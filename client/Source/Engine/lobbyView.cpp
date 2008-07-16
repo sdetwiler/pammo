@@ -64,6 +64,7 @@ LobbyView::LobbyView()
 
 LobbyView::~LobbyView()
 {
+    
     gGame->unregisterTouchable(this);
     gGame->unregisterDrawable(this);
     gGame->unregisterUpdateable(this);
@@ -82,6 +83,16 @@ void LobbyView::init()
     gGame->registerTouchable(this);
     gGame->registerDrawable(this);
     gGame->registerUpdateable(this);
+}
+    
+uint32_t LobbyView::getTouchPriority() const
+{
+    return 200;
+}
+
+uint32_t LobbyView::getDrawPriority() const
+{
+    return 200;
 }
 
 void LobbyView::draw()

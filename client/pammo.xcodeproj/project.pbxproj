@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		11156B8B0E08E52C00B55584 /* healthMeter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11156B890E08E52C00B55584 /* healthMeter.cpp */; };
 		11156BF60E08F25F00B55584 /* collisionDynamics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11156BF50E08F25F00B55584 /* collisionDynamics.cpp */; };
-		1129D0D50DEBDE1F00F1D50B /* DebugConsole.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1129D0D40DEBDE1F00F1D50B /* DebugConsole.mm */; };
 		112C7BDF0E14170600C8C0B2 /* magnitudeWidget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 112C7BDD0E14170600C8C0B2 /* magnitudeWidget.cpp */; };
 		112C7BEB0E14175000C8C0B2 /* trebuchetVehicle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 112C7BE90E14175000C8C0B2 /* trebuchetVehicle.cpp */; };
 		113B2C080DF5BFFC0095A737 /* flameTankVehicle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 113B2C060DF5BFFC0095A737 /* flameTankVehicle.cpp */; };
@@ -50,8 +49,6 @@
 		11156B8A0E08E52C00B55584 /* healthMeter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = healthMeter.h; sourceTree = "<group>"; };
 		11156BF40E08F25F00B55584 /* collisionDynamics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = collisionDynamics.h; sourceTree = "<group>"; };
 		11156BF50E08F25F00B55584 /* collisionDynamics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = collisionDynamics.cpp; sourceTree = "<group>"; };
-		1129D0D30DEBDE1F00F1D50B /* DebugConsole.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DebugConsole.h; sourceTree = "<group>"; };
-		1129D0D40DEBDE1F00F1D50B /* DebugConsole.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DebugConsole.mm; sourceTree = "<group>"; };
 		112C7BDD0E14170600C8C0B2 /* magnitudeWidget.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = magnitudeWidget.cpp; sourceTree = "<group>"; };
 		112C7BDE0E14170600C8C0B2 /* magnitudeWidget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = magnitudeWidget.h; sourceTree = "<group>"; };
 		112C7BE90E14175000C8C0B2 /* trebuchetVehicle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = trebuchetVehicle.cpp; sourceTree = "<group>"; };
@@ -139,8 +136,6 @@
 		080E96DDFE201D6D7F000001 /* iPhone */ = {
 			isa = PBXGroup;
 			children = (
-				1129D0D30DEBDE1F00F1D50B /* DebugConsole.h */,
-				1129D0D40DEBDE1F00F1D50B /* DebugConsole.mm */,
 				11EEB7380DEBC769009F3B13 /* types_platform.h */,
 				115E1A390DEBAE8D00BD1F3A /* Image.mm */,
 				115E19990DEBA2A100BD1F3A /* MainView.h */,
@@ -323,7 +318,6 @@
 				11EEB7280DEBC73F009F3B13 /* vehicle.cpp in Sources */,
 				11EEB7290DEBC73F009F3B13 /* widget.cpp in Sources */,
 				11EEB72A0DEBC73F009F3B13 /* world.cpp in Sources */,
-				1129D0D50DEBDE1F00F1D50B /* DebugConsole.mm in Sources */,
 				1198D6950DED3ED0006F673A /* pathManager.cpp in Sources */,
 				118E43310DF11EB600E619A9 /* particleSystem.cpp in Sources */,
 				11F1374A0DF34A7F00651323 /* imageLibrary.cpp in Sources */,

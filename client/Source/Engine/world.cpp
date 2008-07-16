@@ -57,7 +57,7 @@ World::World(char const* mapName, uint32_t vehicleType)
 
 
     mBackButton = new ImageEntity(gImageLibrary->reference("data/interface/Back.png"));
-    mBackButton->mCenter = Vector2(mBackButton->mSize/2 + Vector2(32, 32));
+    mBackButton->mCenter = Vector2(mBackButton->mSize/2 + Vector2(12, 32));
 
     mHealthMeter = new HealthMeter;
     mHealthMeter->init();

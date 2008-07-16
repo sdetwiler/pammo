@@ -19,7 +19,7 @@ VehicleSelectView::VehicleSelectView(char const* mapName)
     mBackground = gImageLibrary->reference("data/interface/VehicleSelectBackground.png");
     
     float border = 12;
-    Vector2 pos(border, 92);
+    Vector2 pos(border+15, 135);
 
     VehicleDesc* vehicle = new VehicleDesc;
     vehicle->mType = VEHICLE_FLAMETANK;

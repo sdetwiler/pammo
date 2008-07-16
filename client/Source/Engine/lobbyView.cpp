@@ -18,6 +18,7 @@ namespace pammo
 {
 
 LobbyView::LobbyView()
+    : View()
 {
     gGame->queueInitable(this);
     
@@ -35,7 +36,7 @@ LobbyView::LobbyView()
     
     // Load maps.
     float border = 12;
-    Vector2 pos(border, 92);
+    Vector2 pos(border, 335);
     struct dirent* item;
     while((item = readdir(dir)) != NULL)
     {

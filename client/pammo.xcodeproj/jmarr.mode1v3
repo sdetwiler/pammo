@@ -275,13 +275,13 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>18</integer>
+									<integer>30</integer>
 									<integer>9</integer>
 									<integer>0</integer>
 								</array>
 							</array>
 							<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
-							<string>{{0, 48}, {243, 938}}</string>
+							<string>{{0, 149}, {243, 938}}</string>
 						</dict>
 						<key>PBXTopSmartGroupGIDs</key>
 						<array/>
@@ -328,7 +328,7 @@
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>116A9CDF0E2EF95300BB6F8D</string>
+										<string>116A9D090E2EFE7C00BB6F8D</string>
 										<key>history</key>
 										<array>
 											<string>115E1A030DEBAB7200BD1F3A</string>
@@ -457,14 +457,12 @@
 							<string>0pt</string>
 						</dict>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
 								<string>1CE0B20306471E060097A5F4</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>npcManager.cpp</string>
+								<string>pathManager.cpp</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -472,11 +470,11 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>1CE0B20406471E060097A5F4</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>npcManager.cpp</string>
+										<string>pathManager.cpp</string>
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>116A9CE00E2EF95300BB6F8D</string>
+										<string>116A9D0D0E2EFE7C00BB6F8D</string>
 										<key>history</key>
 										<array>
 											<string>115E1A030DEBAB7200BD1F3A</string>
@@ -522,7 +520,6 @@
 											<string>11C82B920E22C15A002B9380</string>
 											<string>11C82B960E22C15A002B9380</string>
 											<string>1139BAFC0E2442000039FBB3</string>
-											<string>11BE35BB0E258B49001A6DD1</string>
 											<string>11BE35BD0E258B49001A6DD1</string>
 											<string>11BE35BE0E258B49001A6DD1</string>
 											<string>110CB0090E2EA508005CD905</string>
@@ -532,9 +529,11 @@
 											<string>116A9CB60E2EEE3100BB6F8D</string>
 											<string>116A9CC80E2EF73900BB6F8D</string>
 											<string>116A9CC90E2EF73900BB6F8D</string>
-											<string>116A9CCA0E2EF73900BB6F8D</string>
 											<string>116A9CCB0E2EF73900BB6F8D</string>
-											<string>116A9CCC0E2EF73900BB6F8D</string>
+											<string>116A9CE40E2EF97D00BB6F8D</string>
+											<string>116A9CFB0E2EFDC200BB6F8D</string>
+											<string>116A9D0A0E2EFE7C00BB6F8D</string>
+											<string>116A9D0B0E2EFE7C00BB6F8D</string>
 										</array>
 										<key>prevStack</key>
 										<array>
@@ -604,6 +603,9 @@
 											<string>116A9CCF0E2EF73900BB6F8D</string>
 											<string>116A9CD00E2EF73900BB6F8D</string>
 											<string>116A9CD10E2EF73900BB6F8D</string>
+											<string>116A9CE60E2EF97D00BB6F8D</string>
+											<string>116A9CFD0E2EFDC200BB6F8D</string>
+											<string>116A9D0C0E2EFE7C00BB6F8D</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -615,22 +617,24 @@
 							<key>GeometryConfiguration</key>
 							<dict>
 								<key>Frame</key>
-								<string>{{0, 5}, {1355, 626}}</string>
+								<string>{{0, 5}, {1355, 385}}</string>
 								<key>RubberWindowFrame</key>
 								<string>60 31 1620 997 0 0 1680 1028 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXNavigatorGroup</string>
 							<key>Proportion</key>
-							<string>626pt</string>
+							<string>385pt</string>
 						</dict>
 						<dict>
+							<key>BecomeActive</key>
+							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
 								<string>1CE0B20306471E060097A5F4</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>npcManager.cpp</string>
+								<string>player.cpp</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -638,11 +642,11 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>1CE0B20406471E060097A5F4</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>npcManager.cpp</string>
+										<string>player.cpp</string>
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>116A9CE10E2EF95300BB6F8D</string>
+										<string>116A9D110E2EFE7C00BB6F8D</string>
 										<key>history</key>
 										<array>
 											<string>115E1A030DEBAB7200BD1F3A</string>
@@ -700,8 +704,8 @@
 											<string>116A9CBA0E2EEE3100BB6F8D</string>
 											<string>116A9CD30E2EF73900BB6F8D</string>
 											<string>116A9CD40E2EF73900BB6F8D</string>
-											<string>116A9CD50E2EF73900BB6F8D</string>
-											<string>116A9CD60E2EF73900BB6F8D</string>
+											<string>116A9D0E0E2EFE7C00BB6F8D</string>
+											<string>116A9D0F0E2EFE7C00BB6F8D</string>
 										</array>
 										<key>prevStack</key>
 										<array>
@@ -767,6 +771,7 @@
 											<string>116A9CD70E2EF73900BB6F8D</string>
 											<string>116A9CD80E2EF73900BB6F8D</string>
 											<string>116A9CD90E2EF73900BB6F8D</string>
+											<string>116A9D100E2EFE7C00BB6F8D</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -778,14 +783,14 @@
 							<key>GeometryConfiguration</key>
 							<dict>
 								<key>Frame</key>
-								<string>{{0, 636}, {1355, 315}}</string>
+								<string>{{0, 395}, {1355, 556}}</string>
 								<key>RubberWindowFrame</key>
 								<string>60 31 1620 997 0 0 1680 1028 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXNavigatorGroup</string>
 							<key>Proportion</key>
-							<string>315pt</string>
+							<string>556pt</string>
 						</dict>
 						<dict>
 							<key>ContentConfiguration</key>
@@ -966,10 +971,10 @@
 	<array>
 		<string>116A9CBF0E2EEE3100BB6F8D</string>
 		<string>116A9CC00E2EEE3100BB6F8D</string>
-		<string>1C78EAAD065D492600B07095</string>
 		<string>11FE36A20DEB9D9A0092C28F</string>
-		<string>1CD10A99069EF8BA00B06720</string>
 		<string>/Users/jmarr/Desktop/Irradiated/client/pammo.xcodeproj</string>
+		<string>1C78EAAD065D492600B07095</string>
+		<string>1CD10A99069EF8BA00B06720</string>
 	</array>
 	<key>WindowString</key>
 	<string>60 31 1620 997 0 0 1680 1028 </string>

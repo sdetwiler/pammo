@@ -110,7 +110,7 @@
 
 - (void)startAnimation
 {
-	mTimer = [NSTimer scheduledTimerWithTimeInterval:1./10. target:self selector:@selector(drawView) userInfo:nil repeats:YES];
+	mTimer = [NSTimer scheduledTimerWithTimeInterval:1./15. target:self selector:@selector(drawView) userInfo:nil repeats:YES];
 }
 
 

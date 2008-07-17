@@ -31,7 +31,11 @@ Player::~Player()
 int Player::init(Player::Type type)
 {
     mType = type;
-    mPathManager = new PathManager(this);
+    
+    if(type == Local)
+        mPathManager = new PathManager(this);
+    else
+        mPathManager = 0;
 
     spawn();
 

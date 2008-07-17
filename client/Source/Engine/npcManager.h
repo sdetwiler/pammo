@@ -24,7 +24,7 @@ protected:
 private:
     void generatePath(Player* player);
 
-    Player* mPlayers;
+    Player** mPlayers;
     uint32_t mNumPlayers;
 
 };

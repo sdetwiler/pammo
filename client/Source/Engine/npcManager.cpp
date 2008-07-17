@@ -16,6 +16,8 @@ NpcManager::NpcManager()
 
 NpcManager::~NpcManager()
 {
+    for(uint32_t i=0; i < mNumPlayers; ++i)
+        delete mPlayers[i];
     delete[] mPlayers;
 }
 
@@ -23,17 +25,15 @@ int NpcManager::init(uint32_t numPlayers)
 {
     int ret;
     mNumPlayers = numPlayers;
-    mPlayers = new Player[mNumPlayers];
+    mPlayers = new Player*[mNumPlayers];
 
     for(uint32_t i=0; i<mNumPlayers; ++i)
     {
-        ret = mPlayers[i].init(Player::Remote);
-        if(ret < 0)
-        {
-            delete mPlayers;
-            mNumPlayers = 0;
-        }
-        mPlayers[i].setCenter(gWorld->getRandomSpawnPoint());
+        mPlayers[i] = new Player();
+        ret = mPlayers[i]->init(Player::Remote);
+        assert(ret >= 0);
+        
+        mPlayers[i]->setCenter(gWorld->getRandomSpawnPoint());
     }
 
     return 0;
@@ -81,14 +81,14 @@ void NpcManager::update()
 {
     for(uint32_t i=0; i<mNumPlayers; ++i)
     {
-        if(mPlayers[i].getState() == Player::Alive || mPlayers[i].getState() == Player::Spawning)
+        if(mPlayers[i]->getState() == Player::Alive || mPlayers[i]->getState() == Player::Spawning)
         {
-            if(mPlayers[i].isMoving() == false)
+            if(mPlayers[i]->isMoving() == false)
             {
-                generatePath(mPlayers+i);
+                generatePath(mPlayers[i]);
             }
         }        
-        mPlayers[i].update();
+        mPlayers[i]->update();
     }
 }
 
@@ -96,9 +96,9 @@ void NpcManager::draw()
 {
     for(uint32_t i=0; i<mNumPlayers; ++i)
     {
-        if(mPlayers[i].getState() == Player::Alive || mPlayers[i].getState() == Player::Spawning)
+        if(mPlayers[i]->getState() == Player::Alive || mPlayers[i]->getState() == Player::Spawning)
         {
-            mPlayers[i].draw();
+            mPlayers[i]->draw();
         }
     }
 }

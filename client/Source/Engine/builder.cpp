@@ -231,22 +231,35 @@ void buildCollisionMap(World* world, char const* mapName)
     uint16_t numPOIs = readUInt16(&cur, &remain);
     dprintf("POIs: %d", numPOIs);
     
+    uint32_t spawnPoints = 0;
+    uint32_t swarmPoints = 0;
+    
     // Read each poi.
     for(uint32_t poi=0; poi<numPOIs; ++poi)
     {
         uint16_t properties = readUInt16(&cur, &remain);
         float x = readFloat(&cur, &remain);
         float y = readFloat(&cur, &remain);
-        dprintf("Spawn Point: %f, %f", x, y);
         
-        world->addSpawnPoint(Vector2(x, y));
+        if(properties == 0)
+        {
+            ++spawnPoints;
+            dprintf("Spawn Point: %f, %f", x, y);
+            world->addSpawnPoint(Vector2(x, y));
+        }
+        else if(properties == 1)
+        {
+            ++swarmPoints;
+            dprintf("Swarm Point: %f, %f", x, y);
+            world->addSwarmPoint(Vector2(x, y));
+        }
     }
     
     // Add a default POI if non are defined in the file.
-    if(numPOIs == 0)
-    {
+    if(spawnPoints == 0)
         world->addSpawnPoint(Vector2(0, 0));
-    }
+    if(swarmPoints == 0)
+        world->addSwarmPoint(Vector2(100, 100));
     
     // Free the buffer;
     delete[] buffer;

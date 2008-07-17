@@ -25,7 +25,7 @@ Player::~Player()
     if(mVehicle)
         delete mVehicle;
     if(mPathManager)
-        delete mPathManager;
+        mPathManager->destroy();
 }
 
 int Player::init(Player::Type type)

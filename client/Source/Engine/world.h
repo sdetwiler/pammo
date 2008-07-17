@@ -63,6 +63,10 @@ class World : public View
         
         void addSpawnPoint(Vector2 spawnPoint);
         Vector2 getRandomSpawnPoint();
+        
+        void addSwarmPoint(Vector2 swarmPoint);
+        uint32_t getSwarmPointCount();
+        Vector2 getSwarmPoint(uint32_t i);
 
     protected:
     private:
@@ -76,6 +80,7 @@ class World : public View
         Touch::Phase mLastPhase;
         
         vector< Vector2 > mSpawnPoints;
+        vector< Vector2 > mSwarmPoints;
         
         ImageEntity* mBackButton;
         HealthMeter* mHealthMeter;

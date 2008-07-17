@@ -18,6 +18,7 @@ public:
     PathManager(Player* player);
     virtual ~PathManager();
 
+    void destroy();
     virtual void init();
     virtual void draw();
     virtual bool touch(uint32_t count, Touch* touches);

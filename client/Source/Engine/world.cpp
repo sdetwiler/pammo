@@ -269,6 +269,21 @@ Vector2 World::getRandomSpawnPoint()
     return mSpawnPoints[rand() % mSpawnPoints.size()];
 }
 
+void World::addSwarmPoint(Vector2 swarmPoint)
+{
+    mSwarmPoints.push_back(swarmPoint);
+}
+
+uint32_t World::getSwarmPointCount()
+{
+    mSwarmPoints.size();
+}
+
+Vector2 World::getSwarmPoint(uint32_t i)
+{
+    return mSwarmPoints[i];
+}
+
 void World::gotoLobby()
 {
     // Create lobby.

@@ -99,10 +99,13 @@ def saveOverlays(map):
     count = 0
     poisOutput = ''
     for poi in map.getPOIs():
-        if poi.getType() == POI.DisabledTypeName: continue
+        type = poi.getType()
+        if type == POI.SpawnPointTypeName: property = 0
+        elif type == POI.SwarmPointTypeName: property = 1
+        else: continue
         count += 1
         pos = poi.getPos()
-        poisOutput += pack('!H', 0)
+        poisOutput += pack('!H', property)
         poisOutput += pack('!2f', pos[0], pos[1])
     output += pack('!H', count)
     output += poisOutput

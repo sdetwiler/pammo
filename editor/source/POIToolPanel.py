@@ -162,10 +162,20 @@ class POIToolPanel(wx.Panel):
 
         pois = display.getMap().getPOIs()
         
-        # Draw all collision shapes.
-        gc.SetBrush(wx.Brush(wx.Color(0, 100, 0, 92)))
-        gc.SetPen(wx.Pen(wx.Color(0, 128, 0, 168), self.strokeSize))
+        # Draw all POIs.
         for poi in pois:
+            type = poi.getType()
+            if type == POI.SpawnPointTypeName:
+                gc.SetBrush(wx.Brush(wx.Color(0, 100, 0, 92)))
+                gc.SetPen(wx.Pen(wx.Color(0, 128, 0, 168), self.strokeSize))
+            elif type == POI.SwarmPointTypeName:
+                gc.SetBrush(wx.Brush(wx.Color(0, 0, 100, 92)))
+                gc.SetPen(wx.Pen(wx.Color(0, 0, 128, 168), self.strokeSize))
+            elif type == POI.DisabledTypeName:
+                gc.SetBrush(wx.Brush(wx.Color(100, 100, 100, 92)))
+                gc.SetPen(wx.Pen(wx.Color(128, 128, 128, 168), self.strokeSize))
+            else: continue
+
             pos = poi.getPos()
             gc.DrawEllipse(pos[0] - self.displaySize/2 + self.strokeSize - 1, pos[1] - self.displaySize/2 + self.strokeSize - 1,
                            self.displaySize - self.strokeSize*2 + 1, self.displaySize - self.strokeSize*2 + 1)

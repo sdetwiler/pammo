@@ -20,6 +20,11 @@ PathManager::~PathManager()
     gGame->unregisterTouchable(this);
 }
 
+void PathManager::destroy()
+{
+    gGame->queueDeleteable(this);
+}
+
 void PathManager::init()
 {
     gGame->registerDrawable(this);

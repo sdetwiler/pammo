@@ -16,10 +16,7 @@ NpcManager::NpcManager()
 
 NpcManager::~NpcManager()
 {
-    for(uint32_t i=0; i<mNumPlayers; ++i)
-    {
-        delete &mPlayers[i];
-    }
+    delete[] mPlayers;
 }
 
 int NpcManager::init(uint32_t numPlayers)

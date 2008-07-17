@@ -275,13 +275,13 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>16</integer>
+									<integer>18</integer>
 									<integer>9</integer>
 									<integer>0</integer>
 								</array>
 							</array>
 							<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
-							<string>{{0, 72}, {243, 938}}</string>
+							<string>{{0, 48}, {243, 938}}</string>
 						</dict>
 						<key>PBXTopSmartGroupGIDs</key>
 						<array/>
@@ -328,7 +328,7 @@
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>116A9CB50E2EEE3100BB6F8D</string>
+										<string>116A9CDF0E2EF95300BB6F8D</string>
 										<key>history</key>
 										<array>
 											<string>115E1A030DEBAB7200BD1F3A</string>
@@ -464,7 +464,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CE0B20306471E060097A5F4</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>world.cpp</string>
+								<string>npcManager.cpp</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -472,11 +472,11 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>1CE0B20406471E060097A5F4</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>world.cpp</string>
+										<string>npcManager.cpp</string>
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>116A9CB90E2EEE3100BB6F8D</string>
+										<string>116A9CE00E2EF95300BB6F8D</string>
 										<key>history</key>
 										<array>
 											<string>115E1A030DEBAB7200BD1F3A</string>
@@ -512,12 +512,10 @@
 											<string>11FE68250E1B4A8C008030C9</string>
 											<string>11FE68260E1B4A8C008030C9</string>
 											<string>11FE68360E1B4B0D008030C9</string>
-											<string>11FE68380E1B4B0D008030C9</string>
 											<string>11FE686B0E1B50A4008030C9</string>
 											<string>11FE689F0E1B5FA4008030C9</string>
 											<string>11FE68E10E1B6505008030C9</string>
 											<string>11FE68EA0E1B682F008030C9</string>
-											<string>11FE68EB0E1B682F008030C9</string>
 											<string>11FE68EC0E1B682F008030C9</string>
 											<string>11FE690F0E1B7207008030C9</string>
 											<string>11C82B910E22C15A002B9380</string>
@@ -525,16 +523,18 @@
 											<string>11C82B960E22C15A002B9380</string>
 											<string>1139BAFC0E2442000039FBB3</string>
 											<string>11BE35BB0E258B49001A6DD1</string>
-											<string>11BE35BC0E258B49001A6DD1</string>
 											<string>11BE35BD0E258B49001A6DD1</string>
 											<string>11BE35BE0E258B49001A6DD1</string>
 											<string>110CB0090E2EA508005CD905</string>
 											<string>110CB00A0E2EA508005CD905</string>
 											<string>110CB00B0E2EA508005CD905</string>
 											<string>116A9C980E2EED2C00BB6F8D</string>
-											<string>116A9C990E2EED2C00BB6F8D</string>
 											<string>116A9CB60E2EEE3100BB6F8D</string>
-											<string>116A9CB70E2EEE3100BB6F8D</string>
+											<string>116A9CC80E2EF73900BB6F8D</string>
+											<string>116A9CC90E2EF73900BB6F8D</string>
+											<string>116A9CCA0E2EF73900BB6F8D</string>
+											<string>116A9CCB0E2EF73900BB6F8D</string>
+											<string>116A9CCC0E2EF73900BB6F8D</string>
 										</array>
 										<key>prevStack</key>
 										<array>
@@ -599,6 +599,11 @@
 											<string>116A9C9E0E2EED2C00BB6F8D</string>
 											<string>116A9C9F0E2EED2C00BB6F8D</string>
 											<string>116A9CB80E2EEE3100BB6F8D</string>
+											<string>116A9CCD0E2EF73900BB6F8D</string>
+											<string>116A9CCE0E2EF73900BB6F8D</string>
+											<string>116A9CCF0E2EF73900BB6F8D</string>
+											<string>116A9CD00E2EF73900BB6F8D</string>
+											<string>116A9CD10E2EF73900BB6F8D</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -625,7 +630,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CE0B20306471E060097A5F4</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>healthMeter.cpp</string>
+								<string>npcManager.cpp</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -633,11 +638,11 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>1CE0B20406471E060097A5F4</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>healthMeter.cpp</string>
+										<string>npcManager.cpp</string>
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>116A9CBD0E2EEE3100BB6F8D</string>
+										<string>116A9CE10E2EF95300BB6F8D</string>
 										<key>history</key>
 										<array>
 											<string>115E1A030DEBAB7200BD1F3A</string>
@@ -672,7 +677,6 @@
 											<string>11FE68250E1B4A8C008030C9</string>
 											<string>11FE68260E1B4A8C008030C9</string>
 											<string>11FE68360E1B4B0D008030C9</string>
-											<string>11FE68380E1B4B0D008030C9</string>
 											<string>11FE686B0E1B50A4008030C9</string>
 											<string>11FE689F0E1B5FA4008030C9</string>
 											<string>11FE68CC0E1B6415008030C9</string>
@@ -686,7 +690,6 @@
 											<string>11C82B960E22C15A002B9380</string>
 											<string>1139BAFC0E2442000039FBB3</string>
 											<string>11BE35BB0E258B49001A6DD1</string>
-											<string>11BE35BC0E258B49001A6DD1</string>
 											<string>11BE35BD0E258B49001A6DD1</string>
 											<string>11BE35BE0E258B49001A6DD1</string>
 											<string>110CB0080E2EA508005CD905</string>
@@ -694,9 +697,11 @@
 											<string>110CB00A0E2EA508005CD905</string>
 											<string>110CB00B0E2EA508005CD905</string>
 											<string>116A9CA10E2EED2C00BB6F8D</string>
-											<string>116A9CA20E2EED2C00BB6F8D</string>
 											<string>116A9CBA0E2EEE3100BB6F8D</string>
-											<string>116A9CBB0E2EEE3100BB6F8D</string>
+											<string>116A9CD30E2EF73900BB6F8D</string>
+											<string>116A9CD40E2EF73900BB6F8D</string>
+											<string>116A9CD50E2EF73900BB6F8D</string>
+											<string>116A9CD60E2EF73900BB6F8D</string>
 										</array>
 										<key>prevStack</key>
 										<array>
@@ -759,6 +764,9 @@
 											<string>116A9CA40E2EED2C00BB6F8D</string>
 											<string>116A9CA50E2EED2C00BB6F8D</string>
 											<string>116A9CBC0E2EEE3100BB6F8D</string>
+											<string>116A9CD70E2EF73900BB6F8D</string>
+											<string>116A9CD80E2EF73900BB6F8D</string>
+											<string>116A9CD90E2EF73900BB6F8D</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -956,7 +964,6 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>116A9CBE0E2EEE3100BB6F8D</string>
 		<string>116A9CBF0E2EEE3100BB6F8D</string>
 		<string>116A9CC00E2EEE3100BB6F8D</string>
 		<string>1C78EAAD065D492600B07095</string>

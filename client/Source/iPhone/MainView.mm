@@ -49,7 +49,6 @@
 	}
 	
 	mGame = new Game();
-	mGame->init();
 	
 	[self startAnimation];
 	
@@ -110,7 +109,9 @@
 
 - (void)startAnimation
 {
-	mTimer = [NSTimer scheduledTimerWithTimeInterval:1./15. target:self selector:@selector(drawView) userInfo:nil repeats:YES];
+	mTimer = [NSTimer scheduledTimerWithTimeInterval:1./60. target:self selector:@selector(drawView) userInfo:nil repeats:YES];
+    mLastTime = getTime();
+    mMicros = 0;
 }
 
 
@@ -121,14 +122,30 @@
 
 - (void)drawView
 {
-	mGame->update();
-	[EAGLContext setCurrentContext:mContext];
-	glBindFramebufferOES(GL_FRAMEBUFFER_OES, mFramebuffer);
+    uint64_t t = getTime();
+    mMicros += t - mLastTime;
+    mLastTime = t;
+    
+    bool draw = false;
+    
+    while(mMicros >= 33333)
+    {
+        mGame->update();
+        mMicros -= 33333;
+        
+        draw = true;
+    }
+    
+    if(draw)
+    {
+        [EAGLContext setCurrentContext:mContext];
+        glBindFramebufferOES(GL_FRAMEBUFFER_OES, mFramebuffer);
 	
-	mGame->draw();
+        mGame->draw();
 	
-	glBindRenderbufferOES(GL_RENDERBUFFER_OES, mRenderbuffer);
-	[mContext presentRenderbuffer:GL_RENDERBUFFER_OES];
+        glBindRenderbufferOES(GL_RENDERBUFFER_OES, mRenderbuffer);
+        [mContext presentRenderbuffer:GL_RENDERBUFFER_OES];
+    }
 	
 }
 

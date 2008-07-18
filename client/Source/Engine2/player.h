@@ -10,6 +10,7 @@ namespace pammo
 
 class Camera;
 class ImageEntity;
+class VehicleBody;
 
 class Player : 
     public View,
@@ -35,14 +36,7 @@ class Player :
         TargetRingWidget* mMovementRing;
         TargetRingWidget* mTargetRing;
         
-        float mTargetRotation;
-        float mVelocityRotation;
-        float mRotation;
-        
-        float mTargetAcceleration;
-        float mAcceleration;
-        
-        Vector2 mVelocity;
+        VehicleBody* mBody;
         ImageEntity* mEntity;
         
         bool mFiring;

@@ -1,4 +1,4 @@
-#include "image.h"
+#include "pammo.h"
 
 #import <OpenGLES/ES1/gl.h>
 #import <QuartzCore/QuartzCore.h>

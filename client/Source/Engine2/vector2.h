@@ -1,12 +1,3 @@
-/*
- *  vector2.h
- *  Flain
- *
- *  Created by James Marr on 4/13/08.
- *  Copyright 2008 scea. All rights reserved.
- *
- */
-
 #ifndef __VECTOR2_H__
 #define __VECTOR2_H__
 

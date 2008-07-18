@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		1121D1370E2F0BA2008C8598 /* builder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1121D1350E2F0BA2008C8598 /* builder.cpp */; };
-		112A588C0E303B5800A3C218 /* entity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 112A58890E303B5800A3C218 /* entity.cpp */; };
 		112A588D0E303B5800A3C218 /* imageEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 112A588A0E303B5800A3C218 /* imageEntity.cpp */; };
 		112A588F0E303B7600A3C218 /* targetRingWidget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 112A588E0E303B7600A3C218 /* targetRingWidget.cpp */; };
 		112A59FB0E3056BC00A3C218 /* particleSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 112A59FA0E3056BC00A3C218 /* particleSystem.cpp */; };
@@ -17,7 +16,7 @@
 		115E19840DEBA13700BD1F3A /* Main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 115E19830DEBA13700BD1F3A /* Main.mm */; };
 		115E19870DEBA14E00BD1F3A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 115E19860DEBA14E00BD1F3A /* AppDelegate.mm */; };
 		115E199E0DEBA2A100BD1F3A /* MainView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 115E199A0DEBA2A100BD1F3A /* MainView.mm */; };
-		115E1A3A0DEBAE8D00BD1F3A /* Image.mm in Sources */ = {isa = PBXBuildFile; fileRef = 115E1A390DEBAE8D00BD1F3A /* Image.mm */; };
+		115E1A3A0DEBAE8D00BD1F3A /* iPhone.mm in Sources */ = {isa = PBXBuildFile; fileRef = 115E1A390DEBAE8D00BD1F3A /* iPhone.mm */; };
 		11C3F42E0E2F0F3A00EE8D28 /* player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11C3F42D0E2F0F3A00EE8D28 /* player.cpp */; };
 		11CFA2120DEE8D1700279425 /* data in Resources */ = {isa = PBXBuildFile; fileRef = 11CFA1FE0DEE8D1700279425 /* data */; };
 		11EEB7220DEBC73F009F3B13 /* camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11EEB70B0DEBC73F009F3B13 /* camera.cpp */; };
@@ -35,11 +34,9 @@
 /* Begin PBXFileReference section */
 		1121D1350E2F0BA2008C8598 /* builder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = builder.cpp; sourceTree = "<group>"; };
 		1121D1360E2F0BA2008C8598 /* builder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = builder.h; sourceTree = "<group>"; };
-		112A58890E303B5800A3C218 /* entity.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = entity.cpp; sourceTree = "<group>"; };
 		112A588A0E303B5800A3C218 /* imageEntity.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = imageEntity.cpp; sourceTree = "<group>"; };
 		112A588B0E303B5800A3C218 /* imageEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = imageEntity.h; sourceTree = "<group>"; };
 		112A588E0E303B7600A3C218 /* targetRingWidget.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = targetRingWidget.cpp; sourceTree = "<group>"; };
-		112A58900E303B8E00A3C218 /* entity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = entity.h; sourceTree = "<group>"; };
 		112A58910E303B9500A3C218 /* targetRingWidget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = targetRingWidget.h; sourceTree = "<group>"; };
 		112A59F90E3056BC00A3C218 /* particleSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = particleSystem.h; sourceTree = "<group>"; };
 		112A59FA0E3056BC00A3C218 /* particleSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = particleSystem.cpp; sourceTree = "<group>"; };
@@ -52,18 +49,17 @@
 		115E19860DEBA14E00BD1F3A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; };
 		115E19990DEBA2A100BD1F3A /* MainView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainView.h; sourceTree = "<group>"; };
 		115E199A0DEBA2A100BD1F3A /* MainView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MainView.mm; sourceTree = "<group>"; };
-		115E1A390DEBAE8D00BD1F3A /* Image.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Image.mm; sourceTree = "<group>"; };
+		115E1A390DEBAE8D00BD1F3A /* iPhone.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = iPhone.mm; sourceTree = "<group>"; };
 		11C3F42D0E2F0F3A00EE8D28 /* player.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = player.cpp; sourceTree = "<group>"; };
 		11C3F42F0E2F0F7E00EE8D28 /* player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = player.h; sourceTree = "<group>"; };
 		11CFA1FE0DEE8D1700279425 /* data */ = {isa = PBXFileReference; lastKnownFileType = folder; name = data; path = ../data; sourceTree = SOURCE_ROOT; };
 		11D631F00DEB9E6400CA2A0A /* Platform.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Platform.pch; sourceTree = "<group>"; };
 		11EEB70B0DEBC73F009F3B13 /* camera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = camera.cpp; sourceTree = "<group>"; };
 		11EEB70C0DEBC73F009F3B13 /* camera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = camera.h; sourceTree = "<group>"; };
-		11EEB70D0DEBC73F009F3B13 /* dprintf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dprintf.h; sourceTree = "<group>"; };
 		11EEB70E0DEBC73F009F3B13 /* drawImage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = drawImage.cpp; sourceTree = "<group>"; };
 		11EEB7110DEBC73F009F3B13 /* game.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = game.cpp; sourceTree = "<group>"; };
 		11EEB7120DEBC73F009F3B13 /* game.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = game.h; sourceTree = "<group>"; };
-		11EEB7130DEBC73F009F3B13 /* image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = image.h; sourceTree = "<group>"; };
+		11EEB7130DEBC73F009F3B13 /* drawImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = drawImage.h; sourceTree = "<group>"; };
 		11EEB7160DEBC73F009F3B13 /* pammo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pammo.h; sourceTree = "<group>"; };
 		11EEB7190DEBC73F009F3B13 /* transform2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = transform2.h; sourceTree = "<group>"; };
 		11EEB71A0DEBC73F009F3B13 /* vector2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vector2.h; sourceTree = "<group>"; };
@@ -101,7 +97,7 @@
 			isa = PBXGroup;
 			children = (
 				11EEB7380DEBC769009F3B13 /* platform.h */,
-				115E1A390DEBAE8D00BD1F3A /* Image.mm */,
+				115E1A390DEBAE8D00BD1F3A /* iPhone.mm */,
 				115E19990DEBA2A100BD1F3A /* MainView.h */,
 				115E199A0DEBA2A100BD1F3A /* MainView.mm */,
 				115E19850DEBA14E00BD1F3A /* AppDelegate.h */,
@@ -120,8 +116,6 @@
 				112A59FA0E3056BC00A3C218 /* particleSystem.cpp */,
 				112A588E0E303B7600A3C218 /* targetRingWidget.cpp */,
 				112A58910E303B9500A3C218 /* targetRingWidget.h */,
-				112A58890E303B5800A3C218 /* entity.cpp */,
-				112A58900E303B8E00A3C218 /* entity.h */,
 				112A588A0E303B5800A3C218 /* imageEntity.cpp */,
 				112A588B0E303B5800A3C218 /* imageEntity.h */,
 				11C3F42D0E2F0F3A00EE8D28 /* player.cpp */,
@@ -130,8 +124,7 @@
 				1121D1360E2F0BA2008C8598 /* builder.h */,
 				11EEB70B0DEBC73F009F3B13 /* camera.cpp */,
 				11EEB70C0DEBC73F009F3B13 /* camera.h */,
-				11EEB70D0DEBC73F009F3B13 /* dprintf.h */,
-				11EEB7130DEBC73F009F3B13 /* image.h */,
+				11EEB7130DEBC73F009F3B13 /* drawImage.h */,
 				11EEB70E0DEBC73F009F3B13 /* drawImage.cpp */,
 				11EEB7110DEBC73F009F3B13 /* game.cpp */,
 				11EEB7120DEBC73F009F3B13 /* game.h */,
@@ -248,7 +241,7 @@
 				115E19840DEBA13700BD1F3A /* Main.mm in Sources */,
 				115E19870DEBA14E00BD1F3A /* AppDelegate.mm in Sources */,
 				115E199E0DEBA2A100BD1F3A /* MainView.mm in Sources */,
-				115E1A3A0DEBAE8D00BD1F3A /* Image.mm in Sources */,
+				115E1A3A0DEBAE8D00BD1F3A /* iPhone.mm in Sources */,
 				11EEB7220DEBC73F009F3B13 /* camera.cpp in Sources */,
 				11EEB7230DEBC73F009F3B13 /* drawImage.cpp in Sources */,
 				11EEB7250DEBC73F009F3B13 /* game.cpp in Sources */,
@@ -258,7 +251,6 @@
 				1121D1370E2F0BA2008C8598 /* builder.cpp in Sources */,
 				11C3F42E0E2F0F3A00EE8D28 /* player.cpp in Sources */,
 				1138114A0E2FEBDF00E9FF5F /* view.cpp in Sources */,
-				112A588C0E303B5800A3C218 /* entity.cpp in Sources */,
 				112A588D0E303B5800A3C218 /* imageEntity.cpp in Sources */,
 				112A588F0E303B7600A3C218 /* targetRingWidget.cpp in Sources */,
 				112A59FB0E3056BC00A3C218 /* particleSystem.cpp in Sources */,

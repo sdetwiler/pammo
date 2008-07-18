@@ -1,7 +1,6 @@
 #include "map.h"
 
 #include "camera.h"
-#include "image.h"
 #include "imageLibrary.h"
 #include "world.h"
 #include "imageEntity.h"

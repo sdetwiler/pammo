@@ -8,7 +8,6 @@
  */
 
 #include "imageLibrary.h"
-#include "image.h"
 
 namespace pammo
 {
@@ -22,7 +21,8 @@ ImageLibrary::~ImageLibrary()
 {
     for(StringImageRefMap::iterator i=mImages.begin(); i != mImages.end(); ++i)
     {
-        closeImage(i->second->mImage);
+        glDeleteTextures(1, &i->second->mImage->mTexture);
+        delete i->second->mImage;
         delete i->second;
     }
 }
@@ -56,7 +56,8 @@ void ImageLibrary::unreference(Image* image)
             --(i->second->mRefCount);
             if(!i->second->mRefCount)
             {
-                closeImage(i->second->mImage);
+                glDeleteTextures(1, &i->second->mImage->mTexture);
+                delete i->second->mImage;
                 delete i->second;
                 mImages.erase(i);
                 return;

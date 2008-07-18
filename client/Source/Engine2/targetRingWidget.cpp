@@ -1,6 +1,6 @@
 #include "targetRingWidget.h"
 #include "imageLibrary.h"
-#include "image.h"
+#include "drawImage.h"
 
 namespace pammo
 {

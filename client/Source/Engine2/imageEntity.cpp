@@ -1,5 +1,4 @@
 #include "imageEntity.h"
-#include "image.h"
 
 namespace pammo
 {

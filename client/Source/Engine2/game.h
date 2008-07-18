@@ -1,8 +1,6 @@
 #ifndef __GAME_H__
 #define __GAME_H__
 
-#include "pammo.h"
-
 namespace pammo
 {
 
@@ -12,14 +10,14 @@ class Game
 {
 public:
     Game();
-    virtual ~Game();
-
-    int init();
+    ~Game();
 
     void touches(uint32_t count, Touch* touches);
     void update();
-
     void draw();
+        
+protected:
+    friend class View;
     
     void queueInit(View* view);
     void queueDelete(View* view);
@@ -32,8 +30,6 @@ public:
 
     void registerUpdateable(View* view);
     void unregisterUpdateable(View* view);
-        
-protected:
 
 private:
     // Processes any pending initables or deleteables.

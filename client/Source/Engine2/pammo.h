@@ -2,7 +2,6 @@
 #define __PAMMO_H__
 
 #include "platform.h"
-#include "dprintf.h"
 
 #include <vector>
 #include <set>
@@ -12,12 +11,20 @@ using namespace std;
 
 #include <stdlib.h>
 #include <math.h>
+#include <time.h>
 
 #include "vector2.h"
 #include "transform2.h"
 
 namespace pammo
 {
+
+struct Image
+{
+    Vector2 mSize;
+    uint32_t mTexture;
+};
+
 struct Touch
 {
 	enum Phase
@@ -31,10 +38,15 @@ struct Touch
 	Vector2 mLocation;
 };
 
-typedef std::vector< Vector2 > Vector2Vec;
+void dprintf(char const* format, ...);
+Image* openImage(char const* filename);
+Vector2 getFrameSize();
+uint64_t getTime(void);
 
 } // namespace pammo
 
 using namespace pammo;
+
+#include "game.h"
 
 #endif // __PAMMO_H__

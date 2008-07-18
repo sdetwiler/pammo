@@ -1,12 +1,3 @@
-/*
- *  transform2.h
- *  Flain
- *
- *  Created by James Marr on 4/13/08.
- *  Copyright 2008 __MyCompanyName__. All rights reserved.
- *
- */
-
 #ifndef __TRANSFORM2_H__
 #define __TRANSFORM2_H__
 

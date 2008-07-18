@@ -1,10 +1,10 @@
+#include "pammo.h"
 #include "game.h"
-#include "image.h"
+
 #include "imageLibrary.h"
-#include "world.h"
 #include "view.h"
 
-#include <time.h>
+#include "world.h"
 
 namespace pammo
 {
@@ -16,9 +16,6 @@ Game::Game()
     gGame = this;
     
     srand(time(NULL));
-    
-    // Let the image subroutine precompile vert arrays.
-    initImage();
     
     // Initialize the image library.
     gImageLibrary = new ImageLibrary();

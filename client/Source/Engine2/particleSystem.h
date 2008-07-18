@@ -2,7 +2,6 @@
 #define __PARTICLESYSTEM_H__
 
 #include "pammo.h"
-#include "image.h"
 #include "imageEntity.h"
 #include "view.h"
 

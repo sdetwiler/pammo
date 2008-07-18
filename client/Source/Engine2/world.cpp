@@ -10,7 +10,6 @@
 #include "world.h"
 #include "game.h"
 #include "camera.h"
-#include "image.h"
 #include "imageLibrary.h"
 #include "player.h"
 #include "map.h"

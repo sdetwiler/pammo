@@ -1,4 +1,4 @@
-#include "image.h"
+#include "drawImage.h"
 
 namespace pammo
 {
@@ -17,16 +17,6 @@ const GLfloat spriteTexcoords[] = {
 0.0, 1.0,
 1.0, 1.0,
 };
-
-void initImage()
-{
-}
-
-void closeImage(Image* image)
-{
-    glDeleteTextures(1, &image->mTexture);
-    delete image;
-}
 
 void drawImage(Image* image, Transform2 const& transform, float alpha)
 {

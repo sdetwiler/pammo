@@ -1,3 +1,8 @@
+// Trick to get fast precompiled headers in xCode. Don't touch.
+#ifdef pammo
+#undef pammo
+#endif
+
 #ifndef __PAMMO_H__
 #define __PAMMO_H__
 

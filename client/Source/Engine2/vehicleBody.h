@@ -2,26 +2,24 @@
 #define __VEHICLE_BODY_H__
 
 #include "pammo.h"
+#include "body.h"
 
 namespace pammo
 {
 
-class VehicleBody
+class VehicleBody : public Body
 {
     public:
         VehicleBody();
-        ~VehicleBody();
+        virtual ~VehicleBody();
         
         void update();
         
         float mTargetRotation;
-        float mVelocityRotation;
-        float mRotation;
-        
         float mTargetAcceleration;
-        float mAcceleration;
-        Vector2 mVelocity;
-        Vector2 mCenter;
+        
+    private:
+        float mCurrentAcceleration;
 };
 
 }

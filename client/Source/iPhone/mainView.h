@@ -1,8 +1,11 @@
+#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
+
 #import <OpenGLES/EAGL.h>
 #import <OpenGLES/ES1/gl.h>
 #import <OpenGLES/ES1/glext.h>
 
-#import "pammo.h"
+#include "pammo.h"
 
 @interface MainView : UIView
 {

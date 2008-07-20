@@ -1,12 +1,3 @@
-/*
- *  world.h
- *  Flain
- *
- *  Created by James Marr on 3/28/08.
- *  Copyright 2008 __MyCompanyName__. All rights reserved.
- *
- */
-
 #ifndef __WORLD_H__
 #define __WORLD_H__
 
@@ -19,6 +10,7 @@ class Camera;
 class Map;
 class Player;
 class ParticleSystem;
+class Physics;
 
 class World
 {
@@ -29,12 +21,14 @@ class World
         Camera* getCamera();
         Map* getMap();
         ParticleSystem* getParticleSystem();
+        Physics* getPhysics();
 
     protected:
     private:
 		Camera* mCamera;
         Map* mMap;
         ParticleSystem* mParticleSystem;
+        Physics* mPhysics;
         
         Player* mPlayer;
 };

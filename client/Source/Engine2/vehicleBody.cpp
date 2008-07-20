@@ -3,16 +3,19 @@
 namespace pammo
 {
 
-VehicleBody::VehicleBody()
+VehicleBody::VehicleBody() : Body()
 {
     mTargetRotation = 0;
-    mVelocityRotation = 0;
-    mRotation = 0;
-    
     mTargetAcceleration = 0;
-    mAcceleration = 0;
-    mVelocity = Vector2(0, 0);
-    mCenter = Vector2(0, 0);
+    mCurrentAcceleration = 0;
+    
+    mProperties = 1;
+    
+    mRotationDamping = 0.4;
+    mDamping = 0.05;
+    
+    mRadius = 20;
+    mMass = 100;
 }
 
 VehicleBody::~VehicleBody()
@@ -20,7 +23,7 @@ VehicleBody::~VehicleBody()
 
 void VehicleBody::update()
 {
-    // Advance rotation.
+    // Apply rotation accelerations.
     if(mTargetRotation != mRotation)
     {
         float diff = mTargetRotation - mRotation;
@@ -31,23 +34,18 @@ void VehicleBody::update()
         
         if(diff > 0 && diff < M_PI || diff < 0 && diff < -M_PI)
         {
-            mVelocityRotation += amt;
+            mRotationAcceleration += amt;
         }
         else
         {
-            mVelocityRotation -= amt;
+            mRotationAcceleration -= amt;
         }
     }
+    mRotation = mTargetRotation;
     
-    mVelocityRotation *= 0.6;
-    mRotation += mVelocityRotation;
-    
-    if(mRotation > 2*M_PI) mRotation -= 2*M_PI;
-    if(mRotation < 0) mRotation += 2*M_PI;
-
-    mVelocity += Vector2(mTargetAcceleration, 0) * Transform2::createRotation(mRotation);
-    mVelocity *= 0.9;
-    mCenter += mVelocity;
+    // Apply linear accelerations.
+    mCurrentAcceleration = mTargetAcceleration;
+    mAcceleration += Vector2(mCurrentAcceleration, 0) * Transform2::createRotation(mRotation);
 }
 
 }

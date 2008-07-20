@@ -1,12 +1,3 @@
-/*
- *  world.cpp
- *  Flain
- *
- *  Created by James Marr on 3/28/08.
- *  Copyright 2008 __MyCompanyName__. All rights reserved.
- *
- */
-
 #include "world.h"
 #include "game.h"
 #include "camera.h"
@@ -15,6 +6,7 @@
 #include "map.h"
 #include "builder.h"
 #include "particleSystem.h"
+#include "physics.h"
 
 namespace pammo
 {
@@ -28,9 +20,11 @@ World::World()
     mCamera = new Camera(Vector2(0, 0), getFrameSize());
     mMap = new Map();
     
-    mPlayer = new Player();
-    
     mParticleSystem = new ParticleSystem(500);
+    
+    mPhysics = new Physics();
+    
+    mPlayer = new Player();
     
     buildFromMap(this, "TheMap");
 }
@@ -38,8 +32,9 @@ World::World()
 World::~World()
 {
     mPlayer->destroy();
+    mPhysics->destroy();
+    mParticleSystem->destroy();
     
-    delete mParticleSystem;
     delete mCamera;
     delete mMap;
     
@@ -59,6 +54,11 @@ Map* World::getMap()
 ParticleSystem* World::getParticleSystem()
 {
     return mParticleSystem;
+}
+
+Physics* World::getPhysics()
+{
+    return mPhysics;
 }
 
 } //namespace pammo

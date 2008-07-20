@@ -1,3 +1,7 @@
+#include "pammo.h"
+
+#define pammo "You must include pammo.h"
+
 #ifdef __OBJC__
     #import <Foundation/Foundation.h>
     #import <UIKit/UIKit.h>

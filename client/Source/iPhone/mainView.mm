@@ -1,4 +1,4 @@
-#import "MainView.h"
+#import "mainView.h"
 
 #import <QuartzCore/QuartzCore.h>
 #import <OpenGLES/EAGLDrawable.h>

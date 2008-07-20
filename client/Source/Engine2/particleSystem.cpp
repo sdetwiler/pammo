@@ -1,8 +1,6 @@
 #include "particleSystem.h"
 #include "imageLibrary.h"
 #include "world.h"
-#include "collisionMap.h"
-#include "collisionDynamics.h"
 #include "camera.h"
 
 namespace pammo

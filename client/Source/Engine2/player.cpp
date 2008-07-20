@@ -6,6 +6,7 @@
 #include "targetRingWidget.h"
 #include "particleSystem.h"
 #include "vehicleBody.h"
+#include "physics.h"
 
 namespace pammo
 {
@@ -23,7 +24,8 @@ Player::Player() : View()
     mEntity = new ImageEntity(gImageLibrary->reference("data/vehicles/flameTank5/00.png"));
     
     mBody = new VehicleBody();
-    mBody->mCenter = Vector2(3000, 1500);
+    //mBody->mCenter = Vector2(3000, 1500);
+    gWorld->getPhysics()->addBody(mBody);
     
     mFiring = false;
 }
@@ -69,7 +71,7 @@ void Player::update()
         ParticleSystem::InitFireParticleArgs args;
         args.initialPosition = mBody->mCenter;
         args.initialRotation = atan2(mFireDirection.y, mFireDirection.x);
-        args.initialVelocity = mBody->mVelocity;
+        args.initialVelocity = mBody->mVelocity / 30.;
         
         gWorld->getParticleSystem()->initFireParticle(args);
     }
@@ -103,7 +105,7 @@ void Player::onTargetRingUpdated(TargetRingWidget *widget, Vector2 value)
         else
         {
             if(rot < 0) rot += M_PI*2;
-            mBody->mTargetAcceleration = mag;
+            mBody->mTargetAcceleration = mag * mBody->mMass * 7;
             mBody->mTargetRotation = rot;
         }
     }

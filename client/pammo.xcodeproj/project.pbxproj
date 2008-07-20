@@ -13,11 +13,12 @@
 		112A59FB0E3056BC00A3C218 /* particleSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 112A59FA0E3056BC00A3C218 /* particleSystem.cpp */; };
 		1138114A0E2FEBDF00E9FF5F /* view.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 113811490E2FEBDF00E9FF5F /* view.cpp */; };
 		113B2C2D0DF65EB20095A737 /* map.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 113B2C2C0DF65EB20095A737 /* map.cpp */; };
-		115E19840DEBA13700BD1F3A /* Main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 115E19830DEBA13700BD1F3A /* Main.mm */; };
-		115E19870DEBA14E00BD1F3A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 115E19860DEBA14E00BD1F3A /* AppDelegate.mm */; };
-		115E199E0DEBA2A100BD1F3A /* MainView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 115E199A0DEBA2A100BD1F3A /* MainView.mm */; };
+		115E19870DEBA14E00BD1F3A /* appDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 115E19860DEBA14E00BD1F3A /* appDelegate.mm */; };
+		115E199E0DEBA2A100BD1F3A /* mainView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 115E199A0DEBA2A100BD1F3A /* mainView.mm */; };
 		115E1A3A0DEBAE8D00BD1F3A /* iPhone.mm in Sources */ = {isa = PBXBuildFile; fileRef = 115E1A390DEBAE8D00BD1F3A /* iPhone.mm */; };
 		118320AC0E31545F0037B9B4 /* vehicleBody.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 118320AB0E31545F0037B9B4 /* vehicleBody.cpp */; };
+		118321130E328D710037B9B4 /* physics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 118321120E328D710037B9B4 /* physics.cpp */; };
+		1183216D0E3290760037B9B4 /* body.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1183216C0E3290760037B9B4 /* body.cpp */; };
 		11C3F42E0E2F0F3A00EE8D28 /* player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11C3F42D0E2F0F3A00EE8D28 /* player.cpp */; };
 		11CFA2120DEE8D1700279425 /* data in Resources */ = {isa = PBXBuildFile; fileRef = 11CFA1FE0DEE8D1700279425 /* data */; };
 		11EEB7220DEBC73F009F3B13 /* camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11EEB70B0DEBC73F009F3B13 /* camera.cpp */; };
@@ -45,18 +46,21 @@
 		113811490E2FEBDF00E9FF5F /* view.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = view.cpp; sourceTree = "<group>"; };
 		113B2C2B0DF65EB20095A737 /* map.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = map.h; sourceTree = "<group>"; };
 		113B2C2C0DF65EB20095A737 /* map.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = map.cpp; sourceTree = "<group>"; };
-		115E19830DEBA13700BD1F3A /* Main.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Main.mm; sourceTree = "<group>"; };
-		115E19850DEBA14E00BD1F3A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		115E19860DEBA14E00BD1F3A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; };
-		115E19990DEBA2A100BD1F3A /* MainView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainView.h; sourceTree = "<group>"; };
-		115E199A0DEBA2A100BD1F3A /* MainView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MainView.mm; sourceTree = "<group>"; };
+		115E19850DEBA14E00BD1F3A /* appDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = appDelegate.h; sourceTree = "<group>"; };
+		115E19860DEBA14E00BD1F3A /* appDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = appDelegate.mm; sourceTree = "<group>"; };
+		115E19990DEBA2A100BD1F3A /* mainView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mainView.h; sourceTree = "<group>"; };
+		115E199A0DEBA2A100BD1F3A /* mainView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = mainView.mm; sourceTree = "<group>"; };
 		115E1A390DEBAE8D00BD1F3A /* iPhone.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = iPhone.mm; sourceTree = "<group>"; };
 		118320AA0E31545F0037B9B4 /* vehicleBody.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vehicleBody.h; sourceTree = "<group>"; };
 		118320AB0E31545F0037B9B4 /* vehicleBody.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = vehicleBody.cpp; sourceTree = "<group>"; };
+		118321110E328D710037B9B4 /* physics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = physics.h; sourceTree = "<group>"; };
+		118321120E328D710037B9B4 /* physics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = physics.cpp; sourceTree = "<group>"; };
+		1183216B0E3290760037B9B4 /* body.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = body.h; sourceTree = "<group>"; };
+		1183216C0E3290760037B9B4 /* body.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = body.cpp; sourceTree = "<group>"; };
 		11C3F42D0E2F0F3A00EE8D28 /* player.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = player.cpp; sourceTree = "<group>"; };
 		11C3F42F0E2F0F7E00EE8D28 /* player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = player.h; sourceTree = "<group>"; };
 		11CFA1FE0DEE8D1700279425 /* data */ = {isa = PBXFileReference; lastKnownFileType = folder; name = data; path = ../data; sourceTree = SOURCE_ROOT; };
-		11D631F00DEB9E6400CA2A0A /* Platform.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Platform.pch; sourceTree = "<group>"; };
+		11D631F00DEB9E6400CA2A0A /* header.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = header.pch; sourceTree = "<group>"; };
 		11EEB70B0DEBC73F009F3B13 /* camera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = camera.cpp; sourceTree = "<group>"; };
 		11EEB70C0DEBC73F009F3B13 /* camera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = camera.h; sourceTree = "<group>"; };
 		11EEB70E0DEBC73F009F3B13 /* drawImage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = drawImage.cpp; sourceTree = "<group>"; };
@@ -99,14 +103,13 @@
 		080E96DDFE201D6D7F000001 /* iPhone */ = {
 			isa = PBXGroup;
 			children = (
-				115E19850DEBA14E00BD1F3A /* AppDelegate.h */,
-				115E19860DEBA14E00BD1F3A /* AppDelegate.mm */,
-				115E19990DEBA2A100BD1F3A /* MainView.h */,
-				115E199A0DEBA2A100BD1F3A /* MainView.mm */,
-				115E19830DEBA13700BD1F3A /* Main.mm */,
+				115E19850DEBA14E00BD1F3A /* appDelegate.h */,
+				115E19860DEBA14E00BD1F3A /* appDelegate.mm */,
+				11D631F00DEB9E6400CA2A0A /* header.pch */,
+				115E19990DEBA2A100BD1F3A /* mainView.h */,
+				115E199A0DEBA2A100BD1F3A /* mainView.mm */,
 				115E1A390DEBAE8D00BD1F3A /* iPhone.mm */,
 				11EEB7380DEBC769009F3B13 /* platform.h */,
-				11D631F00DEB9E6400CA2A0A /* Platform.pch */,
 			);
 			name = iPhone;
 			path = Source/iPhone;
@@ -115,6 +118,8 @@
 		11EEB7080DEBC73F009F3B13 /* Engine2 */ = {
 			isa = PBXGroup;
 			children = (
+				1183216C0E3290760037B9B4 /* body.cpp */,
+				1183216B0E3290760037B9B4 /* body.h */,
 				1121D1350E2F0BA2008C8598 /* builder.cpp */,
 				1121D1360E2F0BA2008C8598 /* builder.h */,
 				11EEB70B0DEBC73F009F3B13 /* camera.cpp */,
@@ -132,6 +137,8 @@
 				11EEB7160DEBC73F009F3B13 /* pammo.h */,
 				112A59FA0E3056BC00A3C218 /* particleSystem.cpp */,
 				112A59F90E3056BC00A3C218 /* particleSystem.h */,
+				118321120E328D710037B9B4 /* physics.cpp */,
+				118321110E328D710037B9B4 /* physics.h */,
 				11C3F42D0E2F0F3A00EE8D28 /* player.cpp */,
 				11C3F42F0E2F0F7E00EE8D28 /* player.h */,
 				112A588E0E303B7600A3C218 /* targetRingWidget.cpp */,
@@ -140,8 +147,8 @@
 				11EEB71A0DEBC73F009F3B13 /* vector2.h */,
 				118320AB0E31545F0037B9B4 /* vehicleBody.cpp */,
 				118320AA0E31545F0037B9B4 /* vehicleBody.h */,
-				113811480E2FEBDF00E9FF5F /* view.h */,
 				113811490E2FEBDF00E9FF5F /* view.cpp */,
+				113811480E2FEBDF00E9FF5F /* view.h */,
 				11EEB71F0DEBC73F009F3B13 /* world.cpp */,
 				11EEB7200DEBC73F009F3B13 /* world.h */,
 			);
@@ -243,9 +250,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				115E19840DEBA13700BD1F3A /* Main.mm in Sources */,
-				115E19870DEBA14E00BD1F3A /* AppDelegate.mm in Sources */,
-				115E199E0DEBA2A100BD1F3A /* MainView.mm in Sources */,
+				115E19870DEBA14E00BD1F3A /* appDelegate.mm in Sources */,
+				115E199E0DEBA2A100BD1F3A /* mainView.mm in Sources */,
 				115E1A3A0DEBAE8D00BD1F3A /* iPhone.mm in Sources */,
 				11EEB7220DEBC73F009F3B13 /* camera.cpp in Sources */,
 				11EEB7230DEBC73F009F3B13 /* drawImage.cpp in Sources */,
@@ -260,6 +266,8 @@
 				112A588F0E303B7600A3C218 /* targetRingWidget.cpp in Sources */,
 				112A59FB0E3056BC00A3C218 /* particleSystem.cpp in Sources */,
 				118320AC0E31545F0037B9B4 /* vehicleBody.cpp in Sources */,
+				118321130E328D710037B9B4 /* physics.cpp in Sources */,
+				1183216D0E3290760037B9B4 /* body.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -274,11 +282,8 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = Source/iPhone/Platform.pch;
-				HEADER_SEARCH_PATHS = (
-					Source/Engine,
-					Source/iPhone,
-				);
+				GCC_PREFIX_HEADER = Source/iPhone/header.pch;
+				HEADER_SEARCH_PATHS = Source/Engine2/iPhone;
 				INFOPLIST_FILE = Source/iPhone/Info.plist;
 				PRODUCT_NAME = Irradiated;
 			};
@@ -290,11 +295,8 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = Source/iPhone/Platform.pch;
-				HEADER_SEARCH_PATHS = (
-					Source/Engine,
-					Source/iPhone,
-				);
+				GCC_PREFIX_HEADER = Source/iPhone/header.pch;
+				HEADER_SEARCH_PATHS = Source/Engine2/iPhone;
 				INFOPLIST_FILE = Source/iPhone/Info.plist;
 				PRODUCT_NAME = Irradiated;
 			};

@@ -17,7 +17,7 @@
 	GLint mWidth;
 	GLint mHeight;
 	GLuint mRenderbuffer, mFramebuffer;
-	
+    
 	pammo::Game* mGame;
 }
 

@@ -8,9 +8,10 @@
 namespace pammo
 {
 
+class Body;
 class Camera;
 class ImageEntity;
-class VehicleBody;
+class VehicleController;
 
 class Player : 
     public View,
@@ -36,7 +37,8 @@ class Player :
         TargetRingWidget* mMovementRing;
         TargetRingWidget* mTargetRing;
         
-        VehicleBody* mBody;
+        Body* mBody;
+        VehicleController* mController;
         ImageEntity* mEntity;
         
         bool mFiring;

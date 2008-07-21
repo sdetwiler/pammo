@@ -5,7 +5,8 @@
 #include "imageEntity.h"
 #include "targetRingWidget.h"
 #include "particleSystem.h"
-#include "vehicleBody.h"
+#include "vehicleController.h"
+#include "body.h"
 #include "physics.h"
 
 namespace pammo
@@ -15,17 +16,24 @@ Player::Player() : View()
 {
     mMovementRing = new TargetRingWidget(kMoveRingPriority);
     mMovementRing->setObserver(this);
-    mMovementRing->setCenter(Vector2(160, 70));
+    mMovementRing->setCenter(Vector2(70, 160));
     
     mTargetRing = new TargetRingWidget(kFireRingPriority);
     mTargetRing->setObserver(this);
-    mTargetRing->setCenter(Vector2(160, 410));
+    mTargetRing->setCenter(Vector2(410, 160));
     
     mEntity = new ImageEntity(gImageLibrary->reference("data/vehicles/flameTank5/00.png"));
     
-    mBody = new VehicleBody();
+    mBody = gWorld->getPhysics()->addBody();
     //mBody->mCenter = Vector2(3000, 1500);
-    gWorld->getPhysics()->addBody(mBody);
+    mBody->mProperties = 1;
+    mBody->mDamping = 0.1;
+    mBody->mRadius = 20;
+    mBody->mMass = 100;
+    
+    mController = new VehicleController();
+    mController->mBody = mBody;
+    mController->mRotationDamping = 0.4;
     
     mFiring = false;
 }
@@ -56,9 +64,9 @@ bool Player::touch(uint32_t count, Touch* touches)
 
 void Player::update()
 {
-    mBody->update();
+    mController->update();
 
-    mEntity->mRotation = mBody->mRotation + M_PI/2;
+    mEntity->mRotation = mController->mRotation + M_PI/2;
     mEntity->mCenter = mBody->mCenter;
     mEntity->makeDirty();
     
@@ -100,13 +108,13 @@ void Player::onTargetRingUpdated(TargetRingWidget *widget, Vector2 value)
         float rot = atan2(value.y, value.x);
         if(mag < 0.1)
         {
-            mBody->mTargetAcceleration = 0;
+            mController->mAcceleration = 0;
         }
         else
         {
             if(rot < 0) rot += M_PI*2;
-            mBody->mTargetAcceleration = mag * mBody->mMass * 7;
-            mBody->mTargetRotation = rot;
+            mController->mAcceleration = mag * mBody->mMass * 7;
+            mController->mRotationTarget = rot;
         }
     }
     else if(widget == mTargetRing)

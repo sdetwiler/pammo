@@ -20,7 +20,7 @@ class GraphicsContext;
 class Camera
 {
 	public:
-		Camera(Vector2 const& origin, Vector2 const& size);
+		Camera();
 		~Camera();
 		
 		void set();
@@ -34,8 +34,6 @@ class Camera
 		Vector2 mCenter;
 		Vector2 mSize;
 		float mRotation;
-		Vector2 mFrameStart;
-		Vector2 mFrameSize;
 		
 	private:
 		Transform2 getTransform();

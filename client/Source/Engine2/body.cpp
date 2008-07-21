@@ -8,11 +8,6 @@ Body::Body()
     mMass = 0;
     mRadius = 0;
     
-    mRotationDamping = 0;
-    mRotationAcceleration = 0;
-    mRotationVelocity = 0;
-    mRotation = 0;
-    
     mDamping = 0;
     mAcceleration = Vector2(0, 0);
     mVelocity = Vector2(0, 0);

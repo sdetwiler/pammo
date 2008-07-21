@@ -10,14 +10,13 @@ Physics::Physics() : View()
 {
     for(uint32_t i=0; i < 20; ++i)
     {
-        Body* b = new Body();
+        Body* b = addBody();
         b->mRadius = 15;
         b->mMass = 10;
         b->mCenter = Vector2(rand()%200, rand()%200);
-        b->mDamping = 0.2;
+        b->mDamping = 0.05;
         b->mProperties = 1;
         b->mCollideProperties = 1;
-        addBody(b);
     }
 }
 
@@ -37,6 +36,32 @@ uint32_t Physics::getDrawPriority() const
     
 void Physics::update()
 {
+    // Add pending bodies.
+    for(BodyVector::iterator i=mAddBodies.begin(); i != mAddBodies.end(); ++i)
+    {
+        mBodies.push_back(*i);
+    }
+    mAddBodies.clear();
+    
+    // Remove pending bodies.
+    for(BodyVector::iterator i=mRemoveBodies.begin(); i != mRemoveBodies.end(); ++i)
+    {
+        bool found = false;
+        for(BodyVector::iterator j=mBodies.begin(); j != mBodies.end(); ++j)
+        {
+            if(*i == *j)
+            {
+                mBodies.erase(j);
+                found = true;
+                break;
+            }
+        }
+        assert(found);
+        delete *i;
+    }
+    mRemoveBodies.clear();
+
+    // Main update work.
     integrate();
     collide();
 }
@@ -71,9 +96,16 @@ void Physics::draw()
     gWorld->getCamera()->unset();
 }
         
-void Physics::addBody(Body* body)
+Body* Physics::addBody()
 {
-    mBodies.push_back(body);
+    Body* body = new Body;
+    mAddBodies.push_back(body);
+    return body;
+}
+
+void Physics::removeBody(Body* body)
+{
+    mRemoveBodies.push_back(body);
 }
         
 void Physics::integrate()
@@ -82,26 +114,12 @@ void Physics::integrate()
     for(BodyVector::iterator i = mBodies.begin(); i != mBodies.end(); ++i)
     {
         Body* b = *i;
-    
-        // Integrate rotation.
-        //b->mRotationVelocity += b->mRotationAcceleration;
-        //b->mRotationAcceleration = 0;
-        //b->mRotationVelocity *= 1 - b->mRotationDamping;
-        //b->mRotation += b->mRotationVelocity;
-    
-        //if(b->mRotation > 2*M_PI) b->mRotation -= 2*M_PI;
-        //if(b->mRotation < 0) b->mRotation += 2*M_PI;
 
         // Integrate position;
         b->mCenter += b->mVelocity * timestep;
         b->mVelocity += b->mAcceleration * timestep;
-        b->mVelocity *= pow(b->mDamping, timestep);
+        b->mVelocity *= 1 - b->mDamping;
         b->mAcceleration = Vector2(0, 0);
-        
-        //b->mVelocity += b->mAcceleration / b->mMass;
-        //b->mAcceleration = Vector2(0, 0);
-        //b->mVelocity *= 1 - b->mDamping;
-        //b->mCenter += b->mVelocity;
     }
 }
 

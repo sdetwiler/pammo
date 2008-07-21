@@ -22,14 +22,10 @@ class Body
         uint16_t mCollideProperties;
         
         Physics* mPhysics;
+        void* mUserArg;
         
         float mMass;
         float mRadius;
-        
-        float mRotationDamping;
-        float mRotationAcceleration;
-        float mRotationVelocity;
-        float mRotation;
         
         float mDamping;
         Vector2 mAcceleration;

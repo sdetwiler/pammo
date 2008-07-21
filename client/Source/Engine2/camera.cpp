@@ -12,18 +12,13 @@
 namespace pammo
 {
 
-Camera::Camera(Vector2 const& origin, Vector2 const& size)
+Camera::Camera()
 {
-	mCenter.x = 0;
-	mCenter.y = 0;
+	mCenter = Vector2(0, 0);
 	
-	mSize.x = 320;
-	mSize.y = 480;
+	mSize = getFrameSize();
 	
 	mRotation = 0;//3.14159/4;
-	
-	mFrameStart = origin;
-	mFrameSize = size;
 	
 	mTransformDirty = true;
 	mInverseTransformDirty = true;
@@ -49,20 +44,10 @@ Transform2 Camera::getTransform()
 		//mTransform = CGAffineTransformTranslate(mTransform, - mCenter.x, - mCenter.y);
 		
 		mTransform = Transform2();
-		mTransform *= Transform2::createTranslation(Vector2(mFrameSize.x/2, mFrameSize.y/2));
+		mTransform *= Transform2::createTranslation(getFrameSize()/2.);
 		mTransform *= Transform2::createRotation(mRotation);
-		mTransform *= Transform2::createScale(Vector2(mFrameSize.x / mSize.x, mFrameSize.y / mSize.y));
-		mTransform *= Transform2::createTranslation(Vector2(-mCenter.x, -mCenter.y));
-/**		
-		dprintf("Frame: %f, %f\n", mFrameSize.x, mFrameSize.y);
-		dprintf("Rotation: %f\n", mRotation);
-		dprintf("Center: %f, %f\n", mCenter.x, mCenter.y);
-		
-		dprintf("Camera Transform\n");
-		dprintf("[ %f %f ]\n", mTransform[0], mTransform[1]);
-		dprintf("[ %f %f ]\n", mTransform[2], mTransform[3]);
-		dprintf("[ %f %f ]\n", mTransform[4], mTransform[5]);
-		**/
+		mTransform *= Transform2::createScale(getFrameSize() / mSize);
+		mTransform *= Transform2::createTranslation(-mCenter);
 		mTransformDirty = false;
 	}
 	

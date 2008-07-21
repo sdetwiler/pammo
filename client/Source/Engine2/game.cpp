@@ -45,7 +45,6 @@ void Game::draw()
     
 	Vector2 frame = getFrameSize();
 	
-	glViewport(0, 0, (int)frame.x, (int)frame.y);
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 	
@@ -61,6 +60,15 @@ void Game::draw()
 	
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
+    
+    // Rotate coordinate system if we are on the iPhone.
+#ifdef IPHONE
+	glViewport(0, 0, (int)frame.y, (int)frame.x);
+    glRotatef(-90, 0, 0, 1);
+#else
+	glViewport(0, 0, (int)frame.x, (int)frame.y);
+#endif
+    
 	glOrthof(0, frame.x, frame.y, 0, -1.0, 1.0);
 	
 	glMatrixMode(GL_MODELVIEW);
@@ -95,6 +103,7 @@ void Game::queueDelete(View* view)
     
 void Game::registerDrawable(View* view)
 {
+    assert(mDrawable.find(view->getDrawPriority()) == mDrawable.end());
     mDrawable.insert(ViewMap::value_type(view->getDrawPriority(), view));
 }
 
@@ -113,6 +122,7 @@ void Game::unregisterDrawable(View* view)
 
 void Game::registerTouchable(View* view)
 {
+    assert(mTouchable.find(view->getTouchPriority()) == mTouchable.end());
     mTouchable.insert(ViewMap::value_type(view->getTouchPriority(), view));
 }
 
@@ -131,6 +141,7 @@ void Game::unregisterTouchable(View* view)
 
 void Game::registerUpdateable(View* view)
 {
+    assert(mUpdateable.find(view->getUpdatePriority()) == mUpdateable.end());
     mUpdateable.insert(ViewMap::value_type(view->getUpdatePriority(), view));
 }
 

@@ -21,11 +21,14 @@ class Physics : public View
         virtual void update();
         virtual void draw();
         
-        void addBody(Body* body);
+        Body* addBody();
+        void removeBody(Body* body);
         
     private:
         typedef vector< Body* > BodyVector;
         BodyVector mBodies;
+        BodyVector mAddBodies;
+        BodyVector mRemoveBodies;
         
         void integrate();
         void collide();

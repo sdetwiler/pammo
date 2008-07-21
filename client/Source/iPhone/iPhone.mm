@@ -1,5 +1,7 @@
 #include "pammo.h"
 
+#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 #import <OpenGLES/ES1/gl.h>
 #import <QuartzCore/QuartzCore.h>
 
@@ -19,7 +21,7 @@ void dprintf(char const* format, ...)
 
 Vector2 getFrameSize()
 {
-    return Vector2(320, 480);
+    return Vector2(480, 320);
 }
 
 Image* openImage(char const* path)

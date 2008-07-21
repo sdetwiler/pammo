@@ -17,7 +17,7 @@ World::World()
 {
     gWorld = this;
 
-    mCamera = new Camera(Vector2(0, 0), getFrameSize());
+    mCamera = new Camera();
     mMap = new Map();
     
     mParticleSystem = new ParticleSystem(500);

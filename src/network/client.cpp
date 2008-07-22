@@ -153,6 +153,26 @@ ClientObserver* Client::getObserver()
     return mObserver;
 }
 
+void Client::setConnectionEventNotification(Connection* connection, int events)
+{
+    modifySocket(connection->getSocket(), events);
+}
+
+//////////////////////////////////////////////////
+
+void Client::modifySocket(SOCKET s, int events)
+{
+    if(events & READ)
+        FD_SET(s, &mReadFds);
+    else
+        FD_CLR(s, &mReadFds);
+
+    if(events & WRITE)
+        FD_SET(s, &mWriteFds);
+    else
+        FD_CLR(s, &mWriteFds);
+}
+
 int Client::addSocket(SOCKET const& s, int events)
 {
     if(s > mHighFd)
@@ -167,7 +187,8 @@ int Client::addSocket(SOCKET const& s, int events)
     // Make non-blocking.
 
 #ifdef WIN32
-    ret = ioctlsocket(s, FIONBIO, 0);
+    u_long val = 1;
+    ret = ioctlsocket(s, FIONBIO, &val);
 #else
     int flags;
     flags = fcntl(s, F_GETFL, 0);

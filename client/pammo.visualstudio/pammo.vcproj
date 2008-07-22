@@ -40,7 +40,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;..\..\external-libs\sdl\include&quot;;..\Source\win32;..\Source\Engine;&quot;..\..\external-libs\dirent&quot;"
+				AdditionalIncludeDirectories="&quot;..\..\external-libs\sdl\include&quot;;..\Source\win32;&quot;$(ProjectDir)\..\Source\Engine2&quot;;&quot;..\..\external-libs\dirent&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -119,7 +119,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;..\..\external-libs\sdl\include&quot;;..\Source\win32;..\Source\Engine;&quot;..\..\external-libs\dirent&quot;"
+				AdditionalIncludeDirectories="&quot;..\..\external-libs\sdl\include&quot;;..\Source\win32;&quot;$(ProjectDir)\..\Source\Engine2&quot;;&quot;..\..\external-libs\dirent&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -183,99 +183,71 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath="..\Source\Engine\animationEntity.h"
+				RelativePath="..\Source\Engine2\body.h"
 				>
 			</File>
 			<File
-				RelativePath="..\Source\Engine\builder.h"
+				RelativePath="..\Source\Engine2\builder.h"
 				>
 			</File>
 			<File
-				RelativePath="..\Source\Engine\camera.h"
+				RelativePath="..\Source\Engine2\camera.h"
 				>
 			</File>
 			<File
-				RelativePath="..\Source\Engine\collisionDynamics.h"
+				RelativePath="..\Source\Engine2\drawImage.h"
 				>
 			</File>
 			<File
-				RelativePath="..\Source\Engine\collisionMap.h"
+				RelativePath="..\Source\Engine2\enemy.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\external-libs\dirent\dirent.h"
+				RelativePath="..\Source\Engine2\enemyManager.h"
 				>
 			</File>
 			<File
-				RelativePath="..\Source\Engine\dprintf.h"
+				RelativePath="..\Source\Engine2\game.h"
 				>
 			</File>
 			<File
-				RelativePath="..\Source\Engine\entity.h"
+				RelativePath="..\Source\Engine2\imageEntity.h"
 				>
 			</File>
 			<File
-				RelativePath="..\Source\Engine\flameTankVehicle.h"
+				RelativePath="..\Source\Engine2\imageLibrary.h"
 				>
 			</File>
 			<File
-				RelativePath="..\Source\Engine\game.h"
+				RelativePath="..\Source\Engine2\map.h"
 				>
 			</File>
 			<File
-				RelativePath="..\Source\Engine\healthMeter.h"
+				RelativePath="..\Source\Engine2\pammo.h"
 				>
 			</File>
 			<File
-				RelativePath="..\Source\Engine\image.h"
+				RelativePath="..\Source\Engine2\particleSystem.h"
 				>
 			</File>
 			<File
-				RelativePath="..\Source\Engine\imageEntity.h"
+				RelativePath="..\Source\Engine2\physics.h"
 				>
 			</File>
 			<File
-				RelativePath="..\Source\Engine\imageLibrary.h"
+				RelativePath="..\Source\win32\platform.h"
 				>
 			</File>
 			<File
-				RelativePath="..\Source\Engine\lobbyView.h"
+				RelativePath="..\Source\Engine2\player.h"
 				>
 			</File>
 			<File
-				RelativePath="..\Source\Engine\magnitudeWidget.h"
+				RelativePath="..\Source\Engine2\sideShooterEnemy.h"
 				>
 			</File>
 			<File
-				RelativePath="..\Source\Engine\npcManager.h"
-				>
-			</File>
-			<File
-				RelativePath="..\Source\Engine\pammo.h"
-				>
-			</File>
-			<File
-				RelativePath="..\Source\Engine\particleSystem.h"
-				>
-			</File>
-			<File
-				RelativePath="..\Source\Engine\pathManager.h"
-				>
-			</File>
-			<File
-				RelativePath="..\Source\Engine\performanceMonitor.h"
-				>
-			</File>
-			<File
-				RelativePath="..\Source\Engine\player.h"
-				>
-			</File>
-			<File
-				RelativePath="..\Source\Engine\targetRingWidget.h"
-				>
-			</File>
-			<File
-				RelativePath="..\Source\Engine\tileMap.h"
+				RelativePath="..\Source\Engine2\targetRingWidget.h"
 				>
 			</File>
 			<File
@@ -283,35 +255,27 @@
 				>
 			</File>
 			<File
-				RelativePath="..\Source\Engine\transform2.h"
+				RelativePath="..\Source\Engine2\transform2.h"
 				>
 			</File>
 			<File
-				RelativePath="..\Source\Engine\trebuchetVehicle.h"
+				RelativePath="..\Source\Engine2\trebuchetEnemy.h"
 				>
 			</File>
 			<File
-				RelativePath="..\Source\win32\types_platform.h"
+				RelativePath="..\Source\Engine2\vector2.h"
 				>
 			</File>
 			<File
-				RelativePath="..\Source\Engine\vector2.h"
+				RelativePath="..\Source\Engine2\vehicleController.h"
 				>
 			</File>
 			<File
-				RelativePath="..\Source\Engine\vehicle.h"
+				RelativePath="..\Source\Engine2\view.h"
 				>
 			</File>
 			<File
-				RelativePath="..\Source\Engine\vehicleSelectView.h"
-				>
-			</File>
-			<File
-				RelativePath="..\Source\Engine\widget.h"
-				>
-			</File>
-			<File
-				RelativePath="..\Source\Engine\world.h"
+				RelativePath="..\Source\Engine2\world.h"
 				>
 			</File>
 		</Filter>
@@ -327,27 +291,15 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\Source\Engine\animationEntity.cpp"
+				RelativePath="..\Source\Engine2\body.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\Source\Engine\builder.cpp"
+				RelativePath="..\Source\Engine2\builder.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\Source\Engine\camera.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\Source\Engine\collisionDynamics.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\Source\Engine\collisionMap.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\external-libs\dirent\dirent.c"
+				RelativePath="..\Source\Engine2\camera.cpp"
 				>
 			</File>
 			<File
@@ -355,23 +307,19 @@
 				>
 			</File>
 			<File
-				RelativePath="..\Source\Engine\drawImage.cpp"
+				RelativePath="..\Source\Engine2\drawImage.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\Source\Engine\entity.cpp"
+				RelativePath="..\Source\Engine2\enemy.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\Source\Engine\flameTankVehicle.cpp"
+				RelativePath="..\Source\Engine2\enemyManager.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\Source\Engine\game.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\Source\Engine\healthMeter.cpp"
+				RelativePath="..\Source\Engine2\game.cpp"
 				>
 			</File>
 			<File
@@ -379,19 +327,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\Source\Engine\imageEntity.cpp"
+				RelativePath="..\Source\Engine2\imageEntity.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\Source\Engine\imageLibrary.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\Source\Engine\lobbyView.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\Source\Engine\magnitudeWidget.cpp"
+				RelativePath="..\Source\Engine2\imageLibrary.cpp"
 				>
 			</File>
 			<File
@@ -399,27 +339,27 @@
 				>
 			</File>
 			<File
-				RelativePath="..\Source\Engine\npcManager.cpp"
+				RelativePath="..\Source\Engine2\map.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\Source\Engine\particleSystem.cpp"
+				RelativePath="..\Source\Engine2\particleSystem.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\Source\Engine\pathManager.cpp"
+				RelativePath="..\Source\Engine2\physics.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\Source\Engine\player.cpp"
+				RelativePath="..\Source\Engine2\player.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\Source\Engine\targetRingWidget.cpp"
+				RelativePath="..\Source\Engine2\sideShooterEnemy.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\Source\Engine\tileMap.cpp"
+				RelativePath="..\Source\Engine2\targetRingWidget.cpp"
 				>
 			</File>
 			<File
@@ -427,23 +367,19 @@
 				>
 			</File>
 			<File
-				RelativePath="..\Source\Engine\trebuchetVehicle.cpp"
+				RelativePath="..\Source\Engine2\trebuchetEnemy.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\Source\Engine\vehicle.cpp"
+				RelativePath="..\Source\Engine2\vehicleController.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\Source\Engine\vehicleSelectView.cpp"
+				RelativePath="..\Source\Engine2\view.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\Source\Engine\widget.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\Source\Engine\world.cpp"
+				RelativePath="..\Source\Engine2\world.cpp"
 				>
 			</File>
 		</Filter>

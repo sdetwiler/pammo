@@ -17,7 +17,6 @@ TargetRingWidget::TargetRingWidget(uint32_t priority)
     
     mRingImage = gImageLibrary->reference("data/interface/targetRingBackground.png");
     mIndicatorImage = gImageLibrary->reference("data/interface/targetRingSelection.png");
-    
 }
 
 TargetRingWidget::~TargetRingWidget()

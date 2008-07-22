@@ -175,4 +175,28 @@ void CollisionDynamics::draw()
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 }
 
+Vehicle* CollisionDynamics::getClosestVehicle(Vehicle const* fromVehicle)
+{
+    float shortest = 100000000.0;
+    Vehicle* closest = NULL;
+    for(DynamicBodyVector::iterator i = mBodies.begin(); i != mBodies.end(); ++i)
+    {
+        if((*i)->mType != DynamicBody::VehicleType)
+            continue;
+
+        Vehicle* vehicle = (*i)->mVehicle;
+
+        Vector2 v = fromVehicle->mCenter - vehicle->mCenter;
+        float distance = magnitude(v);
+        if(distance < shortest && (fromVehicle!=vehicle))
+        {
+            closest = vehicle;
+            shortest = distance;
+        }
+    }
+
+    return closest;
+}
+
+
 }

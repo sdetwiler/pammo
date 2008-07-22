@@ -37,6 +37,11 @@ void Connection::onReadable()
     
     mReadable = true;
     
+    int events = 0;
+    if(mWritable == false)
+        events|= ConnectionOwner::WRITE;
+    mOwner->setConnectionEventNotification(this, events);
+
     if(mObserver)
         mObserver->onReadable(this);
 }
@@ -45,6 +50,11 @@ void Connection::onWritable()
 {
     //    printf("Connection::onWritable\n");
     mWritable = true;
+
+    int events = 0;
+    if(mReadable == false)
+        events|= ConnectionOwner::READ;
+    mOwner->setConnectionEventNotification(this, events);
 
     if(mObserver)
         mObserver->onWritable(this);
@@ -76,12 +86,24 @@ int Connection::read(uint8_t* buf, uint32_t bufLen, uint32_t& numRead)
         int e = errno;
         //printf("recv failed: %s (%d)\n", strerror(e), e);
         mReadable = false;
+        int events = ConnectionOwner::READ;
+        if(mWritable == false)
+            events|= ConnectionOwner::WRITE;
+        mOwner->setConnectionEventNotification(this, events);
+
         return -1;
     }
 
     // No longer readable.
     if(read < bufLen)
+    {
         mReadable = false;
+     
+        int events = ConnectionOwner::READ;
+        if(mWritable == false)
+            events|= ConnectionOwner::WRITE;
+        mOwner->setConnectionEventNotification(this, events);
+    }
 
     numRead = read;
     
@@ -103,11 +125,21 @@ int Connection::write(uint8_t* buf, uint32_t bufLen, uint32_t& numWritten)
         int e = errno;
         //        printf("send failed: %s (%d)", strerror(e), e);
         mWritable = false;
+
+        int events = ConnectionOwner::WRITE;
+        if(mReadable == false)
+            events|= ConnectionOwner::READ;
+        mOwner->setConnectionEventNotification(this, events);
+
         return -1;
     }
     if(sent < bufLen)
     {
         mWritable = false;
+        int events = ConnectionOwner::WRITE;
+        if(mReadable == false)
+            events|= ConnectionOwner::READ;
+        mOwner->setConnectionEventNotification(this, events);
     }
 
     numWritten = sent;

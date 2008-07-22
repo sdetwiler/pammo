@@ -90,7 +90,11 @@ bool PathManager::touch(uint32_t count, Touch* touches)
         return true;
 
     case Touch::PhaseMove:
-        mBuilding = true;
+        if(mBuilding == false)
+        {
+            addPoint(mPlayer->getCenter());
+            mBuilding = true;
+        }
         addPoint(gWorld->getCamera()->translateToWorld(touches[0].mLocation));
         return true;
         break;
@@ -111,13 +115,19 @@ bool PathManager::touch(uint32_t count, Touch* touches)
 
 void PathManager::addPoint(Vector2 const& point)
 {
+    if(mPlayer->getVehicle() == NULL)
+    {
+        dprintf("PathManager::addPoint called but player does not have an active vehicle.");
+        return;
+    }
+
     Vector2 newPoint = point;
     if(mPoints.size() > 0)
     {
         Vector2 worldStart = mPoints[mPoints.size()-1];
         Vector2 worldEnd = point;
         vector< Vector2 > newPath;
-        
+
         gWorld->getCollisionMap()->route(worldStart, worldEnd, mPlayer->getVehicle()->getCollisionBodyRadius(), newPath);
         for(uint32_t i=0; i < newPath.size(); ++i)
             mPoints.push_back(newPath[i]);

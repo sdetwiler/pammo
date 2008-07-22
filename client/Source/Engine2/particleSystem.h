@@ -72,17 +72,14 @@ public:
     //void initHitParticle(Vector2 const& initialPosition);
     //void initExplosionParticle(Vector2 const& initialPosition);
 
-    //struct InitBallParticleArgs
-    //{
-    //    Vehicle const*  emitter;
-    //    Vector2         initialPosition;
-    //    float           initialRotation;
-    //    Vector2         initialVelocity;
-    //    ParticleHitCb   hitCallback;
-    //    void*           hitCallbackArg;
-    //    float           maxDistance;
-    //};
-    //void initBallParticle(InitBallParticleArgs const& args); 
+    struct InitBallParticleArgs
+    {
+        Vector2         initialPosition;
+        float           initialRotation;
+        Vector2         initialVelocity;
+        float           maxDistance;
+    };
+    void initBallParticle(InitBallParticleArgs const& args); 
 
 protected:
 private:

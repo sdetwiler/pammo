@@ -83,57 +83,6 @@ void TrebuchetVehicle::update()
     Vehicle::update();
 
     getTransform();
-
-    Vector2 baseVelocity;
-/******
-    // Fire.
-    int width=1;
-    int i=1;
-    //for(int i= 0; i<width; ++i)
-    {
-        // Add new flame particle.
-        float rad = 32.0f; // Distance from center of tank to end of nozzle.
-        float rot = mFireAngle - 90.0f*0.0174532925f +(i*.02f) + ((rand()%3)/60.0f);
-        
-        // Calculate center. Vehicle center plus nozzle rad rotated for direction.
-        Vector2 center = mCenter + Vector2(rad, 0) * Transform2::createRotation(rot) + Vector2((rand()%6)-3, (rand()%6)-3);
-
-        // Calculate base / initial velocity. Vehicle speed rotated for direction.
-        if(mMoving)
-            baseVelocity = Vector2(mSpeed, 0) * Transform2::createRotation(rot);
-        else
-            baseVelocity = Vector2(0, 0);
-
-        ParticleSystem::InitFireParticleArgs args;
-        args.emitter = this;
-        args.hitCallback = particleHitCb;
-        args.hitCallbackArg = this;
-        args.initialPosition = center;
-        args.initialRotation = rot;
-        args.initialVelocity = baseVelocity;
-
-        gWorld->getParticleSystem()->initFireParticle(args);
-    }
-
-    // Smoke.
-    width=1;
-    //for(int i= 0; i<=width; ++i)
-    {
-        float rad = 20; // Distance from center of tank to end of nozzle.
-        float rot = mFireAngle - 90.0f*0.0174532925f+ (i*.06f) + (-0.3f +(rand()%10)/15.0f);
-        
-        // Calculate center. Vehicle center plus nozzle rad rotated for direction.
-        Vector2 center = mCenter + Vector2(rad, 0) * Transform2::createRotation(rot);
-
-        // Calculate base / initial velocity. Vehicle speed rotated for direction.
-        if(mMoving)
-            baseVelocity = Vector2(mSpeed, 0) * Transform2::createRotation(rot);
-        else
-            baseVelocity = Vector2(0, 0);
-
-        gWorld->getParticleSystem()->initSmokeParticle(center, rot, baseVelocity);
-    }
-****/
 }
 
 bool TrebuchetVehicle::touch(uint32_t count, Touch* touches)
@@ -196,6 +145,11 @@ void TrebuchetVehicle::onParticleHit(Vehicle* vehicle)
 void TrebuchetVehicle::particleHitCb(Vehicle* vehicle, void* arg)
 {
     ((TrebuchetVehicle*)arg)->onParticleHit(vehicle);
+}
+
+uint32_t TrebuchetVehicle::getTypeId()
+{
+    return VEHICLE_TREBUCHET;
 }
 
 } // namespace pammo

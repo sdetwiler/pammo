@@ -163,6 +163,26 @@ int Server::stop()
     return 0;
 }
 
+void Server::setConnectionEventNotification(Connection* connection, int events)
+{
+    modifySocket(connection->getSocket(), events);
+}
+
+//////////////////////////////////////////////////
+
+void Server::modifySocket(SOCKET s, int events)
+{
+    if(events & READ)
+        FD_SET(s, &mReadFds);
+    else
+        FD_CLR(s, &mReadFds);
+
+    if(events & WRITE)
+        FD_SET(s, &mWriteFds);
+    else
+        FD_CLR(s, &mWriteFds);
+}
+
 //////////////////////////////////////////////////
 
 int Server::addSocket(SOCKET s, int events)
@@ -171,15 +191,14 @@ int Server::addSocket(SOCKET s, int events)
         mHighFd = s;
 
     int ret;
-    if(events & READ)
-        FD_SET(s, &mReadFds); 
-    if(events & WRITE)
-        FD_SET(s, &mWriteFds);
+
+    modifySocket(s, events);
 
     // Make non-blocking.
 
 #ifdef WIN32
-    ret = ioctlsocket(s, FIONBIO, 0);
+    u_long val = 1;
+    ret = ioctlsocket(s, FIONBIO, &val);
 #else
     int flags;
     flags = fcntl(s, F_GETFL, 0);
@@ -257,40 +276,36 @@ void Server::threadFunc()
 
         // Cast to in for win32 compatibility.
         int count = select((int)mHighFd, &readFds, &writeFds, &errorFds, NULL);
-        for(int i=0; i<count; ++i)
+        printf("select returns with %d\n", count);
+
+        if(FD_ISSET(mNotifySocket, &readFds))
         {
-            if(FD_ISSET(i+1, &readFds))
-            {
-                if(i == mNotifySocket)
-                {
-                    int foo;
-                    recv(i, (char*)&foo, sizeof(foo), 0);
+            int foo;
+            recv(it->first, (char*)&foo, sizeof(foo), 0);
 
-                    // Check if should shut down.
-                    if(!mRunning)
-                    {
-                        return;
-                    }
-                }
-                
-                else if(i == mSocket)
-                {
-                    onNewConnection();
-                }
-                else
-                {
-                    it = mConnections.find(i);
-                    if(it != mConnections.end())
-                    {
-                        it->second->onReadable();
-                    }
-                }
+            // Check if should shut down.
+            if(!mRunning)
+            {
+                return;
             }
+            --count;
+        }
+        if(FD_ISSET(mSocket, &readFds))
+        {
+            onNewConnection();
+            --count;
+        }
 
-            if(FD_ISSET(i, &writeFds))
+        if(count)
+        {
+            for(it = mConnections.begin(); it != mConnections.end(); ++it)
             {
-                it = mConnections.find(i);
-                if(it != mConnections.end())
+                if(FD_ISSET(it->first, &readFds))
+                {
+                    it->second->onReadable();
+                }
+
+                if(FD_ISSET(it->first, &writeFds))
                 {
                     it->second->onWritable();
                 }
@@ -405,7 +420,8 @@ int Server::onNewConnection()
         struct sockaddr_in addr;
         int addrLen = sizeof(addr);
         SOCKET newSock = accept(mSocket, (struct sockaddr*)&addr, &addrLen);
-        if(newSock < 0)
+        // Cast for win32 compatibility.
+        if(((int)newSock) < 0)
         {
             //   closeConnection(conn);
             delete conn;

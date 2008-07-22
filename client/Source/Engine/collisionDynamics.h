@@ -49,7 +49,8 @@ class CollisionDynamics
         };
         
         void raycast(Vector2 const& startPosition, Vector2 const& endPosition, float radius, float speed, uint32_t mask, RaycastResult& result);
-        
+        Vehicle* getClosestVehicle(Vehicle const* fromVehicle);
+
         void draw();
         
     private:

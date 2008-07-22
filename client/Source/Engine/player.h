@@ -67,6 +67,9 @@ public:
     Vector2 const& getCenter() const;
     void setCenter(Vector2 const& center);
 
+    void setSwarmPoint(Vector2 const& point);
+    Vector2 const& getSwarmPoint();
+
 
 protected:
 
@@ -74,6 +77,9 @@ protected:
     void destroy();
 
 private:
+
+    void npcUpdate();
+
     PathManager* mPathManager;
     Vehicle*     mVehicle;
     uint32_t     mVehicleType;
@@ -85,6 +91,7 @@ private:
     uint64_t     mSpawnFrame;  // Frame number was spawned.
     uint64_t     mFrameCount;  // Count of frames since created.
 
+    Vector2      mSwarmPoint; // Used only by NPCs.
     float        mHealth;
 
     PlayerObserver* mObserver;

@@ -1,4 +1,4 @@
-#include "image.h"
+#include "pammo.h"
 #include <map>
 #include <string>
 #include <SDL_image.h>
@@ -8,7 +8,8 @@ namespace pammo
 
 Vector2 getFrameSize()
 {
-    return Vector2(320, 480);
+//   return Vector2(320, 480);
+   return Vector2(480, 320);
 }
 
 Image* openImage(char const* path)
@@ -39,6 +40,7 @@ Image* openImage(char const* path)
         format = GL_RGB;
     else if(surface->format->BitsPerPixel = 32)
         format = GL_RGBA;
+
 
     glTexImage2D(GL_TEXTURE_2D, 0, format, surface->w, surface->h, 0, format, GL_UNSIGNED_BYTE, surface->pixels);
     glDisable(GL_TEXTURE_2D);

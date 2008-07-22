@@ -6,7 +6,7 @@
 namespace pammo
 {
 
-class Image;
+struct Image;
 
 class ImageEntity
 {

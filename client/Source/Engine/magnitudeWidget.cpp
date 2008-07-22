@@ -61,6 +61,7 @@ bool MagnitudeWidget::touch(uint32_t count, Touch* touches)
 
     // Move or End
     mMagnitude = hyp;
+//    dprintf("Magnitude: %.2f", mMagnitude);
     mAngle = theta - (90.0f*0.0174532925f);
     ((TrebuchetVehicle*)mVehicle)->setFireDirection(mAngle);
     ((TrebuchetVehicle*)mVehicle)->setFireMagnitude(mMagnitude);

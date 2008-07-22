@@ -37,6 +37,7 @@ class Server :
         void setObserver(ServerObserver* o);
         ServerObserver* getObserver();
 
+        virtual void setConnectionEventNotification(Connection* connection, int events);
         virtual void closeConnection(Connection* c);
         virtual void notify();
         
@@ -51,6 +52,7 @@ class Server :
 
         int addSocket(SOCKET s, int events);
         int removeSocket(SOCKET s);
+        void modifySocket(SOCKET s, int events);
 
         static void* threadBootFunc(void* arg);
         void threadFunc();

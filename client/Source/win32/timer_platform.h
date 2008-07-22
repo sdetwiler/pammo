@@ -1,7 +1,7 @@
 #ifndef __TIMERPLATFORM_H__
 #define __TIMERPLATFORM_H__
 
-#include "types_platform.h"
+#include "platform.h"
 
 struct Timer
 {

@@ -2,7 +2,7 @@
 #define __IMAGE_H__
 
 #include "pammo.h"
-#include "types_platform.h"
+#include "platform.h"
 
 namespace pammo
 {

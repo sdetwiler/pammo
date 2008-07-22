@@ -10,7 +10,7 @@
 #ifndef __PAMMO_H__
 #define __PAMMO_H__
 
-#include "types_platform.h"
+#include "platform.h"
 #include "timer_platform.h"
 #include "dprintf.h"
 

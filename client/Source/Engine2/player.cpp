@@ -1,3 +1,4 @@
+#include "pammo.h"
 #include "player.h"
 #include "world.h"
 #include "camera.h"
@@ -16,16 +17,26 @@ Player::Player() : View()
 {
     mMovementRing = new TargetRingWidget(kMoveRingPriority);
     mMovementRing->setObserver(this);
-    mMovementRing->setCenter(Vector2(70, 160));
     
     mTargetRing = new TargetRingWidget(kFireRingPriority);
     mTargetRing->setObserver(this);
-    mTargetRing->setCenter(Vector2(410, 160));
-    
+
+    Vector2 size = getFrameSize();
+    if(size.x > size.y)
+    {
+        mMovementRing->setCenter(Vector2(70, 160));
+        mTargetRing->setCenter(Vector2(410, 160));
+    }
+    else
+    {
+        mMovementRing->setCenter(Vector2(160, 70));
+        mTargetRing->setCenter(Vector2(160, 410));
+    }
+
     mEntity = new ImageEntity(gImageLibrary->reference("data/vehicles/flameTank5/00.png"));
     
     mBody = gWorld->getPhysics()->addBody();
-    //mBody->mCenter = Vector2(3000, 1500);
+    mBody->mCenter = Vector2(3000, 1500);
     mBody->mProperties = 1;
     mBody->mDamping = 0.1;
     mBody->mRadius = 20;
@@ -98,6 +109,11 @@ void Player::setCenter(Vector2 center)
 {
     mEntity->mCenter = center;
     mEntity->makeDirty();
+}
+
+Vector2 const& Player::getCenter() const
+{
+    return mEntity->mCenter;
 }
 
 void Player::onTargetRingUpdated(TargetRingWidget *widget, Vector2 value)

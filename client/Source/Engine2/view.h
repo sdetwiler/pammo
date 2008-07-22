@@ -21,6 +21,7 @@ enum ViewPriorities
 {
     kMapPriority = 100,
     kParticlePriority = 120,
+    kEnemyManagerPriority = 140,
     kPlayerPriority = 150,
     kMoveRingPriority = 200,
     kFireRingPriority = 201

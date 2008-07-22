@@ -52,7 +52,7 @@ World::World(char const* mapName, uint32_t vehicleType)
     assert(ret == 0);
 
     mNpcManager = new NpcManager;
-    ret = mNpcManager->init(10);
+    ret = mNpcManager->init(20);
     assert(ret == 0);
 
     mBackButton = new ImageEntity(gImageLibrary->reference("data/interface/Back.png"));
@@ -276,7 +276,7 @@ void World::addSwarmPoint(Vector2 swarmPoint)
 
 uint32_t World::getSwarmPointCount()
 {
-    mSwarmPoints.size();
+    return mSwarmPoints.size();
 }
 
 Vector2 World::getSwarmPoint(uint32_t i)

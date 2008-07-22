@@ -12,6 +12,8 @@ class Player;
 class ParticleSystem;
 class Physics;
 
+class EnemyManager;
+
 class World
 {
 	public:
@@ -22,6 +24,8 @@ class World
         Map* getMap();
         ParticleSystem* getParticleSystem();
         Physics* getPhysics();
+        Player const* getPlayer() const;
+        EnemyManager* getEnemyManager() const;
 
     protected:
     private:
@@ -31,6 +35,7 @@ class World
         Physics* mPhysics;
         
         Player* mPlayer;
+        EnemyManager* mEnemyManager;
 };
     
 extern World* gWorld;

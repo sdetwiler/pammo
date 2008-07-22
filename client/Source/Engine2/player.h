@@ -32,6 +32,7 @@ class Player :
         virtual void onTargetRingUpdated(TargetRingWidget *widget, Vector2 value);
         
         void setCenter(Vector2 center);
+        Vector2 const& getCenter() const;
 
     private:
         TargetRingWidget* mMovementRing;

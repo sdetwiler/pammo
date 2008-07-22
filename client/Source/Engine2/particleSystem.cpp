@@ -74,6 +74,7 @@ bool fireParticleCb(Particle* p, ParticleSystem* system)
     p->mOldMag = mag;
     return true;
 }
+#endif
 
 bool ballParticleCb(Particle* p, ParticleSystem* system)
 {
@@ -97,13 +98,11 @@ bool ballParticleCb(Particle* p, ParticleSystem* system)
     {
         if(p->mHitsObject)
         {
-            system->initExplosionParticle(p->mEndPosition);
-            if(p->mHitCallback)
-                p->mHitCallback(p->mHitVehicle, p->mHitCallbackArg);
+            //system->initExplosionParticle(p->mEndPosition);
         }
         else
         {
-            system->initHitParticle(p->mEndPosition);
+            //system->initHitParticle(p->mEndPosition);
         }
         return false;
     }
@@ -113,37 +112,21 @@ bool ballParticleCb(Particle* p, ParticleSystem* system)
     {
         if(p->mHitsObject)
         {
-            system->initExplosionParticle(p->mEndPosition);
-
-            if(p->mHitCallback)
-                p->mHitCallback(p->mHitVehicle, p->mHitCallbackArg);
+           // system->initExplosionParticle(p->mEndPosition);
         }
         else
         {
-            system->initHitParticle(p->mEndPosition);
+            //system->initHitParticle(p->mEndPosition);
         }
 
         return false;
     }
-//    p->mAlpha-=0.02f;
-/**
-    if(p->mAlpha<=0)
-    {
-        if(p->mHitsObject) 
-        {
-            system->initHitParticle(p->mEndPosition);
-            if(p->mHitCallback)
-                p->mHitCallback(p->mHitVehicle, p->mHitCallbackArg);
-        }
-       return false;
-    }
-    **/
 
     p->mOldMag = mag;
     return true;
 }
 
-
+#if 0
 bool smokeParticleCb(Particle* p, ParticleSystem* system)
 {
     p->mImage.mCenter.x += p->mVelocity.x;
@@ -476,6 +459,7 @@ void ParticleSystem::initExplosionParticle(Vector2 const& initialPosition)
     p->mImage.mCenter = initialPosition + Vector2(rand()%20, rand()%20);
     p->mImage.makeDirty();
 }
+#endif
 
 void ParticleSystem::initBallParticle(InitBallParticleArgs const& args)
 {
@@ -489,7 +473,6 @@ void ParticleSystem::initBallParticle(InitBallParticleArgs const& args)
         
     // Properties about ball particles.
     float velocity = 10.0f;
-   // float maxDistance = 150.0f;
     float particleRadius = 8.0f;
 
     // Set basic particle properties.
@@ -499,9 +482,6 @@ void ParticleSystem::initBallParticle(InitBallParticleArgs const& args)
     p->mRadius = particleRadius;
     p->mHitsObject = false;
     p->mAlpha = 1.0f;
-    p->mHitCallback = args.hitCallback;
-    p->mHitCallbackArg = args.hitCallbackArg;
-    p->mHitVehicle = NULL;
     p->mStartPosition = args.initialPosition;
     
     // Setup image.
@@ -518,37 +498,7 @@ void ParticleSystem::initBallParticle(InitBallParticleArgs const& args)
 
     //dprintf("World\n  start: [%.2f, %.2f]\n  end:  [%.2f, %.2f]", initialPosition.x, initialPosition.y, p->mEndPosition.x, p->mEndPosition.y);
     
-    // Collide with collision map.
-    CollisionMap::RaycastResult mapResult;
-    gWorld->getCollisionMap()->raycast(args.initialPosition, p->mEndPosition, particleRadius, mapResult);
-    
-    // Collide with collision dynamics.
-    CollisionDynamics::RaycastResult dynamicsResult;
-    uint32_t flags;
-    if(args.emitter->getCollisionBodyMask() & LOCALPLAYER)
-        flags = REMOTEPLAYER;
-    else
-        flags = LOCALPLAYER;
-
-    gWorld->getCollisionDynamics()->raycast(args.initialPosition, p->mEndPosition, particleRadius, velocity, flags, dynamicsResult);
-    
-    // Determine which was closer.
-    if(mapResult.mHit && (!dynamicsResult.mHit || mapResult.mDistance < dynamicsResult.mDistance))
-    {
-        p->mEndPosition = mapResult.mPosition;
-        p->mHitsObject = true;
-    }
-    else if(dynamicsResult.mHit)
-    {
-        p->mEndPosition = dynamicsResult.mPosition;
-        p->mHitVehicle = dynamicsResult.mBody->mVehicle;
-        p->mHitsObject = true;
-    }
-
-    //dprintf("hit:  [%.2f, %.2f]", p->mEndPosition.x, p->mEndPosition.y);
-
 }
-#endif
 
 
 

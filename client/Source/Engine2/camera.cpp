@@ -17,7 +17,6 @@ Camera::Camera()
 	mCenter = Vector2(0, 0);
 	
 	mSize = getFrameSize();
-	
 	mRotation = 0;//3.14159/4;
 	
 	mTransformDirty = true;

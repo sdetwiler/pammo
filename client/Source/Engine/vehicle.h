@@ -36,6 +36,8 @@ public:
     virtual uint32_t getTouchPriority() const;
     virtual void update();
 
+    virtual uint32_t getTypeId() = 0;
+
     // Called when vehicle is hit to cause damage.
     virtual void hit(float damage)=0;
     

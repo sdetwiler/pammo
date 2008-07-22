@@ -53,12 +53,17 @@ bool ballParticleCb(Particle* p, ParticleSystem* system)
     p->mImage.mCenter.x += p->mVelocity.x;
     p->mImage.mCenter.y += p->mVelocity.y;
 
-    float distance = magnitude(p->mImage.mCenter - p->mStartPosition)/magnitude(p->mEndPosition - p->mStartPosition);
-    //dprintf("Distance: %.2f", distance);
+    float distance = magnitude(p->mImage.mCenter - p->mStartPosition) / magnitude(p->mEndPosition - p->mStartPosition);
 
     float x = (distance-0.5)*1.5;
     float y = (-(x*x))+1;
-    //dprintf("Scale: %.2f", y);
+    //dprintf("Scale: %.2f\n", y);
+    if(y<0)
+    {
+        dprintf("WTF: distance: %.2f\t %.2f", distance, x);
+        dprintf("WTF: scale %.2f\n", y);
+        y = .01;
+    }
     p->mImage.mSize = 16 * y;
     
     p->mImage.makeDirty();
@@ -311,7 +316,7 @@ void ParticleSystem::initFireParticle(InitFireParticleArgs const& args)
     if(args.emitter->getCollisionBodyMask() & LOCALPLAYER)
         flags = REMOTEPLAYER;
     else
-        flags = LOCALPLAYER;
+        flags = LOCALPLAYER | REMOTEPLAYER;
 
     gWorld->getCollisionDynamics()->raycast(args.initialPosition, p->mEndPosition, particleRadius, velocity, flags, dynamicsResult);
     

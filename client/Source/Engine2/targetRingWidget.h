@@ -8,7 +8,7 @@ namespace pammo
 {
 
 class TargetRingWidget;
-class Image;
+struct Image;
 
 class TargetRingObserver
 {

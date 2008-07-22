@@ -60,7 +60,6 @@ void Game::draw()
 	
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-    
     // Rotate coordinate system if we are on the iPhone.
 #ifdef IPHONE
 	glViewport(0, 0, (int)frame.y, (int)frame.x);
@@ -70,8 +69,8 @@ void Game::draw()
 #endif
     
 	glOrthof(0, frame.x, frame.y, 0, -1.0, 1.0);
-	
-	glMatrixMode(GL_MODELVIEW);
+
+    glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	
     for(ViewMap::iterator i = mDrawable.begin(); i!= mDrawable.end(); ++i)

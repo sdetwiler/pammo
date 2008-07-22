@@ -34,6 +34,15 @@ int NpcManager::init(uint32_t numPlayers)
         assert(ret >= 0);
         
         mPlayers[i]->setCenter(gWorld->getRandomSpawnPoint());
+        if(gWorld->getSwarmPointCount() == 0)
+        {
+            dprintf("No swarm points defined. Using origin.");
+            mPlayers[i]->setSwarmPoint(Vector2(0,0));
+        }
+        else
+        {
+            mPlayers[i]->setSwarmPoint(gWorld->getSwarmPoint(rand()%gWorld->getSwarmPointCount()));
+        }
     }
 
     return 0;
@@ -53,8 +62,29 @@ void NpcManager::generatePath(Player* player)
     Vector2 lastPos;
     Vector2 newPos;
 
-    lastPos = player->getCenter();
+    Vector2Vec newPath;
 
+    int32_t range = 50;
+    lastPos = player->getCenter();
+    path.push_back(lastPos);
+    for(uint32_t i=0; i<3; ++i)
+    {
+
+        float x = (rand()%(range*2)) - range;
+        float y = (rand()%(range*2)) - range;
+        newPos = player->getSwarmPoint() + Vector2(x, y);
+        if(gWorld->getCollisionMap()->route(lastPos, newPos, 20, newPath))
+        {
+            for(Vector2Vec::iterator j = newPath.begin(); j!=newPath.end(); ++j)
+                path.push_back( *j );
+        }
+        else
+        {
+            path.push_back(newPos);
+        }
+        lastPos = newPos;
+    }
+        /**
     int maxX = gWorld->getTileMap()->getSizeX() * gWorld->getTileMap()->getSizeMaterial();
     int maxY = gWorld->getTileMap()->getSizeY() * gWorld->getTileMap()->getSizeMaterial();
     for(uint32_t i=0; i<5; ++i)
@@ -73,7 +103,9 @@ void NpcManager::generatePath(Player* player)
 
         lastPos = newPos;
     }
+
     dprintf("");
+**/
     player->setPath(path);
 }
 

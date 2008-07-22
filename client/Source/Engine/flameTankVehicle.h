@@ -20,6 +20,7 @@ public:
     virtual bool touch(uint32_t count, Touch* touches);
     virtual void hit(float damage);
     virtual void destroy();
+    virtual uint32_t getTypeId();
 
     static void particleHitCb(Vehicle* vehicle, void* arg);
 

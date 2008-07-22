@@ -6,12 +6,14 @@
  *  Copyright 2008 __MyCompanyName__. All rights reserved.
  *
  */
-
+#include "pammo.h"
 #include "builder.h"
 #include "world.h"
 #include "imageEntity.h"
 #include "imageLibrary.h"
 #include "map.h"
+#include "enemyManager.h"
+
 //#include "collisionMap.h"
 
 namespace pammo
@@ -156,7 +158,6 @@ void buildTileMap(World* world, char const* name)
 
 void buildCollisionMap(World* world, char const* mapName)
 {
-    #if 0
     string fullName = string("data/maps/") + mapName + ".omap";
 	FILE* f = fopen(fullName.c_str(), "rb");
 	if(!f)
@@ -175,7 +176,7 @@ void buildCollisionMap(World* world, char const* mapName)
     char* cur = buffer;
     
     // Get a pointer to the collision map.
-    CollisionMap* collisionMap = world->getCollisionMap();
+    //CollisionMap* collisionMap = world->getCollisionMap();
     
     // Verify the map header.
     assert(cur[0] == 'P' && cur[1] == 'I' && cur[2] == 'O' && cur[3] == 1);
@@ -223,7 +224,7 @@ void buildCollisionMap(World* world, char const* mapName)
             normals[i%numPoints] = normal;
         }
         
-        collisionMap->addShape(numPoints, points, normals);
+        //collisionMap->addShape(numPoints, points, normals);
         delete[] points;
         delete[] normals;
     }
@@ -246,25 +247,16 @@ void buildCollisionMap(World* world, char const* mapName)
         {
             ++spawnPoints;
             dprintf("Spawn Point: %f, %f", x, y);
-            world->addSpawnPoint(Vector2(x, y));
-        }
-        else if(properties == 1)
-        {
-            ++swarmPoints;
-            dprintf("Swarm Point: %f, %f", x, y);
-            world->addSwarmPoint(Vector2(x, y));
+            world->getEnemyManager()->addSpawnPoint(Vector2(x, y));
         }
     }
     
     // Add a default POI if non are defined in the file.
     if(spawnPoints == 0)
-        world->addSpawnPoint(Vector2(0, 0));
-    if(swarmPoints == 0)
-        world->addSwarmPoint(Vector2(100, 100));
+        world->getEnemyManager()->addSpawnPoint(Vector2(0, 0));
     
     // Free the buffer;
     delete[] buffer;
-    #endif
 }
     
 void buildFromMap(World* world, char const* mapName)

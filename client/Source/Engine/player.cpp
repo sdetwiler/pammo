@@ -124,13 +124,18 @@ void Player::spawn()
 
     else
     {
-        if(rand()%2)
+        if(false && rand()%2)
         {
             mVehicle = new FlameTankVehicle;
+            mVehicleType = VEHICLE_FLAMETANK;
         }
         else
+        {
             mVehicle = new TrebuchetVehicle;
+            mVehicleType = VEHICLE_TREBUCHET;
+        }
     }
+
     mVehicle->setObserver(this);
     ret = mVehicle->init();
     if(ret < 0)
@@ -217,6 +222,48 @@ uint32_t Player::getTouchPriority() const
     return 0;
 }
 
+void Player::npcUpdate()
+{
+    // Expensive, so only do on occasion.
+    if(rand()%5)
+    {
+        return;
+    }
+
+    Vehicle* closest = gWorld->getCollisionDynamics()->getClosestVehicle(mVehicle);
+    if(!closest)
+        return;
+
+    Vector2 targetVector = mVehicle->mCenter - closest->mCenter;
+    float theta = atan2(targetVector.y, targetVector.x);
+    theta-=(90.0f*0.0174532925f);
+
+    switch(mVehicleType)
+    {
+    case VEHICLE_FLAMETANK:
+        ((FlameTankVehicle*)mVehicle)->setFireDirection(theta);
+        break;
+    case VEHICLE_TREBUCHET:
+        float noise = (rand()%8)-4;
+        ((TrebuchetVehicle*)mVehicle)->setFireDirection(theta-((noise+180.0f)*0.0174532925f));
+        if(!(rand()%3))
+        {
+            float mag = magnitude(targetVector);
+            if(mag > 200)
+                mag = 200;
+            else if(mag < 1)
+                mag = 5;
+
+            dprintf("mag: %.2f", mag);
+            ((TrebuchetVehicle*)mVehicle)->setFireMagnitude(magnitude(targetVector));
+            ((TrebuchetVehicle*)mVehicle)->fire();
+        }
+
+        break;
+    }
+}
+
+
 void Player::update()
 {
     ++mFrameCount;
@@ -228,10 +275,18 @@ void Player::update()
             setState(Alive);
         }
         mVehicle->update();
+        if(mType== Remote)
+        {
+            npcUpdate();
+        }
         break;
     
     case Alive:
         mVehicle->update();
+        if(mType== Remote)
+        {
+            npcUpdate();
+        }
         break;
 
     case Destroyed:
@@ -272,6 +327,16 @@ void Player::setPath(Vector2Vec const& path)
     **/
 }
 
+
+void Player::setSwarmPoint(Vector2 const& point)
+{
+    mSwarmPoint = point;
+}
+
+Vector2 const& Player::getSwarmPoint()
+{
+    return mSwarmPoint;
+}
 
 
 }

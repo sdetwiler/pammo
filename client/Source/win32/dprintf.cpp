@@ -1,9 +1,12 @@
-#include "types_platform.h"
-#include "dprintf.h"
+#include "platform.h"
 #include <stdio.h>
 #include <stdarg.h>
 #include <malloc.h>
 #include <stdio.h>
+
+namespace pammo
+{
+
 void dprintf(char const* format, ...)
 {
     // Get a debug console for win32. Yea.
@@ -39,3 +42,6 @@ void dprintf(char const* format, ...)
 
     printf("%s\n", buffer);
 }
+
+
+} // namespace pammo

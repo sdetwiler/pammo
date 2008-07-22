@@ -8,6 +8,7 @@ namespace pammo
 
 Physics::Physics() : View()
 {
+    return;
     for(uint32_t i=0; i < 20; ++i)
     {
         Body* b = addBody();
@@ -68,13 +69,14 @@ void Physics::update()
 
 void Physics::draw()
 {
+    return;
     gWorld->getCamera()->set();
     
     // Draw debug collision information.
     glLoadIdentity();
     glDisable(GL_TEXTURE_2D);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-    glColor4f(1, 0, 0, 1);
+    glColor4f(1, 0, 0, .5);
     
     for(BodyVector::iterator i = mBodies.begin(); i != mBodies.end(); ++i)
     {

@@ -16,6 +16,13 @@ class ConnectionOwner
         virtual ~ConnectionOwner()
         {}
 
+        enum SocketEvent
+        {
+            READ = 1,
+            WRITE = 2
+        };
+
+        virtual void setConnectionEventNotification(Connection* connection, int events)=0;
         virtual void closeConnection(Connection* connection)=0;
         virtual void notify()=0;
 };

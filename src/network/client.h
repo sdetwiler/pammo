@@ -36,6 +36,8 @@ class Client :
 
         void setObserver(ClientObserver* o);
         ClientObserver* getObserver();
+
+        virtual void setConnectionEventNotification(Connection* connection, int events);
         virtual void closeConnection(Connection* connection);
         virtual void notify();
         
@@ -49,6 +51,7 @@ class Client :
         };
         int addSocket(SOCKET const& s, int events);
         int removeSocket(SOCKET const& s);
+        void modifySocket(SOCKET s, int events);
 
         static void* threadBootFunc(void* arg);
         void threadFunc();

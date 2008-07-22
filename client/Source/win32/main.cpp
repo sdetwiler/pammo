@@ -1,6 +1,7 @@
 #include "pammo.h"
 #include "game.h"
-#include "image.h"
+
+Timer gTimer;
 
 class InputProcessor
 {
@@ -8,24 +9,40 @@ public:
     InputProcessor()
     {
         memset(&mDown, 0, sizeof(mDown));
+        keyTouch[0].mLocation.x = 69;
+        keyTouch[0].mLocation.y = 158;
     }
 
     ~InputProcessor()
     {
     }
 
+    Touch keyTouch[1];
     SDL_keysym mKeySym;
     bool mDown[5];
+
+
+    void cap(float* val, float min, float max)
+    {
+        if(*val < min)
+            *val = min;
+        else if(*val > max)
+            *val = max;
+    }
 
     void InputProcessor::update(Game* game)
     {
         SDL_Event event;
         Vector2 location;
         Touch touch[5];
+        float keyRange = 56;
+        
+
         bool altUp = false;
         bool mouseUp = false;
         while(SDL_PollEvent(&event)) 
         {
+            float directionKey = false;
             switch(event.type) 
             {
             case SDL_KEYDOWN:
@@ -36,16 +53,85 @@ public:
                     touch[1].mLocation = touch[0].mLocation;
                     mDown[1] = true;
                 }
+
+                // Keyboard input for movement control.
+                else if(mKeySym.sym == SDLK_a)
+                {
+                    keyTouch[0].mPhase = Touch::PhaseBegin;
+                    keyTouch[0].mLocation.x += -keyRange;
+                    keyTouch[0].mLocation.y += 0;
+                    directionKey = true;
+                }
+                else if(mKeySym.sym == SDLK_d)
+                {
+                    keyTouch[0].mPhase = Touch::PhaseBegin;
+                    keyTouch[0].mLocation.x += keyRange;
+                    keyTouch[0].mLocation.y += 0;
+                    directionKey = true;
+                }
+
+                else if(mKeySym.sym == SDLK_w)
+                {
+                    keyTouch[0].mPhase = Touch::PhaseBegin;
+                    keyTouch[0].mLocation.x += 0;
+                    keyTouch[0].mLocation.y += -keyRange/2;
+                    directionKey = true;
+                }
+                else if(mKeySym.sym == SDLK_s)
+                {
+                    keyTouch[0].mPhase = Touch::PhaseBegin;
+                    keyTouch[0].mLocation.x += 0;
+                    keyTouch[0].mLocation.y += keyRange/2;
+                    directionKey = true;
+                }
+
                 break;
 
             case SDL_KEYUP:
-                memset(&mKeySym, 0, sizeof(mKeySym));
+                //memset(&mKeySym, 0, sizeof(mKeySym));
+                mKeySym = event.key.keysym;
                 if(mKeySym.sym == SDLK_RALT || mKeySym.sym== SDLK_LALT)
                 {
                     touch[1].mPhase = Touch::PhaseEnd;
                     touch[1].mLocation = touch[0].mLocation;
                     altUp = true;
                 }
+
+
+                // Keyboard input for movement control.
+                else if(mKeySym.sym == SDLK_a)
+                {
+                    keyTouch[0].mPhase = Touch::PhaseEnd;
+                    keyTouch[0].mLocation.x += keyRange;
+                    keyTouch[0].mLocation.y += 0;
+                    directionKey = true;
+                }
+                else if(mKeySym.sym == SDLK_d)
+                {
+                    keyTouch[0].mPhase = Touch::PhaseEnd;
+                    keyTouch[0].mLocation.x += -keyRange;
+                    keyTouch[0].mLocation.y += 0;
+                    directionKey = true;
+                }
+
+                else if(mKeySym.sym == SDLK_w)
+                {
+                    keyTouch[0].mPhase = Touch::PhaseEnd;
+                    keyTouch[0].mLocation.x += 0;
+                    keyTouch[0].mLocation.y += keyRange/2;
+                    directionKey = true;
+                }
+                else if(mKeySym.sym == SDLK_s)
+                {
+                    keyTouch[0].mPhase = Touch::PhaseEnd;
+                    keyTouch[0].mLocation.x += 0;
+                    keyTouch[0].mLocation.y += -keyRange/2;
+                    directionKey = true;
+                }
+
+
+
+
                 break;
 
             case SDL_MOUSEMOTION:
@@ -123,6 +209,14 @@ public:
                 exit(0);
             }// switch
 
+
+            if(directionKey)
+            {
+                cap(&keyTouch[0].mLocation.x, 0, 128);
+                cap(&keyTouch[0].mLocation.y, 128, 255);
+                game->touches(1, keyTouch);
+            }
+
             if(mDown[0] && mDown[1])
             {
                 if(mouseUp)
@@ -156,12 +250,27 @@ public:
 };// class
 
 
-
+int initTimer(Timer* timer)
+{
+    _ftime(&timer->timeBuffer);
+    timer->startTime = (uint64_t)timer->timeBuffer.time * 1000000 + (uint64_t)timer->timeBuffer.millitm * 1000;
+    if(!QueryPerformanceFrequency(&timer->freq))
+    {
+        dprintf("QueryPerformanceFrequency failed");
+        return -1;
+    }
+    if(!QueryPerformanceCounter(&timer->now))
+    {
+        dprintf("QueryPerformanceCounter failed");
+        return -1;
+    }
+    
+    return 0;
+}
 
 int main(int argc, char *argv[]) 
 {
-    Timer timer;
-    if(initTimer(&timer) < 0)
+    if(initTimer(&gTimer) < 0)
     {
         return -1;
     }
@@ -188,17 +297,12 @@ int main(int argc, char *argv[])
 
     int ret;
     Game* game = new Game;
-    ret = game->init(); 
-    if(ret < 0)
-    {
-        return ret;
-    }
 
     InputProcessor input;
 
     // 1 ms accuracy for timer.
     timeBeginPeriod(5);
-    uint64_t start = getTime(&timer);
+    uint64_t start = getTime();
     uint64_t now;
     uint32_t frames = 0;
     while(true)
@@ -213,7 +317,7 @@ int main(int argc, char *argv[])
 
         Sleep(33);
 
-        now = getTime(&timer);
+        now = getTime();
         
         if(now - start > 2000000)
         {

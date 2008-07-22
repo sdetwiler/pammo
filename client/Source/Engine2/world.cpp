@@ -7,6 +7,7 @@
 #include "builder.h"
 #include "particleSystem.h"
 #include "physics.h"
+#include "enemyManager.h"
 
 namespace pammo
 {
@@ -26,6 +27,8 @@ World::World()
     
     mPlayer = new Player();
     
+    mEnemyManager = new EnemyManager;
+
     buildFromMap(this, "TheMap");
 }
 
@@ -59,6 +62,16 @@ ParticleSystem* World::getParticleSystem()
 Physics* World::getPhysics()
 {
     return mPhysics;
+}
+
+Player const* World::getPlayer() const
+{
+    return mPlayer;
+}
+
+EnemyManager* World::getEnemyManager() const
+{
+    return mEnemyManager;
 }
 
 } //namespace pammo

@@ -177,4 +177,9 @@ void FlameTankVehicle::particleHitCb(Vehicle* vehicle, void* arg)
     ((FlameTankVehicle*)arg)->onParticleHit(vehicle);
 }
 
+uint32_t FlameTankVehicle::getTypeId()
+{
+    return VEHICLE_FLAMETANK;
+}
+
 } // namespace pammo

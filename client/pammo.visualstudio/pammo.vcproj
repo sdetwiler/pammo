@@ -183,10 +183,6 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath="..\Source\Engine2\body.h"
-				>
-			</File>
-			<File
 				RelativePath="..\Source\Engine2\builder.h"
 				>
 			</File>
@@ -196,10 +192,6 @@
 			</File>
 			<File
 				RelativePath="..\Source\Engine2\drawImage.h"
-				>
-			</File>
-			<File
-				RelativePath="..\Source\Engine2\enemy.h"
 				>
 			</File>
 			<File
@@ -291,10 +283,6 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\Source\Engine2\body.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\Source\Engine2\builder.cpp"
 				>
 			</File>
@@ -308,10 +296,6 @@
 			</File>
 			<File
 				RelativePath="..\Source\Engine2\drawImage.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\Source\Engine2\enemy.cpp"
 				>
 			</File>
 			<File

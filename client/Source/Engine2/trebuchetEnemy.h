@@ -2,28 +2,14 @@
 #define __TREBUCHETENEMY_H__
 
 #include "pammo.h"
-#include "enemy.h"
+#include "enemyManager.h"
 
 namespace pammo
 {
 
-class TrebuchetEnemy : 
-    public Enemy
-{
-public:
-    TrebuchetEnemy(Vector2 const& position);
-    virtual ~TrebuchetEnemy();
-
-    virtual void update();
-
-protected:
-
-    virtual void fire(float distance);
-
-private:
-        
-};
-
+void trebuchetEnemyInit(Enemy* e, EnemyManager* manager);
+void trebuchetEnemyUpdate(Enemy* e, EnemyManager* manager);
+void trebuchetEnemyDraw(Enemy* e, EnemyManager* manager);
 
 } // namespace pammo
 

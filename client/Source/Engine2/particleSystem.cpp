@@ -24,47 +24,6 @@ bool fireParticleCb(Particle* p, ParticleSystem* system)
     return true;
 }
 
-#if 0
-bool fireParticleCb(Particle* p, ParticleSystem* system)
-{
-    p->mImage.mCenter.x += p->mVelocity.x;
-    p->mImage.mCenter.y += p->mVelocity.y;
-    p->mImage.mRotation += 0.08f;
-    p->mImage.mSize *= 1.05;
-    p->mImage.makeDirty();
-
-    float mag = magnitude(p->mImage.mCenter - p->mEndPosition);
-   // dprintf("mag: %.2f", mag);
-    // Really close to dest.
-    if(mag < 5)
-    {
-        if(p->mHitsObject)
-        {
-            system->initHitParticle(p->mEndPosition);
-            if(p->mHitCallback)
-                p->mHitCallback(p->mHitVehicle, p->mHitCallbackArg);
-        }
-        return false;
-    }
-
-    // Passed it.
-    if(p->mOldMag && (mag > p->mOldMag))
-    {
-        if(p->mHitsObject)
-        {
-            system->initHitParticle(p->mEndPosition);
-            if(p->mHitCallback)
-                p->mHitCallback(p->mHitVehicle, p->mHitCallbackArg);
-        }
-        return false;
-    }
-    
-    p->mAlpha-=0.05f;
-
-    p->mOldMag = mag;
-    return true;
-}
-#endif
 
 bool ballParticleCb(Particle* p, ParticleSystem* system)
 {
@@ -116,7 +75,6 @@ bool ballParticleCb(Particle* p, ParticleSystem* system)
     return true;
 }
 
-#if 0
 bool smokeParticleCb(Particle* p, ParticleSystem* system)
 {
     p->mImage.mCenter.x += p->mVelocity.x;
@@ -128,6 +86,7 @@ bool smokeParticleCb(Particle* p, ParticleSystem* system)
         return false;
     return true;
 }
+#if 0
 
 bool hitParticleCb(Particle* p, ParticleSystem* system)
 {
@@ -250,7 +209,7 @@ void ParticleSystem::initFireParticle(InitFireParticleArgs const& args)
     p->mAlpha = 1.0f;
 
     float f = 8.0;
-    float r = 1.0/f - ((rand()%100)/(f*50)) ;
+    float r = 1.0/f - ((rand()%100)/(f*50));
     
     // Setup image.
     p->mImage.setImage(gImageLibrary->reference("data/particles/flame01.png"));
@@ -345,7 +304,7 @@ void ParticleSystem::initFireParticle(InitFireParticleArgs const& args)
     //dprintf("hit:  [%.2f, %.2f]", p->mEndPosition.x, p->mEndPosition.y);
 
 }
-
+#endif
 
 void ParticleSystem::initSmokeParticle(Vector2 const& initialPosition, float initialRotation, Vector2 const& initialVelocity)
 {
@@ -362,8 +321,8 @@ void ParticleSystem::initSmokeParticle(Vector2 const& initialPosition, float ini
 
     // Set basic particle properties.
     p->mCallback = smokeParticleCb;
-    p->mMass = 0;
-    p->mRadius = 0;
+   // p->mMass = 0;
+//    p->mRadius = 0;
     p->mAlpha = 1.0f;
 
     // Setup image.
@@ -375,7 +334,7 @@ void ParticleSystem::initSmokeParticle(Vector2 const& initialPosition, float ini
     // Setup velocity. InitialVelocity from vehicle plus particle speed rotated for direction.
     p->mVelocity = initialVelocity + Vector2(velocity, 0) * Transform2::createRotation(initialRotation);
 }
-
+#if 0
 void ParticleSystem::initHitParticle(Vector2 const& initialPosition)
 {
     if(mAvailable.size() == 0)

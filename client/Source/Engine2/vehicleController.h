@@ -6,7 +6,7 @@
 namespace pammo
 {
 
-class Body;
+struct Body;
 
 class VehicleController
 {

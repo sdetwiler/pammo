@@ -82,7 +82,7 @@ void Player::update()
     
     gWorld->getCamera()->mCenter = mBody->mCenter;
     gWorld->getCamera()->makeDirty();
-    
+ 
     // Fire if we should be.
     if(mFiring)
     {

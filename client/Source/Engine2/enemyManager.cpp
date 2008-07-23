@@ -1,5 +1,7 @@
 #include "pammo.h"
 #include "enemyManager.h"
+#include "world.h"
+#include "physics.h"
 #include "trebuchetEnemy.h"
 #include "sideShooterEnemy.h"
 
@@ -33,17 +35,16 @@ void EnemyManager::update()
         uint64_t now = getTime();
         if(now-mLastEnemy > 5000000)
         {
-
             Vector2 const* pos = getSpawnPoint(rand()%getSpawnPointCount());
             Enemy* enemy;
             int type = rand()%2;
             switch(type)
             {
             case 0:
-                enemy = new TrebuchetEnemy(*pos);
+                enemy = createEnemy(TrebuchetEnemy, *pos);
                 break;
             case 1:
-                enemy = new SideShooterEnemy(*pos);
+                enemy = createEnemy(SideShooterEnemy, *pos);
                 break;
             }
             
@@ -54,7 +55,7 @@ void EnemyManager::update()
 
     for(EnemyVector::iterator i = mEnemies.begin(); i!= mEnemies.end(); ++i)
     {
-        (*i)->update();
+        (*i)->mUpdateCb((*i), this);
     }
 }
 
@@ -62,7 +63,7 @@ void EnemyManager::draw()
 {
     for(EnemyVector::iterator i = mEnemies.begin(); i!= mEnemies.end(); ++i)
     {
-        (*i)->draw();
+        (*i)->mDrawCb((*i), this);
     }
 }
 
@@ -81,8 +82,44 @@ Vector2 const* EnemyManager::getSpawnPoint(uint32_t index) const
 
 uint32_t EnemyManager::getSpawnPointCount() const
 {
-    return mSpawnPoints.size();
+    return (uint32_t)mSpawnPoints.size();
 }
 
+Enemy* EnemyManager::createEnemy(EnemyType type, Vector2 const& position)
+{
+    // Should pull from pool.
+    Enemy* e = new Enemy;
+    memset(e, 0, sizeof(Enemy));
+
+    e->mBody = gWorld->getPhysics()->addBody();
+    e->mBody->mCenter = position;
+    e->mBody->mProperties = kEnemyCollisionProperties;
+    e->mBody->mCollideProperties= kEnemyCollisionProperties | kPlayerCollisionProperties;
+    e->mBody->mDamping = 0.1f;
+    e->mBody->mRadius = 20;
+    e->mBody->mMass = 100;
+    e->mController = new VehicleController();
+    e->mController->mBody = e->mBody;
+    e->mController->mRotationDamping = 0.4f;
+
+    switch(type)
+    {
+    case TrebuchetEnemy:
+        trebuchetEnemyInit(e, this);
+        break;
+    case SideShooterEnemy:
+        sideShooterEnemyInit(e, this);
+        break;
+    }
+
+    return e;
+}
+
+void EnemyManager::destroyEnemy(Enemy* e)
+{
+    gWorld->getPhysics()->removeBody(e->mBody);
+    // Should return to pool.
+    delete e;
+}
 
 } // namespace pammo

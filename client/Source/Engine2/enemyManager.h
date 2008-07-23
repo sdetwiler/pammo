@@ -3,11 +3,33 @@
 
 #include "pammo.h"
 #include "view.h"
-#include "enemy.h"
+
+#include "vehicleController.h"
+#include "imageEntity.h"
+
 #include <vector>
 
+#define ENEMY_DATA_SIZE 128
+#define ENEMY_COUNT
 namespace pammo
 {
+
+class EnemyManager;
+struct Enemy;
+
+typedef void(*EnemyUpdateCb)(Enemy* e, EnemyManager* manager);
+typedef void (*EnemyDrawCb)(Enemy* e, EnemyManager* manager);
+
+struct Enemy
+{
+    ImageEntity*         mEntity;
+    Body*                mBody;
+    VehicleController*   mController;
+    EnemyUpdateCb        mUpdateCb;
+    EnemyDrawCb          mDrawCb;
+
+    uint8_t mData[ENEMY_DATA_SIZE];
+};
 
 class EnemyManager
     : public View
@@ -25,7 +47,15 @@ public:
     Vector2 const* getSpawnPoint(uint32_t index) const;
     uint32_t getSpawnPointCount() const;
 
+    enum EnemyType
+    {
+        TrebuchetEnemy,
+        SideShooterEnemy
+    };
+
 protected:
+    Enemy* createEnemy(EnemyType type, Vector2 const& position);
+    void destroyEnemy(Enemy* e);
 
 private:
     typedef vector< Vector2 > Vector2Vector;

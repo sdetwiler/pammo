@@ -2,24 +2,14 @@
 #define __SIDESHOOTERENEMY_H__
 
 #include "pammo.h"
-#include "enemy.h"
+#include "enemyManager.h"
 
 namespace pammo
 {
 
-class SideShooterEnemy : 
-    public Enemy
-{
-public:
-    SideShooterEnemy(Vector2 const& position);
-    virtual ~SideShooterEnemy();
-
-protected:
-
-private:
-        
-};
-
+void sideShooterEnemyInit(Enemy* e, EnemyManager* manager);
+void sideShooterEnemyUpdate(Enemy* e, EnemyManager* manager);
+void sideShooterEnemyDraw(Enemy* e, EnemyManager* manager);
 
 } // namespace pammo
 

@@ -69,7 +69,7 @@ public:
     //void removeVehicleTarget(Vehicle* vehicle);
 
     void initFireParticle(InitFireParticleArgs const& args);
-    //void initSmokeParticle(Vector2 const& initialPosition, float initialRotation, Vector2 const& initialVelocity);
+    void initSmokeParticle(Vector2 const& initialPosition, float initialRotation, Vector2 const& initialVelocity);
     //void initHitParticle(Vector2 const& initialPosition);
     //void initExplosionParticle(Vector2 const& initialPosition);
 

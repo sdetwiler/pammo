@@ -1,5 +1,5 @@
 #include "vehicleController.h"
-#include "body.h"
+#include "physics.h"
 
 namespace pammo
 {

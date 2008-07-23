@@ -7,7 +7,6 @@
 #include "targetRingWidget.h"
 #include "particleSystem.h"
 #include "vehicleController.h"
-#include "body.h"
 #include "physics.h"
 
 namespace pammo
@@ -37,7 +36,7 @@ Player::Player() : View()
     
     mBody = gWorld->getPhysics()->addBody();
     mBody->mCenter = Vector2(3000, 1500);
-    mBody->mProperties = 1;
+    mBody->mProperties = kPlayerCollisionProperties;
     mBody->mDamping = 0.1;
     mBody->mRadius = 20;
     mBody->mMass = 100;
@@ -90,7 +89,7 @@ void Player::update()
         ParticleSystem::InitFireParticleArgs args;
         args.initialPosition = mBody->mCenter;
         args.initialRotation = atan2(mFireDirection.y, mFireDirection.x);
-        args.initialVelocity = mBody->mVelocity / 30.;
+        args.initialVelocity = mBody->mVelocity;
         
         gWorld->getParticleSystem()->initFireParticle(args);
     }

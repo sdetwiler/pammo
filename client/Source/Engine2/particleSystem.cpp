@@ -2,35 +2,25 @@
 #include "imageLibrary.h"
 #include "world.h"
 #include "camera.h"
+#include "physics.h"
 
 namespace pammo
 {
 
 bool fireParticleCb(Particle* p, ParticleSystem* system)
 {
-    p->mImage.mCenter.x += p->mVelocity.x;
-    p->mImage.mCenter.y += p->mVelocity.y;
+    p->mImage.mCenter = p->mBody->mCenter;
     p->mImage.mRotation += 0.08f;
     p->mImage.mSize *= 1.05;
     p->mImage.makeDirty();
-
-    float mag = magnitude(p->mImage.mCenter - p->mEndPosition);
-   // dprintf("mag: %.2f", mag);
-    // Really close to dest.
-    if(mag < 5)
+    
+    if(p->mAlpha <= 0)
     {
-        return false;
-    }
-
-    // Passed it.
-    if(p->mOldMag && (mag > p->mOldMag))
-    {
+        gWorld->getPhysics()->removeBody(p->mBody);
         return false;
     }
     
     p->mAlpha-=0.05f;
-
-    p->mOldMag = mag;
     return true;
 }
 
@@ -240,32 +230,6 @@ void ParticleSystem::draw()
     }
     
     gWorld->getCamera()->unset();
-    
-    return;
-    
-    // Draw debug collision information.
-    glLoadIdentity();
-    glDisable(GL_TEXTURE_2D);
-	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-    glColor4f(1, 0, 0, .25);
-    
-    for(ParticleVector::iterator i = mUsed.begin(); i!=mUsed.end(); ++i)
-    {
-        Particle* p = (*i);
-        if(p->mRadius == 0) continue;
-        
-        uint32_t const num = 8;
-        Vector2 points[num];
-        for(uint32_t j=0; j < num; ++j)
-            points[j] = p->mImage.mCenter + Vector2(p->mRadius, 0) * Transform2::createRotation(3.1415/4*j);
-            
-        glVertexPointer(2, GL_FLOAT, 0, (float*)points);
-        glDrawArrays(GL_TRIANGLE_FAN, 0, num);
-    }
-    
-    glColor4f(1, 1, 1, 1);
-    glEnable(GL_TEXTURE_2D);
-	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 }
 
 void ParticleSystem::initFireParticle(InitFireParticleArgs const& args)
@@ -279,16 +243,10 @@ void ParticleSystem::initFireParticle(InitFireParticleArgs const& args)
     mUsed.push_back(p);
         
     // Properties about fire particles.
-    float velocity = 10.0f;
-    float maxDistance = 150.0f;
-    float particleRadius = 10.0f;
+    float velocity = 300.0f;
 
     // Set basic particle properties.
     p->mCallback = fireParticleCb;
-    p->mOldMag = 0;
-    p->mMass = 0;
-    p->mRadius = particleRadius;
-    p->mHitsObject = false;
     p->mAlpha = 1.0f;
 
     float f = 8.0;
@@ -299,12 +257,16 @@ void ParticleSystem::initFireParticle(InitFireParticleArgs const& args)
     p->mImage.mCenter = args.initialPosition;
     p->mImage.mRotation = args.initialRotation + r;
     p->mImage.makeDirty();
-
-    // Setup velocity. InitialVelocity from vehicle plus particle speed rotated for direction.
-    p->mVelocity = args.initialVelocity + Vector2(velocity, 0) * Transform2::createRotation(args.initialRotation+r);
     
-    // Calculate unblocked end position. Start position plus maxDistance rotated for direction.
-    p->mEndPosition = args.initialPosition + Vector2(maxDistance, 0) * Transform2::createRotation(args.initialRotation+r);
+    // Get a body.
+    p->mBody = gWorld->getPhysics()->addBody();
+    p->mBody->mProperties = kPlayerBulletCollisionProperties;
+    p->mBody->mCollideProperties = kEnemyCollisionProperties;
+    p->mBody->mDamping = 0;
+    p->mBody->mRadius = 20;
+    p->mBody->mMass = 50;
+    p->mBody->mCenter = args.initialPosition;
+    p->mBody->mVelocity = args.initialVelocity + Vector2(velocity, 0) * Transform2::createRotation(args.initialRotation+r);
 }
 
 #if 0
@@ -345,7 +307,6 @@ void ParticleSystem::initFireParticle(InitFireParticleArgs const& args)
     p->mImage.mRotation = args.initialRotation + r;
     p->mImage.makeDirty();
     
-
     // Setup velocity. InitialVelocity from vehicle plus particle speed rotated for direction.
     p->mVelocity = args.initialVelocity + Vector2(velocity, 0) * Transform2::createRotation(args.initialRotation+r);
     
@@ -478,8 +439,6 @@ void ParticleSystem::initBallParticle(InitBallParticleArgs const& args)
     // Set basic particle properties.
     p->mCallback = ballParticleCb;
     p->mOldMag = 0;
-    p->mMass = 0;
-    p->mRadius = particleRadius;
     p->mHitsObject = false;
     p->mAlpha = 1.0f;
     p->mStartPosition = args.initialPosition;

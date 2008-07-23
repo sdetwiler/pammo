@@ -12,7 +12,8 @@ Enemy::Enemy(Vector2 const& position)
 {
     mBody = gWorld->getPhysics()->addBody();
     mBody->mCenter = position;
-    mBody->mProperties = 1;
+    mBody->mProperties = kEnemyCollisionProperties;
+    mBody->mCollideProperties = kEnemyCollisionProperties | kPlayerCollisionProperties;
     mBody->mDamping = 0.1;
     mBody->mRadius = 20;
     mBody->mMass = 100;

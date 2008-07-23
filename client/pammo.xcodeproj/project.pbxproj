@@ -18,7 +18,10 @@
 		115E1A3A0DEBAE8D00BD1F3A /* iPhone.mm in Sources */ = {isa = PBXBuildFile; fileRef = 115E1A390DEBAE8D00BD1F3A /* iPhone.mm */; };
 		118320AC0E31545F0037B9B4 /* vehicleController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 118320AB0E31545F0037B9B4 /* vehicleController.cpp */; };
 		118321130E328D710037B9B4 /* physics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 118321120E328D710037B9B4 /* physics.cpp */; };
-		1183216D0E3290760037B9B4 /* body.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1183216C0E3290760037B9B4 /* body.cpp */; };
+		118F3E610E35A01E00ECCDFE /* enemy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 118F3E590E35A01E00ECCDFE /* enemy.cpp */; };
+		118F3E620E35A01E00ECCDFE /* enemyManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 118F3E5B0E35A01E00ECCDFE /* enemyManager.cpp */; };
+		118F3E630E35A01E00ECCDFE /* sideShooterEnemy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 118F3E5D0E35A01E00ECCDFE /* sideShooterEnemy.cpp */; };
+		118F3E640E35A01E00ECCDFE /* trebuchetEnemy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 118F3E5F0E35A01E00ECCDFE /* trebuchetEnemy.cpp */; };
 		11C3F42E0E2F0F3A00EE8D28 /* player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11C3F42D0E2F0F3A00EE8D28 /* player.cpp */; };
 		11CFA2120DEE8D1700279425 /* data in Resources */ = {isa = PBXBuildFile; fileRef = 11CFA1FE0DEE8D1700279425 /* data */; };
 		11EEB7220DEBC73F009F3B13 /* camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11EEB70B0DEBC73F009F3B13 /* camera.cpp */; };
@@ -55,8 +58,14 @@
 		118320AB0E31545F0037B9B4 /* vehicleController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = vehicleController.cpp; sourceTree = "<group>"; };
 		118321110E328D710037B9B4 /* physics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = physics.h; sourceTree = "<group>"; };
 		118321120E328D710037B9B4 /* physics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = physics.cpp; sourceTree = "<group>"; };
-		1183216B0E3290760037B9B4 /* body.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = body.h; sourceTree = "<group>"; };
-		1183216C0E3290760037B9B4 /* body.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = body.cpp; sourceTree = "<group>"; };
+		118F3E590E35A01E00ECCDFE /* enemy.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = enemy.cpp; sourceTree = "<group>"; };
+		118F3E5A0E35A01E00ECCDFE /* enemy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = enemy.h; sourceTree = "<group>"; };
+		118F3E5B0E35A01E00ECCDFE /* enemyManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = enemyManager.cpp; sourceTree = "<group>"; };
+		118F3E5C0E35A01E00ECCDFE /* enemyManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = enemyManager.h; sourceTree = "<group>"; };
+		118F3E5D0E35A01E00ECCDFE /* sideShooterEnemy.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sideShooterEnemy.cpp; sourceTree = "<group>"; };
+		118F3E5E0E35A01E00ECCDFE /* sideShooterEnemy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sideShooterEnemy.h; sourceTree = "<group>"; };
+		118F3E5F0E35A01E00ECCDFE /* trebuchetEnemy.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = trebuchetEnemy.cpp; sourceTree = "<group>"; };
+		118F3E600E35A01E00ECCDFE /* trebuchetEnemy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = trebuchetEnemy.h; sourceTree = "<group>"; };
 		11C3F42D0E2F0F3A00EE8D28 /* player.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = player.cpp; sourceTree = "<group>"; };
 		11C3F42F0E2F0F7E00EE8D28 /* player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = player.h; sourceTree = "<group>"; };
 		11CFA1FE0DEE8D1700279425 /* data */ = {isa = PBXFileReference; lastKnownFileType = folder; name = data; path = ../data; sourceTree = SOURCE_ROOT; };
@@ -118,14 +127,16 @@
 		11EEB7080DEBC73F009F3B13 /* Engine2 */ = {
 			isa = PBXGroup;
 			children = (
-				1183216C0E3290760037B9B4 /* body.cpp */,
-				1183216B0E3290760037B9B4 /* body.h */,
 				1121D1350E2F0BA2008C8598 /* builder.cpp */,
 				1121D1360E2F0BA2008C8598 /* builder.h */,
 				11EEB70B0DEBC73F009F3B13 /* camera.cpp */,
 				11EEB70C0DEBC73F009F3B13 /* camera.h */,
 				11EEB70E0DEBC73F009F3B13 /* drawImage.cpp */,
 				11EEB7130DEBC73F009F3B13 /* drawImage.h */,
+				118F3E590E35A01E00ECCDFE /* enemy.cpp */,
+				118F3E5A0E35A01E00ECCDFE /* enemy.h */,
+				118F3E5B0E35A01E00ECCDFE /* enemyManager.cpp */,
+				118F3E5C0E35A01E00ECCDFE /* enemyManager.h */,
 				11EEB7110DEBC73F009F3B13 /* game.cpp */,
 				11EEB7120DEBC73F009F3B13 /* game.h */,
 				112A588A0E303B5800A3C218 /* imageEntity.cpp */,
@@ -141,9 +152,13 @@
 				118321110E328D710037B9B4 /* physics.h */,
 				11C3F42D0E2F0F3A00EE8D28 /* player.cpp */,
 				11C3F42F0E2F0F7E00EE8D28 /* player.h */,
+				118F3E5D0E35A01E00ECCDFE /* sideShooterEnemy.cpp */,
+				118F3E5E0E35A01E00ECCDFE /* sideShooterEnemy.h */,
 				112A588E0E303B7600A3C218 /* targetRingWidget.cpp */,
 				112A58910E303B9500A3C218 /* targetRingWidget.h */,
 				11EEB7190DEBC73F009F3B13 /* transform2.h */,
+				118F3E5F0E35A01E00ECCDFE /* trebuchetEnemy.cpp */,
+				118F3E600E35A01E00ECCDFE /* trebuchetEnemy.h */,
 				11EEB71A0DEBC73F009F3B13 /* vector2.h */,
 				118320AB0E31545F0037B9B4 /* vehicleController.cpp */,
 				118320AA0E31545F0037B9B4 /* vehicleController.h */,
@@ -267,7 +282,10 @@
 				112A59FB0E3056BC00A3C218 /* particleSystem.cpp in Sources */,
 				118320AC0E31545F0037B9B4 /* vehicleController.cpp in Sources */,
 				118321130E328D710037B9B4 /* physics.cpp in Sources */,
-				1183216D0E3290760037B9B4 /* body.cpp in Sources */,
+				118F3E610E35A01E00ECCDFE /* enemy.cpp in Sources */,
+				118F3E620E35A01E00ECCDFE /* enemyManager.cpp in Sources */,
+				118F3E630E35A01E00ECCDFE /* sideShooterEnemy.cpp in Sources */,
+				118F3E640E35A01E00ECCDFE /* trebuchetEnemy.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

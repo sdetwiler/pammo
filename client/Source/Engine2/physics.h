@@ -7,7 +7,71 @@
 namespace pammo
 {
 
-class Body;
+enum CollisionProperties
+{
+    kPlayerCollisionProperties = 1 << 0,
+    kEnemyCollisionProperties = 1 << 1,
+    kPlayerBulletCollisionProperties = 1 << 2
+};
+
+class Physics;
+struct Body;
+//struct Shape;
+
+// Description of a contact event.
+struct Contact
+{
+    Vector2 mContactPoint;
+    Vector2 mContactNormal;
+    float mSeparatingVelocity;
+    float mPenetrationDepth;
+};
+
+// Responses to a contact.
+struct ContactResponse
+{
+    bool mBounceMe;
+    bool mBounceThem;
+};
+
+// Callback function.
+typedef void (*BodyOnBodyCollisionCallback)(Body* self, Body* other, Contact* contact, ContactResponse* response);
+//typedef void (*BodyOnShapeCollisionCallback)(Body* self, Shape* other, Contact* contact, ContactResponse* response);
+
+struct Body
+{
+    // Bit field describing this.
+    uint16_t mProperties;
+    
+    // Bit field of what this collides with.
+    // this->mProperties & other->mCollideProperties != 0 -> Collision.
+    uint16_t mCollideProperties;
+    
+    // Pointers back to objects.
+    void* mUserArg;
+    
+    // Static body attributes.
+    float mMass;
+    float mRadius;
+    float mDamping;
+    
+    // Dynamic body attributes.
+    Vector2 mAcceleration;
+    Vector2 mVelocity;
+    Vector2 mCenter;
+    
+    // Collision callbacks.
+    BodyOnBodyCollisionCallback mBodyCallback;
+    //BodyOnShapeCollisionCallback mShapeCallback;
+    
+    // List maitenance.
+    bool mAdded;
+    Body* mNext;
+    Body* mPrev;
+    Body* mEdgeNext;
+    Body* mEdgePrev;
+    Body* mRemoveNext;
+};
 
 class Physics : public View
 {
@@ -23,12 +87,14 @@ class Physics : public View
         
         Body* addBody();
         void removeBody(Body* body);
+        void resortBody(Body* body);
         
     private:
-        typedef vector< Body* > BodyVector;
-        BodyVector mBodies;
-        BodyVector mAddBodies;
-        BodyVector mRemoveBodies;
+        Body* mBodies;
+        Body* mEdges;
+        Body* mAddBodies;
+        Body* mRemoveBodies;
+        Body* mFreed;
         
         void integrate();
         void collide();

@@ -9,6 +9,7 @@
 
 namespace pammo
 {
+
 TrebuchetEnemy::TrebuchetEnemy(Vector2 const& position) 
     : Enemy(position)
 {

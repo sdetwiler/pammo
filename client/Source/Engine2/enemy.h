@@ -3,7 +3,7 @@
 
 #include "pammo.h"
 #include "imageEntity.h"
-#include "body.h"
+#include "physics.h"
 #include "vehicleController.h"
 
 namespace pammo

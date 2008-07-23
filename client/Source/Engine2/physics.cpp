@@ -1,23 +1,28 @@
 #include "physics.h"
 #include "world.h"
 #include "camera.h"
-#include "body.h"
 
 namespace pammo
 {
 
 Physics::Physics() : View()
 {
+    mBodies = 0;
+    mEdges = 0;
+    mAddBodies = 0;
+    mRemoveBodies = 0;
+    mFreed = 0;
+    
     return;
-    for(uint32_t i=0; i < 20; ++i)
+    for(uint32_t i=0; i < 500; ++i)
     {
         Body* b = addBody();
         b->mRadius = 15;
         b->mMass = 10;
-        b->mCenter = Vector2(rand()%200, rand()%200);
+        b->mCenter = Vector2(rand()%500, rand()%500);
         b->mDamping = 0.05;
-        b->mProperties = 1;
-        b->mCollideProperties = 1;
+        b->mProperties = kPlayerCollisionProperties;
+        b->mCollideProperties = kPlayerCollisionProperties;
     }
 }
 
@@ -38,29 +43,41 @@ uint32_t Physics::getDrawPriority() const
 void Physics::update()
 {
     // Add pending bodies.
-    for(BodyVector::iterator i=mAddBodies.begin(); i != mAddBodies.end(); ++i)
+    while(mAddBodies)
     {
-        mBodies.push_back(*i);
+        Body* cur = mAddBodies;
+        mAddBodies = cur->mNext;
+        
+        cur->mNext = mBodies;
+        if(cur->mNext) cur->mNext->mPrev = cur;
+        mBodies = cur;
+        
+        cur->mEdgeNext = mEdges;
+        if(cur->mEdgeNext) cur->mEdgeNext->mEdgePrev = cur;
+        mEdges = cur;
+        
+        cur->mAdded = true;
+        resortBody(cur);
     }
-    mAddBodies.clear();
     
     // Remove pending bodies.
-    for(BodyVector::iterator i=mRemoveBodies.begin(); i != mRemoveBodies.end(); ++i)
+    while(mRemoveBodies)
     {
-        bool found = false;
-        for(BodyVector::iterator j=mBodies.begin(); j != mBodies.end(); ++j)
-        {
-            if(*i == *j)
-            {
-                mBodies.erase(j);
-                found = true;
-                break;
-            }
-        }
-        assert(found);
-        delete *i;
+        Body* cur = mRemoveBodies;
+        mRemoveBodies = cur->mRemoveNext;
+        
+        if(cur->mNext) cur->mNext->mPrev = cur->mPrev;
+        if(cur->mPrev) cur->mPrev->mNext = cur->mNext;
+        else mBodies = cur->mNext;
+        
+        if(cur->mEdgeNext) cur->mEdgeNext->mEdgePrev = cur->mEdgePrev;
+        if(cur->mEdgePrev) cur->mEdgePrev->mEdgeNext = cur->mEdgeNext;
+        else mEdges = cur->mEdgeNext;
+        
+        cur->mAdded = false;
+        cur->mNext = mFreed;
+        mFreed = cur;
     }
-    mRemoveBodies.clear();
 
     // Main update work.
     integrate();
@@ -78,10 +95,9 @@ void Physics::draw()
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
     glColor4f(1, 0, 0, .5);
     
-    for(BodyVector::iterator i = mBodies.begin(); i != mBodies.end(); ++i)
+    Body* b = mBodies;
+    while(b)
     {
-        Body* b = *i;
-        
         uint32_t const num = 8;
         Vector2 points[num];
         for(uint32_t j=0; j < num; ++j)
@@ -89,6 +105,8 @@ void Physics::draw()
             
         glVertexPointer(2, GL_FLOAT, 0, (float*)points);
         glDrawArrays(GL_TRIANGLE_FAN, 0, num);
+        
+        b = b->mNext;
     }
     
     glColor4f(1, 1, 1, 1);
@@ -100,43 +118,130 @@ void Physics::draw()
         
 Body* Physics::addBody()
 {
-    Body* body = new Body;
-    mAddBodies.push_back(body);
+    Body* body;
+    if(mFreed)
+    {
+        body = mFreed;
+        mFreed = body->mNext;
+    }
+    else
+    {
+        body = new Body();
+    }
+    
+    memset(body, 0, sizeof(Body));
+    body->mNext = mAddBodies;
+    mAddBodies = body;
     return body;
 }
 
 void Physics::removeBody(Body* body)
 {
-    mRemoveBodies.push_back(body);
+    body->mRemoveNext = mRemoveBodies;
+    mRemoveBodies = body;
+}
+
+void Physics::resortBody(Body* body)
+{
+    // Don't resort if the body isn't added yet.
+    if(!body->mAdded) return;
+    
+    // Calculate left-most edge.
+    float left = body->mCenter.x - body->mRadius;
+    Body* cur;
+    
+    // Sort down.
+    cur = body->mEdgeNext;
+    while(cur && left > cur->mCenter.x - cur->mRadius)
+    {
+        body->mEdgeNext = cur->mEdgeNext;
+        cur->mEdgeNext = body;
+        if(body->mEdgeNext) body->mEdgeNext->mEdgePrev = body;
+        
+        cur->mEdgePrev = body->mEdgePrev;
+        body->mEdgePrev = cur;
+        if(cur->mEdgePrev) cur->mEdgePrev->mEdgeNext = cur;
+        else mEdges = cur;
+        
+        cur = body->mEdgeNext;    
+    }
+    
+    // Sort up.
+    cur = body->mEdgePrev;
+    while(cur && left < cur->mCenter.x - cur->mRadius)
+    {
+        cur->mEdgeNext = body->mEdgeNext;
+        body->mEdgeNext = cur;
+        if(cur->mEdgeNext) cur->mEdgeNext->mEdgePrev = cur;
+        
+        body->mEdgePrev = cur->mEdgePrev;
+        cur->mEdgePrev = body;
+        if(body->mEdgePrev) body->mEdgePrev->mEdgeNext = body;
+        else mEdges = body;
+        
+        cur = body->mEdgePrev;
+    }
 }
         
 void Physics::integrate()
 {
     float timestep = 1./30.;
-    for(BodyVector::iterator i = mBodies.begin(); i != mBodies.end(); ++i)
+    Body* b = mBodies;
+    while(b)
     {
-        Body* b = *i;
-
         // Integrate position;
         b->mCenter += b->mVelocity * timestep;
         b->mVelocity += b->mAcceleration * timestep;
         b->mVelocity *= 1 - b->mDamping;
         b->mAcceleration = Vector2(0, 0);
+        resortBody(b);
+        b = b->mNext;
+    }
+    
+    return;
+    // Verify edge list integrity.
+    float edge = -1e100;
+    b = mEdges;
+    //dprintf("Pass");
+    while(b)
+    {
+        assert(edge <= b->mCenter.x - b->mRadius);
+        edge = b->mCenter.x - b->mRadius;
+        //dprintf("edge: %f", edge);
+        b = b->mEdgeNext;
     }
 }
 
 void Physics::collide()
 {
-    for(BodyVector::iterator i = mBodies.begin(); i != mBodies.end(); ++i)
+    uint32_t numBodies = 0;
+    uint32_t numCompares = 0;
+    
+    Body* b1i = mEdges;
+    while(b1i)
     {
-        Body* b1 = *i;
+        Body* b1 = b1i;
+        b1i = b1i->mEdgeNext;
+        float right = b1->mCenter.x + b1->mRadius;
+        ++numBodies;
         
-        for(BodyVector::iterator i2 = i+1; i2 != mBodies.end(); ++i2)
+        Body* b2i = b1->mEdgeNext;
+        while(b2i)
         {
-            Body* b2 = *i2;
+            Body* b2 = b2i;
+            b2i = b2i->mEdgeNext;
+            
+            // If the left of b1 is larger than the right of b1, there are no more possible collisions with b1.
+            if(right < b2->mCenter.x - b2->mRadius)
+                break;
+            ++numCompares;
+            
+            // Calculate the overlap of collision properties.
+            bool b1HitsB2 = b1->mCollideProperties & b2->mProperties;
+            bool b2HitsB1 = b2->mCollideProperties & b1->mProperties;
             
             // Only calculate if there is overlap with the collision properties.
-            if(!(b1->mCollideProperties & b2->mProperties) && !(b2->mCollideProperties & b1->mProperties))
+            if(!b1HitsB2 && !b2HitsB1)
                 continue;
             
             // Decide if they touch.
@@ -146,25 +251,57 @@ void Physics::collide()
             if(magsq > totalRadius * totalRadius)
                 continue;
             
-            Vector2 contactNormal = normalize(diff);
-            float separatingVelocity = dot((b1->mVelocity - b2->mVelocity), contactNormal);
-            if(separatingVelocity > 0) continue;
+            // This looks like a contact. Start building up a struct.
+            Contact contact;
+            contact.mContactNormal = normalize(diff);
+            contact.mSeparatingVelocity = dot((b1->mVelocity - b2->mVelocity), contact.mContactNormal);
+            contact.mPenetrationDepth = (b1->mRadius + b2->mRadius) - sqrt(magsq);
+            contact.mContactPoint = contact.mContactNormal * (b1->mRadius + b2->mRadius - contact.mPenetrationDepth)/2;
+            if(contact.mSeparatingVelocity > 0) continue;
             
-            float totalIMass = 1/(b1->mMass) + 1/(b2->mMass);
+            // Decide how to react.
+            ContactResponse b1OnB2 = { false, false };
+            ContactResponse b2OnB1 = { false, false };
+            bool responder = false;
             
+            // Make appropriate callbacks.
+            if(b1HitsB2 && b1->mBodyCallback)
+            {
+                responder = true;
+                b1->mBodyCallback(b1, b2, &contact, &b1OnB2);
+            }
+            if(b2HitsB1 && b2->mBodyCallback)
+            {
+                responder = true;
+                b2->mBodyCallback(b2, b1, &contact, &b2OnB1);
+            }
+            
+            // Eventually, react appropriately. For now, either bounce or don't bounce.
+            if(!b1OnB2.mBounceMe && !b1OnB2.mBounceThem
+                && !b2OnB1.mBounceMe && !b2OnB1.mBounceThem
+                && responder)
+                continue;
+            
+            // Perform velocity response.
             float restitution = 0.3;
-            float deltaVelocity = -(separatingVelocity*restitution + separatingVelocity);
+            float totalIMass = 1/(b1->mMass) + 1/(b2->mMass);
+            float deltaVelocity = -(contact.mSeparatingVelocity*restitution + contact.mSeparatingVelocity);
             float impulse = deltaVelocity / totalIMass;
-            Vector2 impulsePerIMass = contactNormal * impulse;
+            Vector2 impulsePerIMass = contact.mContactNormal * impulse;
             b1->mVelocity += impulsePerIMass / b1->mMass;
             b2->mVelocity -= impulsePerIMass / b2->mMass;
             
-            float penetration = (b1->mRadius + b2->mRadius) - sqrt(magsq);
-            Vector2 movePerIMass = contactNormal * (penetration / totalIMass);
+            // Perform position response.
+            Vector2 movePerIMass = contact.mContactNormal * (contact.mPenetrationDepth / totalIMass);
             b1->mCenter += movePerIMass / b1->mMass;
+            resortBody(b1);
+            
             b2->mCenter -= movePerIMass / b2->mMass;
+            resortBody(b2);
         }
     }
+    
+    //dprintf("%f compares / body", (float)numCompares / numBodies);
 }
 
 }

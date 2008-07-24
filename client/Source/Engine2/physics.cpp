@@ -86,7 +86,6 @@ void Physics::update()
 
 void Physics::draw()
 {
-    return;
     gWorld->getCamera()->set();
     
     // Draw debug collision information.

@@ -24,54 +24,37 @@ bool fireParticleCb(Particle* p, ParticleSystem* system)
     return true;
 }
 
+void ballCollisionCb(Body* self, Body* other, Contact* contact, ContactResponse* response)
+{
+    Particle* p = (Particle*)(self->mUserArg);
+    p->mCollision = true;
+    response->mBounceThem = true;
+    response->mBounceMe = true;
+}
 
 bool ballParticleCb(Particle* p, ParticleSystem* system)
 {
-    p->mImage.mCenter.x += p->mVelocity.x;
-    p->mImage.mCenter.y += p->mVelocity.y;
+    if(p->mCollision)
+    {
+        gWorld->getPhysics()->removeBody(p->mBody);
+        gWorld->getParticleSystem()->initExplosionParticle(p->mBody->mCenter);
+        return false;
+    }
 
+    if(magnitude(p->mEndPosition - p->mStartPosition) < magnitude(p->mBody->mCenter - p->mStartPosition))
+    {
+        gWorld->getPhysics()->removeBody(p->mBody);
+        return false;
+    }
+
+    p->mImage.mCenter = p->mBody->mCenter;
     float distance = magnitude(p->mImage.mCenter - p->mStartPosition)/magnitude(p->mEndPosition - p->mStartPosition);
-    //dprintf("Distance: %.2f", distance);
-
     float x = (distance-0.5)*1.5;
     float y = (-(x*x))+1;
-    //dprintf("Scale: %.2f", y);
     p->mImage.mSize = 16 * y;
     
     p->mImage.makeDirty();
 
-    float mag = magnitude(p->mImage.mCenter - p->mEndPosition);
-   // dprintf("mag: %.2f", mag);
-    // Really close to dest.
-    if(mag < 10)
-    {
-        if(p->mHitsObject)
-        {
-            //system->initExplosionParticle(p->mEndPosition);
-        }
-        else
-        {
-            //system->initHitParticle(p->mEndPosition);
-        }
-        return false;
-    }
-
-    // Passed it.
-    if(p->mOldMag && (mag > p->mOldMag))
-    {
-        if(p->mHitsObject)
-        {
-           // system->initExplosionParticle(p->mEndPosition);
-        }
-        else
-        {
-            //system->initHitParticle(p->mEndPosition);
-        }
-
-        return false;
-    }
-
-    p->mOldMag = mag;
     return true;
 }
 
@@ -95,7 +78,7 @@ bool hitParticleCb(Particle* p, ParticleSystem* system)
         return false;
     return true;
 }
-
+#endif
 bool explosionParticleCb(Particle* p, ParticleSystem* system)
 {
 
@@ -108,7 +91,6 @@ bool explosionParticleCb(Particle* p, ParticleSystem* system)
         return false;
     return true;
 }
-#endif
 
 ParticleSystem::ParticleSystem(uint32_t numParticles)
     : View()
@@ -356,7 +338,7 @@ void ParticleSystem::initHitParticle(Vector2 const& initialPosition)
     p->mImage.mCenter = initialPosition + Vector2(rand()%10, rand()%10);
     p->mImage.makeDirty();
 }
-
+#endif
 
 void ParticleSystem::initExplosionParticle(Vector2 const& initialPosition)
 {
@@ -370,8 +352,6 @@ void ParticleSystem::initExplosionParticle(Vector2 const& initialPosition)
 
     // Set basic particle properties.
     p->mCallback = explosionParticleCb;
-    p->mMass = 0;
-    p->mRadius = 0;
     p->mAlpha = 1.0f;
 
     // Setup image.
@@ -379,7 +359,6 @@ void ParticleSystem::initExplosionParticle(Vector2 const& initialPosition)
     p->mImage.mCenter = initialPosition + Vector2(rand()%20, rand()%20);
     p->mImage.makeDirty();
 }
-#endif
 
 void ParticleSystem::initBallParticle(InitBallParticleArgs const& args)
 {
@@ -392,13 +371,14 @@ void ParticleSystem::initBallParticle(InitBallParticleArgs const& args)
     mUsed.push_back(p);
         
     // Properties about ball particles.
-    float velocity = 10.0f;
+    float velocity = 300.0f;
     float particleRadius = 8.0f;
 
     // Set basic particle properties.
     p->mCallback = ballParticleCb;
-    p->mOldMag = 0;
-    p->mHitsObject = false;
+//    p->mOldMag = 0;
+//    p->mHitsObject = false;
+    p->mCollision = false;
     p->mAlpha = 1.0f;
     p->mStartPosition = args.initialPosition;
     
@@ -407,9 +387,21 @@ void ParticleSystem::initBallParticle(InitBallParticleArgs const& args)
     p->mImage.mCenter = args.initialPosition;
     p->mImage.mRotation = args.initialRotation;
     p->mImage.makeDirty();
-    
+
+    // Get a body.
+    p->mBody = gWorld->getPhysics()->addBody();
+    p->mBody->mProperties = kPlayerBulletCollisionProperties;
+    p->mBody->mCollideProperties = kEnemyCollisionProperties | kPlayerCollisionProperties;
+    p->mBody->mDamping = 0;
+    p->mBody->mRadius = 8;
+    p->mBody->mMass = 50;
+    p->mBody->mCenter = args.initialPosition;
+    p->mBody->mVelocity = args.initialVelocity + Vector2(velocity, 0) * Transform2::createRotation(args.initialRotation);
+    p->mBody->mBodyCallback = ballCollisionCb;
+    p->mBody->mUserArg = p;
+
     // Setup velocity. InitialVelocity from vehicle plus particle speed rotated for direction.
-    p->mVelocity = args.initialVelocity + Vector2(velocity, 0) * Transform2::createRotation(args.initialRotation);
+//    p->mVelocity = args.initialVelocity + Vector2(velocity, 0) * Transform2::createRotation(args.initialRotation);
     
     // Calculate unblocked end position. Start position plus maxDistance rotated for direction.
     p->mEndPosition = args.initialPosition + Vector2(args.maxDistance, 0) * Transform2::createRotation(args.initialRotation);

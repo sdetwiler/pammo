@@ -39,8 +39,9 @@ struct Particle
     ImageEntity  mImage;
     float        mAlpha;
     Vector2      mEndPosition;
-    float        mOldMag;
-    bool         mHitsObject;           // Will the particle hit an object.
+    bool         mCollision; // A collision has occurred.
+//    float        mOldMag;
+//    bool         mHitsObject;           // Will the particle hit an object.
 };
 
 
@@ -71,7 +72,7 @@ public:
     void initFireParticle(InitFireParticleArgs const& args);
     void initSmokeParticle(Vector2 const& initialPosition, float initialRotation, Vector2 const& initialVelocity);
     //void initHitParticle(Vector2 const& initialPosition);
-    //void initExplosionParticle(Vector2 const& initialPosition);
+    void initExplosionParticle(Vector2 const& initialPosition);
 
     struct InitBallParticleArgs
     {

@@ -4,92 +4,117 @@
 #include "camera.h"
 #include "physics.h"
 
+#include "player.h"
+#include "enemyManager.h"
+
+#include <algorithm>
+
 namespace pammo
 {
 
-bool fireParticleCb(Particle* p, ParticleSystem* system)
+void doDamage(Body* self, Body* other, ParticleType type, float damage)
+{
+
+	if(self->mCollideProperties & other->mProperties)
+	{
+		if(other->mProperties & kPlayerCollisionProperties)
+		{
+			((Player*)(other->mUserArg))->damage(type, damage);
+		}
+		else if(other->mProperties & kEnemyCollisionProperties)
+		{
+			Enemy* e = (Enemy*)other->mUserArg;
+			if(e->mDestroyed)
+				return;
+
+			if(e->mDamageCb)
+				e->mDamageCb(e, type, damage);
+		}
+	}
+}
+
+void fireParticleCb(Particle* p, ParticleSystem* system)
 {
     p->mImage.mCenter = p->mBody->mCenter;
     p->mImage.mRotation += 0.08f;
-    p->mImage.mSize *= 1.05;
+    p->mImage.mSize *= 1.05f;
     p->mImage.makeDirty();
     
     if(p->mAlpha <= 0)
     {
         gWorld->getPhysics()->removeBody(p->mBody);
-        return false;
+		system->removeParticle(p);
+		return;
     }
-    
-    p->mAlpha-=0.05f;
-    return true;
+
+    p->mAlpha-=0.075f;
+}
+
+
+void fireCollisionCb(Body* self, Body* other, Contact* contact, ContactResponse* response)
+{
+	response->mBounceThem = true;
+	response->mBounceMe = true;
+
+	doDamage(self, other, Fire, 10.0f);
 }
 
 void ballCollisionCb(Body* self, Body* other, Contact* contact, ContactResponse* response)
 {
-    Particle* p = (Particle*)(self->mUserArg);
-    p->mCollision = true;
     response->mBounceThem = true;
     response->mBounceMe = true;
+
+	Particle* p = (Particle*)(self->mUserArg);
+    gWorld->getPhysics()->removeBody(self);
+    gWorld->getParticleSystem()->initExplosionParticle(self->mCenter);
+	gWorld->getParticleSystem()->removeParticle(p);
+
+//	doDamage(self, other, Ball, 100.0f);
 }
 
-bool ballParticleCb(Particle* p, ParticleSystem* system)
+void ballParticleCb(Particle* p, ParticleSystem* system)
 {
-    if(p->mCollision)
-    {
-        gWorld->getPhysics()->removeBody(p->mBody);
-        gWorld->getParticleSystem()->initExplosionParticle(p->mBody->mCenter);
-        return false;
-    }
-
     if(magnitude(p->mEndPosition - p->mStartPosition) < magnitude(p->mBody->mCenter - p->mStartPosition))
     {
         gWorld->getPhysics()->removeBody(p->mBody);
-        return false;
+		system->removeParticle(p);
+		return;
     }
 
     p->mImage.mCenter = p->mBody->mCenter;
     float distance = magnitude(p->mImage.mCenter - p->mStartPosition)/magnitude(p->mEndPosition - p->mStartPosition);
-    float x = (distance-0.5)*1.5;
+    float x = (distance-0.5f)*1.5f;
     float y = (-(x*x))+1;
     p->mImage.mSize = 16 * y;
-    
     p->mImage.makeDirty();
-
-    return true;
 }
 
-bool smokeParticleCb(Particle* p, ParticleSystem* system)
+void smokeParticleCb(Particle* p, ParticleSystem* system)
 {
     p->mImage.mCenter.x += p->mVelocity.x;
     p->mImage.mCenter.y += p->mVelocity.y;
     p->mImage.makeDirty();
-    p->mImage.mSize *= 1.03;
+    p->mImage.mSize *= 1.03f;
     p->mAlpha-=0.05f;
     if(p->mAlpha<=0)
-        return false;
-    return true;
+	{
+        gWorld->getPhysics()->removeBody(p->mBody);
+		system->removeParticle(p);
+	}
 }
-#if 0
 
-bool hitParticleCb(Particle* p, ParticleSystem* system)
+void explosionParticleCb(Particle* p, ParticleSystem* system)
 {
-    p->mAlpha-=0.05f;
-    if(p->mAlpha<=0)
-        return false;
-    return true;
-}
-#endif
-bool explosionParticleCb(Particle* p, ParticleSystem* system)
-{
-
-    p->mImage.mSize*=1.07;
+    p->mImage.mSize*=1.07f;
     p->mImage.mRotation+= ((float)(rand()%10)-5.0f)/100.0f;
     p->mImage.makeDirty();
 
     p->mAlpha-=0.05f;
     if(p->mAlpha<=0)
-        return false;
-    return true;
+	{
+        //gWorld->getPhysics()->removeBody(p->mBody);
+		system->removeParticle(p);
+	}
 }
 
 ParticleSystem::ParticleSystem(uint32_t numParticles)
@@ -111,7 +136,13 @@ ParticleSystem::~ParticleSystem()
     {
         delete *i;
     }
+
     for(ParticleVector::iterator i = mUsed.begin(); i!=mUsed.end(); ++i)
+    {
+        delete *i;
+    }
+
+    for(ParticleVector::iterator i = mRemoved.begin(); i!=mRemoved.end(); ++i)
     {
         delete *i;
     }
@@ -127,34 +158,29 @@ uint32_t ParticleSystem::getDrawPriority() const
     return kParticlePriority;
 }
 
+void ParticleSystem::removeParticle(Particle* p)
+{
+	mRemoved.push_back(p);
+	mUsed.erase(std::find(mUsed.begin(), mUsed.end(), p));
+}
+
 void ParticleSystem::update()
 {
     //mMonitor->addSample(mUsed.size());
 
-    typedef vector<int> IntVector;
-    IntVector removeParticles;
-    
-    // Iterator over each particle, making its callback. If callback returns true, puts its index into the removeParticles list.
+	for(uint32_t i=0; i<mRemoved.size(); ++i)
+	{
+		Particle* p = mRemoved[i];
+		gImageLibrary->unreference(p->mImage.getImage());
+		mAvailable.push_back(p);
+	}
+	mRemoved.clear();
+
+    // Iterator over each particle, making its callback.
     for(uint32_t i = 0; i<mUsed.size(); ++i)
     {
         Particle* p = mUsed[i];
-        if(p->mCallback(p, this) == false)
-        {
-            removeParticles.push_back(i);
-        }
-    }
-    
-    // Now iterate over remove list and the particles.
-    for(uint32_t i=0; i < removeParticles.size(); ++i)
-    {
-        // Get a reference the particle. Every iteratation is going to remove one particle.
-        // Which means the indexes stored in removeParticles are wrong.
-        // To adjust, subtract from the stored index the number of particels we have already removed.
-        uint32_t indexInUsed = removeParticles[i] - i;
-        Particle* p = mUsed[indexInUsed];
-        gImageLibrary->unreference(p->mImage.getImage());
-        mUsed.erase(mUsed.begin() + indexInUsed);
-        mAvailable.push_back(p);
+        p->mCallback(p, this);
     }
 }
 
@@ -190,8 +216,8 @@ void ParticleSystem::initFireParticle(InitFireParticleArgs const& args)
     p->mCallback = fireParticleCb;
     p->mAlpha = 1.0f;
 
-    float f = 8.0;
-    float r = 1.0/f - ((rand()%100)/(f*50));
+    float f = 8.0f;
+    float r = 1.0f/f - ((rand()%100)/(f*50));
     
     // Setup image.
     p->mImage.setImage(gImageLibrary->reference("data/particles/flame01.png"));
@@ -205,88 +231,12 @@ void ParticleSystem::initFireParticle(InitFireParticleArgs const& args)
     p->mBody->mCollideProperties = kEnemyCollisionProperties;
     p->mBody->mDamping = 0;
     p->mBody->mRadius = 20;
-    p->mBody->mMass = 50;
+    p->mBody->mMass = 10;
     p->mBody->mCenter = args.initialPosition;
     p->mBody->mVelocity = args.initialVelocity + Vector2(velocity, 0) * Transform2::createRotation(args.initialRotation+r);
+    p->mBody->mBodyCallback = fireCollisionCb;
+    p->mBody->mUserArg = p;
 }
-
-#if 0
-
-void ParticleSystem::initFireParticle(InitFireParticleArgs const& args)
-{
-    if(mAvailable.size() == 0)
-        return;
-
-    // Grab a particle.
-    Particle* p = mAvailable.back();
-    mAvailable.pop_back();
-    mUsed.push_back(p);
-        
-    // Properties about fire particles.
-    float velocity = 10.0f;
-    float maxDistance = 150.0f;
-    float particleRadius = 10.0f;
-
-    // Set basic particle properties.
-    p->mCallback = fireParticleCb;
-    p->mOldMag = 0;
-    p->mMass = 0;
-    p->mRadius = particleRadius;
-    p->mHitsObject = false;
-    p->mAlpha = 1.0f;
-    p->mHitCallback = args.hitCallback;
-    p->mHitCallbackArg = args.hitCallbackArg;
-    p->mHitVehicle = NULL;
-
-    float f = 8.0;
-    float r = 1.0/f - ((rand()%100)/(f*50)) ;
-    
-    // Setup image.
-    //p->mImage.setImage(gImageLibrary->reference("data/particles/flame2-01.png"));
-    p->mImage.setImage(gImageLibrary->reference("data/particles/flame01.png"));
-    p->mImage.mCenter = args.initialPosition;
-    p->mImage.mRotation = args.initialRotation + r;
-    p->mImage.makeDirty();
-    
-    // Setup velocity. InitialVelocity from vehicle plus particle speed rotated for direction.
-    p->mVelocity = args.initialVelocity + Vector2(velocity, 0) * Transform2::createRotation(args.initialRotation+r);
-    
-    // Calculate unblocked end position. Start position plus maxDistance rotated for direction.
-    p->mEndPosition = args.initialPosition + Vector2(maxDistance, 0) * Transform2::createRotation(args.initialRotation+r);
-
-    //dprintf("World\n  start: [%.2f, %.2f]\n  end:  [%.2f, %.2f]", initialPosition.x, initialPosition.y, p->mEndPosition.x, p->mEndPosition.y);
-    
-    // Collide with collision map.
-    CollisionMap::RaycastResult mapResult;
-    gWorld->getCollisionMap()->raycast(args.initialPosition, p->mEndPosition, particleRadius, mapResult);
-    
-    // Collide with collision dynamics.
-    CollisionDynamics::RaycastResult dynamicsResult;
-    uint32_t flags;
-    if(args.emitter->getCollisionBodyMask() & LOCALPLAYER)
-        flags = REMOTEPLAYER;
-    else
-        flags = LOCALPLAYER;
-
-    gWorld->getCollisionDynamics()->raycast(args.initialPosition, p->mEndPosition, particleRadius, velocity, flags, dynamicsResult);
-    
-    // Determine which was closer.
-    if(mapResult.mHit && (!dynamicsResult.mHit || mapResult.mDistance < dynamicsResult.mDistance))
-    {
-        p->mEndPosition = mapResult.mPosition;
-        p->mHitsObject = true;
-    }
-    else if(dynamicsResult.mHit)
-    {
-        p->mEndPosition = dynamicsResult.mPosition;
-        p->mHitVehicle = dynamicsResult.mBody->mVehicle;
-        p->mHitsObject = true;
-    }
-
-    //dprintf("hit:  [%.2f, %.2f]", p->mEndPosition.x, p->mEndPosition.y);
-
-}
-#endif
 
 void ParticleSystem::initSmokeParticle(Vector2 const& initialPosition, float initialRotation, Vector2 const& initialVelocity)
 {
@@ -303,8 +253,6 @@ void ParticleSystem::initSmokeParticle(Vector2 const& initialPosition, float ini
 
     // Set basic particle properties.
     p->mCallback = smokeParticleCb;
-   // p->mMass = 0;
-//    p->mRadius = 0;
     p->mAlpha = 1.0f;
 
     // Setup image.
@@ -316,29 +264,6 @@ void ParticleSystem::initSmokeParticle(Vector2 const& initialPosition, float ini
     // Setup velocity. InitialVelocity from vehicle plus particle speed rotated for direction.
     p->mVelocity = initialVelocity + Vector2(velocity, 0) * Transform2::createRotation(initialRotation);
 }
-#if 0
-void ParticleSystem::initHitParticle(Vector2 const& initialPosition)
-{
-    if(mAvailable.size() == 0)
-        return;
-
-    // Grab a particle.
-    Particle* p = mAvailable.back();
-    mAvailable.pop_back();
-    mUsed.push_back(p);
-
-    // Set basic particle properties.
-    p->mCallback = hitParticleCb;
-    p->mMass = 0;
-    p->mRadius = 0;
-    p->mAlpha = 1.0f;
-
-    // Setup image.
-    p->mImage.setImage(gImageLibrary->reference("data/particles/smoke00.png"));
-    p->mImage.mCenter = initialPosition + Vector2(rand()%10, rand()%10);
-    p->mImage.makeDirty();
-}
-#endif
 
 void ParticleSystem::initExplosionParticle(Vector2 const& initialPosition)
 {
@@ -356,7 +281,7 @@ void ParticleSystem::initExplosionParticle(Vector2 const& initialPosition)
 
     // Setup image.
     p->mImage.setImage(gImageLibrary->reference("data/particles/explosion00.png"));
-    p->mImage.mCenter = initialPosition + Vector2(rand()%20, rand()%20);
+    p->mImage.mCenter = initialPosition + Vector2((float)(rand()%20), (float)(rand()%20));
     p->mImage.makeDirty();
 }
 
@@ -376,9 +301,6 @@ void ParticleSystem::initBallParticle(InitBallParticleArgs const& args)
 
     // Set basic particle properties.
     p->mCallback = ballParticleCb;
-//    p->mOldMag = 0;
-//    p->mHitsObject = false;
-    p->mCollision = false;
     p->mAlpha = 1.0f;
     p->mStartPosition = args.initialPosition;
     
@@ -400,14 +322,8 @@ void ParticleSystem::initBallParticle(InitBallParticleArgs const& args)
     p->mBody->mBodyCallback = ballCollisionCb;
     p->mBody->mUserArg = p;
 
-    // Setup velocity. InitialVelocity from vehicle plus particle speed rotated for direction.
-//    p->mVelocity = args.initialVelocity + Vector2(velocity, 0) * Transform2::createRotation(args.initialRotation);
-    
     // Calculate unblocked end position. Start position plus maxDistance rotated for direction.
     p->mEndPosition = args.initialPosition + Vector2(args.maxDistance, 0) * Transform2::createRotation(args.initialRotation);
-
-    //dprintf("World\n  start: [%.2f, %.2f]\n  end:  [%.2f, %.2f]", initialPosition.x, initialPosition.y, p->mEndPosition.x, p->mEndPosition.y);
-    
 }
 
 

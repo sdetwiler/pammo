@@ -4,11 +4,12 @@
 #include "pammo.h"
 #include "view.h"
 #include "targetRingWidget.h"
+#include "particleSystem.h" // For particle types.
 
 namespace pammo
 {
 
-class Body;
+struct Body;
 class Camera;
 class ImageEntity;
 class VehicleController;
@@ -31,6 +32,8 @@ class Player :
         
         virtual void onTargetRingUpdated(TargetRingWidget *widget, Vector2 value);
         
+		void damage(ParticleType type, float amount);
+
         void setCenter(Vector2 center);
         Vector2 const& getCenter() const;
 

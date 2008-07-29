@@ -1,11 +1,12 @@
-#include "trebuchetEnemy.h"
-
 #include "world.h"
 #include "player.h"
 #include "physics.h"
 #include "camera.h"
 #include "imageLibrary.h"
 #include "particleSystem.h"
+
+#include "enemyManager.h"
+#include "trebuchetEnemy.h"
 
 namespace pammo
 {
@@ -15,6 +16,9 @@ void trebuchetEnemyInit(Enemy* e, EnemyManager* manager)
     e->mEntity = new ImageEntity(gImageLibrary->reference("data/vehicles/trebuchet/00.png"));
     e->mDrawCb = trebuchetEnemyDraw;
     e->mUpdateCb = trebuchetEnemyUpdate;
+	e->mDamageCb = trebuchetEnemyDamage;
+	e->mDestroyCb = trebuchetEnemyDestroy;
+	e->mHealth = 100.0f;
 }
 
 void trebuchetEnemyFire(Enemy* e, float distance)
@@ -76,6 +80,25 @@ void trebuchetEnemyDraw(Enemy* e, EnemyManager* manager)
     gWorld->getCamera()->unset();
 }
 
+void trebuchetEnemyDestroy(Enemy* e, EnemyManager* manager)
+{
+	dprintf("%p You sunk my trebuchet!");
+	gWorld->getParticleSystem()->initExplosionParticle(e->mBody->mCenter);
+	gImageLibrary->unreference(e->mEntity->getImage());
+	delete e->mEntity;
+
+}
+
+
+void trebuchetEnemyDamage(Enemy* e, ParticleType type, float amount)
+{
+	e->mHealth-=amount;
+
+	if(e->mHealth <=0)
+	{
+		gWorld->getEnemyManager()->destroyEnemy(e);
+	}
+}
 
 
 } // namespace pammo

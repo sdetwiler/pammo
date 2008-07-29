@@ -8,6 +8,7 @@
 #include "particleSystem.h"
 #include "vehicleController.h"
 #include "physics.h"
+#include "enemyManager.h"
 
 namespace pammo
 {
@@ -35,7 +36,8 @@ Player::Player() : View()
     mEntity = new ImageEntity(gImageLibrary->reference("data/vehicles/flameTank5/00.png"));
     
     mBody = gWorld->getPhysics()->addBody();
-    mBody->mCenter = Vector2(3000, 1500);
+	mBody->mCenter = *(gWorld->getEnemyManager()->getSpawnPoint(0));
+    
     mBody->mProperties = kPlayerCollisionProperties;
     mBody->mDamping = 0.1;
     mBody->mRadius = 20;
@@ -143,6 +145,11 @@ void Player::onTargetRingUpdated(TargetRingWidget *widget, Vector2 value)
             mFireDirection = value;
         }
     }
+}
+
+void Player::damage(ParticleType type, float amount)
+{
+	dprintf("ouch");
 }
 
 }

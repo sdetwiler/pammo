@@ -86,6 +86,8 @@ void Physics::update()
 
 void Physics::draw()
 {
+	return;
+
     gWorld->getCamera()->set();
     
     // Draw debug collision information.
@@ -244,7 +246,11 @@ void Physics::collide()
                 continue;
             
             // Decide if they touch.
-            Vector2 diff = b1->mCenter - b2->mCenter;
+            Vector2 diff;
+			if(b1->mCenter == b2->mCenter)
+				diff = Vector2(0,.001);
+			else
+				diff = b1->mCenter - b2->mCenter;
             float magsq = diff.x*diff.x + diff.y*diff.y;
             float totalRadius = b1->mRadius + b2->mRadius;
             if(magsq > totalRadius * totalRadius)

@@ -5,6 +5,8 @@
 #include "trebuchetEnemy.h"
 #include "sideShooterEnemy.h"
 
+#include <algorithm>
+
 namespace pammo
 {
 
@@ -33,11 +35,11 @@ void EnemyManager::update()
     if(mEnemies.size() < 50)
     {
         uint64_t now = getTime();
-        if(now-mLastEnemy > 5000000)
+        if(now-mLastEnemy > 2500000)
         {
             Vector2 const* pos = getSpawnPoint(rand()%getSpawnPointCount());
             Enemy* enemy;
-            int type = rand()%2;
+            int type = 0;//rand()%2;
             switch(type)
             {
             case 0:
@@ -98,9 +100,15 @@ Enemy* EnemyManager::createEnemy(EnemyType type, Vector2 const& position)
     e->mBody->mDamping = 0.1f;
     e->mBody->mRadius = 20;
     e->mBody->mMass = 100;
+	e->mBody->mUserArg = e;
     e->mController = new VehicleController();
     e->mController->mBody = e->mBody;
     e->mController->mRotationDamping = 0.4f;
+	e->mDrawCb = NULL;
+	e->mUpdateCb = NULL;
+	e->mDamageCb = NULL;
+	e->mDestroyCb = NULL;
+	e->mDestroyed = false;
 
     switch(type)
     {
@@ -117,6 +125,13 @@ Enemy* EnemyManager::createEnemy(EnemyType type, Vector2 const& position)
 
 void EnemyManager::destroyEnemy(Enemy* e)
 {
+	if(e->mDestroyed == true)
+		return;
+
+	e->mDestroyed = true;
+
+	e->mDestroyCb(e, this);
+	mEnemies.erase(find(mEnemies.begin(), mEnemies.end(), e));
     gWorld->getPhysics()->removeBody(e->mBody);
     // Should return to pool.
     delete e;

@@ -10,38 +10,35 @@
 namespace pammo
 {
 
-struct Particle;
-class ParticleSystem;
-    // Return false if particle should be expired. True if not.
-typedef bool (*ParticleCb)(Particle* p, ParticleSystem* system);
-
-//typedef void (*ParticleHitCb)(Vehicle* vehicle, void* arg);
-
-
-bool fireParticleCb(Particle* p, ParticleSystem* system);
+enum ParticleType
+{
+	Ball,
+	Fire
+};
 
 struct Body;
+struct Particle;
+class ParticleSystem;
+
+// Return false if particle should be expired. True if not.
+typedef void (*ParticleCb)(Particle* p, ParticleSystem* system);
+
+//bool fireParticleCb(Particle* p, ParticleSystem* system);
+
 
 struct Particle
 {
-    uint32_t     mSerialNum;
-    ParticleCb   mCallback;             // Callback to modify particle on each update.
-
-    //ParticleHitCb mHitCallback;         // Callback function when hit occurs.
-    //void*         mHitCallbackArg;      // Argument to pass to mHitCallback.
-    //Vehicle*      mHitVehicle;          // What vehicle will be hit by this particle.
-
-    Vector2      mStartPosition;
-    Vector2      mVelocity;             // Velocity of particle.
-    
-    Body* mBody; // Body for physics based particles.
+    uint32_t     mSerialNum;        // For debugging to track particles.
+    ParticleCb   mCallback;         // Callback to modify particle on each update.
+    Body*        mBody;             // Body for physics based particles.
 
     ImageEntity  mImage;
     float        mAlpha;
+
+	Vector2      mVelocity;         // Velocity of particle.
+
+	Vector2      mStartPosition;
     Vector2      mEndPosition;
-    bool         mCollision; // A collision has occurred.
-//    float        mOldMag;
-//    bool         mHitsObject;           // Will the particle hit an object.
 };
 
 
@@ -64,11 +61,10 @@ public:
         float           initialRotation;
         Vector2         initialVelocity;
         //ParticleHitCb   hitCallback;
-        void*           hitCallbackArg;
+//        void*           hitCallbackArg;
     };
 
-    //void removeVehicleTarget(Vehicle* vehicle);
-
+	void removeParticle(Particle* p);
     void initFireParticle(InitFireParticleArgs const& args);
     void initSmokeParticle(Vector2 const& initialPosition, float initialRotation, Vector2 const& initialVelocity);
     //void initHitParticle(Vector2 const& initialPosition);
@@ -89,6 +85,7 @@ private:
     typedef vector< Particle* > ParticleVector;
     ParticleVector mAvailable;
     ParticleVector mUsed;
+	ParticleVector mRemoved;
 
     //PerformanceMonitor* mMonitor;
 };

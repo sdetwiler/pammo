@@ -25,11 +25,11 @@ World::World()
     
     mPhysics = new Physics();
     
-    mPlayer = new Player();
     
     mEnemyManager = new EnemyManager;
 
     buildFromMap(this, "TheMap");
+    mPlayer = new Player();
 }
 
 World::~World()

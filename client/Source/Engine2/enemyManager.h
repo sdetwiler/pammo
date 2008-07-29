@@ -6,7 +6,7 @@
 
 #include "vehicleController.h"
 #include "imageEntity.h"
-
+#include "particleSystem.h"
 #include <vector>
 
 #define ENEMY_DATA_SIZE 128
@@ -17,8 +17,10 @@ namespace pammo
 class EnemyManager;
 struct Enemy;
 
-typedef void(*EnemyUpdateCb)(Enemy* e, EnemyManager* manager);
+typedef void (*EnemyUpdateCb)(Enemy* e, EnemyManager* manager);
 typedef void (*EnemyDrawCb)(Enemy* e, EnemyManager* manager);
+typedef void (*EnemyDamageCb)(Enemy* e, ParticleType type, float amount);
+typedef void (*EnemyDestroyCb)(Enemy* e, EnemyManager* manager);
 
 struct Enemy
 {
@@ -27,6 +29,13 @@ struct Enemy
     VehicleController*   mController;
     EnemyUpdateCb        mUpdateCb;
     EnemyDrawCb          mDrawCb;
+	EnemyDamageCb        mDamageCb;
+	EnemyDestroyCb       mDestroyCb;
+
+	bool                 mDestroyed;
+
+	float                mHealth;
+
 
     uint8_t mData[ENEMY_DATA_SIZE];
 };
@@ -53,9 +62,10 @@ public:
         SideShooterEnemy
     };
 
+    void destroyEnemy(Enemy* e);
+
 protected:
     Enemy* createEnemy(EnemyType type, Vector2 const& position);
-    void destroyEnemy(Enemy* e);
 
 private:
     typedef vector< Vector2 > Vector2Vector;

@@ -1,11 +1,3 @@
-/*
- *  builder.cpp
- *  Flain
- *
- *  Created by James Marr on 4/1/08.
- *  Copyright 2008 __MyCompanyName__. All rights reserved.
- *
- */
 #include "pammo.h"
 #include "builder.h"
 #include "world.h"
@@ -13,6 +5,7 @@
 #include "imageLibrary.h"
 #include "map.h"
 #include "enemyManager.h"
+#include "player.h"
 
 //#include "collisionMap.h"
 
@@ -131,8 +124,8 @@ void buildTileMap(World* world, char const* name)
     {
         uint16_t i = readUInt16(&cur, &remain);
         dprintf("Prop using %d", i);
-        float posX = roundf(readFloat(&cur, &remain));
-        float posY = roundf(readFloat(&cur, &remain));
+        float posX = readFloat(&cur, &remain);
+        float posY = readFloat(&cur, &remain);
         float scale = readFloat(&cur, &remain);
         float rot = readFloat(&cur, &remain);
         
@@ -234,7 +227,6 @@ void buildCollisionMap(World* world, char const* mapName)
     dprintf("POIs: %d", numPOIs);
     
     uint32_t spawnPoints = 0;
-    uint32_t swarmPoints = 0;
     
     // Read each poi.
     for(uint32_t poi=0; poi<numPOIs; ++poi)
@@ -248,6 +240,10 @@ void buildCollisionMap(World* world, char const* mapName)
             ++spawnPoints;
             dprintf("Spawn Point: %f, %f", x, y);
             world->getEnemyManager()->addSpawnPoint(Vector2(x, y));
+        }
+        else if(properties == 1)
+        {
+            world->getPlayer()->setCenter(Vector2(x, y));
         }
     }
     

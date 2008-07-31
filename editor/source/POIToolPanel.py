@@ -168,7 +168,7 @@ class POIToolPanel(wx.Panel):
             if type == POI.SpawnPointTypeName:
                 gc.SetBrush(wx.Brush(wx.Color(0, 100, 0, 92)))
                 gc.SetPen(wx.Pen(wx.Color(0, 128, 0, 168), self.strokeSize))
-            elif type == POI.SwarmPointTypeName:
+            elif type == POI.PlayerStartTypeName:
                 gc.SetBrush(wx.Brush(wx.Color(0, 0, 100, 92)))
                 gc.SetPen(wx.Pen(wx.Color(0, 0, 128, 168), self.strokeSize))
             elif type == POI.DisabledTypeName:

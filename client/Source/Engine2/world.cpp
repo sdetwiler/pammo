@@ -25,11 +25,11 @@ World::World()
     
     mPhysics = new Physics();
     
-    
     mEnemyManager = new EnemyManager;
+    
+    mPlayer = new Player();
 
     buildFromMap(this, "TheMap");
-    mPlayer = new Player();
 }
 
 World::~World()
@@ -64,7 +64,7 @@ Physics* World::getPhysics()
     return mPhysics;
 }
 
-Player const* World::getPlayer() const
+Player* World::getPlayer() const
 {
     return mPlayer;
 }

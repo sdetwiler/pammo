@@ -24,7 +24,8 @@ enum ViewPriorities
     kEnemyManagerPriority = 140,
     kPlayerPriority = 150,
     kMoveRingPriority = 200,
-    kFireRingPriority = 201
+    kFireRingPriority = 201,
+    kWeaponSelectorPriority = 250
 };
 
 class View

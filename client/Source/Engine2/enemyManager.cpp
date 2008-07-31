@@ -1,7 +1,8 @@
-#include "pammo.h"
 #include "enemyManager.h"
+
 #include "world.h"
 #include "physics.h"
+#include "camera.h"
 #include "trebuchetEnemy.h"
 #include "sideShooterEnemy.h"
 
@@ -63,10 +64,12 @@ void EnemyManager::update()
 
 void EnemyManager::draw()
 {
+    gWorld->getCamera()->set();
     for(EnemyVector::iterator i = mEnemies.begin(); i!= mEnemies.end(); ++i)
     {
         (*i)->mDrawCb((*i), this);
     }
+    gWorld->getCamera()->unset();
 }
 
 void EnemyManager::addSpawnPoint(Vector2 point)
@@ -101,9 +104,9 @@ Enemy* EnemyManager::createEnemy(EnemyType type, Vector2 const& position)
     e->mBody->mRadius = 20;
     e->mBody->mMass = 100;
 	e->mBody->mUserArg = e;
-    e->mController = new VehicleController();
-    e->mController->mBody = e->mBody;
-    e->mController->mRotationDamping = 0.4f;
+    e->mController.reset();
+    e->mController.mBody = e->mBody;
+    e->mController.mRotationDamping = 0.4f;
 	e->mDrawCb = NULL;
 	e->mUpdateCb = NULL;
 	e->mDamageCb = NULL;

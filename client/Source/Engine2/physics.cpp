@@ -138,6 +138,12 @@ Body* Physics::addBody()
 
 void Physics::removeBody(Body* body)
 {
+    // Clean up the body so that it doesn't affect anything.
+    body->mBodyCallback = 0;
+    body->mProperties = 0;
+    body->mCollideProperties = 0;
+    
+    // Add it to the remove list.
     body->mRemoveNext = mRemoveBodies;
     mRemoveBodies = body;
 }

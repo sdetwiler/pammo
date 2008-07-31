@@ -41,9 +41,9 @@ void trebuchetEnemyFire(Enemy* e, float distance)
 
 void trebuchetEnemyUpdate(Enemy* e, EnemyManager* manager)
 {
-    e->mController->update();
+    e->mController.update();
 
-    e->mEntity->mRotation = e->mController->mRotation + (float)M_PI/2;
+    e->mEntity->mRotation = e->mController.mRotation + (float)M_PI/2;
     e->mEntity->mCenter = e->mBody->mCenter;
     e->mEntity->makeDirty();
 
@@ -53,18 +53,18 @@ void trebuchetEnemyUpdate(Enemy* e, EnemyManager* manager)
     float rot = atan2(heading.y, heading.x);
     if(rot < 0) 
         rot += (float)M_PI*2;
-    e->mController->mRotationTarget = rot;
+    e->mController.mRotationTarget = rot;
 
     if(mag < 200)
     {
-        e->mController->mAcceleration = 0;
+        e->mController.mAcceleration = 0;
         // Maybe fire.
         if(!(rand()%30))
             trebuchetEnemyFire(e, mag);
     }
     else
     {
-        e->mController->mAcceleration = speed * e->mBody->mMass * 7;
+        e->mController.mAcceleration = speed * e->mBody->mMass * 7;
     }
 
     e->mEntity->makeDirty();
@@ -73,11 +73,7 @@ void trebuchetEnemyUpdate(Enemy* e, EnemyManager* manager)
 
 void trebuchetEnemyDraw(Enemy* e, EnemyManager* manager)
 {
-    gWorld->getCamera()->set();
-    
     e->mEntity->draw();
-    
-    gWorld->getCamera()->unset();
 }
 
 void trebuchetEnemyDestroy(Enemy* e, EnemyManager* manager)
@@ -88,7 +84,6 @@ void trebuchetEnemyDestroy(Enemy* e, EnemyManager* manager)
 	delete e->mEntity;
 
 }
-
 
 void trebuchetEnemyDamage(Enemy* e, ParticleType type, float amount)
 {

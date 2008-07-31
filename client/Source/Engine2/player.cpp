@@ -1,5 +1,5 @@
-#include "pammo.h"
 #include "player.h"
+
 #include "world.h"
 #include "camera.h"
 #include "imageLibrary.h"
@@ -8,7 +8,10 @@
 #include "particleSystem.h"
 #include "vehicleController.h"
 #include "physics.h"
+#include "flamethrowerWeapon.h"
+#include "lightningWeapon.h"
 #include "enemyManager.h"
+#include "weaponSelector.h"
 
 namespace pammo
 {
@@ -20,23 +23,19 @@ Player::Player() : View()
     
     mTargetRing = new TargetRingWidget(kFireRingPriority);
     mTargetRing->setObserver(this);
+    
+    mWeaponSelector = new WeaponSelector();
+    mWeaponSelector->addWeapon(new LightningWeapon);
+    mWeaponSelector->addWeapon(new FlamethrowerWeapon);
 
     Vector2 size = getFrameSize();
     if(size.x > size.y)
-    {
-        mMovementRing->setCenter(Vector2(70, 160));
-        mTargetRing->setCenter(Vector2(410, 160));
-    }
-    else
-    {
-        mMovementRing->setCenter(Vector2(160, 70));
-        mTargetRing->setCenter(Vector2(160, 410));
-    }
+    mMovementRing->setCenter(Vector2(60, 260));
+    mTargetRing->setCenter(Vector2(420, 260));
 
     mEntity = new ImageEntity(gImageLibrary->reference("data/vehicles/flameTank5/00.png"));
     
     mBody = gWorld->getPhysics()->addBody();
-	mBody->mCenter = *(gWorld->getEnemyManager()->getSpawnPoint(0));
     
     mBody->mProperties = kPlayerCollisionProperties;
     mBody->mDamping = 0.1;
@@ -46,6 +45,8 @@ Player::Player() : View()
     mController = new VehicleController();
     mController->mBody = mBody;
     mController->mRotationDamping = 0.4;
+    
+    mWeapon = new LightningWeapon();
     
     mFiring = false;
 }
@@ -88,12 +89,7 @@ void Player::update()
     // Fire if we should be.
     if(mFiring)
     {
-        ParticleSystem::InitFireParticleArgs args;
-        args.initialPosition = mBody->mCenter;
-        args.initialRotation = atan2(mFireDirection.y, mFireDirection.x);
-        args.initialVelocity = mBody->mVelocity;
-        
-        gWorld->getParticleSystem()->initFireParticle(args);
+        mWeapon->fire();
     }
 }
 
@@ -108,8 +104,7 @@ void Player::draw()
 
 void Player::setCenter(Vector2 center)
 {
-    mEntity->mCenter = center;
-    mEntity->makeDirty();
+    mBody->mCenter = center;
 }
 
 Vector2 const& Player::getCenter() const
@@ -130,7 +125,8 @@ void Player::onTargetRingUpdated(TargetRingWidget *widget, Vector2 value)
         else
         {
             if(rot < 0) rot += M_PI*2;
-            mController->mAcceleration = mag * mBody->mMass * 7;
+            //mController->mAcceleration = mag * mBody->mMass * 7;
+            mController->mAcceleration = mBody->mMass * 7;
             mController->mRotationTarget = rot;
         }
     }

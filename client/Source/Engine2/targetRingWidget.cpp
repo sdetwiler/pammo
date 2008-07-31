@@ -13,7 +13,7 @@ TargetRingWidget::TargetRingWidget(uint32_t priority)
     
     mCenter = Vector2(160, 70);
     mValue = Vector2(0, 0);
-    mSize = 100;
+    mSize = 80;
     
     mRingImage = gImageLibrary->reference("data/interface/targetRingBackground.png");
     mIndicatorImage = gImageLibrary->reference("data/interface/targetRingSelection.png");
@@ -89,7 +89,7 @@ void TargetRingWidget::draw()
     float x = mSize;
     float y = mSize;
     Transform2 trans;
-    trans *= Transform2::createTranslation(mCenter - Vector2(x/2, y/2));
+    trans = Transform2::createTranslation(mCenter - Vector2(x/2, y/2));
 	trans *= Transform2::createScale(Vector2(x, y));
     drawImage(mRingImage, trans, 100);
     

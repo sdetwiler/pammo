@@ -101,7 +101,7 @@ def saveOverlays(map):
     for poi in map.getPOIs():
         type = poi.getType()
         if type == POI.SpawnPointTypeName: property = 0
-        elif type == POI.SwarmPointTypeName: property = 1
+        elif type == POI.PlayerStartTypeName: property = 1
         else: continue
         count += 1
         pos = poi.getPos()

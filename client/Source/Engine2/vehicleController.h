@@ -12,8 +12,9 @@ class VehicleController
 {
     public:
         VehicleController();
-        ~VehicleController();
+        virtual ~VehicleController();
         
+        void reset();
         void update();
         
         float mRotationTarget;

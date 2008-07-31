@@ -6,6 +6,14 @@ namespace pammo
 
 VehicleController::VehicleController()
 {
+    reset();
+}
+
+VehicleController::~VehicleController()
+{}
+
+void VehicleController::reset()
+{
     mBody = 0;
     
     mRotationTarget = 0;
@@ -15,9 +23,6 @@ VehicleController::VehicleController()
     
     mAcceleration = 0;
 }
-
-VehicleController::~VehicleController()
-{}
 
 void VehicleController::update()
 {

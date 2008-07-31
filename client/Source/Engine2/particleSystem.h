@@ -12,19 +12,16 @@ namespace pammo
 
 enum ParticleType
 {
-	Ball,
-	Fire
+    Fire,
+    Lightning
 };
 
 struct Body;
 struct Particle;
 class ParticleSystem;
 
-// Return false if particle should be expired. True if not.
+// Particle callback function prototype.
 typedef void (*ParticleCb)(Particle* p, ParticleSystem* system);
-
-//bool fireParticleCb(Particle* p, ParticleSystem* system);
-
 
 struct Particle
 {
@@ -41,7 +38,6 @@ struct Particle
     Vector2      mEndPosition;
 };
 
-
 class ParticleSystem : public View
 {
 public:
@@ -54,6 +50,15 @@ public:
     void update();
     void draw();
 
+    // Returns null if no particles are available.
+    // JEM Should accept some sort of priority, so that bullets can pull the rug out from smoke particles.
+    Particle* addParticle();
+    Particle* addParticleWithBody();
+	void removeParticle(Particle* p);
+
+
+
+
     struct InitFireParticleArgs
     {
         //Vehicle const*  emitter;
@@ -63,8 +68,7 @@ public:
         //ParticleHitCb   hitCallback;
 //        void*           hitCallbackArg;
     };
-
-	void removeParticle(Particle* p);
+    
     void initFireParticle(InitFireParticleArgs const& args);
     void initSmokeParticle(Vector2 const& initialPosition, float initialRotation, Vector2 const& initialVelocity);
     //void initHitParticle(Vector2 const& initialPosition);

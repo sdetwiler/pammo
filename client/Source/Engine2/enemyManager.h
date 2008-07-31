@@ -26,7 +26,7 @@ struct Enemy
 {
     ImageEntity*         mEntity;
     Body*                mBody;
-    VehicleController*   mController;
+    VehicleController    mController;
     EnemyUpdateCb        mUpdateCb;
     EnemyDrawCb          mDrawCb;
 	EnemyDamageCb        mDamageCb;

@@ -13,6 +13,8 @@ struct Body;
 class Camera;
 class ImageEntity;
 class VehicleController;
+class Weapon;
+class WeaponSelector;
 
 class Player : 
     public View,
@@ -37,13 +39,17 @@ class Player :
         void setCenter(Vector2 center);
         Vector2 const& getCenter() const;
 
-    private:
+    public:
         TargetRingWidget* mMovementRing;
         TargetRingWidget* mTargetRing;
+        
+        WeaponSelector* mWeaponSelector;
         
         Body* mBody;
         VehicleController* mController;
         ImageEntity* mEntity;
+        
+        Weapon* mWeapon;
         
         bool mFiring;
         Vector2 mFireDirection;

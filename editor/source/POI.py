@@ -1,11 +1,11 @@
 SpawnPointTypeName = 'Spawn Point'
-SwarmPointTypeName = 'Swarm Point'
+PlayerStartTypeName = 'Player Start'
 DisabledTypeName = 'Disabled'
 
-TypeNames = [SpawnPointTypeName, SwarmPointTypeName, DisabledTypeName]
+TypeNames = [SpawnPointTypeName, PlayerStartTypeName, DisabledTypeName]
 
 SpawnPointTypeIndex = TypeNames.index(SpawnPointTypeName)
-SwarmPointTypeIndex = TypeNames.index(SwarmPointTypeName)
+PlayerStartTypeIndex = TypeNames.index(PlayerStartTypeName)
 DisabledTypeIndex = TypeNames.index(DisabledTypeName)
 
 class POI:

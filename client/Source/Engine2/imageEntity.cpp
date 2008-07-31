@@ -14,6 +14,7 @@ const GLfloat spriteTexcoords[] = {
 ImageEntity::ImageEntity()
 {
     mAlpha = 1.0f;
+    mRotation = 0;
 	mCenter.x = 0;
 	mCenter.y = 0;
     mSize.x = 0;

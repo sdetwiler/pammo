@@ -90,6 +90,9 @@ void Map::addProp(ImageEntity* entity)
     Vector2 ul = entity->mCenter - entity->mSize/2;
     Vector2 br = entity->mCenter + entity->mSize/2;
     
+    ul.x = roundf(ul.x); ul.y = roundf(ul.y);
+    br.x = roundf(br.x); br.y = roundf(br.y);
+    
     // If the prop is completely off the map, return;
     if(br.x <= 0 || br.y <= 0 || ul.x >= mSizeX*mSizeMaterial || ul.y >= mSizeY*mSizeMaterial)
         return;

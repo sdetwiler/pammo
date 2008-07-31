@@ -24,7 +24,7 @@ class World
         Map* getMap();
         ParticleSystem* getParticleSystem();
         Physics* getPhysics();
-        Player const* getPlayer() const;
+        Player* getPlayer() const;
         EnemyManager* getEnemyManager() const;
 
     protected:

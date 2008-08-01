@@ -35,7 +35,7 @@ Player::Player() : View()
     mMovementRing->setCenter(Vector2(60, 260));
     mTargetRing->setCenter(Vector2(420, 260));
 
-    mEntity = new ImageEntity(gImageLibrary->reference("data/vehicles/flameTank5/00.png"));
+    mEntity = new ImageEntity(gImageLibrary->reference("data/vehicles/tank/00.png"));
     
     mBody = gWorld->getPhysics()->addBody();
     

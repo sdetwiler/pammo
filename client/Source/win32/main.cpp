@@ -9,8 +9,8 @@ public:
     InputProcessor()
     {
         memset(&mDown, 0, sizeof(mDown));
-        keyTouch[0].mLocation.x = 69;
-        keyTouch[0].mLocation.y = 158;
+        keyTouch[0].mLocation.x = 60;
+        keyTouch[0].mLocation.y = 260;
     }
 
     ~InputProcessor()
@@ -35,7 +35,7 @@ public:
         SDL_Event event;
         Vector2 location;
         Touch touch[5];
-        float keyRange = 56;
+        float keyRange = 40;
         
 
         bool altUp = false;
@@ -74,14 +74,14 @@ public:
                 {
                     keyTouch[0].mPhase = Touch::PhaseBegin;
                     keyTouch[0].mLocation.x += 0;
-                    keyTouch[0].mLocation.y += -keyRange/2;
+                    keyTouch[0].mLocation.y += -keyRange;
                     directionKey = true;
                 }
                 else if(mKeySym.sym == SDLK_s)
                 {
                     keyTouch[0].mPhase = Touch::PhaseBegin;
                     keyTouch[0].mLocation.x += 0;
-                    keyTouch[0].mLocation.y += keyRange/2;
+                    keyTouch[0].mLocation.y += keyRange;
                     directionKey = true;
                 }
 
@@ -118,14 +118,14 @@ public:
                 {
                     keyTouch[0].mPhase = Touch::PhaseEnd;
                     keyTouch[0].mLocation.x += 0;
-                    keyTouch[0].mLocation.y += keyRange/2;
+                    keyTouch[0].mLocation.y += keyRange;
                     directionKey = true;
                 }
                 else if(mKeySym.sym == SDLK_s)
                 {
                     keyTouch[0].mPhase = Touch::PhaseEnd;
                     keyTouch[0].mLocation.x += 0;
-                    keyTouch[0].mLocation.y += -keyRange/2;
+                    keyTouch[0].mLocation.y += -keyRange;
                     directionKey = true;
                 }
 
@@ -212,9 +212,10 @@ public:
 
             if(directionKey)
             {
-                cap(&keyTouch[0].mLocation.x, 0, 128);
-                cap(&keyTouch[0].mLocation.y, 128, 255);
-                game->touches(1, keyTouch);
+				cap(&keyTouch[0].mLocation.x, 20, 100);
+				cap(&keyTouch[0].mLocation.y, 220, 300);
+				dprintf("### %.2f %.2f", keyTouch[0].mLocation.x, keyTouch[0].mLocation.y);
+				game->touches(1, keyTouch);
             }
 
             if(mDown[0] && mDown[1])

@@ -13,6 +13,7 @@ namespace pammo
 // Forward declair collision and particle callbacks.
 void lightningBulletCollisionCallback(Body* self, Body* other, Contact* contact, ContactResponse* response);
 void lightningBulletParticleCallback(Particle* p, ParticleSystem* system);
+void lightningGlowParticleCallback(Particle* p, ParticleSystem* system);
 
 LightningWeapon::LightningWeapon()
     : Weapon()
@@ -52,19 +53,48 @@ void LightningWeapon::fire()
     
     // Setup image.
     p->mImage.setImage(gImageLibrary->reference("data/particles/lightning00.png"));
-    p->mImage.mCenter = player->mBody->mCenter;
+    p->mImage.mCenter = player->mBody->mCenter + Vector2(20, 0) * Transform2::createRotation(initialRotation+r);
     p->mImage.mRotation = initialRotation + r;
     p->mImage.makeDirty();
         
-    // Properties about fire particles.
+    // Properties about lightning bullet particles.
     p->mBody->mProperties = kPlayerBulletCollisionProperties;
     p->mBody->mCollideProperties = kEnemyCollisionProperties;
     p->mBody->mBodyCallback = lightningBulletCollisionCallback;
     p->mBody->mDamping = 0;
     p->mBody->mRadius = 20;
     p->mBody->mMass = 15;
-    p->mBody->mCenter = player->mBody->mCenter;
+    p->mBody->mCenter = p->mImage.mCenter + Vector2(20, 0) * Transform2::createRotation(initialRotation+r);
     p->mBody->mVelocity = player->mBody->mVelocity + Vector2(300, 0) * Transform2::createRotation(initialRotation+r);
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // Get a particle.
+	p = gWorld->getParticleSystem()->addParticle();
+    if(!p)
+		return;
+    
+
+    // Set basic particle properties.
+    p->mCallback = lightningGlowParticleCallback;
+    p->mAlpha = 1.0f;
+    
+    // Setup image.
+    p->mImage.setImage(gImageLibrary->reference("data/particles/lightningGlow00.png"));
+    p->mImage.mCenter = player->mBody->mCenter;
+    p->mImage.mRotation = initialRotation + r;
+    p->mImage.makeDirty();
+        
 }
 
 void lightningBulletCollisionCallback(Body* self, Body* other, Contact* contact, ContactResponse* response)
@@ -89,6 +119,18 @@ void lightningBulletParticleCallback(Particle* p, ParticleSystem* system)
     if(p->mAlpha <= 0)
         system->removeParticle(p);
 }
+
+void lightningGlowParticleCallback(Particle* p, ParticleSystem* system)
+{
+    p->mImage.mCenter = gWorld->getPlayer()->getCenter();
+	p->mImage.mSize*=1.2;
+	p->mImage.makeDirty();
+    
+    p->mAlpha-=0.12f;
+    if(p->mAlpha <= 0)
+        system->removeParticle(p);
+}
+
 
 }
 

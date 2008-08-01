@@ -65,7 +65,6 @@ bool TargetRingWidget::touch(uint32_t count, Touch* touches)
         
         Vector2 diff = loc - mCenter;
         float dist = magnitude(diff);
-        
         if(dist > mSize/2 * 2) continue;
         else if(dist > mSize/2) diff = diff / dist * mSize / 2;
         

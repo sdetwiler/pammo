@@ -99,6 +99,7 @@ void EnemyManager::update()
 	while(e)
 	{
 		e->mUpdateCb(e, this);
+		assert(e!=e->mNext);
 		e = e->mNext;
 	}
 }

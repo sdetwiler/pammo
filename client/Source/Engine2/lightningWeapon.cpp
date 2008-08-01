@@ -47,11 +47,11 @@ void LightningWeapon::fire()
     
     // Choose some numbers.
     float f = 3.0;
-    float r = 1.0/f - ((rand()%100)/(f*50)) ;
+    float r = 1.0/f - ((rand()%100)/(f*90)) ;
     float initialRotation = atan2(player->mFireDirection.y, player->mFireDirection.x);
     
     // Setup image.
-    p->mImage.setImage(gImageLibrary->reference("data/particles/ball.png"));
+    p->mImage.setImage(gImageLibrary->reference("data/particles/lightning00.png"));
     p->mImage.mCenter = player->mBody->mCenter;
     p->mImage.mRotation = initialRotation + r;
     p->mImage.makeDirty();
@@ -81,11 +81,11 @@ void lightningBulletCollisionCallback(Body* self, Body* other, Contact* contact,
 void lightningBulletParticleCallback(Particle* p, ParticleSystem* system)
 {
     p->mImage.mCenter = p->mBody->mCenter;
-    p->mImage.mRotation += 0.065f;
-    p->mImage.mSize *= 1.05;
+  //  p->mImage.mRotation += 0.065f;
+   // p->mImage.mSize *= 1.05;
     p->mImage.makeDirty();
     
-    p->mAlpha-=0.1f;
+    p->mAlpha-=0.06f;
     if(p->mAlpha <= 0)
         system->removeParticle(p);
 }

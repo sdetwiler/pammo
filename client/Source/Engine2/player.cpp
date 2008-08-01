@@ -24,10 +24,12 @@ Player::Player() : View()
     mTargetRing = new TargetRingWidget(kFireRingPriority);
     mTargetRing->setObserver(this);
     
+	// SCD: Horrible hack. addWeapon sets the player's weapon from the gWorld pointer. Because this is happening via a constructor, the player is not yet set on the gWorld pointer.
+	gWorld->mPlayer = this;
+
     mWeaponSelector = new WeaponSelector();
     mWeaponSelector->addWeapon(new LightningWeapon);
     mWeaponSelector->addWeapon(new FlamethrowerWeapon);
-
     Vector2 size = getFrameSize();
     if(size.x > size.y)
     mMovementRing->setCenter(Vector2(60, 260));

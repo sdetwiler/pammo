@@ -29,6 +29,7 @@ class World
 
     protected:
     private:
+		friend class Player; // SCD: continuation of horrible hack.
 		Camera* mCamera;
         Map* mMap;
         ParticleSystem* mParticleSystem;

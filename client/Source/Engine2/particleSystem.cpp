@@ -150,8 +150,6 @@ void doDamage(Body* self, Body* other, ParticleType type, float damage)
 		else if(other->mProperties & kEnemyCollisionProperties)
 		{
 			Enemy* e = (Enemy*)other->mUserArg;
-			if(e->mDestroyed)
-				return;
 
 			if(e->mDamageCb)
 				e->mDamageCb(e, type, damage);

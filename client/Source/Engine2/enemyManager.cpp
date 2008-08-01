@@ -1,10 +1,10 @@
+#include "pammo.h"
 #include "enemyManager.h"
-
 #include "world.h"
 #include "physics.h"
-#include "camera.h"
 #include "trebuchetEnemy.h"
 #include "sideShooterEnemy.h"
+#include "camera.h"
 
 #include <algorithm>
 
@@ -14,6 +14,11 @@ namespace pammo
 EnemyManager::EnemyManager()
 {
     mLastEnemy = 0;
+	mActiveEnemyCount = 0;
+	mAddEnemies = NULL;
+	mRemoveEnemies = NULL;
+	mEnemies = NULL;
+	mFreed = NULL;
 }
 
 EnemyManager::~EnemyManager()
@@ -33,42 +38,81 @@ uint32_t EnemyManager::getDrawPriority() const
 
 void EnemyManager::update()
 {
-    if(mEnemies.size() < 50)
+	while(mAddEnemies)
+	{
+		// Pop from add stack.
+		Enemy* e = mAddEnemies;
+		mAddEnemies = e->mNext;
+
+        e->mNext = mEnemies;
+        if(e->mNext)
+			e->mNext->mPrev = e;
+        mEnemies = e;
+	}
+
+	while(mRemoveEnemies)
+	{
+		// Pop from remove stack.
+		Enemy* e = mRemoveEnemies;
+		mRemoveEnemies = e->mRemoveNext;
+
+		// Remove from active list.
+		if(e->mNext)
+			e->mNext->mPrev = e->mPrev;
+		if(e->mPrev)
+			e->mPrev->mNext = e->mNext;
+		else
+			mEnemies = e->mNext;
+
+		// Push onto avail stack.
+		e->mPrev = NULL;
+		e->mNext = mFreed;
+		mFreed = e;
+	}
+
+
+    if(mActiveEnemyCount < 50)
     {
         uint64_t now = getTime();
         if(now-mLastEnemy > 2500000)
         {
             Vector2 const* pos = getSpawnPoint(rand()%getSpawnPointCount());
-            Enemy* enemy;
-            int type = 0;//rand()%2;
+            Enemy* enemy = addEnemy();
+			enemy->mBody->mCenter = *pos;
+
+			int type = 0;//rand()%2;
             switch(type)
             {
             case 0:
-                enemy = createEnemy(TrebuchetEnemy, *pos);
+				trebuchetEnemyInit(enemy, this);
                 break;
             case 1:
-                enemy = createEnemy(SideShooterEnemy, *pos);
+                sideShooterEnemyInit(enemy, this);
                 break;
             }
-            
-            mEnemies.push_back(enemy);
-            mLastEnemy = now;
+
+			mLastEnemy = now;
         }
     }
 
-    for(EnemyVector::iterator i = mEnemies.begin(); i!= mEnemies.end(); ++i)
-    {
-        (*i)->mUpdateCb((*i), this);
-    }
+	Enemy* e = mEnemies;
+	while(e)
+	{
+		e->mUpdateCb(e, this);
+		e = e->mNext;
+	}
 }
 
 void EnemyManager::draw()
 {
     gWorld->getCamera()->set();
-    for(EnemyVector::iterator i = mEnemies.begin(); i!= mEnemies.end(); ++i)
-    {
-        (*i)->mDrawCb((*i), this);
-    }
+
+	Enemy* e = mEnemies;
+	while(e)
+	{
+		e->mDrawCb(e, this);
+		e = e->mNext;
+	}
     gWorld->getCamera()->unset();
 }
 
@@ -90,54 +134,47 @@ uint32_t EnemyManager::getSpawnPointCount() const
     return (uint32_t)mSpawnPoints.size();
 }
 
-Enemy* EnemyManager::createEnemy(EnemyType type, Vector2 const& position)
+
+Enemy* EnemyManager::addEnemy()
 {
-    // Should pull from pool.
-    Enemy* e = new Enemy;
-    memset(e, 0, sizeof(Enemy));
+    Enemy* e;
+    if(mFreed)
+    {
+        e = mFreed;
+        mFreed = e->mNext;
+		memset(e, 0, sizeof(e));
+    }
+    else
+    {
+        e = new Enemy();
+		memset(e, 0, sizeof(e));
+    }
+
+	e->mNext = mAddEnemies;
+	e->mPrev = NULL;
+	mAddEnemies = e;
 
     e->mBody = gWorld->getPhysics()->addBody();
-    e->mBody->mCenter = position;
     e->mBody->mProperties = kEnemyCollisionProperties;
     e->mBody->mCollideProperties= kEnemyCollisionProperties | kPlayerCollisionProperties;
     e->mBody->mDamping = 0.1f;
     e->mBody->mRadius = 20;
     e->mBody->mMass = 100;
 	e->mBody->mUserArg = e;
-    e->mController.reset();
     e->mController.mBody = e->mBody;
     e->mController.mRotationDamping = 0.4f;
-	e->mDrawCb = NULL;
-	e->mUpdateCb = NULL;
-	e->mDamageCb = NULL;
-	e->mDestroyCb = NULL;
-	e->mDestroyed = false;
 
-    switch(type)
-    {
-    case TrebuchetEnemy:
-        trebuchetEnemyInit(e, this);
-        break;
-    case SideShooterEnemy:
-        sideShooterEnemyInit(e, this);
-        break;
-    }
-
-    return e;
+	++mActiveEnemyCount;
+	return e;
 }
 
-void EnemyManager::destroyEnemy(Enemy* e)
+void EnemyManager::removeEnemy(Enemy* e)
 {
-	if(e->mDestroyed == true)
-		return;
+	// Push onto remove stack.
+	e->mRemoveNext = mRemoveEnemies;
+	mRemoveEnemies = e;
 
-	e->mDestroyed = true;
-
-	e->mDestroyCb(e, this);
-	mEnemies.erase(find(mEnemies.begin(), mEnemies.end(), e));
-    gWorld->getPhysics()->removeBody(e->mBody);
-    // Should return to pool.
-    delete e;
+	--mActiveEnemyCount;
 }
 
 } // namespace pammo

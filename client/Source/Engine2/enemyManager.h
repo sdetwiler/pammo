@@ -30,12 +30,13 @@ struct Enemy
     EnemyUpdateCb        mUpdateCb;
     EnemyDrawCb          mDrawCb;
 	EnemyDamageCb        mDamageCb;
-	EnemyDestroyCb       mDestroyCb;
-
-	bool                 mDestroyed;
 
 	float                mHealth;
 
+    // List maitenance.
+    Enemy* mNext;
+    Enemy* mPrev;
+    Enemy* mRemoveNext;
 
     uint8_t mData[ENEMY_DATA_SIZE];
 };
@@ -56,24 +57,28 @@ public:
     Vector2 const* getSpawnPoint(uint32_t index) const;
     uint32_t getSpawnPointCount() const;
 
+	Enemy* addEnemy();
+    void removeEnemy(Enemy* e);
+
     enum EnemyType
     {
         TrebuchetEnemy,
         SideShooterEnemy
     };
 
-    void destroyEnemy(Enemy* e);
-
 protected:
-    Enemy* createEnemy(EnemyType type, Vector2 const& position);
 
 private:
     typedef vector< Vector2 > Vector2Vector;
     Vector2Vector mSpawnPoints;
 
-    typedef vector< Enemy* > EnemyVector; 
-    EnemyVector mEnemies;
-    uint64_t mLastEnemy;
+	Enemy* mEnemies;
+    Enemy* mAddEnemies;
+    Enemy* mRemoveEnemies;
+    Enemy* mFreed;
+
+	uint32_t mActiveEnemyCount;
+	uint64_t mLastEnemy;
 };
 
 } // namespace pammo

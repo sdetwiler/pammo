@@ -199,6 +199,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\Source\Engine2\flamethrowerWeapon.h"
+				>
+			</File>
+			<File
 				RelativePath="..\Source\Engine2\game.h"
 				>
 			</File>
@@ -208,6 +212,10 @@
 			</File>
 			<File
 				RelativePath="..\Source\Engine2\imageLibrary.h"
+				>
+			</File>
+			<File
+				RelativePath="..\Source\Engine2\lightningWeapon.h"
 				>
 			</File>
 			<File
@@ -267,6 +275,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\Source\Engine2\weapon.h"
+				>
+			</File>
+			<File
+				RelativePath="..\Source\Engine2\weaponSelector.h"
+				>
+			</File>
+			<File
 				RelativePath="..\Source\Engine2\world.h"
 				>
 			</File>
@@ -303,6 +319,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\Source\Engine2\flamethrowerWeapon.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\Source\Engine2\game.cpp"
 				>
 			</File>
@@ -316,6 +336,10 @@
 			</File>
 			<File
 				RelativePath="..\Source\Engine2\imageLibrary.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\Source\Engine2\lightningWeapon.cpp"
 				>
 			</File>
 			<File
@@ -360,6 +384,14 @@
 			</File>
 			<File
 				RelativePath="..\Source\Engine2\view.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\Source\Engine2\weapon.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\Source\Engine2\weaponSelector.cpp"
 				>
 			</File>
 			<File

@@ -17,7 +17,6 @@ void trebuchetEnemyInit(Enemy* e, EnemyManager* manager)
     e->mDrawCb = trebuchetEnemyDraw;
     e->mUpdateCb = trebuchetEnemyUpdate;
 	e->mDamageCb = trebuchetEnemyDamage;
-	e->mDestroyCb = trebuchetEnemyDestroy;
 	e->mHealth = 100.0f;
 }
 
@@ -76,22 +75,17 @@ void trebuchetEnemyDraw(Enemy* e, EnemyManager* manager)
     e->mEntity->draw();
 }
 
-void trebuchetEnemyDestroy(Enemy* e, EnemyManager* manager)
-{
-	dprintf("%p You sunk my trebuchet!");
-	gWorld->getParticleSystem()->initExplosionParticle(e->mBody->mCenter);
-	gImageLibrary->unreference(e->mEntity->getImage());
-	delete e->mEntity;
-
-}
-
 void trebuchetEnemyDamage(Enemy* e, ParticleType type, float amount)
 {
 	e->mHealth-=amount;
 
 	if(e->mHealth <=0)
 	{
-		gWorld->getEnemyManager()->destroyEnemy(e);
+		dprintf("%p You sunk my trebuchet!", e);
+		gWorld->getParticleSystem()->initExplosionParticle(e->mBody->mCenter);
+		gImageLibrary->unreference(e->mEntity->getImage());
+		gWorld->getEnemyManager()->removeEnemy(e);
+		e->mDamageCb = NULL;
 	}
 }
 

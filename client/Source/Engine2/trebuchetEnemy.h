@@ -10,7 +10,6 @@ void trebuchetEnemyInit(Enemy* e, EnemyManager* manager);
 void trebuchetEnemyUpdate(Enemy* e, EnemyManager* manager);
 void trebuchetEnemyDraw(Enemy* e, EnemyManager* manager);
 void trebuchetEnemyDamage(Enemy* e, ParticleType type, float amount);
-void trebuchetEnemyDestroy(Enemy* e, EnemyManager* manager);
 
 } // namespace pammo
 

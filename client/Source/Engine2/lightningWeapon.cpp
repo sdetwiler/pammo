@@ -47,12 +47,21 @@ void LightningWeapon::fire()
     p->mAlpha = 1.0f;
     
     // Choose some numbers.
-    float f = 3.0;
+    float f = 10.0;
     float r = 1.0/f - ((rand()%100)/(f*90)) ;
     float initialRotation = atan2(player->mFireDirection.y, player->mFireDirection.x);
     
     // Setup image.
-    p->mImage.setImage(gImageLibrary->reference("data/particles/lightning00.png"));
+	int i=rand()%3;
+	char filename[256];
+	float velocity = 130;
+	sprintf(filename, "data/particles/lightning0%d.png", i);
+    if(i)
+	{
+		velocity+=100+(rand()%100);
+	}
+	
+	p->mImage.setImage(gImageLibrary->reference(filename));
     p->mImage.mCenter = player->mBody->mCenter + Vector2(20, 0) * Transform2::createRotation(initialRotation+r);
     p->mImage.mRotation = initialRotation + r;
     p->mImage.makeDirty();
@@ -65,7 +74,7 @@ void LightningWeapon::fire()
     p->mBody->mRadius = 20;
     p->mBody->mMass = 15;
     p->mBody->mCenter = p->mImage.mCenter + Vector2(20, 0) * Transform2::createRotation(initialRotation+r);
-    p->mBody->mVelocity = player->mBody->mVelocity + Vector2(300, 0) * Transform2::createRotation(initialRotation+r);
+    p->mBody->mVelocity = player->mBody->mVelocity + Vector2(velocity, 0) * Transform2::createRotation(initialRotation+r);
 
 
 
@@ -92,7 +101,7 @@ void LightningWeapon::fire()
     // Setup image.
     p->mImage.setImage(gImageLibrary->reference("data/particles/lightningGlow00.png"));
     p->mImage.mCenter = player->mBody->mCenter;
-    p->mImage.mRotation = initialRotation + r;
+    p->mImage.mRotation = initialRotation + (r*4);
     p->mImage.makeDirty();
         
 }
@@ -115,7 +124,7 @@ void lightningBulletParticleCallback(Particle* p, ParticleSystem* system)
    // p->mImage.mSize *= 1.05;
     p->mImage.makeDirty();
     
-    p->mAlpha-=0.06f;
+    p->mAlpha-=0.08f;
     if(p->mAlpha <= 0)
         system->removeParticle(p);
 }

@@ -4,6 +4,7 @@
 #include "pammo.h"
 #include "view.h"
 #include "targetRingWidget.h"
+#include "weaponSelector.h"
 #include "particleSystem.h" // For particle types.
 
 namespace pammo
@@ -18,7 +19,8 @@ class WeaponSelector;
 
 class Player : 
     public View,
-    public TargetRingObserver
+    public TargetRingObserver,
+    public WeaponSelectorObserver
 {
     public:
         Player();
@@ -33,6 +35,7 @@ class Player :
         virtual void draw();
         
         virtual void onTargetRingUpdated(TargetRingWidget *widget, Vector2 value);
+        virtual void onWeaponSelectorUpdated(WeaponSelector* widget, Weapon* weapon);
         
 		void damage(ParticleType type, float amount);
 

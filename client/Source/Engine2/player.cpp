@@ -20,19 +20,10 @@ Player::Player() : View()
 {
     mMovementRing = new TargetRingWidget(kMoveRingPriority);
     mMovementRing->setObserver(this);
+    mMovementRing->setCenter(Vector2(60, 260));
     
     mTargetRing = new TargetRingWidget(kFireRingPriority);
     mTargetRing->setObserver(this);
-    
-	// SCD: Horrible hack. addWeapon sets the player's weapon from the gWorld pointer. Because this is happening via a constructor, the player is not yet set on the gWorld pointer.
-	gWorld->mPlayer = this;
-
-    mWeaponSelector = new WeaponSelector();
-    mWeaponSelector->addWeapon(new LightningWeapon);
-    mWeaponSelector->addWeapon(new FlamethrowerWeapon);
-    Vector2 size = getFrameSize();
-    if(size.x > size.y)
-    mMovementRing->setCenter(Vector2(60, 260));
     mTargetRing->setCenter(Vector2(420, 260));
 
     mEntity = new ImageEntity(gImageLibrary->reference("data/vehicles/tank/00.png"));
@@ -47,8 +38,11 @@ Player::Player() : View()
     mController = new VehicleController();
     mController->mBody = mBody;
     mController->mRotationDamping = 0.4;
-    
-    mWeapon = new LightningWeapon();
+
+    mWeaponSelector = new WeaponSelector();
+    mWeaponSelector->setObserver(this);
+    mWeaponSelector->addWeapon(new LightningWeapon);
+    mWeaponSelector->addWeapon(new FlamethrowerWeapon);
     
     mFiring = false;
 }
@@ -143,6 +137,12 @@ void Player::onTargetRingUpdated(TargetRingWidget *widget, Vector2 value)
             mFireDirection = value;
         }
     }
+}
+
+
+void Player::onWeaponSelectorUpdated(WeaponSelector* widget, Weapon* weapon)
+{
+    mWeapon = weapon;
 }
 
 void Player::damage(ParticleType type, float amount)

@@ -14,6 +14,10 @@ const Vector2 kIconBorder = Vector2(24, 8);
 
 WeaponSelector::WeaponSelector()
 {
+    mObserver = 0;
+    
+    mSelected = 0;
+    
     mHighlight = new ImageEntity(gImageLibrary->reference("data/interface/highlightWeaponIcon.png"));
     mHighlight->mSize = Vector2(kIconSize, kIconSize);
     mHighlight->makeDirty();
@@ -54,8 +58,7 @@ bool WeaponSelector::touch(uint32_t count, Touch* touches)
                 || e->mCenter.y + e->mSize.y < loc.y)
                     continue;
             
-            mSelected = *i;
-            gWorld->getPlayer()->mWeapon = *i;
+            setSelected(*i);
             return true;
         }
     }
@@ -72,6 +75,30 @@ void WeaponSelector::draw()
     {
         (*i)->getIcon()->draw();
     }
+}
+
+void WeaponSelector::setObserver(WeaponSelectorObserver* observer)
+{
+    mObserver = observer;
+    
+    if(mSelected)
+    {
+        mObserver->onWeaponSelectorUpdated(this, mSelected);
+    }
+}
+
+void WeaponSelector::setSelected(Weapon* weapon)
+{
+    if(mSelected)
+        mSelected->deselect();
+    
+    mSelected = weapon;
+    
+    if(mSelected)
+        mSelected->select();
+    
+    if(mObserver)
+        mObserver->onWeaponSelectorUpdated(this, mSelected);
 }
 
 void WeaponSelector::addWeapon(Weapon* weapon)
@@ -96,11 +123,8 @@ void WeaponSelector::addWeapon(Weapon* weapon)
     }
     
     // If this is the first weapon, set it on the player.
-    if(mWeapons.size() == 1)
-    {
-        mSelected = weapon;
-        gWorld->getPlayer()->mWeapon = weapon;
-    }
+    if(!mSelected)
+        setSelected(weapon);
 }
 
 }

@@ -9,7 +9,14 @@ namespace pammo
 {
 
 class Weapon;
+class WeaponSelector;
 class ImageEntity;
+
+class WeaponSelectorObserver
+{
+    public:
+        virtual void onWeaponSelectorUpdated(WeaponSelector* widget, Weapon* weapon) = 0;
+};
 
 class WeaponSelector : public View
 {
@@ -23,9 +30,15 @@ class WeaponSelector : public View
         virtual bool touch(uint32_t count, Touch* touches);
         virtual void draw();
         
+        void setObserver(WeaponSelectorObserver* observer);
+        void setSelected(Weapon* weapon);
+        Weapon* getSelected();
+        
         void addWeapon(Weapon* weapon);
     
     private:
+        WeaponSelectorObserver* mObserver;
+        
         typedef vector< Weapon* > WeaponVector;
         WeaponVector mWeapons;
         Weapon* mSelected;

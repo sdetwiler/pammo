@@ -16,7 +16,7 @@ enum CollisionProperties
 
 class Physics;
 struct Body;
-//struct Shape;
+struct Shape;
 
 // Description of a contact event.
 struct Contact
@@ -36,7 +36,17 @@ struct ContactResponse
 
 // Callback function.
 typedef void (*BodyOnBodyCollisionCallback)(Body* self, Body* other, Contact* contact, ContactResponse* response);
-//typedef void (*BodyOnShapeCollisionCallback)(Body* self, Shape* other, Contact* contact, ContactResponse* response);
+typedef void (*BodyOnShapeCollisionCallback)(Body* self, Shape* other, Contact* contact, ContactResponse* response);
+
+struct Shape
+{
+    // Bit field describing this.
+    uint16_t mProperties;
+    
+    // Bounds of shape.
+    uint16_t mNumPoints;
+    Vector2* mPoints;
+};
 
 struct Body
 {
@@ -62,7 +72,7 @@ struct Body
     
     // Collision callbacks.
     BodyOnBodyCollisionCallback mBodyCallback;
-    //BodyOnShapeCollisionCallback mShapeCallback;
+    BodyOnShapeCollisionCallback mShapeCallback;
     
     // List maitenance.
     bool mAdded;
@@ -84,6 +94,8 @@ class Physics : public View
     
         virtual void update();
         virtual void draw();
+        
+        Shape* addShape();
         
         Body* addBody();
         void removeBody(Body* body);

@@ -12,135 +12,8 @@
 namespace pammo
 {
 
-ParticleSystem::ParticleSystem(uint32_t numParticles)
-    : View()
-{
-    //mMonitor = new PerformanceMonitor("Used Particles", 30);
-
-    for(uint32_t i=0; i<numParticles; i++)
-    {
-        Particle* p = new Particle;
-        p->mSerialNum = i;
-        mAvailable.push_back(p);
-    }
-}
-
-ParticleSystem::~ParticleSystem()
-{
-    for(ParticleVector::iterator i = mAvailable.begin(); i!=mAvailable.end(); ++i)
-    {
-        delete *i;
-    }
-
-    for(ParticleVector::iterator i = mUsed.begin(); i!=mUsed.end(); ++i)
-    {
-        delete *i;
-    }
-
-    for(ParticleVector::iterator i = mRemoved.begin(); i!=mRemoved.end(); ++i)
-    {
-        delete *i;
-    }
-}
-
-uint32_t ParticleSystem::getUpdatePriority() const
-{
-    return kParticlePriority;
-}
-
-uint32_t ParticleSystem::getDrawPriority() const
-{
-    return kParticlePriority;
-}
-
-Particle* ParticleSystem::addParticle()
-{
-    if(mAvailable.size() == 0)
-        return 0;
-
-    // Grab a particle.
-    Particle* p = mAvailable.back();
-    memset(p, 0, sizeof(Particle));
-    
-    mAvailable.pop_back();
-    mUsed.push_back(p);
-    
-    return p;
-}
-
-Particle* ParticleSystem::addParticleWithBody()
-{
-    if(mAvailable.size() == 0)
-        return 0;
-        
-    Body* body = gWorld->getPhysics()->addBody();
-    if(!body)
-        return 0;
-
-    // Grab a particle.
-    Particle* p = mAvailable.back();
-    memset(p, 0, sizeof(Particle));
-    p->mBody = body;
-    
-    mAvailable.pop_back();
-    mUsed.push_back(p);
-    
-    return p;
-}
-
-void ParticleSystem::removeParticle(Particle* p)
-{
-    if(p->mBody)
-        gWorld->getPhysics()->removeBody(p->mBody);
-
-	mRemoved.push_back(p);
-	mUsed.erase(std::find(mUsed.begin(), mUsed.end(), p));
-}
-
-void ParticleSystem::update()
-{
-    //mMonitor->addSample(mUsed.size());
-
-	for(uint32_t i=0; i<mRemoved.size(); ++i)
-	{
-		Particle* p = mRemoved[i];
-		gImageLibrary->unreference(p->mImage.getImage());
-		mAvailable.push_back(p);
-	}
-	mRemoved.clear();
-
-    // Iterator over each particle, making its callback.
-    for(uint32_t i = 0; i<mUsed.size(); ++i)
-    {
-        Particle* p = mUsed[i];
-        p->mCallback(p, this);
-    }
-}
-
-void ParticleSystem::draw()
-{
-    gWorld->getCamera()->set();
-
-    for(ParticleVector::iterator i = mUsed.begin(); i!=mUsed.end(); ++i)
-    {
-        (*i)->mImage.mAlpha = (*i)->mAlpha;
-        (*i)->mImage.draw();
-    }
-    
-    gWorld->getCamera()->unset();
-}
-
-
-
-
-
-
-
-
-
 void doDamage(Body* self, Body* other, ParticleType type, float damage)
 {
-
 	if(self->mCollideProperties & other->mProperties)
 	{
 		if(other->mProperties & kPlayerCollisionProperties)
@@ -172,7 +45,6 @@ void fireParticleCb(Particle* p, ParticleSystem* system)
 
     p->mAlpha-=0.075f;
 }
-
 
 void fireCollisionCb(Body* self, Body* other, Contact* contact, ContactResponse* response)
 {
@@ -236,10 +108,128 @@ void explosionParticleCb(Particle* p, ParticleSystem* system)
 	}
 }
 
+////////////////////////////////////////////////////////
+
+ParticleSystem::ParticleSystem(uint32_t numParticles)
+ //   : View()
+{
+	mManagerCount = 4;
+	mManagers = new ParticleManager[mManagerCount];
+	for(uint32_t i=0; i<mManagerCount; ++i)
+	{
+		mManagers[i].setSystem(this);
+		switch(i)
+		{
+		case 0:
+			mManagers[i].setPriority(kParticle0Priority);
+			break;
+		case 1:
+			mManagers[i].setPriority(kParticle1Priority);
+			break;
+		case 2:
+			mManagers[i].setPriority(kParticle2Priority);
+			break;
+		case 3:
+			mManagers[i].setPriority(kParticle3Priority);
+			break;
+		}
+	}
+
+	mFree = NULL;
+	for(uint32_t i=0; i<numParticles; ++i)
+	{
+		Particle* p = new Particle;
+		
+		p->mNext = mFree;
+		mFree = p;
+	}
+}
+
+ParticleSystem::~ParticleSystem()
+{
+	delete[] mManagers;
+}
+/*
+uint32_t ParticleSystem::getUpdatePriority() const
+{
+    return kParticle0Priority;
+}*/
+
+Particle* ParticleSystem::addParticle(uint32_t priority)
+{
+	if(priority > (mManagerCount-1))
+		return NULL;
+
+    // Grab a particle.
+	Particle* p;
+	if(mFree == NULL)
+	{
+		return NULL;
+	}
+
+	p = mFree;
+	mFree = mFree->mNext;
+    memset(p, 0, sizeof(Particle));
+    
+	mManagers[priority].addParticle(p);
+
+    return p;
+}
+
+void ParticleSystem::returnParticle(Particle* p)
+{
+	p->mNext = mFree;
+	mFree = p;
+}
+
+Particle* ParticleSystem::addParticleWithBody(uint32_t priority)
+{
+	if(priority > (mManagerCount-1))
+		return NULL;
+
+    Body* body = gWorld->getPhysics()->addBody();
+    if(!body)
+        return NULL;
+
+	// Grab a particle.
+	Particle* p;
+	if(mFree == NULL)
+	{
+		return NULL;
+	}
+	p = mFree;
+	mFree = mFree->mNext;
+
+    memset(p, 0, sizeof(Particle));
+    p->mBody = body;
+    
+	mManagers[priority].addParticle(p);
+        
+    return p;
+}
+
+void ParticleSystem::removeParticle(Particle* p)
+{
+	p->mManager->removeParticle(p);
+}
+/*
+void ParticleSystem::update()
+{
+	for(uint32_t i=0; i<mManagerCount; ++i)
+	{
+		mManagers[i].update();
+	}
+}
+
+void ParticleSystem::draw()
+{
+}*/
+
+
 void ParticleSystem::initSmokeParticle(Vector2 const& initialPosition, float initialRotation, Vector2 const& initialVelocity)
 {
     // Grab a particle.
-    Particle* p = addParticle();
+    Particle* p = addParticle(1);
     if(!p) return;
         
     // Properties about smoke particles.
@@ -262,7 +252,7 @@ void ParticleSystem::initSmokeParticle(Vector2 const& initialPosition, float ini
 void ParticleSystem::initExplosionParticle(Vector2 const& initialPosition)
 {
     // Grab a particle.
-    Particle* p = addParticle();
+    Particle* p = addParticle(3);
     if(!p) return;
 
     // Set basic particle properties.
@@ -278,7 +268,7 @@ void ParticleSystem::initExplosionParticle(Vector2 const& initialPosition)
 void ParticleSystem::initBallParticle(InitBallParticleArgs const& args)
 {
     // Grab a particle.
-    Particle* p = addParticleWithBody();
+    Particle* p = addParticleWithBody(3);
     if(!p) return;
         
     // Properties about ball particles.
@@ -310,7 +300,138 @@ void ParticleSystem::initBallParticle(InitBallParticleArgs const& args)
     p->mEndPosition = args.initialPosition + Vector2(args.maxDistance, 0) * Transform2::createRotation(args.initialRotation);
 }
 
+//////////////////////////////////////////////////////////
 
 
+ParticleSystem::ParticleManager::ParticleManager() 
+	: View()
+{
+	mParticleSystem = NULL;
+	mDrawHead = NULL;
+	mAddHead = NULL;
+	mAddTail = NULL;
+	mRemoveHead = NULL;
+	mHead = NULL;
+	mTail = NULL;
+	mPriority = kParticle0Priority;
+}
+
+ParticleSystem::ParticleManager::~ParticleManager()
+{
+
+}
+
+void ParticleSystem::ParticleManager::setSystem(ParticleSystem* particleSystem)
+{
+	mParticleSystem = particleSystem;
+}
+
+void ParticleSystem::ParticleManager::setPriority(ViewPriorities priority)
+{
+	mPriority = priority;
+}
+
+void ParticleSystem::ParticleManager::draw()
+{
+	gWorld->getCamera()->set();
+	while(mDrawHead)
+	{
+        mDrawHead->mImage.mAlpha = mDrawHead->mAlpha;
+        mDrawHead->mImage.draw();
+		mDrawHead = mDrawHead->mDrawNext;
+	}
+    gWorld->getCamera()->unset();
+}
+
+void ParticleSystem::ParticleManager::addParticle(Particle* p)
+{
+	p->mManager = this;
+	if(mAddTail)
+	{
+		mAddTail->mNext = p;
+	}
+	else
+	{
+		mAddHead = p;
+	}
+
+	p->mPrev = mAddTail;
+	mAddTail = p;
+}
+
+void ParticleSystem::ParticleManager::removeParticle(Particle* p)
+{
+	p->mRemoveNext = mRemoveHead;
+	mRemoveHead = p;
+}
+
+void ParticleSystem::ParticleManager::update()
+{
+	// Remove all pending remove items.
+	Particle* curr = mRemoveHead;
+	while(curr)
+	{
+		if(curr->mNext)
+			curr->mNext->mPrev = curr->mPrev;
+		else
+			mTail = curr->mPrev;
+
+		if(curr->mPrev)
+			curr->mPrev->mNext = curr->mNext;
+		else
+			mHead = curr->mNext;
+
+		if(curr->mBody)
+			gWorld->getPhysics()->removeBody(curr->mBody);
+
+		// Return to free pool.
+		mParticleSystem->returnParticle(curr);
+
+		curr = curr->mRemoveNext;
+	}
+	mRemoveHead = NULL;
+
+	// Add all new particles to the end of the active list.
+	if(mAddHead)
+	{
+		if(mTail)
+		{
+			mTail->mNext = mAddHead;
+			mAddHead->mPrev = mTail;
+		}
+		else
+			mHead = mAddHead;
+	
+		mTail = mAddTail;
+		mAddHead = NULL;
+		mAddTail = NULL;
+	}
+
+	// Update in reverse order to preserve draw order based on insertion order.
+	curr = mTail;
+	while(curr)
+	{
+		// Update.
+		curr->mCallback(curr, mParticleSystem);
+		// check if should draw.
+		
+		// for now all get drawn.
+		curr->mDrawNext = mDrawHead;
+		mDrawHead = curr;
+
+		curr = curr->mPrev;
+	}			
+}
+
+
+uint32_t ParticleSystem::ParticleManager::getDrawPriority() const
+{
+    return mPriority;
+}
+
+uint32_t ParticleSystem::ParticleManager::getUpdatePriority() const
+{
+    return mPriority;
+}
 
 } // namespace pammo

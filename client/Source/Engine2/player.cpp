@@ -16,6 +16,19 @@
 namespace pammo
 {
 
+void dustParticleCallback(Particle* p, ParticleSystem* system)
+{
+    p->mImage.mCenter = p->mBody->mCenter;
+    p->mImage.mRotation += 0.08f;
+    p->mImage.mSize *= 1.1;
+    p->mImage.makeDirty();
+    
+    p->mAlpha-=0.05f;
+    if(p->mAlpha <= 0)
+        system->removeParticle(p);
+}
+
+
 Player::Player() : View()
 {
     mMovementRing = new TargetRingWidget(kMoveRingPriority);
@@ -71,6 +84,45 @@ bool Player::touch(uint32_t count, Touch* touches)
     return false;
 }
 
+
+void Player::createDust()
+{
+	    // Get a particle.
+	Particle* p = gWorld->getParticleSystem()->addParticleWithBody(1);
+    if(!p) return;
+    
+    // Get player.
+    Player* player = gWorld->getPlayer();
+	float mag = magnitude(mBody->mVelocity);
+
+    // Set basic particle properties.
+    p->mCallback = dustParticleCallback;
+    p->mAlpha = .65f;
+    
+    // Choose some numbers.
+    float f = 4.0;
+    float r = 1.0/f - ((rand()%100)/(f*50)) ;
+    float initialRotation = atan2(mBody->mVelocity.y, mBody->mVelocity.x );
+    
+    // Setup image.
+    p->mImage.setImage(gImageLibrary->reference("data/particles/dust00.png"));
+    p->mImage.mCenter = player->mBody->mCenter;
+    p->mImage.mRotation = initialRotation + r;
+	p->mImage.makeDirty();
+        
+    // Properties about dust particles.
+    p->mBody->mProperties = 0;
+    p->mBody->mCollideProperties = 0;
+    p->mBody->mBodyCallback = 0;
+    p->mBody->mDamping = 0;
+    p->mBody->mRadius = 20;
+    p->mBody->mMass = 50;
+    p->mBody->mCenter = player->mBody->mCenter - Vector2(5,0) * Transform2::createRotation(initialRotation+r);
+    
+	p->mBody->mVelocity = player->mBody->mVelocity - Vector2(mag*.8, 0) * Transform2::createRotation(initialRotation+r);
+}
+
+
 void Player::update()
 {
     mController->update();
@@ -87,6 +139,9 @@ void Player::update()
     {
         mWeapon->fire();
     }
+
+	if(magnitude(mBody->mVelocity) > 8.0f)
+		createDust();
 }
 
 void Player::draw()

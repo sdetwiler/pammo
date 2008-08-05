@@ -20,9 +20,12 @@ class Game;
 enum ViewPriorities
 {
     kMapPriority = 100,
-    kParticlePriority = 120,
+    kParticle0Priority = 120,
+    kParticle1Priority = 125,
     kEnemyManagerPriority = 140,
     kPlayerPriority = 150,
+    kParticle2Priority = 155,
+    kParticle3Priority = 156,
     kMoveRingPriority = 200,
     kFireRingPriority = 201,
     kWeaponSelectorPriority = 250

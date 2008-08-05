@@ -33,7 +33,7 @@ void FlamethrowerWeapon::deselect()
 void FlamethrowerWeapon::fire()
 {
     // Get a particle.
-    Particle* p = gWorld->getParticleSystem()->addParticleWithBody();
+    Particle* p = gWorld->getParticleSystem()->addParticleWithBody(2);
     if(!p) return;
     
     // Get player.

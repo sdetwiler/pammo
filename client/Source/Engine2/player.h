@@ -56,6 +56,9 @@ class Player :
         
         bool mFiring;
         Vector2 mFireDirection;
+
+	private:
+		void createDust();
 };
 
 } // namespace pammo

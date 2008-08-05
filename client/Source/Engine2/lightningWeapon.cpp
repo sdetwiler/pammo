@@ -36,7 +36,7 @@ void LightningWeapon::deselect()
 void LightningWeapon::fire()
 {
     // Get a particle.
-    Particle* p = gWorld->getParticleSystem()->addParticleWithBody();
+    Particle* p = gWorld->getParticleSystem()->addParticleWithBody(2);
     if(!p) return;
     
     // Get player.
@@ -62,7 +62,7 @@ void LightningWeapon::fire()
 	}
 	
 	p->mImage.setImage(gImageLibrary->reference(filename));
-    p->mImage.mCenter = player->mBody->mCenter + Vector2(20, 0) * Transform2::createRotation(initialRotation+r);
+    p->mImage.mCenter = player->mBody->mCenter + Vector2(10, 0) * Transform2::createRotation(initialRotation+r);
     p->mImage.mRotation = initialRotation + r;
     p->mImage.makeDirty();
         
@@ -76,27 +76,15 @@ void LightningWeapon::fire()
     p->mBody->mCenter = p->mImage.mCenter + Vector2(20, 0) * Transform2::createRotation(initialRotation+r);
     p->mBody->mVelocity = player->mBody->mVelocity + Vector2(velocity, 0) * Transform2::createRotation(initialRotation+r);
 
-
-
-
-
-
-
-
-
-
-
-
-
     // Get a particle.
-	p = gWorld->getParticleSystem()->addParticle();
+	p = gWorld->getParticleSystem()->addParticle(2);
     if(!p)
 		return;
     
 
     // Set basic particle properties.
     p->mCallback = lightningGlowParticleCallback;
-    p->mAlpha = 1.0f;
+    p->mAlpha = 0.6f;
     
     // Setup image.
     p->mImage.setImage(gImageLibrary->reference("data/particles/lightningGlow00.png"));
@@ -132,10 +120,10 @@ void lightningBulletParticleCallback(Particle* p, ParticleSystem* system)
 void lightningGlowParticleCallback(Particle* p, ParticleSystem* system)
 {
     p->mImage.mCenter = gWorld->getPlayer()->getCenter();
-	p->mImage.mSize*=1.2;
+	p->mImage.mSize*=1.4;
 	p->mImage.makeDirty();
     
-    p->mAlpha-=0.12f;
+    p->mAlpha-=0.2f;
     if(p->mAlpha <= 0)
         system->removeParticle(p);
 }

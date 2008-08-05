@@ -71,7 +71,7 @@ void EnemyManager::update()
 	}
 
 
-    if(mActiveEnemyCount < 50 && 0)
+    if(mActiveEnemyCount < 50)
     {
         uint64_t now = getTime();
         if(now-mLastEnemy > 2500000)

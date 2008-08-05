@@ -36,8 +36,8 @@ World::~World()
 {
     mPlayer->destroy();
     mPhysics->destroy();
-    mParticleSystem->destroy();
-    
+    //mParticleSystem->destroy();
+    delete mParticleSystem;
     delete mCamera;
     delete mMap;
     

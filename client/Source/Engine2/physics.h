@@ -46,6 +46,9 @@ struct Shape
     // Bounds of shape.
     uint16_t mNumPoints;
     Vector2* mPoints;
+    
+    // Private, for list management.
+    Shape* mNext;
 };
 
 struct Body
@@ -108,8 +111,13 @@ class Physics : public View
         Body* mRemoveBodies;
         Body* mFreed;
         
+        Shape* mShapes;
+        
         void integrate();
         void collide();
+        
+        void oneBodyResponse(Body* b1, Contact* contact);
+        void twoBodyResponse(Body* b1, Body* b2, Contact* contact);
 };
 
 }

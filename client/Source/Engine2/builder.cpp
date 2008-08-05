@@ -1,13 +1,12 @@
-#include "pammo.h"
 #include "builder.h"
+
 #include "world.h"
 #include "imageEntity.h"
 #include "imageLibrary.h"
 #include "map.h"
 #include "enemyManager.h"
 #include "player.h"
-
-//#include "collisionMap.h"
+#include "physics.h"
 
 namespace pammo
 {
@@ -169,7 +168,7 @@ void buildCollisionMap(World* world, char const* mapName)
     char* cur = buffer;
     
     // Get a pointer to the collision map.
-    //CollisionMap* collisionMap = world->getCollisionMap();
+    Physics* physics = gWorld->getPhysics();
     
     // Verify the map header.
     assert(cur[0] == 'P' && cur[1] == 'I' && cur[2] == 'O' && cur[3] == 1);
@@ -181,45 +180,20 @@ void buildCollisionMap(World* world, char const* mapName)
     dprintf("Collision Shapes: %d", numShapes);
     
     // Read each shape.
-    for(uint32_t shape=0; shape < numShapes; ++shape)
+    for(uint32_t s=0; s < numShapes; ++s)
     {
-        uint16_t properties = readUInt16(&cur, &remain);
-        uint16_t numPoints = readUInt16(&cur, &remain);
-        dprintf(" Points: %d", numPoints);
-        Vector2* points = new Vector2[numPoints];
-        Vector2* normals = new Vector2[numPoints];
-        for(uint32_t i=0; i < numPoints; ++i)
-        {
-            points[i].x = readFloat(&cur, &remain);
-            points[i].y = readFloat(&cur, &remain);
-            dprintf("  (%f, %f)", points[i].x, points[i].y);
-        }
+        Shape* shape = physics->addShape();
         
-        // Calculate normals.
-        for(uint32_t i=1; i < numPoints+1; ++i)
+        shape->mProperties = readUInt16(&cur, &remain);
+        shape->mNumPoints = readUInt16(&cur, &remain);
+        dprintf(" Points: %d", shape->mNumPoints);
+        shape->mPoints = new Vector2[shape->mNumPoints];
+        for(uint32_t i=0; i < shape->mNumPoints; ++i)
         {
-            Vector2 p0 = points[i-1];
-            Vector2 p1 = points[i%numPoints];
-            Vector2 p2 = points[(i+1)%numPoints];
-            
-            Vector2 A = p1 - p0;
-            Vector2 B = p2 - p1;
-            
-            Vector2 NA(-A.y, A.x);
-            Vector2 NB(-B.y, B.x);
-            
-            Vector2 normal = normalize((normalize(NA) + normalize(NB))/2);
-            
-            // Adjust normal so that the width is constant... Create odd edges.
-            float theta = acos(dot(A, B) / (magnitude(A) * magnitude(B)));
-            normal = normal / cos(theta/2);
-            
-            normals[i%numPoints] = normal;
+            shape->mPoints[i].x = readFloat(&cur, &remain);
+            shape->mPoints[i].y = readFloat(&cur, &remain);
+            dprintf("  (%f, %f)", shape->mPoints[i].x, shape->mPoints[i].y);
         }
-        
-        //collisionMap->addShape(numPoints, points, normals);
-        delete[] points;
-        delete[] normals;
     }
     
     // Read num POIs.

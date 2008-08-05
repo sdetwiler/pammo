@@ -13,17 +13,7 @@ Physics::Physics() : View()
     mRemoveBodies = 0;
     mFreed = 0;
     
-    return;
-    for(uint32_t i=0; i < 500; ++i)
-    {
-        Body* b = addBody();
-        b->mRadius = 15;
-        b->mMass = 10;
-        b->mCenter = Vector2(rand()%500, rand()%500);
-        b->mDamping = 0.05;
-        b->mProperties = kPlayerCollisionProperties;
-        b->mCollideProperties = kPlayerCollisionProperties;
-    }
+    mShapes = 0;
 }
 
 Physics::~Physics()
@@ -110,11 +100,32 @@ void Physics::draw()
         b = b->mNext;
     }
     
+    glColor4f(0, 1, 0, .25);
+    Shape* shape = mShapes;
+    while(shape)
+    {
+        glVertexPointer(2, GL_FLOAT, 0, (float*)shape->mPoints);
+        glDrawArrays(GL_TRIANGLE_FAN, 0, shape->mNumPoints);
+        
+        shape = shape->mNext;
+    }
+    
     glColor4f(1, 1, 1, 1);
     glEnable(GL_TEXTURE_2D);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
     
     gWorld->getCamera()->unset();
+}
+
+Shape* Physics::addShape()
+{
+    Shape* shape = new Shape();
+    shape->mProperties = 0;
+    shape->mNumPoints = 0;
+    shape->mPoints = 0;
+    shape->mNext = mShapes;
+    mShapes = shape;
+    return shape;
 }
         
 Body* Physics::addBody()
@@ -221,16 +232,12 @@ void Physics::integrate()
 
 void Physics::collide()
 {
-    uint32_t numBodies = 0;
-    uint32_t numCompares = 0;
-    
     Body* b1i = mEdges;
     while(b1i)
     {
         Body* b1 = b1i;
         b1i = b1i->mEdgeNext;
         float right = b1->mCenter.x + b1->mRadius;
-        ++numBodies;
         
         Body* b2i = b1->mEdgeNext;
         while(b2i)
@@ -241,7 +248,6 @@ void Physics::collide()
             // If the left of b1 is larger than the right of b1, there are no more possible collisions with b1.
             if(right < b2->mCenter.x - b2->mRadius)
                 break;
-            ++numCompares;
             
             // Calculate the overlap of collision properties.
             bool b1HitsB2 = b1->mCollideProperties & b2->mProperties;
@@ -271,48 +277,127 @@ void Physics::collide()
             if(contact.mSeparatingVelocity > 0) continue;
             
             // Decide how to react.
-            ContactResponse b1OnB2 = { false, false };
-            ContactResponse b2OnB1 = { false, false };
-            bool responder = false;
-            
-            // Make appropriate callbacks.
-            if(b1HitsB2 && b1->mBodyCallback)
+            ContactResponse response = { false, false };
+            // If b1 had the right collision properties, it will play a part in deciding the response.
+            if(b1HitsB2)
             {
-                responder = true;
-                b1->mBodyCallback(b1, b2, &contact, &b1OnB2);
+                // If it doesn't define a body callback, then both bodies bounce. Otherwise the callback chooses the response.
+                if(!b1->mBodyCallback)
+                {
+                    response.mBounceMe = true;
+                    response.mBounceThem = true;
+                }
+                else
+                    b1->mBodyCallback(b1, b2, &contact, &response);
             }
-            if(b2HitsB1 && b2->mBodyCallback)
+            // The same response struct is going to be used for b2. Swap me / them.
+            bool tmp = response.mBounceMe;
+            response.mBounceMe = response.mBounceThem;
+            response.mBounceThem = tmp;
+            // Same as with b1.
+            if(b2HitsB1)
             {
-                responder = true;
-                b2->mBodyCallback(b2, b1, &contact, &b2OnB1);
+                if(!b2->mBodyCallback)
+                {
+                    response.mBounceMe = true;
+                    response.mBounceThem = true;
+                }
+                else
+                    b2->mBodyCallback(b2, b1, &contact, &response);
             }
             
             // Eventually, react appropriately. For now, either bounce or don't bounce.
-            if(!b1OnB2.mBounceMe && !b1OnB2.mBounceThem
-                && !b2OnB1.mBounceMe && !b2OnB1.mBounceThem
-                && responder)
+            if(!response.mBounceMe && !response.mBounceThem)
                 continue;
+            else if(response.mBounceMe && response.mBounceThem)
+                twoBodyResponse(b1, b2, &contact);
+            else if(!response.mBounceMe && response.mBounceThem)
+                oneBodyResponse(b1, &contact);
+            else if(response.mBounceMe && !response.mBounceThem)
+            {
+                // In this case, we are flipping the normal ordering, so reverse the contact normal.
+                contact.mContactNormal = - contact.mContactNormal;
+                oneBodyResponse(b2, &contact);
+            }
+        }
             
-            // Perform velocity response.
-            float restitution = 0.3;
-            float totalIMass = 1/(b1->mMass) + 1/(b2->mMass);
-            float deltaVelocity = -(contact.mSeparatingVelocity*restitution + contact.mSeparatingVelocity);
-            float impulse = deltaVelocity / totalIMass;
-            Vector2 impulsePerIMass = contact.mContactNormal * impulse;
-            b1->mVelocity += impulsePerIMass / b1->mMass;
-            b2->mVelocity -= impulsePerIMass / b2->mMass;
+        // Now collide shapes.
+        Shape* shape = mShapes;
+        Vector2 P = b1->mCenter;
+        float radiusSquared = b1->mRadius * b1->mRadius;
+        while(shape)
+        {
+            // Iterate over each point.
+            for(uint32_t i=0; i < shape->mNumPoints; ++i)
+            {
+                // Distance from point to edge.
+                // http://www.gamedev.net/community/forums/topic.asp?topic_id=308060&whichpage=1&#1964164
+                Vector2 E0 = shape->mPoints[i];
+                Vector2 E1 = shape->mPoints[(i+1)%shape->mNumPoints];
+                Vector2 D = P - E0;
+                Vector2 E = E1 - E0;
+                float e2 = dot(E, E);
+                float ed = dot(E, D);
+                float t  = (ed / e2);
+                
+                if(t < 0) t = 0;
+                else if(t > 1) t = 1;
+
+                Vector2 Q = E0 + E*t;
+                Vector2 PQ = Q - P;
+                float dist2 = dot(PQ, PQ);
+                
+                // If the distance is more than radius squared, no hit.
+                if(dist2 > radiusSquared) continue;
+                
+                // Fill out a contact and perform one body response.
+                Contact contact;
+                contact.mContactPoint = Q;
+                contact.mContactNormal = normalize(P - Q);
+                contact.mSeparatingVelocity = dot(b1->mVelocity, contact.mContactNormal);
+                contact.mPenetrationDepth = b1->mRadius - sqrt(dist2);
+                oneBodyResponse(b1, &contact);
+            }
             
-            // Perform position response.
-            Vector2 movePerIMass = contact.mContactNormal * (contact.mPenetrationDepth / totalIMass);
-            b1->mCenter += movePerIMass / b1->mMass;
-            resortBody(b1);
-            
-            b2->mCenter -= movePerIMass / b2->mMass;
-            resortBody(b2);
+            shape = shape->mNext;
         }
     }
+}
+
+void Physics::oneBodyResponse(Body* b1, Contact* contact)
+{
+    // Perform velocity response.
+    float restitution = 0.3;
+    float totalIMass = 1/(b1->mMass);
+    float deltaVelocity = -(contact->mSeparatingVelocity*restitution + contact->mSeparatingVelocity);
+    float impulse = deltaVelocity / totalIMass;
+    Vector2 impulsePerIMass = contact->mContactNormal * impulse;
+    b1->mVelocity += impulsePerIMass / b1->mMass;
     
-    //dprintf("%f compares / body", (float)numCompares / numBodies);
+    // Perform position response.
+    Vector2 movePerIMass = contact->mContactNormal * (contact->mPenetrationDepth / totalIMass);
+    b1->mCenter += movePerIMass / b1->mMass;
+    resortBody(b1);
+}
+
+void Physics::twoBodyResponse(Body* b1, Body* b2, Contact* contact)
+{
+    // Perform velocity response.
+    float restitution = 0.3;
+    float totalIMass = 1/(b1->mMass) + 1/(b2->mMass);
+    float deltaVelocity = -(contact->mSeparatingVelocity*restitution + contact->mSeparatingVelocity);
+    float impulse = deltaVelocity / totalIMass;
+    Vector2 impulsePerIMass = contact->mContactNormal * impulse;
+    b1->mVelocity += impulsePerIMass / b1->mMass;
+    b2->mVelocity -= impulsePerIMass / b2->mMass;
+    
+    // Perform position response.
+    Vector2 movePerIMass = contact->mContactNormal * (contact->mPenetrationDepth / totalIMass);
+    b1->mCenter += movePerIMass / b1->mMass;
+    resortBody(b1);
+    
+    b2->mCenter -= movePerIMass / b2->mMass;
+    resortBody(b2);
 }
 
 }

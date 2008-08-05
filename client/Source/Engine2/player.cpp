@@ -137,7 +137,7 @@ void Player::update()
     // Fire if we should be.
     if(mFiring)
     {
-        mWeapon->fire();
+		mWeapon->fire();
     }
 
 	if(magnitude(mBody->mVelocity) > 8.0f)

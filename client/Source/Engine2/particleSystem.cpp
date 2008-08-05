@@ -210,6 +210,7 @@ Particle* ParticleSystem::addParticleWithBody(uint32_t priority)
 
 void ParticleSystem::removeParticle(Particle* p)
 {
+	p->mCallback = NULL;
 	p->mManager->removeParticle(p);
 }
 /*
@@ -411,13 +412,16 @@ void ParticleSystem::ParticleManager::update()
 	curr = mTail;
 	while(curr)
 	{
-		// Update.
-		curr->mCallback(curr, mParticleSystem);
-		// check if should draw.
-		
-		// for now all get drawn.
-		curr->mDrawNext = mDrawHead;
-		mDrawHead = curr;
+		// Update if callback exists. Callback will be NULL if particle was removed.
+		if(curr->mCallback)
+		{
+			curr->mCallback(curr, mParticleSystem);
+			// check if should draw.
+	
+			// for now all get drawn.
+			curr->mDrawNext = mDrawHead;
+			mDrawHead = curr;
+		}
 
 		curr = curr->mPrev;
 	}			

@@ -5,7 +5,7 @@
 #include "view.h"
 
 #include "world.h"
-
+#include "mainScreenView.h"
 namespace pammo
 {
     
@@ -22,7 +22,7 @@ Game::Game()
     
     //new VehicleSelectView();
     // Or create the world view with a map.
-    new World();
+    new MainScreenView();
 }
 
 Game::~Game()
@@ -165,6 +165,7 @@ void Game::initAndDelete()
     mDeleteable.clear();
     for(ViewVector::iterator i = deleteableTmp.begin();  i != deleteableTmp.end(); ++i)
     {
+        (*i)->unregister();
         delete *i;
     }
     

@@ -362,6 +362,9 @@ void ParticleSystem::ParticleManager::addParticle(Particle* p)
 
 void ParticleSystem::ParticleManager::removeParticle(Particle* p)
 {
+    p->mCallback = NULL;
+	if(p->mBody)
+		gWorld->getPhysics()->removeBody(p->mBody);
 	p->mRemoveNext = mRemoveHead;
 	mRemoveHead = p;
 }
@@ -381,9 +384,6 @@ void ParticleSystem::ParticleManager::update()
 			curr->mPrev->mNext = curr->mNext;
 		else
 			mHead = curr->mNext;
-
-		if(curr->mBody)
-			gWorld->getPhysics()->removeBody(curr->mBody);
 
 		// Return to free pool.
 		mParticleSystem->returnParticle(curr);

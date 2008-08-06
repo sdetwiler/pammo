@@ -13,8 +13,6 @@ namespace pammo
 
 EnemyManager::EnemyManager()
 {
-    mLastEnemy = 0;
-	mActiveEnemyCount = 0;
 	mAddEnemies = NULL;
 	mRemoveEnemies = NULL;
 	mEnemies = NULL;
@@ -36,6 +34,20 @@ uint32_t EnemyManager::getDrawPriority() const
     return kEnemyManagerPriority;
 }
 
+
+void EnemyManager::addSpawnEvent(SpawnEvent& evt)
+{
+    uint64_t now = getTime();
+    evt.mStartTime += now; // Change from 0 based to now based.
+    if(evt.mCount == 0)
+        return;
+
+    evt.mFreq = evt.mDuration/evt.mCount;
+    evt.mLastSpawn = 0;
+
+    mSpawnEvents.push_back(evt);
+}
+
 void EnemyManager::update()
 {
 	while(mAddEnemies)
@@ -44,6 +56,7 @@ void EnemyManager::update()
 		Enemy* e = mAddEnemies;
 		mAddEnemies = e->mNext;
 
+        // Push onto active stack.
         e->mNext = mEnemies;
         if(e->mNext)
 			e->mNext->mPrev = e;
@@ -70,31 +83,62 @@ void EnemyManager::update()
 		mFreed = e;
 	}
 
-
-    if(mActiveEnemyCount < 50)
+    uint32_t count=0;
+    // Service spawn events.
+    uint64_t now = getTime();
+    for(SpawnEventVector::iterator i=mSpawnEvents.begin(); i!=mSpawnEvents.end(); ++i)
     {
-        uint64_t now = getTime();
-        if(now-mLastEnemy > 2500000)
+        if((*i).mStartTime < now)
         {
-            Vector2 const* pos = getSpawnPoint(rand()%getSpawnPointCount());
-            Enemy* enemy = addEnemy();
-			enemy->mBody->mCenter = *pos;
-
-			int type = 0;//rand()%2;
-            switch(type)
+            if(((*i).mLastSpawn + (*i).mFreq) <= now)
             {
-            case 0:
-				trebuchetEnemyInit(enemy, this);
-                break;
-            case 1:
-                sideShooterEnemyInit(enemy, this);
-                break;
-            }
+                // spawn.
+                Vector2 const* pos = getSpawnPoint((*i).mSpawnId);
+                if(!pos)
+                {
+                    dprintf("Invalid spawn point id %d", (*i).mSpawnId);
+                    assert(0);
+                }
 
-			mLastEnemy = now;
+                Enemy* enemy = addEnemy();
+			    enemy->mBody->mCenter = *pos;
+
+                int type = (*i).mEnemyType;
+                switch(type)
+                {
+                case 0:
+				    trebuchetEnemyInit(enemy, this);
+                    break;
+                case 1:
+                    sideShooterEnemyInit(enemy, this);
+                    break;
+                default:
+                    dprintf("Invalid enemy type id %d", (*i).mEnemyType);
+                    assert(0);
+                }
+
+                (*i).mLastSpawn = now;
+                dprintf("%d Spawned type %d at point %d", count, (*i).mEnemyType, (*i).mSpawnId);
+            }
         }
+
+        ++count;
     }
 
+    // Look for expired spawn events.
+    SpawnEventVector::iterator i= mSpawnEvents.begin();
+    while(i!=mSpawnEvents.end())
+    {
+        if(((*i).mStartTime + (*i).mDuration) < now)
+        {
+            // erase.
+            i = mSpawnEvents.erase(i);
+        }
+        else
+            ++i;
+    }
+
+    // Update enemies.
 	Enemy* e = mEnemies;
 	while(e)
 	{
@@ -165,7 +209,6 @@ Enemy* EnemyManager::addEnemy()
     e->mController.mBody = e->mBody;
     e->mController.mRotationDamping = 0.4f;
 
-	++mActiveEnemyCount;
 	return e;
 }
 
@@ -174,8 +217,6 @@ void EnemyManager::removeEnemy(Enemy* e)
 	// Push onto remove stack.
 	e->mRemoveNext = mRemoveEnemies;
 	mRemoveEnemies = e;
-
-	--mActiveEnemyCount;
 }
 
 } // namespace pammo

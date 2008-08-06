@@ -1,4 +1,5 @@
 #include "world.h"
+#include "levelLoader.h"
 #include "game.h"
 #include "camera.h"
 #include "imageLibrary.h"
@@ -26,10 +27,18 @@ World::World()
     mPhysics = new Physics();
     
     mEnemyManager = new EnemyManager;
-    
-    mPlayer = new Player();
 
-    buildFromMap(this, "TheMap");
+
+    mPlayer = new Player();
+    
+    char mapName[256];
+    LevelLoader loader;
+    if(loader.load("data/levels/1.csv", mapName) == false)
+    {
+        dprintf("Failed to load level definition file.");
+        assert(0);
+    }
+    buildFromMap(this, mapName);
 }
 
 World::~World()

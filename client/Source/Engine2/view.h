@@ -20,6 +20,8 @@ class Game;
 enum ViewPriorities
 {
     kMapPriority = 100,
+    kPhysicsPriority = 101,
+    kScreenPriority = 102,
     kParticle0Priority = 120,
     kParticle1Priority = 125,
     kEnemyManagerPriority = 140,
@@ -42,6 +44,8 @@ public:
     virtual uint32_t getUpdatePriority() const;
     virtual uint32_t getDrawPriority() const;
     
+    void unregister();
+
     virtual bool touch(uint32_t count, Touch* touches);
     virtual void update();
     virtual void draw();

@@ -22,12 +22,12 @@ Physics::~Physics()
     
 uint32_t Physics::getUpdatePriority() const
 {
-    return kMapPriority+1;
+    return kPhysicsPriority;
 }
 
 uint32_t Physics::getDrawPriority() const
 {
-    return kMapPriority+1;
+    return kPhysicsPriority;
 }
     
 void Physics::update()

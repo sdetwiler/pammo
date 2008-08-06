@@ -20,6 +20,10 @@ View::View()
 
 View::~View()
 {
+}
+
+void View::unregister()
+{
     if(getDrawPriority() != 0)
         gGame->unregisterDrawable(this);
     

@@ -214,7 +214,7 @@ public:
             {
 				cap(&keyTouch[0].mLocation.x, 20, 100);
 				cap(&keyTouch[0].mLocation.y, 220, 300);
-				dprintf("### %.2f %.2f", keyTouch[0].mLocation.x, keyTouch[0].mLocation.y);
+//				dprintf("### %.2f %.2f", keyTouch[0].mLocation.x, keyTouch[0].mLocation.y);
 				game->touches(1, keyTouch);
             }
 
@@ -253,6 +253,9 @@ public:
 
 int initTimer(Timer* timer)
 {
+    // 1 ms accuracy for timer.
+//    timeBeginPeriod(5);
+
     _ftime(&timer->timeBuffer);
     timer->startTime = (uint64_t)timer->timeBuffer.time * 1000000 + (uint64_t)timer->timeBuffer.millitm * 1000;
     if(!QueryPerformanceFrequency(&timer->freq))
@@ -294,15 +297,13 @@ int main(int argc, char *argv[])
     SDL_Surface* screen;
     SDL_Init(SDL_INIT_VIDEO);
     screen = SDL_SetVideoMode((int)getFrameSize().x, (int)getFrameSize().y, 0, SDL_OPENGL);
-    SDL_WM_SetCaption("PAMMO", NULL);
+    SDL_WM_SetCaption("Irradiated", NULL);
 
     int ret;
     Game* game = new Game;
 
     InputProcessor input;
 
-    // 1 ms accuracy for timer.
-    timeBeginPeriod(5);
     uint64_t start = getTime();
     uint64_t now;
     uint32_t frames = 0;

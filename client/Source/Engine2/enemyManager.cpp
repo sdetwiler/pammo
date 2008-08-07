@@ -205,7 +205,7 @@ Enemy* EnemyManager::addEnemy()
 
     e->mBody = gWorld->getPhysics()->addBody();
     e->mBody->mProperties = kEnemyCollisionProperties;
-    e->mBody->mCollideProperties= kEnemyCollisionProperties | kPlayerCollisionProperties;
+    e->mBody->mCollideProperties= kEnemyCollisionProperties | kPlayerCollisionProperties | kBarrierCollisionProperties;
     e->mBody->mDamping = 0.1f;
     e->mBody->mRadius = 20;
     e->mBody->mMass = 100;

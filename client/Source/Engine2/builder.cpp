@@ -184,7 +184,9 @@ void buildCollisionMap(World* world, char const* mapName)
     {
         Shape* shape = physics->addShape();
         
-        shape->mProperties = readUInt16(&cur, &remain);
+		uint16_t properties = readUInt16(&cur, &remain);
+		if(properties == 0)
+			shape->mProperties = kBarrierCollisionProperties;
         shape->mNumPoints = readUInt16(&cur, &remain);
         dprintf(" Points: %d", shape->mNumPoints);
         shape->mPoints = new Vector2[shape->mNumPoints];

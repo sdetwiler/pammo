@@ -44,6 +44,7 @@ Player::Player() : View()
     mBody = gWorld->getPhysics()->addBody();
     
     mBody->mProperties = kPlayerCollisionProperties;
+    mBody->mCollideProperties = kBarrierCollisionProperties;
     mBody->mDamping = 0.1;
     mBody->mRadius = 20;
     mBody->mMass = 100;

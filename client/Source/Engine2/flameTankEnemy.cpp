@@ -62,7 +62,7 @@ void flameTankEnemyInitFireParticle(Enemy* e)
         
     // Properties about fire particles.
     p->mBody->mProperties = kPlayerBulletCollisionProperties;
-    p->mBody->mCollideProperties = kPlayerCollisionProperties;
+    p->mBody->mCollideProperties = kPlayerCollisionProperties | kBarrierCollisionProperties;
     p->mBody->mBodyCallback = flameTankEnemyFireCollisionCb;
     p->mBody->mDamping = 0;
     p->mBody->mRadius = 15;

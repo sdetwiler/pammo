@@ -10,8 +10,10 @@ namespace pammo
 enum CollisionProperties
 {
     kPlayerCollisionProperties = 1 << 0,
-    kEnemyCollisionProperties = 1 << 1,
-    kPlayerBulletCollisionProperties = 1 << 2
+    kPlayerBulletCollisionProperties = 1 << 1,
+    kEnemyCollisionProperties = 1 << 2,
+    kEnemyBulletCollisionProperties = 1 << 3,
+    kBarrierCollisionProperties = 1 << 4,
 };
 
 class Physics;
@@ -36,7 +38,7 @@ struct ContactResponse
 
 // Callback function.
 typedef void (*BodyOnBodyCollisionCallback)(Body* self, Body* other, Contact* contact, ContactResponse* response);
-typedef void (*BodyOnShapeCollisionCallback)(Body* self, Shape* other, Contact* contact, ContactResponse* response);
+typedef void (*BodyOnShapeCollisionCallback)(Body* self, Shape* other, Contact* contact, bool* response);
 
 struct Shape
 {

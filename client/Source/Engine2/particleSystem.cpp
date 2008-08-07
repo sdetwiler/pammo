@@ -188,8 +188,7 @@ Particle* ParticleSystem::addParticleWithBody(uint32_t priority)
 		return NULL;
 
     Body* body = gWorld->getPhysics()->addBody();
-    if(!body)
-        return NULL;
+    if(!body) return NULL;
 
 	// Grab a particle.
 	Particle* p;
@@ -202,6 +201,7 @@ Particle* ParticleSystem::addParticleWithBody(uint32_t priority)
 
     memset(p, 0, sizeof(Particle));
     p->mBody = body;
+	body->mUserArg = p;
     
 	mManagers[priority].addParticle(p);
         
@@ -287,8 +287,8 @@ void ParticleSystem::initBallParticle(InitBallParticleArgs const& args)
     p->mImage.makeDirty();
 
     // Get a body.
-    p->mBody->mProperties = kPlayerBulletCollisionProperties;
-    p->mBody->mCollideProperties = kEnemyCollisionProperties | kPlayerCollisionProperties;
+    p->mBody->mProperties = kEnemyBulletCollisionProperties;
+    p->mBody->mCollideProperties = kPlayerCollisionProperties | kBarrierCollisionProperties;
     p->mBody->mDamping = 0;
     p->mBody->mRadius = 8;
     p->mBody->mMass = 50;

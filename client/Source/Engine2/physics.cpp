@@ -216,7 +216,7 @@ void Physics::integrate()
         b = b->mNext;
     }
     
-    return;
+	return;
     // Verify edge list integrity.
     float edge = -1e100;
     b = mEdges;
@@ -322,11 +322,22 @@ void Physics::collide()
         }
             
         // Now collide shapes.
-        Shape* shape = mShapes;
+        Shape* shapei = mShapes;
         Vector2 P = b1->mCenter;
         float radiusSquared = b1->mRadius * b1->mRadius;
-        while(shape)
+        while(shapei)
         {
+			Shape* shape = shapei;
+			shapei = shapei->mNext;
+			
+			if(!(b1->mCollideProperties & shape->mProperties)) continue;
+			
+			bool collided = false;
+			bool inside = false;
+			float bestDistSqrd = HUGE_VAL;
+			Vector2 bestPoint;
+			Contact contact;
+			
             // Iterate over each point.
             for(uint32_t i=0; i < shape->mNumPoints; ++i)
             {
@@ -346,20 +357,61 @@ void Physics::collide()
                 Vector2 Q = E0 + E*t;
                 Vector2 PQ = Q - P;
                 float dist2 = dot(PQ, PQ);
+				
+				// Point in polygon
+				uint32_t j = (i+1)%shape->mNumPoints;
+				// http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html
+				if(((shape->mPoints[i].y > P.y) != (shape->mPoints[j].y > P.y))
+				   && (P.x < (shape->mPoints[j].x - shape->mPoints[i].x) * (P.y - shape->mPoints[i].y) / (shape->mPoints[j].y - shape->mPoints[i].y) + shape->mPoints[i].x))
+				{
+					inside = !inside;
+				}
                 
-                // If the distance is more than radius squared, no hit.
-                if(dist2 > radiusSquared) continue;
-                
-                // Fill out a contact and perform one body response.
-                Contact contact;
-                contact.mContactPoint = Q;
-                contact.mContactNormal = normalize(P - Q);
-                contact.mSeparatingVelocity = dot(b1->mVelocity, contact.mContactNormal);
-                contact.mPenetrationDepth = b1->mRadius - sqrt(dist2);
-                oneBodyResponse(b1, &contact);
+                // If this is closer than our best hit, remember it.
+                if(dist2 < bestDistSqrd)
+				{
+					bestDistSqrd = dist2;
+					bestPoint = Q;
+				}
             }
-            
-            shape = shape->mNext;
+			
+			if(inside)
+			{	
+				// Fill out a contact and perform one body response.
+				contact.mContactPoint = bestPoint;
+				contact.mContactNormal = normalize(bestPoint - P);
+				contact.mSeparatingVelocity = dot(b1->mVelocity, contact.mContactNormal);
+				contact.mPenetrationDepth = b1->mRadius + sqrt(bestDistSqrd);
+				collided = true;
+			}
+			else if(bestDistSqrd < radiusSquared)
+			{
+				// Fill out a contact and perform one body response.
+				contact.mContactPoint = bestPoint;
+				contact.mContactNormal = normalize(P - bestPoint);
+				contact.mSeparatingVelocity = dot(b1->mVelocity, contact.mContactNormal);
+				contact.mPenetrationDepth = b1->mRadius - sqrt(bestDistSqrd);
+				collided = true;
+			}
+			
+			if(collided)
+			{
+				bool response = false;
+				if(b1->mShapeCallback)
+				{
+					b1->mShapeCallback(b1, shape, &contact, &response);
+				}
+				else
+				{
+					response = true;
+				}
+				
+				if(response)
+				{
+					oneBodyResponse(b1, &contact);
+					P = b1->mCenter;
+				}
+			}
         }
     }
 }

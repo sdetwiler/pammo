@@ -57,7 +57,7 @@ void FlamethrowerWeapon::fire()
         
     // Properties about fire particles.
     p->mBody->mProperties = kPlayerBulletCollisionProperties;
-    p->mBody->mCollideProperties = kEnemyCollisionProperties;
+    p->mBody->mCollideProperties = kEnemyCollisionProperties | kBarrierCollisionProperties;
     p->mBody->mBodyCallback = flamethrowerBulletCollisionCallback;
     p->mBody->mDamping = 0;
     p->mBody->mRadius = 20;

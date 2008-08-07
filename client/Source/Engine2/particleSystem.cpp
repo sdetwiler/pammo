@@ -301,6 +301,7 @@ void ParticleSystem::initBallParticle(InitBallParticleArgs const& args)
     p->mEndPosition = args.initialPosition + Vector2(args.maxDistance, 0) * Transform2::createRotation(args.initialRotation);
 }
 
+
 //////////////////////////////////////////////////////////
 
 

@@ -3,6 +3,7 @@
 #include "world.h"
 #include "physics.h"
 #include "trebuchetEnemy.h"
+#include "flameTankEnemy.h"
 #include "sideShooterEnemy.h"
 #include "camera.h"
 
@@ -110,6 +111,9 @@ void EnemyManager::update()
 				    trebuchetEnemyInit(enemy, this);
                     break;
                 case 1:
+                    flameTankEnemyInit(enemy, this);
+                    break;
+                case 2:
                     sideShooterEnemyInit(enemy, this);
                     break;
                 default:
@@ -214,7 +218,8 @@ Enemy* EnemyManager::addEnemy()
 
 void EnemyManager::removeEnemy(Enemy* e)
 {
-	// Push onto remove stack.
+    gWorld->getPhysics()->removeBody(e->mBody);
+    // Push onto remove stack.
 	e->mRemoveNext = mRemoveEnemies;
 	mRemoveEnemies = e;
 }

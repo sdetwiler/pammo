@@ -19,7 +19,6 @@ class FlamethrowerWeapon : public Weapon
         
         virtual void fire();
 };
-
 }
 
 #endif

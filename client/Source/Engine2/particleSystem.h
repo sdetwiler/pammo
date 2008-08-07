@@ -18,18 +18,14 @@ struct Body;
 struct Particle;
 class ParticleSystem;
 
+void doDamage(Body* self, Body* other, ParticleType type, float damage);
+
 class ParticleSystem //: public View
 {
 public:
     ParticleSystem(uint32_t numParticles);
     virtual ~ParticleSystem();
-   /** 
-    virtual uint32_t getUpdatePriority() const;
-    virtual uint32_t getDrawPriority() const;
 
-    virtual void update();
-    virtual void draw();
-**/
     // Returns null if no particles are available.
     Particle* addParticle(uint32_t priority);
     Particle* addParticleWithBody(uint32_t priority);
@@ -41,8 +37,6 @@ public:
         float           initialRotation;
         Vector2         initialVelocity;
     };
-    void initFireParticle(InitFireParticleArgs const& args);
-
 	void initSmokeParticle(Vector2 const& initialPosition, float initialRotation, Vector2 const& initialVelocity);
 
 	void initExplosionParticle(Vector2 const& initialPosition);

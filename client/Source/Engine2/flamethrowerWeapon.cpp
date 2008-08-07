@@ -14,6 +14,7 @@ namespace pammo
 void flamethrowerBulletCollisionCallback(Body* self, Body* other, Contact* contact, ContactResponse* response);
 void flamethrowerBulletParticleCallback(Particle* p, ParticleSystem* system);
 
+
 FlamethrowerWeapon::FlamethrowerWeapon()
     : Weapon()
 {

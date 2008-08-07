@@ -10,12 +10,13 @@
 
 namespace pammo
 {
+void trebuchetEnemySurroundUpdate(Enemy* e, EnemyManager* manager);
 
 void trebuchetEnemyInit(Enemy* e, EnemyManager* manager)
 {
     e->mEntity = new ImageEntity(gImageLibrary->reference("data/vehicles/trebuchet/00.png"));
     e->mDrawCb = trebuchetEnemyDraw;
-    e->mUpdateCb = trebuchetEnemyUpdate;
+    e->mUpdateCb = trebuchetEnemySurroundUpdate;
 	e->mDamageCb = trebuchetEnemyDamage;
 	e->mHealth = 100.0f;
 }
@@ -36,6 +37,43 @@ void trebuchetEnemyFire(Enemy* e, float distance)
     args.maxDistance = distance;
 
     gWorld->getParticleSystem()->initBallParticle(args);
+}
+
+
+void trebuchetEnemySurroundUpdate(Enemy* e, EnemyManager* manager)
+{
+    e->mController.update();
+
+    e->mEntity->mRotation = e->mController.mRotation + (float)M_PI/2;
+    e->mEntity->mCenter = e->mBody->mCenter;
+    e->mEntity->makeDirty();
+
+    Vector2 heading = gWorld->getPlayer()->getCenter() - e->mBody->mCenter;
+    float mag = magnitude(heading);
+    float speed = .5f;
+    float rot = atan2(heading.y, heading.x);
+
+    if(mag < 200)
+    {
+        //e->mController.mAcceleration = 0;
+        // Maybe fire.
+        if(!(rand()%30))
+            trebuchetEnemyFire(e, mag);
+
+        rot+=(1.57f/1.5f);
+
+    }
+    else
+    {
+        e->mController.mAcceleration = speed * e->mBody->mMass * 7;
+    }
+    if(rot < 0) 
+        rot += (float)M_PI*2;
+    else if(rot > (float)M_PI*2)
+        rot -= (float)M_PI*2;
+
+    e->mController.mRotationTarget = rot;
+    e->mEntity->makeDirty();
 }
 
 void trebuchetEnemyUpdate(Enemy* e, EnemyManager* manager)

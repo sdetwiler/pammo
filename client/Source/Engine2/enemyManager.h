@@ -117,6 +117,7 @@ public:
     enum EnemyType
     {
         TrebuchetEnemy,
+        FlameTankEnemy,
         SideShooterEnemy
     };
 

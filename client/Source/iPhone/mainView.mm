@@ -25,8 +25,6 @@
     
     self.multipleTouchEnabled = YES;
 	
-	//[self buildInputUI:frame];
-	
 	CAEAGLLayer *eaglLayer = (CAEAGLLayer *)self.layer;
 	eaglLayer.opaque = YES;
 	eaglLayer.drawableProperties = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -41,8 +39,6 @@
 	}
 	
 	mGame = new Game();
-	
-	[self startAnimation];
 	
 	return self;
 }
@@ -101,7 +97,7 @@
 
 - (void)startAnimation
 {
-	mTimer = [NSTimer scheduledTimerWithTimeInterval:1./25. target:self selector:@selector(drawView) userInfo:nil repeats:YES];
+	mTimer = [NSTimer scheduledTimerWithTimeInterval:1./30. target:self selector:@selector(drawView) userInfo:nil repeats:YES];
     mLastTime = getTime();
     mMicros = 0;
 }
@@ -115,14 +111,60 @@
 - (void)drawView
 {
     uint64_t t = getTime();
-    mMicros += t - mLastTime;
+    uint64_t delta = t - mLastTime;
     mLastTime = t;
+    
+    // If callback is not within a fudge area, do nothing.
+    uint64_t fudge = 6000;
+    if(delta < 33333-fudge || delta > 33333+fudge)
+    {
+        return;
+    }
+    
+    #if 1
+    static uint32_t slots[50];
+    static uint32_t cur = 0;
+    
+    slots[cur] = delta;
+    ++cur;
+    if(cur == 50)
+    {
+        uint64_t total = 0;
+        for(uint32_t i=0; i < 50; ++i)
+        {
+            //printf("%d, ", slots[i]);
+            total += slots[i];
+        }
+        printf("average: %d\n", total / 50);
+        cur = 0;
+    }
+    #endif
 	
 	[EAGLContext setCurrentContext:mContext];
 	[mContext presentRenderbuffer:GL_RENDERBUFFER_OES];
 	
+    uint64_t updateStart = getTime();
 	mGame->update();
 	mGame->draw();
+    uint64_t updateEnd = getTime();
+    
+    #if 0
+    static uint32_t slots[50];
+    static uint32_t cur = 0;
+    
+    slots[cur] = updateEnd - updateStart;
+    ++cur;
+    if(cur == 50)
+    {
+        uint64_t total = 0;
+        for(uint32_t i=0; i < 50; ++i)
+        {
+            total += slots[i];
+        }
+        printf("average: %d\n", total / 50);
+        cur = 0;
+    }
+    #endif
 }
 
 - (void) touchesBegan:(NSSet*)touches withEvent:(UIEvent*)event

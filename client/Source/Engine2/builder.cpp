@@ -169,6 +169,8 @@ void buildCollisionMap(World* world, char const* mapName)
     
     // Get a pointer to the collision map.
     Physics* physics = gWorld->getPhysics();
+    Map* map = gWorld->getMap();
+    physics->setMapSize(Vector2(map->getSizeX()*map->getSizeMaterial(), map->getSizeY()*map->getSizeMaterial()));
     
     // Verify the map header.
     assert(cur[0] == 'P' && cur[1] == 'I' && cur[2] == 'O' && cur[3] == 1);
@@ -182,20 +184,19 @@ void buildCollisionMap(World* world, char const* mapName)
     // Read each shape.
     for(uint32_t s=0; s < numShapes; ++s)
     {
-        Shape* shape = physics->addShape();
-        
 		uint16_t properties = readUInt16(&cur, &remain);
-		if(properties == 0)
-			shape->mProperties = kBarrierCollisionProperties;
-        shape->mNumPoints = readUInt16(&cur, &remain);
-        dprintf(" Points: %d", shape->mNumPoints);
-        shape->mPoints = new Vector2[shape->mNumPoints];
-        for(uint32_t i=0; i < shape->mNumPoints; ++i)
+		if(properties == 0) properties = kBarrierCollisionProperties;
+        uint16_t numPoints = readUInt16(&cur, &remain);
+        dprintf(" Points: %d", numPoints);
+        Vector2* points = new Vector2[numPoints];
+        for(uint32_t i=0; i < numPoints; ++i)
         {
-            shape->mPoints[i].x = readFloat(&cur, &remain);
-            shape->mPoints[i].y = readFloat(&cur, &remain);
-            dprintf("  (%f, %f)", shape->mPoints[i].x, shape->mPoints[i].y);
+            points[i].x = readFloat(&cur, &remain);
+            points[i].y = readFloat(&cur, &remain);
+            dprintf("  (%f, %f)", points[i].x, points[i].y);
         }
+        
+        physics->addShape(properties, numPoints, points);
     }
     
     // Read num POIs.

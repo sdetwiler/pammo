@@ -75,7 +75,7 @@ void LightningWeapon::fire()
     p->mBody->mShapeCallback = lightningBulletShapeCollisionCallback;
     p->mBody->mDamping = 0;
     p->mBody->mRadius = 8;
-    p->mBody->mMass = 15;
+    p->mBody->mMass = 10;
     p->mBody->mCenter = p->mImage.mCenter + Vector2(20, 0) * Transform2::createRotation(initialRotation+r);
     p->mBody->mVelocity = player->mBody->mVelocity + Vector2(velocity, 0) * Transform2::createRotation(initialRotation+r);
 
@@ -98,6 +98,7 @@ void LightningWeapon::fire()
 
 void lightningBulletCollisionCallback(Body* self, Body* other, Contact* contact, ContactResponse* response)
 {
+	response->mBounceMe = true;
 	response->mBounceThem = true;
 	
     // Stop in place and fade to dark.

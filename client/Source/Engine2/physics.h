@@ -50,7 +50,14 @@ struct Shape
     Vector2* mPoints;
     
     // Private, for list management.
+    uint64_t mLastQuery;
     Shape* mNext;
+};
+
+struct ShapeBucket
+{
+    Shape* mShape;
+    ShapeBucket* mNext;
 };
 
 struct Body
@@ -88,6 +95,8 @@ struct Body
     Body* mRemoveNext;
 };
 
+const uint32_t kShapeBucketCount = 30;
+
 class Physics : public View
 {
     public:
@@ -100,7 +109,8 @@ class Physics : public View
         virtual void update();
         virtual void draw();
         
-        Shape* addShape();
+        void setMapSize(Vector2 mapBounds);
+        void addShape(uint16_t properties, uint16_t numPoints, Vector2* points);
         
         Body* addBody();
         void removeBody(Body* body);
@@ -112,11 +122,17 @@ class Physics : public View
         Body* mAddBodies;
         Body* mRemoveBodies;
         Body* mFreed;
-        
+
         Shape* mShapes;
+        Vector2 mShapeBucketSize;
+        uint64_t mShapeQuery;
+        ShapeBucket* mShapeBuckets[kShapeBucketCount][kShapeBucketCount];
         
         void integrate();
         void collide();
+        
+        void collideAgainstBodies(Body* b1);
+        void collideAgainstShapes(Body* b1);
         
         void oneBodyResponse(Body* b1, Contact* contact);
         void twoBodyResponse(Body* b1, Body* b2, Contact* contact);

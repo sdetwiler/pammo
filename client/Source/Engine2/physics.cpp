@@ -14,6 +14,13 @@ Physics::Physics() : View()
     mFreed = 0;
     
     mShapes = 0;
+    mShapeBucketSize = Vector2(1, 1);
+    mShapeQuery = 0;
+    for(uint32_t x=0; x < kShapeBucketCount; ++x)
+    {
+        for(uint32_t y=0; y < kShapeBucketCount; ++y)
+            mShapeBuckets[x][y] = 0;
+    }
 }
 
 Physics::~Physics()
@@ -117,15 +124,50 @@ void Physics::draw()
     gWorld->getCamera()->unset();
 }
 
-Shape* Physics::addShape()
+void Physics::setMapSize(Vector2 mapBounds)
+{
+    mShapeBucketSize.x = mapBounds.x / kShapeBucketCount;
+    mShapeBucketSize.y = mapBounds.y / kShapeBucketCount;
+}
+
+void Physics::addShape(uint16_t properties, uint16_t numPoints, Vector2* points)
 {
     Shape* shape = new Shape();
-    shape->mProperties = 0;
-    shape->mNumPoints = 0;
-    shape->mPoints = 0;
+    shape->mProperties = properties;
+    shape->mNumPoints = numPoints;
+    shape->mPoints = points;
+    shape->mLastQuery = mShapeQuery;
     shape->mNext = mShapes;
     mShapes = shape;
-    return shape;
+    
+    // Calculate min, max.
+    Vector2 min = Vector2(HUGE_VAL, HUGE_VAL);
+    Vector2 max = Vector2(-HUGE_VAL, -HUGE_VAL);
+    for(uint32_t i=0; i < numPoints; ++i)
+    {
+        if(points[i].x > max.x) max.x = points[i].x;
+        if(points[i].y > max.y) max.y = points[i].y;
+        if(points[i].x < min.x) min.x = points[i].x;
+        if(points[i].y < min.y) min.y = points[i].y;
+    }
+    
+    // Clamp min/max.
+    if(min.x < 0) min.x = 0;
+    if(min.y < 0) min.y = 0;
+    if(max.x > mShapeBucketSize.x * kShapeBucketCount) max.x = mShapeBucketSize.x * kShapeBucketCount;
+    if(max.y > mShapeBucketSize.y * kShapeBucketCount) max.y = mShapeBucketSize.y * kShapeBucketCount;
+    
+    // Calculate which buckets this shape falls into.
+    for(uint16_t x = floor(min.x / mShapeBucketSize.x); x < ceil(max.x / mShapeBucketSize.x); ++x)
+    {
+        for(uint16_t y = floor(min.y / mShapeBucketSize.y); y < ceil(max.y / mShapeBucketSize.y); ++y)
+        {
+            ShapeBucket* bucket = new ShapeBucket();
+            bucket->mShape = shape;
+            bucket->mNext = mShapeBuckets[x][y];
+            mShapeBuckets[x][y] = bucket;
+        }
+    }
 }
         
 Body* Physics::addBody()
@@ -232,186 +274,223 @@ void Physics::integrate()
 
 void Physics::collide()
 {
-    Body* b1i = mEdges;
-    while(b1i)
+    Body* b1 = mEdges;
+    while(b1)
     {
-        Body* b1 = b1i;
-        b1i = b1i->mEdgeNext;
-        float right = b1->mCenter.x + b1->mRadius;
-        
-        Body* b2i = b1->mEdgeNext;
-        while(b2i)
-        {
-            Body* b2 = b2i;
-            b2i = b2i->mEdgeNext;
-            
-            // If the left of b1 is larger than the right of b1, there are no more possible collisions with b1.
-            if(right < b2->mCenter.x - b2->mRadius)
-                break;
-            
-            // Calculate the overlap of collision properties.
-            bool b1HitsB2 = b1->mCollideProperties & b2->mProperties;
-            bool b2HitsB1 = b2->mCollideProperties & b1->mProperties;
-            
-            // Only calculate if there is overlap with the collision properties.
-            if(!b1HitsB2 && !b2HitsB1)
-                continue;
-            
-            // Decide if they touch.
-            Vector2 diff;
-			if(b1->mCenter == b2->mCenter)
-				diff = Vector2(0,.001);
-			else
-				diff = b1->mCenter - b2->mCenter;
-            float magsq = diff.x*diff.x + diff.y*diff.y;
-            float totalRadius = b1->mRadius + b2->mRadius;
-            if(magsq > totalRadius * totalRadius)
-                continue;
-            
-            // This looks like a contact. Start building up a struct.
-            Contact contact;
-            contact.mContactNormal = normalize(diff);
-            contact.mSeparatingVelocity = dot((b1->mVelocity - b2->mVelocity), contact.mContactNormal);
-            contact.mPenetrationDepth = (b1->mRadius + b2->mRadius) - sqrt(magsq);
-            contact.mContactPoint = contact.mContactNormal * (b1->mRadius + b2->mRadius - contact.mPenetrationDepth)/2;
-            if(contact.mSeparatingVelocity > 0) continue;
-            
-            // Decide how to react.
-            ContactResponse response = { false, false };
-            // If b1 had the right collision properties, it will play a part in deciding the response.
-            if(b1HitsB2)
-            {
-                // If it doesn't define a body callback, then both bodies bounce. Otherwise the callback chooses the response.
-                if(!b1->mBodyCallback)
-                {
-                    response.mBounceMe = true;
-                    response.mBounceThem = true;
-                }
-                else
-                    b1->mBodyCallback(b1, b2, &contact, &response);
-            }
-            // The same response struct is going to be used for b2. Swap me / them.
-            bool tmp = response.mBounceMe;
-            response.mBounceMe = response.mBounceThem;
-            response.mBounceThem = tmp;
-            // Same as with b1.
-            if(b2HitsB1)
-            {
-                if(!b2->mBodyCallback)
-                {
-                    response.mBounceMe = true;
-                    response.mBounceThem = true;
-                }
-                else
-                    b2->mBodyCallback(b2, b1, &contact, &response);
-            }
-            
-            // Eventually, react appropriately. For now, either bounce or don't bounce.
-            if(!response.mBounceMe && !response.mBounceThem)
-                continue;
-            else if(response.mBounceMe && response.mBounceThem)
-                twoBodyResponse(b1, b2, &contact);
-            else if(!response.mBounceMe && response.mBounceThem)
-                oneBodyResponse(b1, &contact);
-            else if(response.mBounceMe && !response.mBounceThem)
-            {
-                // In this case, we are flipping the normal ordering, so reverse the contact normal.
-                contact.mContactNormal = - contact.mContactNormal;
-                oneBodyResponse(b2, &contact);
-            }
-        }
-            
-        // Now collide shapes.
-        Shape* shapei = mShapes;
-        Vector2 P = b1->mCenter;
-        float radiusSquared = b1->mRadius * b1->mRadius;
-        while(shapei)
-        {
-			Shape* shape = shapei;
-			shapei = shapei->mNext;
-			
-			if(!(b1->mCollideProperties & shape->mProperties)) continue;
-			
-			bool collided = false;
-			bool inside = false;
-			float bestDistSqrd = HUGE_VAL;
-			Vector2 bestPoint;
-			Contact contact;
-			
-            // Iterate over each point.
-            for(uint32_t i=0; i < shape->mNumPoints; ++i)
-            {
-                // Distance from point to edge.
-                // http://www.gamedev.net/community/forums/topic.asp?topic_id=308060&whichpage=1&#1964164
-                Vector2 E0 = shape->mPoints[i];
-                Vector2 E1 = shape->mPoints[(i+1)%shape->mNumPoints];
-                Vector2 D = P - E0;
-                Vector2 E = E1 - E0;
-                float e2 = dot(E, E);
-                float ed = dot(E, D);
-                float t  = (ed / e2);
-                
-                if(t < 0) t = 0;
-                else if(t > 1) t = 1;
+        collideAgainstBodies(b1);
+        collideAgainstShapes(b1);
+        b1 = b1->mEdgeNext;
+    }
+}
 
-                Vector2 Q = E0 + E*t;
-                Vector2 PQ = Q - P;
-                float dist2 = dot(PQ, PQ);
-				
-				// Point in polygon
-				uint32_t j = (i+1)%shape->mNumPoints;
-				// http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html
-				if(((shape->mPoints[i].y > P.y) != (shape->mPoints[j].y > P.y))
-				   && (P.x < (shape->mPoints[j].x - shape->mPoints[i].x) * (P.y - shape->mPoints[i].y) / (shape->mPoints[j].y - shape->mPoints[i].y) + shape->mPoints[i].x))
-				{
-					inside = !inside;
-				}
-                
-                // If this is closer than our best hit, remember it.
-                if(dist2 < bestDistSqrd)
-				{
-					bestDistSqrd = dist2;
-					bestPoint = Q;
-				}
+void Physics::collideAgainstBodies(Body* b1)
+{
+    float right = b1->mCenter.x + b1->mRadius;
+    Body* b2i = b1->mEdgeNext;
+    while(b2i)
+    {
+        Body* b2 = b2i;
+        b2i = b2i->mEdgeNext;
+        
+        // If the left of b1 is larger than the right of b1, there are no more possible collisions with b1.
+        if(right < b2->mCenter.x - b2->mRadius)
+            return;
+        
+        // Calculate the overlap of collision properties.
+        bool b1HitsB2 = b1->mCollideProperties & b2->mProperties;
+        bool b2HitsB1 = b2->mCollideProperties & b1->mProperties;
+        
+        // Only calculate if there is overlap with the collision properties.
+        if(!b1HitsB2 && !b2HitsB1)
+            continue;
+        
+        // Decide if they touch.
+        Vector2 diff;
+        if(b1->mCenter == b2->mCenter)
+            diff = Vector2(0,.001);
+        else
+            diff = b1->mCenter - b2->mCenter;
+        float magsq = diff.x*diff.x + diff.y*diff.y;
+        float totalRadius = b1->mRadius + b2->mRadius;
+        if(magsq > totalRadius * totalRadius)
+            continue;
+        
+        // This looks like a contact. Start building up a struct.
+        Contact contact;
+        contact.mContactNormal = normalize(diff);
+        contact.mSeparatingVelocity = dot((b1->mVelocity - b2->mVelocity), contact.mContactNormal);
+        contact.mPenetrationDepth = (b1->mRadius + b2->mRadius) - sqrt(magsq);
+        contact.mContactPoint = contact.mContactNormal * (b1->mRadius + b2->mRadius - contact.mPenetrationDepth)/2;
+        if(contact.mSeparatingVelocity > 0)
+            continue;
+        
+        // Decide how to react.
+        ContactResponse response = { false, false };
+        // If b1 had the right collision properties, it will play a part in deciding the response.
+        if(b1HitsB2)
+        {
+            // If it doesn't define a body callback, then both bodies bounce. Otherwise the callback chooses the response.
+            if(!b1->mBodyCallback)
+            {
+                response.mBounceMe = true;
+                response.mBounceThem = true;
             }
-			
-			if(inside)
-			{	
-				// Fill out a contact and perform one body response.
-				contact.mContactPoint = bestPoint;
-				contact.mContactNormal = normalize(bestPoint - P);
-				contact.mSeparatingVelocity = dot(b1->mVelocity, contact.mContactNormal);
-				contact.mPenetrationDepth = b1->mRadius + sqrt(bestDistSqrd);
-				collided = true;
-			}
-			else if(bestDistSqrd < radiusSquared)
-			{
-				// Fill out a contact and perform one body response.
-				contact.mContactPoint = bestPoint;
-				contact.mContactNormal = normalize(P - bestPoint);
-				contact.mSeparatingVelocity = dot(b1->mVelocity, contact.mContactNormal);
-				contact.mPenetrationDepth = b1->mRadius - sqrt(bestDistSqrd);
-				collided = true;
-			}
-			
-			if(collided)
-			{
-				bool response = false;
-				if(b1->mShapeCallback)
-				{
-					b1->mShapeCallback(b1, shape, &contact, &response);
-				}
-				else
-				{
-					response = true;
-				}
-				
-				if(response)
-				{
-					oneBodyResponse(b1, &contact);
-					P = b1->mCenter;
-				}
-			}
+            else
+                b1->mBodyCallback(b1, b2, &contact, &response);
+        }
+        // The same response struct is going to be used for b2. Swap me / them.
+        bool tmp = response.mBounceMe;
+        response.mBounceMe = response.mBounceThem;
+        response.mBounceThem = tmp;
+        // Same as with b1.
+        if(b2HitsB1)
+        {
+            if(!b2->mBodyCallback)
+            {
+                response.mBounceMe = true;
+                response.mBounceThem = true;
+            }
+            else
+                b2->mBodyCallback(b2, b1, &contact, &response);
+        }
+        
+        // Eventually, react appropriately. For now, either bounce or don't bounce.
+        if(!response.mBounceMe && !response.mBounceThem)
+            continue;
+        else if(response.mBounceMe && response.mBounceThem)
+            twoBodyResponse(b1, b2, &contact);
+        else if(!response.mBounceMe && response.mBounceThem)
+            oneBodyResponse(b1, &contact);
+        else if(response.mBounceMe && !response.mBounceThem)
+        {
+            // In this case, we are flipping the normal ordering, so reverse the contact normal.
+            contact.mContactNormal = - contact.mContactNormal;
+            oneBodyResponse(b2, &contact);
+        }
+    }
+}
+
+void Physics::collideAgainstShapes(Body* b1)
+{
+    Vector2 P = b1->mCenter;
+    float radiusSquared = b1->mRadius * b1->mRadius;
+    
+    // Calculate bucket coverage.
+    uint16_t minX, minY;
+    uint16_t maxX, maxY;
+    if(b1->mCenter.x - b1->mRadius < 0) minX = 0;
+    else minX = floor((b1->mCenter.x - b1->mRadius) / mShapeBucketSize.x);
+    if(b1->mCenter.y - b1->mRadius < 0) minY = 0;
+    else minY = floor((b1->mCenter.y - b1->mRadius) / mShapeBucketSize.y);
+    if(b1->mCenter.x + b1->mRadius > mShapeBucketSize.x * kShapeBucketCount) minX = kShapeBucketCount;
+    else maxX = ceil((b1->mCenter.x + b1->mRadius) / mShapeBucketSize.x);
+    if(b1->mCenter.y + b1->mRadius > mShapeBucketSize.y * kShapeBucketCount) minY = kShapeBucketCount;
+    else maxY = ceil((b1->mCenter.y + b1->mRadius) / mShapeBucketSize.y);
+    
+    // Increment the shape query counter.
+    mShapeQuery += 1;
+    
+    // Iterate over each bucket.
+    for(uint16_t x=minX; x < maxX; ++x)
+    {
+        for(uint16_t y=minY; y < maxY; ++y)
+        {
+            // Iterate over each shape in teh bucket.
+            ShapeBucket* bucket = mShapeBuckets[x][y];
+            while(bucket)
+            {
+                Shape* shape = bucket->mShape;
+                bucket = bucket->mNext;
+                
+                // Skip this shape if properties don't overlap.
+                if(!(b1->mCollideProperties & shape->mProperties))
+                    continue;
+                    
+                // Skip this shape if the last query is this query, meaning the shape has already been collided against the body.
+                if(shape->mLastQuery == mShapeQuery)
+                    continue;
+                shape->mLastQuery = mShapeQuery;
+                
+                // Get ready to collide body against shape.
+                bool collided = false;
+                bool inside = false;
+                float bestDistSqrd = HUGE_VAL;
+                Vector2 bestPoint;
+                Contact contact;
+                
+                // Iterate over each point.
+                for(uint32_t i=0; i < shape->mNumPoints; ++i)
+                {
+                    // Distance from point to edge.
+                    // http://www.gamedev.net/community/forums/topic.asp?topic_id=308060&whichpage=1&#1964164
+                    Vector2 E0 = shape->mPoints[i];
+                    Vector2 E1 = shape->mPoints[(i+1)%shape->mNumPoints];
+                    Vector2 D = P - E0;
+                    Vector2 E = E1 - E0;
+                    float e2 = dot(E, E);
+                    float ed = dot(E, D);
+                    float t  = (ed / e2);
+                    if(t < 0) t = 0;
+                    else if(t > 1) t = 1;
+                    Vector2 Q = E0 + E*t;
+                    Vector2 PQ = Q - P;
+                    float dist2 = dot(PQ, PQ);
+                    
+                    // Point in polygon
+                    // http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html
+                    uint32_t j = (i+1)%shape->mNumPoints;
+                    if(((shape->mPoints[i].y > P.y) != (shape->mPoints[j].y > P.y))
+                       && (P.x < (shape->mPoints[j].x - shape->mPoints[i].x) * (P.y - shape->mPoints[i].y) / (shape->mPoints[j].y - shape->mPoints[i].y) + shape->mPoints[i].x))
+                    {
+                        inside = !inside;
+                    }
+                    
+                    // If this is closer than our best hit, remember it.
+                    if(dist2 < bestDistSqrd)
+                    {
+                        bestDistSqrd = dist2;
+                        bestPoint = Q;
+                    }
+                }
+                
+                if(inside)
+                {	
+                    // If the body is inside the shape, build a special contact.
+                    contact.mContactPoint = bestPoint;
+                    contact.mContactNormal = normalize(bestPoint - P);
+                    contact.mSeparatingVelocity = dot(b1->mVelocity, contact.mContactNormal);
+                    contact.mPenetrationDepth = b1->mRadius + sqrt(bestDistSqrd);
+                    collided = true;
+                }
+                else if(bestDistSqrd < radiusSquared)
+                {
+                    // If the body touched the shape border, build a normal contact.
+                    contact.mContactPoint = bestPoint;
+                    contact.mContactNormal = normalize(P - bestPoint);
+                    contact.mSeparatingVelocity = dot(b1->mVelocity, contact.mContactNormal);
+                    contact.mPenetrationDepth = b1->mRadius - sqrt(bestDistSqrd);
+                    collided = true;
+                }
+                
+                // If collision response is needed.
+                if(collided)
+                {
+                    // Make callback if one is specified.
+                    if(b1->mShapeCallback)
+                    {
+                        bool response = false;
+                        b1->mShapeCallback(b1, shape, &contact, &response);
+                        
+                        // Do not apply response unless callback told us to.
+                        if(!response)
+                            continue;
+                    }
+                    
+                    // Apply response.
+                    oneBodyResponse(b1, &contact);
+                    P = b1->mCenter;
+                }
+            }
         }
     }
 }

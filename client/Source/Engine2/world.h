@@ -11,6 +11,7 @@ class Map;
 class Player;
 class ParticleSystem;
 class Physics;
+class Minimap;
 
 class EnemyManager;
 
@@ -24,6 +25,7 @@ class World
         Map* getMap();
         ParticleSystem* getParticleSystem();
         Physics* getPhysics();
+        Minimap* getMinimap();
         Player* getPlayer() const;
         EnemyManager* getEnemyManager() const;
 
@@ -34,6 +36,7 @@ class World
         Map* mMap;
         ParticleSystem* mParticleSystem;
         Physics* mPhysics;
+        Minimap* mMinimap;
         
         Player* mPlayer;
         EnemyManager* mEnemyManager;

@@ -8,6 +8,7 @@
 #include "builder.h"
 #include "particleSystem.h"
 #include "physics.h"
+#include "minimap.h"
 #include "enemyManager.h"
 
 namespace pammo
@@ -25,6 +26,8 @@ World::World()
     mParticleSystem = new ParticleSystem(500);
     
     mPhysics = new Physics();
+    
+    mMinimap = new Minimap();
     
     mEnemyManager = new EnemyManager;
 
@@ -45,6 +48,7 @@ World::~World()
 {
     mPlayer->destroy();
     mPhysics->destroy();
+    mMinimap->destroy();
     //mParticleSystem->destroy();
     delete mParticleSystem;
     delete mCamera;
@@ -71,6 +75,11 @@ ParticleSystem* World::getParticleSystem()
 Physics* World::getPhysics()
 {
     return mPhysics;
+}
+
+Minimap* World::getMinimap()
+{
+    return mMinimap;
 }
 
 Player* World::getPlayer() const

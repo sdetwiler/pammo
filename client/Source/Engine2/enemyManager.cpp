@@ -6,6 +6,7 @@
 #include "flameTankEnemy.h"
 #include "sideShooterEnemy.h"
 #include "camera.h"
+#include "minimap.h"
 
 #include <algorithm>
 
@@ -144,9 +145,11 @@ void EnemyManager::update()
 
     // Update enemies.
 	Enemy* e = mEnemies;
+    Minimap* minimap = gWorld->getMinimap();
 	while(e)
 	{
 		e->mUpdateCb(e, this);
+        minimap->markEnemy(e->mBody->mCenter);
 		assert(e!=e->mNext);
 		e = e->mNext;
 	}

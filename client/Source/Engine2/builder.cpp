@@ -7,6 +7,7 @@
 #include "enemyManager.h"
 #include "player.h"
 #include "physics.h"
+#include "minimap.h"
 
 namespace pammo
 {
@@ -171,6 +172,7 @@ void buildCollisionMap(World* world, char const* mapName)
     Physics* physics = gWorld->getPhysics();
     Map* map = gWorld->getMap();
     physics->setMapSize(Vector2(map->getSizeX()*map->getSizeMaterial(), map->getSizeY()*map->getSizeMaterial()));
+    gWorld->getMinimap()->setMapSize(Vector2(map->getSizeX()*map->getSizeMaterial(), map->getSizeY()*map->getSizeMaterial()));
     
     // Verify the map header.
     assert(cur[0] == 'P' && cur[1] == 'I' && cur[2] == 'O' && cur[3] == 1);

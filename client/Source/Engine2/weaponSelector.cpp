@@ -67,6 +67,7 @@ bool WeaponSelector::touch(uint32_t count, Touch* touches)
 
 void WeaponSelector::draw()
 {
+    glLoadIdentity();
     mHighlight->mCenter = mSelected->getIcon()->mCenter;
     mHighlight->makeDirty();
     mHighlight->draw();
@@ -112,14 +113,15 @@ void WeaponSelector::addWeapon(Weapon* weapon)
     
     // Iterate over each icon and set the position accordingly.
     Vector2 frame = getFrameSize();
-    float x = frame.x/2 - (kIconSize + kIconBorder.x)/2 * (mWeapons.size()-1);
+    //float y = frame.y/2 - (kIconSize + kIconBorder.y)/2 * (mWeapons.size()-1);
+    float y = frame.y - 160 + (kIconSize + kIconBorder.y)/2;
     for(WeaponVector::iterator i=mWeapons.begin(); i != mWeapons.end(); ++i)
     {
         entity = (*i)->getIcon();
-        entity->mCenter = Vector2(x, frame.y - kIconSize/2 - kIconBorder.y);
+        entity->mCenter = Vector2(frame.x - kIconSize/2 - kIconBorder.x, y);
         entity->makeDirty();
         
-        x += kIconSize + kIconBorder.x;
+        y -= kIconSize + kIconBorder.y;
     }
     
     // If this is the first weapon, set it on the player.

@@ -115,7 +115,7 @@
     mLastTime = t;
     
     // If callback is not within a fudge area, do nothing.
-    uint64_t fudge = 6000;
+    uint64_t fudge = 3000;
     if(delta < 33333-fudge || delta > 33333+fudge)
     {
         return;
@@ -143,10 +143,10 @@
 	[EAGLContext setCurrentContext:mContext];
 	[mContext presentRenderbuffer:GL_RENDERBUFFER_OES];
 	
-    uint64_t updateStart = getTime();
+    //uint64_t updateStart = getTime();
 	mGame->update();
 	mGame->draw();
-    uint64_t updateEnd = getTime();
+    //uint64_t updateEnd = getTime();
     
     #if 0
     static uint32_t slots[50];

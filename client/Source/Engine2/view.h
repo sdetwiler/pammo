@@ -1,12 +1,3 @@
-/*
- *  view.h
- *  pammo
- *
- *  Created by James Marr on 7/17/08.
- *  Copyright 2008 __MyCompanyName__. All rights reserved.
- *
- */
-
 #ifndef __VIEW_H__
 #define __VIEW_H__
 
@@ -30,7 +21,8 @@ enum ViewPriorities
     kParticle3Priority = 156,
     kMoveRingPriority = 200,
     kFireRingPriority = 201,
-    kWeaponSelectorPriority = 250
+    kMinimapPriority = 230,
+    kWeaponSelectorPriority = 250,
 };
 
 class View

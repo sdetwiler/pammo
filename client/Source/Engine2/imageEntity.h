@@ -17,6 +17,7 @@ public:
 
     void draw();
 
+    void setImageAndInit(Image* image);
     void setImage(Image* image);
     Image* getImage();
 

@@ -195,6 +195,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\Source\Engine2\enemyLoader.h"
+				>
+			</File>
+			<File
 				RelativePath="..\Source\Engine2\enemyManager.h"
 				>
 			</File>
@@ -232,6 +236,10 @@
 			</File>
 			<File
 				RelativePath="..\Source\Engine2\map.h"
+				>
+			</File>
+			<File
+				RelativePath="..\Source\Engine2\minimap.h"
 				>
 			</File>
 			<File
@@ -327,6 +335,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\Source\Engine2\enemyLoader.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\Source\Engine2\enemyManager.cpp"
 				>
 			</File>
@@ -372,6 +384,10 @@
 			</File>
 			<File
 				RelativePath="..\Source\Engine2\map.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\Source\Engine2\minimap.cpp"
 				>
 			</File>
 			<File

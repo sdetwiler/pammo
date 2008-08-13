@@ -52,7 +52,21 @@ void ImageEntity::setImage(Image* image)
     mSize = mImage->mSize;
     mDirty = true;
 }
+
+void ImageEntity::setImageAndInit(Image* image)
+{
+    mAlpha = 1.0f;
+	mCenter.x = 0;
+	mCenter.y = 0;
+    mSize.x = 0;
+    mSize.y = 0;
     
+    mImage = 0;
+    mDirty = true;
+    setImage(image);
+}
+
+
 Image* ImageEntity::getImage()
 {
     return mImage;

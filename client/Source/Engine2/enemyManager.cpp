@@ -1,14 +1,14 @@
 #include "pammo.h"
 #include "enemyManager.h"
+#include "enemyLoader.h"
 #include "world.h"
 #include "physics.h"
 #include "trebuchetEnemy.h"
 #include "flameTankEnemy.h"
 #include "sideShooterEnemy.h"
 #include "camera.h"
+#include "imageLibrary.h"
 #include "minimap.h"
-
-#include <algorithm>
 
 namespace pammo
 {
@@ -48,6 +48,51 @@ void EnemyManager::addSpawnEvent(SpawnEvent& evt)
     evt.mLastSpawn = 0;
 
     mSpawnEvents.push_back(evt);
+}
+
+bool EnemyManager::loadEnemyTemplate(char const* enemyName)
+{
+    EnemyTemplate* enemyTemplate = new EnemyTemplate;
+    EnemyLoader loader;
+    char path[256];
+    snprintf(path, 255, "data/enemies/%s.csv", enemyName);
+    if(loader.load(path, enemyTemplate) == false)
+    {
+        delete enemyTemplate;
+        return false;
+    }
+
+    mEnemyTemplates[std::string(enemyName)] = enemyTemplate;
+    return true;
+}
+
+
+bool EnemyManager::initializeEnemy(Enemy* e, char const* name)
+{
+    StringEnemyTemplateMap::iterator i = mEnemyTemplates.find(name);
+    if(i == mEnemyTemplates.end())
+    {
+        if(loadEnemyTemplate(name) == false)
+            return false;
+        i = mEnemyTemplates.find(name);
+        if(i == mEnemyTemplates.end())
+            return false;
+    }
+    EnemyTemplate* enemyTemplate = i->second;
+    e->mBody->mMass = enemyTemplate->mMass;
+    e->mBody->mRadius = enemyTemplate->mRadius;
+    e->mHealth = enemyTemplate->mHealth;
+    memcpy(&e->mBehavior, &enemyTemplate->mBehavior, sizeof(EnemyBehavior));
+    // SCD only first weapon for now.
+    memcpy(&e->mWeapon, &enemyTemplate->mWeapons[0], sizeof(EnemyWeapon));
+    
+    
+    if(enemyTemplate->mImageType == Single)
+    {
+        e->mEntity.setImage(gImageLibrary->reference(enemyTemplate->mImagePath));
+    }    
+    
+    return true;
 }
 
 void EnemyManager::update()
@@ -153,6 +198,7 @@ void EnemyManager::update()
 		assert(e!=e->mNext);
 		e = e->mNext;
 	}
+
 }
 
 void EnemyManager::draw()

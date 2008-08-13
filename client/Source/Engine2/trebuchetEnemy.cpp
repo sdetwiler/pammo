@@ -14,7 +14,7 @@ void trebuchetEnemySurroundUpdate(Enemy* e, EnemyManager* manager);
 
 void trebuchetEnemyInit(Enemy* e, EnemyManager* manager)
 {
-    e->mEntity = new ImageEntity(gImageLibrary->reference("data/vehicles/trebuchet/00.png"));
+    e->mEntity.setImageAndInit(gImageLibrary->reference("data/vehicles/trebuchet/00.png"));
     e->mDrawCb = trebuchetEnemyDraw;
     e->mUpdateCb = trebuchetEnemySurroundUpdate;
 	e->mDamageCb = trebuchetEnemyDamage;
@@ -25,10 +25,10 @@ void trebuchetEnemyFire(Enemy* e, float distance)
 {
     Vector2 baseVelocity;
     float rad = 32.0f; // Distance from center of vehicle to end of trebuchet.
-    float rot = e->mEntity->mRotation - (float)M_PI/2;
+    float rot = e->mEntity.mRotation - (float)M_PI/2;
     
     // Calculate center. Vehicle center plus arm rotated for direction.
-    Vector2 center = e->mEntity->mCenter + Vector2(rad, 0) * Transform2::createRotation(rot);
+    Vector2 center = e->mEntity.mCenter + Vector2(rad, 0) * Transform2::createRotation(rot);
 
     ParticleSystem::InitBallParticleArgs args;
     args.initialPosition = center;
@@ -44,9 +44,9 @@ void trebuchetEnemySurroundUpdate(Enemy* e, EnemyManager* manager)
 {
     e->mController.update();
 
-    e->mEntity->mRotation = e->mController.mRotation + (float)M_PI/2;
-    e->mEntity->mCenter = e->mBody->mCenter;
-    e->mEntity->makeDirty();
+    e->mEntity.mRotation = e->mController.mRotation + (float)M_PI/2;
+    e->mEntity.mCenter = e->mBody->mCenter;
+    e->mEntity.makeDirty();
 
     Vector2 heading = gWorld->getPlayer()->getCenter() - e->mBody->mCenter;
     float mag = magnitude(heading);
@@ -73,16 +73,16 @@ void trebuchetEnemySurroundUpdate(Enemy* e, EnemyManager* manager)
         rot -= (float)M_PI*2;
 
     e->mController.mRotationTarget = rot;
-    e->mEntity->makeDirty();
+    e->mEntity.makeDirty();
 }
 
 void trebuchetEnemyUpdate(Enemy* e, EnemyManager* manager)
 {
     e->mController.update();
 
-    e->mEntity->mRotation = e->mController.mRotation + (float)M_PI/2;
-    e->mEntity->mCenter = e->mBody->mCenter;
-    e->mEntity->makeDirty();
+    e->mEntity.mRotation = e->mController.mRotation + (float)M_PI/2;
+    e->mEntity.mCenter = e->mBody->mCenter;
+    e->mEntity.makeDirty();
 
     Vector2 heading = gWorld->getPlayer()->getCenter() - e->mBody->mCenter;
     float mag = magnitude(heading);
@@ -104,13 +104,13 @@ void trebuchetEnemyUpdate(Enemy* e, EnemyManager* manager)
         e->mController.mAcceleration = speed * e->mBody->mMass * 7;
     }
 
-    e->mEntity->makeDirty();
+    e->mEntity.makeDirty();
 }
 
 
 void trebuchetEnemyDraw(Enemy* e, EnemyManager* manager)
 {
-    e->mEntity->draw();
+    e->mEntity.draw();
 }
 
 void trebuchetEnemyDamage(Enemy* e, ParticleType type, float amount)
@@ -121,7 +121,7 @@ void trebuchetEnemyDamage(Enemy* e, ParticleType type, float amount)
 	{
 		dprintf("%p You sunk my trebuchet!", e);
 		gWorld->getParticleSystem()->initExplosionParticle(e->mBody->mCenter);
-		gImageLibrary->unreference(e->mEntity->getImage());
+		gImageLibrary->unreference(e->mEntity.getImage());
 		gWorld->getEnemyManager()->removeEnemy(e);
 		e->mDamageCb = NULL;
 	}

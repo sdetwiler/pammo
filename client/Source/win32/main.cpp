@@ -11,6 +11,9 @@ public:
         memset(&mDown, 0, sizeof(mDown));
         keyTouch[0].mLocation.x = 60;
         keyTouch[0].mLocation.y = 260;
+        keyTouch[1].mLocation.x = 400;
+        keyTouch[1].mLocation.y = 260;
+
     }
 
     ~InputProcessor()
@@ -42,7 +45,8 @@ public:
         bool mouseUp = false;
         while(SDL_PollEvent(&event)) 
         {
-            float directionKey = false;
+            bool directionKey = false;
+            bool fireKey = false;
             switch(event.type) 
             {
             case SDL_KEYDOWN:
@@ -83,6 +87,46 @@ public:
                     keyTouch[0].mLocation.x += 0;
                     keyTouch[0].mLocation.y += keyRange;
                     directionKey = true;
+                }
+
+
+
+
+
+
+
+                else if(mKeySym.sym == SDLK_LEFT)
+                {
+                    dprintf("L");
+                    keyTouch[1].mPhase = Touch::PhaseBegin;
+                    keyTouch[1].mLocation.x += -keyRange;
+                    keyTouch[1].mLocation.y += 0;
+                    fireKey = true;
+                }
+                else if(mKeySym.sym == SDLK_RIGHT)
+                {
+                    dprintf("R");
+                    keyTouch[1].mPhase = Touch::PhaseBegin;
+                    keyTouch[1].mLocation.x += keyRange;
+                    keyTouch[1].mLocation.y += 0;
+                    fireKey = true;
+                }
+
+                else if(mKeySym.sym == SDLK_UP)
+                {
+                    dprintf("U");
+                    keyTouch[1].mPhase = Touch::PhaseBegin;
+                    keyTouch[1].mLocation.x += 0;
+                    keyTouch[1].mLocation.y += -keyRange;
+                    fireKey = true;
+                }
+                else if(mKeySym.sym == SDLK_DOWN)
+                {
+                    dprintf("D");
+                    keyTouch[1].mPhase = Touch::PhaseBegin;
+                    keyTouch[1].mLocation.x += 0;
+                    keyTouch[1].mLocation.y += keyRange;
+                    fireKey = true;
                 }
 
                 break;
@@ -131,6 +175,38 @@ public:
 
 
 
+                else if(mKeySym.sym == SDLK_LEFT)
+                {
+                    keyTouch[1].mPhase = Touch::PhaseEnd;
+                    keyTouch[1].mLocation.x += keyRange;
+                    keyTouch[1].mLocation.y += 0;
+                    fireKey = true;
+                }
+                else if(mKeySym.sym == SDLK_RIGHT)
+                {
+                    keyTouch[1].mPhase = Touch::PhaseEnd;
+                    keyTouch[1].mLocation.x += -keyRange;
+                    keyTouch[1].mLocation.y += 0;
+                    fireKey = true;
+                }
+
+                else if(mKeySym.sym == SDLK_UP)
+                {
+                    keyTouch[1].mPhase = Touch::PhaseEnd;
+                    keyTouch[1].mLocation.x += 0;
+                    keyTouch[1].mLocation.y += keyRange;
+                    fireKey = true;
+                }
+                else if(mKeySym.sym == SDLK_DOWN)
+                {
+                    keyTouch[1].mPhase = Touch::PhaseEnd;
+                    keyTouch[1].mLocation.x += 0;
+                    keyTouch[1].mLocation.y += -keyRange;
+                    fireKey = true;
+                }
+
+
+
 
                 break;
 
@@ -167,6 +243,7 @@ public:
                         touch[1].mLocation.x = event.button.x;
                         touch[1].mLocation.y = event.button.y;
                     }
+                    dprintf("#### %.2f %.2f", touch[0].mLocation.x, touch[0].mLocation.y);
                 }
                 else if(SDL_BUTTON_RIGHT)
                 {
@@ -216,6 +293,13 @@ public:
 				cap(&keyTouch[0].mLocation.y, 220, 300);
 //				dprintf("### %.2f %.2f", keyTouch[0].mLocation.x, keyTouch[0].mLocation.y);
 				game->touches(1, keyTouch);
+            }
+            if(fireKey)
+            {
+				cap(&keyTouch[1].mLocation.x, 300, 560);
+				cap(&keyTouch[1].mLocation.y, 220, 300);
+				dprintf("### %.2f %.2f", keyTouch[1].mLocation.x, keyTouch[1].mLocation.y);
+				game->touches(1, keyTouch+1);
             }
 
             if(mDown[0] && mDown[1])

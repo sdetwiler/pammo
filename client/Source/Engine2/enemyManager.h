@@ -9,8 +9,9 @@
 #include "particleSystem.h"
 #include <vector>
 
-#define ENEMY_DATA_SIZE 128
-#define ENEMY_COUNT
+#define ENEMY_MAX_WEAPON_COUNT 4
+//#define ENEMY_DATA_SIZE 128
+//#define ENEMY_COUNT
 namespace pammo
 {
 
@@ -22,40 +23,122 @@ typedef void (*EnemyDrawCb)(Enemy* e, EnemyManager* manager);
 typedef void (*EnemyDamageCb)(Enemy* e, ParticleType type, float amount);
 typedef void (*EnemyDestroyCb)(Enemy* e, EnemyManager* manager);
 
-/*enum Weapon
+
+enum WeaponType
 {
-	Flamethrower,
-	LightningGun,
-	Catapult,
-	MachineGun
-};*/
+    None,
+    Flamethrower,
+    MachineGun,
+    Trebuchet
+};
+
+struct FlamethrowerWeaponData
+{
+    int32_t mPositionX;
+    int32_t mPositionY;
+    uint32_t mAccuracy;
+    uint32_t mDamage;
+    uint32_t mRotationMin;
+    uint32_t mRotationMax;
+    uint32_t mMaxDistance;
+    uint32_t mSpreadAngle;
+};
+
+struct TrebuchetWeaponData
+{
+    int32_t mPositionX;
+    int32_t mPositionY;
+    uint32_t mAccuracy;
+    uint32_t mDamage;
+    uint32_t mRotationMin;
+    uint32_t mRotationMax;
+    uint32_t mMaxDistance;
+    uint32_t mFireRate;
+};
+
+struct MachineGunWeaponData
+{
+    int32_t mPositionX;
+    int32_t mPositionY;
+    uint32_t mAccuracy;
+    uint32_t mDamage;
+    uint32_t mRotationMin;
+    uint32_t mRotationMax;
+    uint32_t mMaxDistance;
+    uint32_t mFireRate;
+};
 
 struct EnemyWeapon
 {
-//	Weapon mType;
-    float  mMinRange;
-    float  mMaxRange;
-    float  mFireFrequency; // 0.0 - 1.0
+	WeaponType mType;
+    uint8_t    mData[256];
 };
 
-enum Behavior
+enum BehaviorType
 {
 	ApproachAndFire,
 	Surround,
 	DriveBy,
-	HideAndCamp,
-	Kamakazi
+	Camp,
+	Kamikaze
+};
+
+struct ApproachAndFireBehaviorData
+{
+    float mSpeed;
+    float mDistance;
+};
+
+struct SurroundBehaviorData
+{
+    float mSpeed;
+    float mDistance;
+};
+
+struct DriveByBehaviorData
+{
+    float mSpeed;
+    float mDistance;
+};
+
+struct CampBehaviorData
+{
+    float mSpeed;
+};
+
+struct KamikazeBehaviorData
+{
+    float mSpeed;
 };
 
 struct EnemyBehavior
 {
-	Behavior mType;
-	uint8_t mData[256];
+	BehaviorType mType;
+	uint8_t      mData[256];
+};
+
+enum EnemyImageType
+{
+    Single,
+    Flipbook
+};
+
+struct EnemyTemplate
+{
+    char            mName[64];
+    EnemyImageType  mImageType;
+    char            mImagePath[256];
+    float           mHealth;
+    float           mMass;
+    float           mRadius;
+    EnemyBehavior   mBehavior;
+    EnemyWeapon     mWeapons[ENEMY_MAX_WEAPON_COUNT];
+    uint32_t        mWeaponCount;
 };
 
 struct Enemy
 {
-    ImageEntity*         mEntity;
+    ImageEntity          mEntity;
     Body*                mBody;
     VehicleController    mController;
     
@@ -68,15 +151,11 @@ struct Enemy
     EnemyDrawCb          mDrawCb;
 	EnemyDamageCb        mDamageCb;
 
-
     // List maitenance.
     Enemy* mNext;
     Enemy* mPrev;
     Enemy* mRemoveNext;
-
-//    uint8_t mData[ENEMY_DATA_SIZE];
 };
-
 
 struct SpawnEvent
 {
@@ -89,8 +168,6 @@ struct SpawnEvent
     uint64_t mFreq;      // Calculated from def. in usec.
     uint64_t mLastSpawn; // in usec.
 };
-
-
 
 class EnemyManager
     : public View
@@ -108,8 +185,10 @@ public:
     Vector2 const* getSpawnPoint(uint32_t index) const;
     uint32_t getSpawnPointCount() const;
 
-
     void addSpawnEvent(SpawnEvent& evt);
+
+    // Initializes the passed enemy with named template.
+    bool initializeEnemy(Enemy* e, char const* enemyName);
 
 	Enemy* addEnemy();
     void removeEnemy(Enemy* e);
@@ -124,19 +203,23 @@ public:
 protected:
 
 private:
+
+    // Loads the template for the named enemy.
+    bool loadEnemyTemplate(char const* enemyName);
+
     typedef vector< Vector2 > Vector2Vector;
     Vector2Vector mSpawnPoints;
 
     typedef vector< SpawnEvent > SpawnEventVector;
     SpawnEventVector mSpawnEvents;
 
+    typedef map< string, EnemyTemplate* > StringEnemyTemplateMap;
+    StringEnemyTemplateMap mEnemyTemplates;
+
 	Enemy* mEnemies;
     Enemy* mAddEnemies;
     Enemy* mRemoveEnemies;
     Enemy* mFreed;
-
-//	uint32_t mActiveEnemyCount;
-//	uint64_t mLastEnemy;
 };
 
 } // namespace pammo

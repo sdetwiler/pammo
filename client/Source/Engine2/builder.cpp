@@ -123,7 +123,7 @@ void buildTileMap(World* world, char const* name)
     for(uint16_t tmp=0; tmp < numEntities; ++tmp)
     {
         uint16_t i = readUInt16(&cur, &remain);
-        dprintf("Prop using %d", i);
+//        dprintf("Prop using %d", i);
         float posX = readFloat(&cur, &remain);
         float posY = readFloat(&cur, &remain);
         float scale = readFloat(&cur, &remain);

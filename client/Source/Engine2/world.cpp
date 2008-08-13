@@ -10,6 +10,7 @@
 #include "physics.h"
 #include "minimap.h"
 #include "enemyManager.h"
+#include "enemyLoader.h"
 
 namespace pammo
 {
@@ -33,7 +34,16 @@ World::World()
 
 
     mPlayer = new Player();
-    
+
+
+    EnemyLoader enemyLoader;
+    EnemyTemplate enemyTemplate;
+    if(enemyLoader.load("data/enemies/flametank.csv", &enemyTemplate) == false)
+    {
+        dprintf("Failed to load enemy definition file.");
+        assert(0);
+    }
+
     char mapName[256];
     LevelLoader loader;
     if(loader.load("data/levels/1.csv", mapName) == false)

@@ -35,13 +35,7 @@
 		11EEB7230DEBC73F009F3B13 /* drawImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11EEB70E0DEBC73F009F3B13 /* drawImage.cpp */; };
 		11EEB7250DEBC73F009F3B13 /* game.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11EEB7110DEBC73F009F3B13 /* game.cpp */; };
 		11EEB72A0DEBC73F009F3B13 /* world.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11EEB71F0DEBC73F009F3B13 /* world.cpp */; };
-		11EFFA9C0E55F5DA003B2DB3 /* backdrops in Resources */ = {isa = PBXBuildFile; fileRef = 11EFFA990E55F5DA003B2DB3 /* backdrops */; };
-		11EFFB050E55F5EC003B2DB3 /* enemies in Resources */ = {isa = PBXBuildFile; fileRef = 11EFFA9D0E55F5EC003B2DB3 /* enemies */; };
-		11EFFB060E55F5EC003B2DB3 /* interface in Resources */ = {isa = PBXBuildFile; fileRef = 11EFFAA00E55F5EC003B2DB3 /* interface */; };
-		11EFFB070E55F5EC003B2DB3 /* levels in Resources */ = {isa = PBXBuildFile; fileRef = 11EFFAB30E55F5EC003B2DB3 /* levels */; };
-		11EFFB080E55F5EC003B2DB3 /* maps in Resources */ = {isa = PBXBuildFile; fileRef = 11EFFAB60E55F5EC003B2DB3 /* maps */; };
-		11EFFB090E55F5EC003B2DB3 /* particles in Resources */ = {isa = PBXBuildFile; fileRef = 11EFFABB0E55F5EC003B2DB3 /* particles */; };
-		11EFFB0A0E55F5EC003B2DB3 /* vehicles in Resources */ = {isa = PBXBuildFile; fileRef = 11EFFAC80E55F5EC003B2DB3 /* vehicles */; };
+		11EFFC750E563C3E003B2DB3 /* data in Resources */ = {isa = PBXBuildFile; fileRef = 11EFFBA20E563C3E003B2DB3 /* data */; };
 		11F1374A0DF34A7F00651323 /* imageLibrary.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11F137490DF34A7F00651323 /* imageLibrary.cpp */; };
 		1D3623EC0D0F72F000981E51 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D3623EB0D0F72F000981E51 /* CoreGraphics.framework */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
@@ -111,13 +105,7 @@
 		11EEB71F0DEBC73F009F3B13 /* world.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = world.cpp; sourceTree = "<group>"; };
 		11EEB7200DEBC73F009F3B13 /* world.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = world.h; sourceTree = "<group>"; };
 		11EEB7380DEBC769009F3B13 /* platform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = platform.h; sourceTree = "<group>"; };
-		11EFFA990E55F5DA003B2DB3 /* backdrops */ = {isa = PBXFileReference; lastKnownFileType = folder; name = backdrops; path = ../data/backdrops; sourceTree = SOURCE_ROOT; };
-		11EFFA9D0E55F5EC003B2DB3 /* enemies */ = {isa = PBXFileReference; lastKnownFileType = folder; name = enemies; path = ../data/enemies; sourceTree = SOURCE_ROOT; };
-		11EFFAA00E55F5EC003B2DB3 /* interface */ = {isa = PBXFileReference; lastKnownFileType = folder; name = interface; path = ../data/interface; sourceTree = SOURCE_ROOT; };
-		11EFFAB30E55F5EC003B2DB3 /* levels */ = {isa = PBXFileReference; lastKnownFileType = folder; name = levels; path = ../data/levels; sourceTree = SOURCE_ROOT; };
-		11EFFAB60E55F5EC003B2DB3 /* maps */ = {isa = PBXFileReference; lastKnownFileType = folder; name = maps; path = ../data/maps; sourceTree = SOURCE_ROOT; };
-		11EFFABB0E55F5EC003B2DB3 /* particles */ = {isa = PBXFileReference; lastKnownFileType = folder; name = particles; path = ../data/particles; sourceTree = SOURCE_ROOT; };
-		11EFFAC80E55F5EC003B2DB3 /* vehicles */ = {isa = PBXFileReference; lastKnownFileType = folder; name = vehicles; path = ../data/vehicles; sourceTree = SOURCE_ROOT; };
+		11EFFBA20E563C3E003B2DB3 /* data */ = {isa = PBXFileReference; lastKnownFileType = folder; name = data; path = ../data; sourceTree = SOURCE_ROOT; };
 		11F137480DF34A7F00651323 /* imageLibrary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = imageLibrary.h; sourceTree = "<group>"; };
 		11F137490DF34A7F00651323 /* imageLibrary.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = imageLibrary.cpp; sourceTree = "<group>"; };
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -271,20 +259,6 @@
 			path = Source/Engine2;
 			sourceTree = "<group>";
 		};
-		11EFFA980E55F5C3003B2DB3 /* data */ = {
-			isa = PBXGroup;
-			children = (
-				11EFFA9D0E55F5EC003B2DB3 /* enemies */,
-				11EFFAA00E55F5EC003B2DB3 /* interface */,
-				11EFFAB30E55F5EC003B2DB3 /* levels */,
-				11EFFAB60E55F5EC003B2DB3 /* maps */,
-				11EFFABB0E55F5EC003B2DB3 /* particles */,
-				11EFFAC80E55F5EC003B2DB3 /* vehicles */,
-				11EFFA990E55F5DA003B2DB3 /* backdrops */,
-			);
-			name = data;
-			sourceTree = "<group>";
-		};
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -296,7 +270,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
-				11EFFA980E55F5C3003B2DB3 /* data */,
+				11EFFBA20E563C3E003B2DB3 /* data */,
 				11EEB7080DEBC73F009F3B13 /* Engine2 */,
 				080E96DDFE201D6D7F000001 /* iPhone */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
@@ -368,13 +342,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				11EFFA9C0E55F5DA003B2DB3 /* backdrops in Resources */,
-				11EFFB050E55F5EC003B2DB3 /* enemies in Resources */,
-				11EFFB060E55F5EC003B2DB3 /* interface in Resources */,
-				11EFFB070E55F5EC003B2DB3 /* levels in Resources */,
-				11EFFB080E55F5EC003B2DB3 /* maps in Resources */,
-				11EFFB090E55F5EC003B2DB3 /* particles in Resources */,
-				11EFFB0A0E55F5EC003B2DB3 /* vehicles in Resources */,
+				11EFFC750E563C3E003B2DB3 /* data in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

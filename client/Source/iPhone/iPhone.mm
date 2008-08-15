@@ -34,9 +34,10 @@ void openRawImage(char const* path, RawImage* image)
 	spriteImage = uiImage.CGImage;
 	image->mSize.x = CGImageGetWidth(spriteImage);
 	image->mSize.y = CGImageGetHeight(spriteImage);
+    image->mBytesPerPixel = 4;
 	
 	// Allocated memory needed for the bitmap context
-	image->mPixels = (uint8_t *) malloc(image->mSize.x * image->mSize.y * 4);
+	image->mPixels = new uint8_t[(uint32_t)(image->mSize.x * image->mSize.y * 4)];
     memset(image->mPixels, 0, image->mSize.x*image->mSize.y*4);
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
 	spriteContext = CGBitmapContextCreate(image->mPixels, image->mSize.x, image->mSize.y, 8, image->mSize.x * 4, colorSpace, kCGImageAlphaPremultipliedLast);

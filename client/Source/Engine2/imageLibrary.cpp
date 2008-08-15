@@ -20,7 +20,7 @@ Image* makeSubImage(RawImage* raw, Vector2 start, Vector2 size)
     // Setup pixel store.
     uint32_t srcRow = raw->mSize.x*raw->mBytesPerPixel;
     uint32_t dstRow = size.x*raw->mBytesPerPixel;
-    uint8_t* pixels = (uint8_t*)malloc(dstRow*size.y);
+    uint8_t* pixels = new uint8_t[(uint32_t)(dstRow*size.y)];
     for(uint32_t y=0; y < size.y; ++y)
     {
         uint32_t srcOffset = y*dstRow;
@@ -44,7 +44,7 @@ Image* makeSubImage(RawImage* raw, Vector2 start, Vector2 size)
 	glTexImage2D(GL_TEXTURE_2D, 0, mode, size.x, size.y, 0, mode, GL_UNSIGNED_BYTE, pixels);
     
     // Restore pixel store.
-    free(pixels);
+    delete[] pixels;
     
     return image;
 }
@@ -56,21 +56,21 @@ Image* openImage(char const* path)
     
 	Image* image = new Image();
     image->mSize = raw.mSize;
+    
+	int mode;
+    if(raw.mBytesPerPixel == 3)
+        mode = GL_RGB;
+    else if(raw.mBytesPerPixel == 4)
+        mode = GL_RGBA;
 	
 	// Use OpenGL ES to generate a name for the texture.
 	glGenTextures(1, &image->mTexture);
 	glBindTexture(GL_TEXTURE_2D, image->mTexture);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST); // scale linearly when image bigger than texture
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); // scale linearly when image smalled than texture
-	int mode;
-    if(raw.mBytesPerPixel == 3)
-        mode = GL_RGB;
-    else if(raw.mBytesPerPixel == 4)
-        mode = GL_RGBA;
-
     glTexImage2D(GL_TEXTURE_2D, 0, mode, image->mSize.x, image->mSize.y, 0, mode, GL_UNSIGNED_BYTE, raw.mPixels);
 	
-	free(raw.mPixels);
+	delete[] raw.mPixels;
 	return image;
 }
     

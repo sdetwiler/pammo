@@ -12,42 +12,32 @@ Vector2 getFrameSize()
    return Vector2(480, 320);
 }
 
-Image* openImage(char const* path)
+void openRawImage(char const* path, RawImage* img)
 {
-    Image* image = new Image;
+//    Image* image = new Image;
     SDL_Surface* surface = IMG_Load(path);
     if(!surface)
     {
         dprintf("Failed to load %s\n", path);
-        delete image;
-        return NULL;
+        assert(0);  
     }
-    image->mSize.x = (float)surface->w;
-    image->mSize.y = (float)surface->h;
-
-    glEnable(GL_TEXTURE_2D);
-    glGenTextures(1, &image->mTexture);
-    glBindTexture(GL_TEXTURE_2D, image->mTexture);
-     
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST); // scale linearly when image bigger than texture
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST); // scale linearly when image smalled than texture
-
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP); // scale linearly when image bigger than texture
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP); // scale linearly when image smalled than texture
+    img->mSize.x = (float)surface->w;
+    img->mSize.y = (float)surface->h;
 
     int format;
     if(surface->format->BitsPerPixel == 24)
-        format = GL_RGB;
+    {
+        img->mBytesPerPixel = 3;
+    }
     else if(surface->format->BitsPerPixel = 32)
-        format = GL_RGBA;
+    {
+        img->mBytesPerPixel = 4;
+    }
 
-
-    glTexImage2D(GL_TEXTURE_2D, 0, format, surface->w, surface->h, 0, format, GL_UNSIGNED_BYTE, surface->pixels);
-    glDisable(GL_TEXTURE_2D);
+    img->mPixels = new uint8_t[img->mBytesPerPixel * img->mSize.x * img->mSize.y];
+    memcpy(img->mPixels, surface->pixels, img->mBytesPerPixel * img->mSize.x * img->mSize.y);
 
     SDL_FreeSurface(surface);
-
-    return image;
 }
 
 }

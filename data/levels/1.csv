@@ -1,3 +1,4 @@
-"Start Time in Seconds","Duration in Seconds","Enemy Count","Enemy Type ID","Spawn Point ID","Map Name"
-0,30,5,1,0,"TheMap"
-20,30,3,0,0,
+"Map Name",,,,
+"TheMap",,,,
+"Start Time (s)","Duration (s)","Enemy Count","Enemy Type","Spawn Point"
+0,10,1,"test",0

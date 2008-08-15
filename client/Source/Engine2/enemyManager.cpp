@@ -1,4 +1,5 @@
 #include "pammo.h"
+#include "player.h"
 #include "enemyManager.h"
 #include "enemyLoader.h"
 #include "world.h"
@@ -10,8 +11,196 @@
 #include "imageLibrary.h"
 #include "minimap.h"
 
+float clamp(float v,float min, float max)
+{
+    if(v<min)
+        return min;
+    if(v>max)
+        return max;
+    return v;
+}
+
 namespace pammo
 {
+void behaviorSurroundCb(Enemy* e, EnemyManager* manager)
+{
+    SurroundBehaviorData* data = (SurroundBehaviorData*)e->mBehavior.mData;
+
+    // Find vector to player.
+    Vector2 heading = gWorld->getPlayer()->getCenter() - e->mBody->mCenter;
+    float mag = magnitude(heading);
+    float rot = atan2(heading.y, heading.x);
+
+    // within target distance.
+    if(mag < data->mDistance)
+    {
+        // turn.
+        rot+=(1.57f/1.5f);
+    }
+    if(rot < 0) 
+        rot+= (float)M_PI*2.0f;
+    else if(rot > (float)M_PI*2.0f)
+        rot-= (float)M_PI*2.0f;
+
+    e->mController.mAcceleration = data->mSpeed * e->mBody->mMass; // SCD magic 7?
+    e->mController.mRotationTarget = rot;
+    e->mEntity.makeDirty();
+}
+
+void behaviorApproachAndFireCb(Enemy* e, EnemyManager* manager)
+{}
+
+void behaviorDriveByCb(Enemy* e, EnemyManager* manager)
+{}
+
+void behaviorCampCb(Enemy* e, EnemyManager* manager)
+{}
+
+void behaviorKamikazeCb(Enemy* e, EnemyManager* manager)
+{}
+
+//// Flamethrower /////
+
+
+void weaponFlamethrowerFireParticleCb(Particle* p, ParticleSystem* system)
+{
+    p->mImage.mCenter = p->mBody->mCenter;
+    p->mImage.mRotation += 0.08f;
+    p->mImage.mSize *= 1.05f;
+    p->mImage.makeDirty();
+    
+    if(p->mAlpha <= 0)
+    {
+		system->removeParticle(p);
+		return;
+    }
+
+    p->mAlpha-=0.085f;
+}
+
+void weaponFlamethrowerFireCollisionCb(Body* self, Body* other, Contact* contact, ContactResponse* response)
+{
+	response->mBounceThem = true;
+	response->mBounceMe = true;
+
+	doDamage(self, other, Fire, 10.0f);
+}
+
+void weaponFlamethrowerCb(Enemy* e, EnemyWeapon* w, EnemyManager* manager)
+{
+
+    FlamethrowerWeaponData* data = (FlamethrowerWeaponData*)w->mData;
+
+    Vector2 targetDirection = gWorld->getPlayer()->getCenter() - e->mBody->mCenter;
+    float rot = atan2(targetDirection.y, targetDirection.x);
+
+    //dprintf("%.2f %.2f    %.2f", targetDirection.x, targetDirection.y, targetRot);
+    
+    rot = clamp(rot, data->mTurret.mRotationMin-M_PI, data->mTurret.mRotationMax+M_PI);
+
+    if(rot > ((float)M_PI*2.0f))
+        rot-= ((float)M_PI*2.0f);
+    //else if(rot < 0)
+    //    rot+= (float)M_PI*2.0f;
+
+    // Calculate center. Vehicle center plus arm rotated for direction.
+    Vector2 center = e->mBody->mCenter
+                     + data->mTurret.mPosition
+                     + data->mTurret.mFirePosition
+                     * Transform2::createRotation(rot);
+
+    // Update weapon image entity.
+    w->mEntity.mCenter = e->mBody->mCenter
+                     + data->mTurret.mPosition
+                     * Transform2::createRotation(rot+ (float)M_PI/2.0f);
+    w->mEntity.mRotation = rot + (float)M_PI/2;
+    w->mEntity.makeDirty();
+    return;
+    // Get a particle.
+    Particle* p = gWorld->getParticleSystem()->addParticleWithBody(2);
+    if(!p)
+        return;
+
+    // Set basic particle properties.
+    p->mCallback = weaponFlamethrowerFireParticleCb;
+    p->mAlpha = 1.0f;
+    
+    // Setup image.
+    p->mImage.setImage(gImageLibrary->reference("data/particles/flame01.png"));
+    p->mImage.mCenter = center;
+    p->mImage.mRotation = rot;
+    p->mImage.makeDirty();
+        
+    // Properties about fire particles.
+    p->mBody->mProperties = kPlayerBulletCollisionProperties;
+    p->mBody->mCollideProperties = kPlayerCollisionProperties | kBarrierCollisionProperties;
+    p->mBody->mBodyCallback = weaponFlamethrowerFireCollisionCb;
+    p->mBody->mDamping = 0;
+    p->mBody->mRadius = 15;
+    p->mBody->mMass = 1;
+    p->mBody->mCenter = center;
+    p->mBody->mVelocity = e->mBody->mVelocity + Vector2(300, 0) * Transform2::createRotation(rot);
+}
+
+
+//// Trebuchet ////
+
+void weaponTrebuchetCb(Enemy* e, EnemyWeapon* w, EnemyManager* manager)
+{}
+void weaponMachineGunCb(Enemy* e, EnemyWeapon* w, EnemyManager* manager)
+{}
+
+void enemyUpdateCb(Enemy* e, EnemyManager* manager)
+{
+    e->mController.update();
+
+    // Update behavior.
+    e->mBehavior.mCb(e, manager);
+
+    // Update weapons.
+    for(uint32_t i=0; i<e->mWeaponCount; ++i)
+    {
+        e->mWeapon[i].mCb(e, &e->mWeapon[i], manager);
+    }
+
+    // Update image entity.
+    e->mEntity.mRotation = e->mController.mRotation + (float)M_PI/2;
+    e->mEntity.mCenter = e->mBody->mCenter;
+    e->mEntity.makeDirty();
+}
+
+void enemyDrawCb(Enemy* e, EnemyManager* manager)
+{
+    e->mEntity.draw();
+    for(uint32_t i=0; i<e->mWeaponCount; ++i)
+    {
+        e->mWeapon[i].mEntity.draw();
+    }
+}
+
+void enemyDamageCb(Enemy* e, ParticleType type, float amount)
+{
+	e->mHealth-=amount;
+
+	if(e->mHealth <=0)
+	{
+		dprintf("dead", e);
+		gWorld->getParticleSystem()->initExplosionParticle(e->mBody->mCenter);
+		gImageLibrary->unreference(e->mEntity.getImage());
+        for(uint32_t i=0; i<e->mWeaponCount; ++i)
+        {
+            gImageLibrary->unreference(e->mWeapon[i].mEntity.getImage());
+        }
+		
+        
+        gWorld->getEnemyManager()->removeEnemy(e);
+		e->mDamageCb = NULL;
+	}
+}
+
+
+
+
 
 EnemyManager::EnemyManager()
 {
@@ -78,19 +267,68 @@ bool EnemyManager::initializeEnemy(Enemy* e, char const* name)
         if(i == mEnemyTemplates.end())
             return false;
     }
+
     EnemyTemplate* enemyTemplate = i->second;
-    e->mBody->mMass = enemyTemplate->mMass;
+
+    // Properties.
+    e->mBody->mMass =   enemyTemplate->mMass;
     e->mBody->mRadius = enemyTemplate->mRadius;
-    e->mHealth = enemyTemplate->mHealth;
-    memcpy(&e->mBehavior, &enemyTemplate->mBehavior, sizeof(EnemyBehavior));
-    // SCD only first weapon for now.
-    memcpy(&e->mWeapon, &enemyTemplate->mWeapons[0], sizeof(EnemyWeapon));
-    
-    
+    e->mHealth =        enemyTemplate->mHealth;
     if(enemyTemplate->mImageType == Single)
     {
-        e->mEntity.setImage(gImageLibrary->reference(enemyTemplate->mImagePath));
+        e->mEntity.setImageAndInit(gImageLibrary->reference(enemyTemplate->mImagePath));
     }    
+    else
+    {
+        dprintf("Only single images are currenly supported.");
+        assert(0);
+    }
+
+    e->mUpdateCb = enemyUpdateCb;
+    e->mDrawCb = enemyDrawCb;
+    e->mDamageCb = enemyDamageCb;
+
+    // Behavior.
+    memcpy(&e->mBehavior, &enemyTemplate->mBehavior, sizeof(EnemyBehavior));
+    switch(e->mBehavior.mType)
+    {
+    case ApproachAndFire:
+        e->mBehavior.mCb = behaviorApproachAndFireCb;
+        break;
+    case Surround:
+        e->mBehavior.mCb = behaviorSurroundCb;
+        break;
+    case DriveBy:
+        e->mBehavior.mCb = behaviorDriveByCb;
+        break;
+    case Camp:
+        e->mBehavior.mCb = behaviorCampCb;
+        break;
+    case Kamikaze:
+        e->mBehavior.mCb = behaviorKamikazeCb;
+        break;
+    }
+    
+    // Weapons.
+    e->mWeaponCount = enemyTemplate->mWeaponCount;
+    for(uint32_t i=0; i<e->mWeaponCount; ++i)
+    {
+        memcpy(&e->mWeapon[i], &enemyTemplate->mWeapons[i].mWeapon, sizeof(EnemyWeapon));
+        e->mWeapon[i].mEntity.setImageAndInit(gImageLibrary->reference(enemyTemplate->mWeapons[i].mImagePath));
+        switch(e->mWeapon[i].mType)
+        {
+        case Flamethrower:
+            e->mWeapon[i].mCb = weaponFlamethrowerCb;
+            break;
+        case MachineGun:
+            e->mWeapon[i].mCb = weaponMachineGunCb;
+            break;
+        case Trebuchet:
+            e->mWeapon[i].mCb = weaponTrebuchetCb;
+            break;
+        }
+    }    
+    
     
     return true;
 }
@@ -130,7 +368,6 @@ void EnemyManager::update()
 		mFreed = e;
 	}
 
-    uint32_t count=0;
     // Service spawn events.
     uint64_t now = getTime();
     for(SpawnEventVector::iterator i=mSpawnEvents.begin(); i!=mSpawnEvents.end(); ++i)
@@ -148,31 +385,17 @@ void EnemyManager::update()
                 }
 
                 Enemy* enemy = addEnemy();
-			    enemy->mBody->mCenter = *pos;
-
-                int type = (*i).mEnemyType;
-                switch(type)
+                if(initializeEnemy(enemy, (*i).mEnemyName) == false)
                 {
-                case 0:
-				    trebuchetEnemyInit(enemy, this);
-                    break;
-                case 1:
-                    flameTankEnemyInit(enemy, this);
-                    break;
-                case 2:
-                    sideShooterEnemyInit(enemy, this);
-                    break;
-                default:
-                    dprintf("Invalid enemy type id %d", (*i).mEnemyType);
+                    dprintf("Failed to initialize enemy %s.");
                     assert(0);
                 }
+                enemy->mBody->mCenter = *pos;
 
                 (*i).mLastSpawn = now;
-                dprintf("%d Spawned type %d at point %d", count, (*i).mEnemyType, (*i).mSpawnId);
+                dprintf("Spawned type %s at point %d", (*i).mEnemyName, (*i).mSpawnId);
             }
         }
-
-        ++count;
     }
 
     // Look for expired spawn events.

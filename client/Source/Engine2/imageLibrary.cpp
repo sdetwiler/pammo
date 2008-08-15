@@ -18,24 +18,30 @@ Image* makeSubImage(RawImage* raw, Vector2 start, Vector2 size)
     image->mSize = size;
     
     // Setup pixel store.
-    uint32_t srcRow = raw->mSize.x*4;
-    uint32_t dstRow = size.x*4;
+    uint32_t srcRow = raw->mSize.x*raw->mBytesPerPixel;
+    uint32_t dstRow = size.x*raw->mBytesPerPixel;
     uint8_t* pixels = (uint8_t*)malloc(dstRow*size.y);
     for(uint32_t y=0; y < size.y; ++y)
     {
         uint32_t srcOffset = y*dstRow;
-        uint32_t dstOffset = start.x*4 + (start.y+y)*srcRow;
+        uint32_t dstOffset = start.x*raw->mBytesPerPixel + (start.y+y)*srcRow;
         uint8_t* src = pixels + srcOffset;
         uint8_t* dst = raw->mPixels + dstOffset;
         memcpy(src, dst, dstRow);
     }
+
+    int mode;
+    if(raw->mBytesPerPixel == 3)
+        mode = GL_RGB;
+    else if(raw->mBytesPerPixel == 4)
+        mode = GL_RGBA;
     
 	// Use OpenGL ES to generate a name for the texture.
 	glGenTextures(1, &image->mTexture);
 	glBindTexture(GL_TEXTURE_2D, image->mTexture);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, size.x, size.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+	glTexImage2D(GL_TEXTURE_2D, 0, mode, size.x, size.y, 0, mode, GL_UNSIGNED_BYTE, pixels);
     
     // Restore pixel store.
     free(pixels);
@@ -56,7 +62,13 @@ Image* openImage(char const* path)
 	glBindTexture(GL_TEXTURE_2D, image->mTexture);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST); // scale linearly when image bigger than texture
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); // scale linearly when image smalled than texture
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image->mSize.x, image->mSize.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, raw.mPixels);
+	int mode;
+    if(raw.mBytesPerPixel == 3)
+        mode = GL_RGB;
+    else if(raw.mBytesPerPixel == 4)
+        mode = GL_RGBA;
+
+    glTexImage2D(GL_TEXTURE_2D, 0, mode, image->mSize.x, image->mSize.y, 0, mode, GL_UNSIGNED_BYTE, raw.mPixels);
 	
 	free(raw.mPixels);
 	return image;

@@ -28,6 +28,7 @@ struct RawImage
 {
     Vector2 mSize;
     uint8_t* mPixels;
+    uint8_t mBytesPerPixel;
 };
 
 struct Image

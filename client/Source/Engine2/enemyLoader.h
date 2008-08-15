@@ -25,11 +25,17 @@ private:
     
     bool parseWeapon(char* s);
     bool parseWeaponNone(char* s);
+    
+    // Common turret type weapon parsing.
+    bool parseWeaponTurret(char* s, EnemyWeaponTemplate* weaponTemplate, TurretWeaponData* data);
+    
+    // Turret based weapons.
     bool parseWeaponFlamethrower(char* s);
     bool parseWeaponTrebuchet(char* s);
     bool parseWeaponMachineGun(char* s);
 
-    void dumpWeapon(EnemyWeapon* w);
+    void dumpWeapon(EnemyWeaponTemplate* w);
+    void dumpWeaponTurret(TurretWeaponData* d);
     void dumpWeaponFlamethrower(FlamethrowerWeaponData* d);
     void dumpWeaponTrebuchet(TrebuchetWeaponData* d);
     void dumpWeaponMachineGun(MachineGunWeaponData* d);

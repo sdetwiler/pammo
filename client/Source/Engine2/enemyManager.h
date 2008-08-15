@@ -17,6 +17,10 @@ namespace pammo
 
 class EnemyManager;
 struct Enemy;
+struct EnemyWeapon;
+
+typedef void (*EnemyBehaviorCb)(Enemy* e, EnemyManager* manager);
+typedef void (*EnemyWeaponCb)(Enemy* e, EnemyWeapon* w, EnemyManager* manager);
 
 typedef void (*EnemyUpdateCb)(Enemy* e, EnemyManager* manager);
 typedef void (*EnemyDrawCb)(Enemy* e, EnemyManager* manager);
@@ -32,46 +36,55 @@ enum WeaponType
     Trebuchet
 };
 
+struct TurretWeaponData
+{
+    Vector2        mPosition;
+    Vector2        mFirePosition;
+    float          mRotationMin;
+    float          mRotationMax;
+    float          mRotationCur;
+};
+
 struct FlamethrowerWeaponData
 {
-    int32_t mPositionX;
-    int32_t mPositionY;
+    TurretWeaponData mTurret;
     uint32_t mAccuracy;
     uint32_t mDamage;
-    uint32_t mRotationMin;
-    uint32_t mRotationMax;
     uint32_t mMaxDistance;
     uint32_t mSpreadAngle;
 };
 
 struct TrebuchetWeaponData
 {
-    int32_t mPositionX;
-    int32_t mPositionY;
+    TurretWeaponData mTurret;
     uint32_t mAccuracy;
     uint32_t mDamage;
-    uint32_t mRotationMin;
-    uint32_t mRotationMax;
     uint32_t mMaxDistance;
     uint32_t mFireRate;
 };
 
 struct MachineGunWeaponData
 {
-    int32_t mPositionX;
-    int32_t mPositionY;
+    TurretWeaponData mTurret;
     uint32_t mAccuracy;
     uint32_t mDamage;
-    uint32_t mRotationMin;
-    uint32_t mRotationMax;
     uint32_t mMaxDistance;
     uint32_t mFireRate;
 };
 
 struct EnemyWeapon
 {
-	WeaponType mType;
-    uint8_t    mData[256];
+	WeaponType     mType;
+    ImageEntity    mEntity;
+    EnemyWeaponCb  mCb;
+
+    uint8_t        mData[256];
+};
+
+struct EnemyWeaponTemplate
+{
+    EnemyWeapon  mWeapon;
+    char         mImagePath[256];
 };
 
 enum BehaviorType
@@ -113,8 +126,9 @@ struct KamikazeBehaviorData
 
 struct EnemyBehavior
 {
-	BehaviorType mType;
-	uint8_t      mData[256];
+	BehaviorType    mType;
+    EnemyBehaviorCb mCb;
+	uint8_t         mData[256];
 };
 
 enum EnemyImageType
@@ -125,15 +139,15 @@ enum EnemyImageType
 
 struct EnemyTemplate
 {
-    char            mName[64];
-    EnemyImageType  mImageType;
-    char            mImagePath[256];
-    float           mHealth;
-    float           mMass;
-    float           mRadius;
-    EnemyBehavior   mBehavior;
-    EnemyWeapon     mWeapons[ENEMY_MAX_WEAPON_COUNT];
-    uint32_t        mWeaponCount;
+    char                mName[64];
+    EnemyImageType      mImageType;
+    char                mImagePath[256];
+    float               mHealth;
+    float               mMass;
+    float               mRadius;
+    EnemyBehavior       mBehavior;
+    EnemyWeaponTemplate mWeapons[ENEMY_MAX_WEAPON_COUNT];
+    uint32_t            mWeaponCount;
 };
 
 struct Enemy
@@ -144,9 +158,10 @@ struct Enemy
     
 	float                mHealth;
 
-	EnemyWeapon          mWeapon;
-	EnemyBehavior        mBehavior;
-	
+	EnemyWeapon          mWeapon[ENEMY_MAX_WEAPON_COUNT];
+    uint32_t             mWeaponCount;
+    EnemyBehavior        mBehavior;
+
 	EnemyUpdateCb        mUpdateCb;
     EnemyDrawCb          mDrawCb;
 	EnemyDamageCb        mDamageCb;
@@ -162,7 +177,7 @@ struct SpawnEvent
     uint64_t mStartTime; // in usec from process start time.
     uint64_t mDuration;  // in usec.
     uint32_t mCount;     // Count of how many to spawn.
-    uint32_t mEnemyType; // 0: trebuchet, 1: flametank
+    char     mEnemyName[256]; // Name of file, sans .csv
     uint32_t mSpawnId;   // Which spawn point?
 
     uint64_t mFreq;      // Calculated from def. in usec.

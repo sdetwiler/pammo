@@ -66,7 +66,7 @@ void flameTankEnemyInitFireParticle(Enemy* e)
     p->mBody->mBodyCallback = flameTankEnemyFireCollisionCb;
     p->mBody->mDamping = 0;
     p->mBody->mRadius = 15;
-    p->mBody->mMass = 5;
+    p->mBody->mMass = 1;
     p->mBody->mCenter = p->mImage.mCenter;
     p->mBody->mVelocity = e->mBody->mVelocity + Vector2(300, 0) * Transform2::createRotation(r);
 }

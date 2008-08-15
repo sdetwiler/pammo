@@ -81,13 +81,13 @@ bool EnemyLoader::parseWeapon(char* s)
         {
         case 1: // Weapon Type
             if(!strcmp(s, "None"))
-                mTemplate->mWeapons[mTemplate->mWeaponCount].mType = None;
+                mTemplate->mWeapons[mTemplate->mWeaponCount].mWeapon.mType = None;
             else if(!strcmp(s, "Flamethrower"))
-                mTemplate->mWeapons[mTemplate->mWeaponCount].mType = Flamethrower;
+                mTemplate->mWeapons[mTemplate->mWeaponCount].mWeapon.mType = Flamethrower;
             else if(!strcmp(s, "MachineGun"))
-                mTemplate->mWeapons[mTemplate->mWeaponCount].mType = MachineGun;
+                mTemplate->mWeapons[mTemplate->mWeaponCount].mWeapon.mType = MachineGun;
             else if(!strcmp(s, "Trebuchet"))
-                mTemplate->mWeapons[mTemplate->mWeaponCount].mType = Trebuchet;
+                mTemplate->mWeapons[mTemplate->mWeaponCount].mWeapon.mType = Trebuchet;
             else
             {
                 dprintf("Unknown weapon type: %s", s);
@@ -96,7 +96,7 @@ bool EnemyLoader::parseWeapon(char* s)
             break;
 
         case 2: // Specific weapon data
-            switch(mTemplate->mWeapons[mTemplate->mWeaponCount].mType)
+            switch(mTemplate->mWeapons[mTemplate->mWeaponCount].mWeapon.mType)
             {
             case None:
                 return parseWeaponNone(s);
@@ -120,34 +120,27 @@ bool EnemyLoader::parseWeapon(char* s)
 
 bool EnemyLoader::parseWeaponFlamethrower(char* s)
 {
-    FlamethrowerWeaponData* data = (FlamethrowerWeaponData*)mTemplate->mWeapons[mTemplate->mWeaponCount].mData;
+    FlamethrowerWeaponData* data = (FlamethrowerWeaponData*)mTemplate->mWeapons[mTemplate->mWeaponCount].mWeapon.mData;
     int column = 2;
     while(s)
     {
         switch(column)
         {
-        case 2: // Position X
-            data->mPositionX = atol(s);
+        case 2:
+            if(!parseWeaponTurret(s, &mTemplate->mWeapons[mTemplate->mWeaponCount], &data->mTurret))
+                return false;
+            column = 8;
             break;
-        case 3: // Position Y
-            data->mPositionY = atol(s);
-            break;
-        case 4: // Accuracy
+        case 9: // Accuracy
             data->mAccuracy = atol(s);
             break;
-        case 5: // Damage
+        case 10: // Damage
             data->mDamage = atol(s);
             break;
-        case 6: // Rotation min
-            data->mRotationMin = atol(s);
-            break;
-        case 7: // Rotation max
-            data->mRotationMax = atol(s);
-            break;
-        case 8: // Max distance
+        case 11: // Max distance
             data->mMaxDistance = atol(s);
             break;
-        case 9: // Spread angle
+        case 12: // Spread angle
             data->mSpreadAngle= atol(s);
             ++mTemplate->mWeaponCount;
             return true;
@@ -162,34 +155,27 @@ bool EnemyLoader::parseWeaponFlamethrower(char* s)
 
 bool EnemyLoader::parseWeaponTrebuchet(char* s)
 {
-    TrebuchetWeaponData* data = (TrebuchetWeaponData*)mTemplate->mWeapons[mTemplate->mWeaponCount].mData;
+    TrebuchetWeaponData* data = (TrebuchetWeaponData*)mTemplate->mWeapons[mTemplate->mWeaponCount].mWeapon.mData;
     int column = 2;
     while(s)
     {
         switch(column)
         {
-        case 2: // Position X
-            data->mPositionX = atol(s);
+        case 2:
+            if(!parseWeaponTurret(s, &mTemplate->mWeapons[mTemplate->mWeaponCount], &data->mTurret))
+                return false;
+            column = 8;
             break;
-        case 3: // Position Y
-            data->mPositionY = atol(s);
-            break;
-        case 4: // Accuracy
+        case 9: // Accuracy
             data->mAccuracy = atol(s);
             break;
-        case 5: // Damage
+        case 10: // Damage
             data->mDamage = atol(s);
             break;
-        case 6: // Rotation min
-            data->mRotationMin = atol(s);
-            break;
-        case 7: // Rotation max
-            data->mRotationMax = atol(s);
-            break;
-        case 8: // Max distance
+        case 11: // Max distance
             data->mMaxDistance = atol(s);
             break;
-        case 9: // Firing rate
+        case 12: // Firing rate
             data->mFireRate = atol(s);
             ++mTemplate->mWeaponCount;
             return true;
@@ -204,34 +190,28 @@ bool EnemyLoader::parseWeaponTrebuchet(char* s)
 
 bool EnemyLoader::parseWeaponMachineGun(char* s)
 {
-    MachineGunWeaponData* data = (MachineGunWeaponData*)mTemplate->mWeapons[mTemplate->mWeaponCount].mData;
+    EnemyWeaponTemplate* weaponTemplate = &mTemplate->mWeapons[mTemplate->mWeaponCount];
+    MachineGunWeaponData* data = (MachineGunWeaponData*)weaponTemplate->mWeapon.mData;
     int column = 2;
     while(s)
     {
         switch(column)
         {
-        case 2: // Position X
-            data->mPositionX = atol(s);
+        case 2:
+            if(!parseWeaponTurret(s, &mTemplate->mWeapons[mTemplate->mWeaponCount], &data->mTurret))
+                return false;
+            column = 8;
             break;
-        case 3: // Position Y
-            data->mPositionY = atol(s);
-            break;
-        case 4: // Accuracy
+        case 9: // Accuracy
             data->mAccuracy = atol(s);
             break;
-        case 5: // Damage
+        case 10: // Damage
             data->mDamage = atol(s);
             break;
-        case 6: // Rotation min
-            data->mRotationMin = atol(s);
-            break;
-        case 7: // Rotation max
-            data->mRotationMax = atol(s);
-            break;
-        case 8: // Max distance
+        case 11: // Max distance
             data->mMaxDistance = atol(s);
             break;
-        case 9: // Firing rate
+        case 12: // Firing rate
             data->mFireRate = atol(s);
             ++mTemplate->mWeaponCount;
             return true;
@@ -243,6 +223,46 @@ bool EnemyLoader::parseWeaponMachineGun(char* s)
 
     return false;
 }
+
+
+bool EnemyLoader::parseWeaponTurret(char* s, EnemyWeaponTemplate* weaponTemplate, TurretWeaponData* data)
+{
+    int column = 2;
+    while(s)
+    {
+        switch(column)
+        {
+        case 2: // Image path
+            strcpy(weaponTemplate->mImagePath, s);
+            break;
+        case 3: // Position X
+            data->mPosition.x = (float)atol(s);
+            break;
+        case 4: // Position y
+            data->mPosition.y = (float)atol(s);
+            break;
+        case 5: // Fire Position X
+            data->mFirePosition.x = (float)atol(s);
+            break;
+        case 6: // Fire Position y
+            data->mFirePosition.y = (float)atol(s);
+            break;
+        case 7: // Rotation min
+            data->mRotationMin = (float)atof(s) * 0.0174532925f;
+            break;
+        case 8: // Rotation max
+            data->mRotationMax = (float)atof(s) * 0.0174532925f;
+            return true;
+        }
+
+        ++column;
+        s=strtok(NULL, ",\"");
+    }
+
+    return false;
+}
+
+
 
 bool EnemyLoader::parseWeaponNone(char* s)
 {
@@ -405,7 +425,6 @@ bool EnemyLoader::parseBehaviorKamikaze(char* s)
     {
         switch(column)
         {
-
         case 2: // Speed
             data->mSpeed = (float)atof(s);
             return true;
@@ -497,40 +516,56 @@ Enemy: %s\n\
     }
 }
 
-void EnemyLoader::dumpWeapon(EnemyWeapon* w)
+void EnemyLoader::dumpWeapon(EnemyWeaponTemplate* w)
 {
-    dprintf("  Weapon\n    Type:         %s", getWeaponName(w->mType));
-    switch(w->mType)
+    dprintf("  Weapon\n    Type:         %s", getWeaponName(w->mWeapon.mType));
+    
+    dprintf("\
+    Image File:   %s",
+    w->mImagePath);
+
+    switch(w->mWeapon.mType)
     {
     case Flamethrower:
-        dumpWeaponFlamethrower((FlamethrowerWeaponData*)w->mData);
+        dumpWeaponFlamethrower((FlamethrowerWeaponData*)w->mWeapon.mData);
         break;
     case Trebuchet:
-        dumpWeaponTrebuchet((TrebuchetWeaponData*)w->mData);
+        dumpWeaponTrebuchet((TrebuchetWeaponData*)w->mWeapon.mData);
         break;
     case MachineGun:
-        dumpWeaponMachineGun((MachineGunWeaponData*)w->mData);
+        dumpWeaponMachineGun((MachineGunWeaponData*)w->mWeapon.mData);
         break;
     }
 }
 
-void EnemyLoader::dumpWeaponFlamethrower(FlamethrowerWeaponData* d)
+void EnemyLoader::dumpWeaponTurret(TurretWeaponData* d)
 {
     dprintf("\
-    Position X:   %d\n\
-    Position Y:   %d\n\
+    Position X:   %.2f\n\
+    Position Y:   %.2f\n\
+    Fire Pos X:   %.2f\n\
+    Fire Pos Y:   %.2f\n\
+    Rotation Min: %.2f\n\
+    Rotation Max: %.2f",
+        d->mPosition.x,
+        d->mPosition.y,
+        d->mFirePosition.x,
+        d->mFirePosition.y,
+        d->mRotationMin * 57.2957795f,
+        d->mRotationMax * 57.2957795f
+    );
+}
+
+void EnemyLoader::dumpWeaponFlamethrower(FlamethrowerWeaponData* d)
+{
+    dumpWeaponTurret(&d->mTurret);
+    dprintf("\
     Accuracy:     %u\n\
     Damage:       %u\n\
-    Rotation Min: %u\n\
-    Rotation Max: %u\n\
     Max Distance: %u\n\
     Spread Angle: %u",
-        d->mPositionX,
-        d->mPositionY,
         d->mAccuracy,
         d->mDamage,
-        d->mRotationMin,
-        d->mRotationMax,
         d->mMaxDistance,
         d->mSpreadAngle
     );
@@ -538,21 +573,14 @@ void EnemyLoader::dumpWeaponFlamethrower(FlamethrowerWeaponData* d)
 
 void EnemyLoader::dumpWeaponTrebuchet(TrebuchetWeaponData* d)
 {
+    dumpWeaponTurret(&d->mTurret);
     dprintf("\
-    Position X:   %d\n\
-    Position Y:   %d\n\
     Accuracy:     %u\n\
     Damage:       %u\n\
-    Rotation Min: %u\n\
-    Rotation Max: %u\n\
     Max Distance: %u\n\
     Fire Rate:    %u",
-        d->mPositionX,
-        d->mPositionY,
         d->mAccuracy,
         d->mDamage,
-        d->mRotationMin,
-        d->mRotationMax,
         d->mMaxDistance,
         d->mFireRate
     );
@@ -560,21 +588,14 @@ void EnemyLoader::dumpWeaponTrebuchet(TrebuchetWeaponData* d)
 
 void EnemyLoader::dumpWeaponMachineGun(MachineGunWeaponData* d)
 {
+    dumpWeaponTurret(&d->mTurret);
     dprintf("\
-    Position X:   %d\n\
-    Position Y:   %d\n\
     Accuracy:     %u\n\
     Damage:       %u\n\
-    Rotation Min: %u\n\
-    Rotation Max: %u\n\
     Max Distance: %u\n\
     Fire Rate:    %u",
-        d->mPositionX,
-        d->mPositionY,
         d->mAccuracy,
         d->mDamage,
-        d->mRotationMin,
-        d->mRotationMax,
         d->mMaxDistance,
         d->mFireRate
     );

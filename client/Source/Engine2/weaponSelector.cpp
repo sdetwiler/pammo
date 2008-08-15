@@ -20,6 +20,7 @@ WeaponSelector::WeaponSelector()
     
     mHighlight = new ImageEntity(gImageLibrary->reference("data/interface/highlightWeaponIcon.png"));
     mHighlight->mSize = Vector2(kIconSize, kIconSize);
+    mHighlight->mRotation = 0;
     mHighlight->makeDirty();
 }
 

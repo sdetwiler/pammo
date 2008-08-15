@@ -11,7 +11,7 @@ public:
         memset(&mDown, 0, sizeof(mDown));
         keyTouch[0].mLocation.x = 60;
         keyTouch[0].mLocation.y = 260;
-        keyTouch[1].mLocation.x = 400;
+        keyTouch[1].mLocation.x = 420;
         keyTouch[1].mLocation.y = 260;
 
     }
@@ -20,7 +20,7 @@ public:
     {
     }
 
-    Touch keyTouch[1];
+    Touch keyTouch[2];
     SDL_keysym mKeySym;
     bool mDown[5];
 
@@ -97,7 +97,6 @@ public:
 
                 else if(mKeySym.sym == SDLK_LEFT)
                 {
-                    dprintf("L");
                     keyTouch[1].mPhase = Touch::PhaseBegin;
                     keyTouch[1].mLocation.x += -keyRange;
                     keyTouch[1].mLocation.y += 0;
@@ -105,7 +104,6 @@ public:
                 }
                 else if(mKeySym.sym == SDLK_RIGHT)
                 {
-                    dprintf("R");
                     keyTouch[1].mPhase = Touch::PhaseBegin;
                     keyTouch[1].mLocation.x += keyRange;
                     keyTouch[1].mLocation.y += 0;
@@ -114,7 +112,6 @@ public:
 
                 else if(mKeySym.sym == SDLK_UP)
                 {
-                    dprintf("U");
                     keyTouch[1].mPhase = Touch::PhaseBegin;
                     keyTouch[1].mLocation.x += 0;
                     keyTouch[1].mLocation.y += -keyRange;
@@ -122,7 +119,6 @@ public:
                 }
                 else if(mKeySym.sym == SDLK_DOWN)
                 {
-                    dprintf("D");
                     keyTouch[1].mPhase = Touch::PhaseBegin;
                     keyTouch[1].mLocation.x += 0;
                     keyTouch[1].mLocation.y += keyRange;
@@ -243,7 +239,6 @@ public:
                         touch[1].mLocation.x = event.button.x;
                         touch[1].mLocation.y = event.button.y;
                     }
-                    dprintf("#### %.2f %.2f", touch[0].mLocation.x, touch[0].mLocation.y);
                 }
                 else if(SDL_BUTTON_RIGHT)
                 {
@@ -296,9 +291,9 @@ public:
             }
             if(fireKey)
             {
-				cap(&keyTouch[1].mLocation.x, 300, 560);
+				cap(&keyTouch[1].mLocation.x, 380, 460);
 				cap(&keyTouch[1].mLocation.y, 220, 300);
-				dprintf("### %.2f %.2f", keyTouch[1].mLocation.x, keyTouch[1].mLocation.y);
+//				dprintf("### %.2f %.2f", keyTouch[1].mLocation.x, keyTouch[1].mLocation.y);
 				game->touches(1, keyTouch+1);
             }
 
@@ -337,8 +332,8 @@ public:
 
 int initTimer(Timer* timer)
 {
-    // 1 ms accuracy for timer.
-//    timeBeginPeriod(5);
+    // 1 ms accuracy for sleep.
+    timeBeginPeriod(1);
 
     _ftime(&timer->timeBuffer);
     timer->startTime = (uint64_t)timer->timeBuffer.time * 1000000 + (uint64_t)timer->timeBuffer.millitm * 1000;
@@ -383,7 +378,6 @@ int main(int argc, char *argv[])
     screen = SDL_SetVideoMode((int)getFrameSize().x, (int)getFrameSize().y, 0, SDL_OPENGL);
     SDL_WM_SetCaption("Irradiated", NULL);
 
-    int ret;
     Game* game = new Game;
 
     InputProcessor input;
@@ -393,18 +387,26 @@ int main(int argc, char *argv[])
     uint32_t frames = 0;
     while(true)
     {
+        uint64_t a = getTime();
+
         input.update(game);
-
         game->update();
-
         game->draw();
         SDL_GL_SwapBuffers();
         ++frames;
 
-        Sleep(33);
-
         now = getTime();
-        
+
+
+        float delta = ((now-a)/10000.0f);
+        //dprintf("delta: %.2f", delta);
+        if(delta>33.0f)
+        {
+            delta = 33.0f;
+        }
+
+        Sleep((DWORD)(33.0f-delta));
+
         if(now - start > 2000000)
         {
             float delta = now-start;

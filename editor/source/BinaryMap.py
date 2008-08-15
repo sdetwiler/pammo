@@ -3,12 +3,8 @@ from struct import *
 import POI
 
 # Visuals File Format
-# 0x50 0x49 0x56 0x01 // 'PIV' 1 (Paradise Irradiated Visuals 1)
-# uint16_t numMaterials
-#    char* materialName\0
-# uint16_t tilesX
-# uint16_t tilesY
-#    uint16_t tiles
+# 0x50 0x49 0x56 0x02 // 'PIV' 1 (Paradise Irradiated Visuals 2)
+# char* backdropName\0
 # uint16_t numProps
 #    char* propName\0
 # uint16_t numEntities
@@ -45,23 +41,13 @@ def save(map):
     saveOverlays(map)
 
 def saveVisuals(map):
-    properties = map.getProperties()
     output = ''
 
     # Visuals headers.
-    output += pack('4B', 0x50, 0x49, 0x56, 0x01)
+    output += pack('4B', 0x50, 0x49, 0x56, 0x02)
 
-    # Tiles and materials.
-    store = []
-    body = pack('!2H', properties.getSizeX(), properties.getSizeY())
-    for y in range(properties.getSizeY()):
-        for x in range(properties.getSizeX()):
-            n = accumulate(store, map.getMaterialTile(x, y))
-            body += pack('!H', n)
-    header = pack('!H', len(store))
-    for s in store:
-        header += s + pack('x')
-    output += header + body
+    # Backdrop
+    output += map.getBackdrop().getName() + pack('x')
 
     # Entities and props
     store = []
@@ -76,7 +62,7 @@ def saveVisuals(map):
     output += header + body
 
     # Save file.
-    path = osfix.path("../data/maps/%s.vmap" % properties.getName())
+    path = osfix.path("../data/maps/%s.vmap" % map.getName())
     f = open(path, "w+b")
     f.write(output)
 
@@ -100,9 +86,7 @@ def saveOverlays(map):
     poisOutput = ''
     for poi in map.getPOIs():
         type = poi.getType()
-        if type == POI.SpawnPointTypeName: property = 0
-        elif type == POI.PlayerStartTypeName: property = 1
-        else: continue
+        property = POI.TypeNames.index(type)
         count += 1
         pos = poi.getPos()
         poisOutput += pack('!H', property)
@@ -111,6 +95,6 @@ def saveOverlays(map):
     output += poisOutput
     
     # Save file.
-    path = osfix.path("../data/maps/%s.omap" % map.getProperties().getName())
+    path = osfix.path("../data/maps/%s.omap" % map.getName())
     f = open(path, "w+b")
     f.write(output)

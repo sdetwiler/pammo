@@ -39,7 +39,7 @@ Player::Player() : View()
     mTargetRing->setObserver(this);
     mTargetRing->setCenter(Vector2(420, 260));
 
-    mEntity = new ImageEntity(gImageLibrary->reference("data/vehicles/tank/00.png"));
+    mEntity = new ImageEntity(gImageLibrary->reference("data/vehicles/singlePlayerAnimationFrames_noTurret/frame1.png"));
     
     mBody = gWorld->getPhysics()->addBody();
     

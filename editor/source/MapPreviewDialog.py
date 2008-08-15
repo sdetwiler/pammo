@@ -9,7 +9,7 @@ class MapPreviewDialog(wx.Dialog):
         self.map = map
         self.display = MapDisplay.MapDisplay(self, -1, map)
 
-        self.display.SetMinSize((320, 480))
+        self.display.SetMinSize((480, 320))
 
         sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.Add(self.display, 0, wx.ALIGN_CENTER)

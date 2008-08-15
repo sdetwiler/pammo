@@ -73,36 +73,16 @@ void buildTileMap(World* world, char const* name)
     Map* map = world->getMap();
     
     // Verify the map header.
-    assert(cur[0] == 'P' && cur[1] == 'I' && cur[2] == 'V' && cur[3] == 1);
+    assert(cur[0] == 'P' && cur[1] == 'I' && cur[2] == 'V' && cur[3] == 2);
     cur += 4;
     remain -= 4;
     
-	// Read num materials.
-	uint16_t numMaterials = readUInt16(&cur, &remain);
-    map->setNumMaterials(numMaterials);
-	dprintf("Materials: %d", numMaterials);
-	
-    // Load each material.
-	for(uint32_t i=0; i < numMaterials; ++i)
-	{
-        char* materialName = readString(&cur, &remain);
-        string materialPath = string("data/materials/") + materialName + ".png";
-        map->setMaterial(i, materialPath.c_str());
-        dprintf("%d - %s", i, materialPath.c_str());
-	}
-    
-    // Load each tile.
-    uint16_t tilesX = readUInt16(&cur, &remain);
-    uint16_t tilesY = readUInt16(&cur, &remain);
-    map->setNumTiles(tilesX, tilesY);
-    for(uint16_t y=0; y < tilesY; ++y)
-    {
-        for(uint16_t x=0; x < tilesX; ++x)
-        {
-            uint16_t i = readUInt16(&cur, &remain);
-            map->setTile(x, y, i);
-        }
-    }
+    // Read backdrop.
+    char* backdropName = readString(&cur, &remain);
+    string backdropPath = string("data/backdrops/") + backdropName + ".png";
+    RawImage backdrop;
+    openRawImage(backdropPath.c_str(), &backdrop);
+    map->setBackdrop(&backdrop);
     
 	// Read num props.
 	uint16_t numProps = readUInt16(&cur, &remain);
@@ -123,7 +103,6 @@ void buildTileMap(World* world, char const* name)
     for(uint16_t tmp=0; tmp < numEntities; ++tmp)
     {
         uint16_t i = readUInt16(&cur, &remain);
-//        dprintf("Prop using %d", i);
         float posX = readFloat(&cur, &remain);
         float posY = readFloat(&cur, &remain);
         float scale = readFloat(&cur, &remain);
@@ -171,8 +150,8 @@ void buildCollisionMap(World* world, char const* mapName)
     // Get a pointer to the collision map.
     Physics* physics = gWorld->getPhysics();
     Map* map = gWorld->getMap();
-    physics->setMapSize(Vector2(map->getSizeX()*map->getSizeMaterial(), map->getSizeY()*map->getSizeMaterial()));
-    gWorld->getMinimap()->setMapSize(Vector2(map->getSizeX()*map->getSizeMaterial(), map->getSizeY()*map->getSizeMaterial()));
+    physics->setMapSize(map->getSize());
+    gWorld->getMinimap()->setMapSize(map->getSize());
     
     // Verify the map header.
     assert(cur[0] == 'P' && cur[1] == 'I' && cur[2] == 'O' && cur[3] == 1);
@@ -216,13 +195,13 @@ void buildCollisionMap(World* world, char const* mapName)
         
         if(properties == 0)
         {
+            world->getPlayer()->setCenter(Vector2(x, y));
+        }
+        else
+        {
             ++spawnPoints;
             dprintf("Spawn Point: %f, %f", x, y);
             world->getEnemyManager()->addSpawnPoint(Vector2(x, y));
-        }
-        else if(properties == 1)
-        {
-            world->getPlayer()->setCenter(Vector2(x, y));
         }
     }
     

@@ -10,6 +10,8 @@ namespace pammo
 class Camera;
 struct Image;
 class ImageEntity;
+
+const uint32_t kMapBucketCount = 15;
     
 class Map : public View
 {
@@ -17,34 +19,16 @@ public:
     Map();
     virtual ~Map();
     
-    void setNumMaterials(uint16_t numMaterials, uint16_t sizeMaterial = 128);
-    void setMaterial(uint16_t index, char const* materialPath);
-    
-    void setNumTiles(uint16_t sizeX, uint16_t sizeY);
-    void setTile(uint16_t x, uint16_t y, uint16_t index);
-    
+    void setBackdrop(RawImage* raw);
     void addProp(ImageEntity* entity);
     
     virtual uint32_t getDrawPriority() const;
     void draw();
     
-    uint16_t getSizeX() const;
-    uint16_t getSizeY() const;
-    uint16_t getSizeMaterial() const;
+    Vector2 getSize() const;
 
 protected:
     void addSubProp(Image* image, Vector2 ul, Vector2 br, uint16_t x, uint16_t y);
-    
-    void drawTiles(uint16_t startX, uint16_t startY, uint16_t endX, uint16_t endY);
-    void drawProps(uint16_t startX, uint16_t startY, uint16_t endX, uint16_t endY);
-    void drawEntities();
-
-    uint16_t mNumMaterials;
-    Image** mMaterials;
-    uint16_t mSizeMaterial;
-    uint16_t mSizeX;
-    uint16_t mSizeY;
-    uint16_t* mTiles;
     
     struct Prop
     {
@@ -53,7 +37,10 @@ protected:
         Vector2 mTexCoords[4];
         Prop* mNext;
     };
-    Prop** mProps;
+    
+    Vector2 mSize;
+    Vector2 mBucketSize;
+    Prop* mBuckets[kMapBucketCount][kMapBucketCount];
     
     typedef vector< ImageEntity* > ImageEntityVector;
     ImageEntityVector mEntities;

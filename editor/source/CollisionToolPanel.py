@@ -1,6 +1,5 @@
 import wx
 import NumValidator
-import MaterialLibrary
 import math
 
 class CollisionToolPanel(wx.Panel):
@@ -215,8 +214,7 @@ class CollisionToolPanel(wx.Panel):
     def onMapDraw(self, display, gc, rect):
         # Draw snap if I'm supposeda.
         if self.snapButton.GetValue() and self.snapAmount.GetValue():
-            (worldX, worldY) = display.getMap().getProperties().getSize()
-            (worldX, worldY) = (worldX*MaterialLibrary.getMaterialSize(), worldY*MaterialLibrary.getMaterialSize())
+            (worldX, worldY) = display.getMap().getSize()
             
             tileSize = float(self.snapAmount.GetValue())
             sizeX, sizeY = (int(worldX // tileSize), int(worldY // tileSize))

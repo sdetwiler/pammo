@@ -1,10 +1,10 @@
 import wx
 import osfix
 
-class Material:
+class Backdrop:
     def __init__(self, name):
         self.name = name
-        path = osfix.path('../data/materials/' + name + '.png')
+        path = osfix.path('../data/backdrops/' + name + '.png')
         self.bitmap = wx.Image(path, wx.BITMAP_TYPE_PNG).ConvertToBitmap()
         
     def getName(self):
@@ -14,7 +14,7 @@ class Material:
         return self.bitmap
 
 def pathToName(path):
-    base = osfix.path('../data/materials/')
+    base = osfix.path('../data/backdrops/')
     path = osfix.path(path)
     if path[-4:] != '.png': return None
     if path.find(base) == -1: return None

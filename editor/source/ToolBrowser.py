@@ -1,7 +1,6 @@
 import wx
 
 import PropToolPanel
-import MaterialToolPanel
 import CollisionToolPanel
 import POIToolPanel
 
@@ -21,10 +20,6 @@ class ToolBrowser(wx.Panel):
 
         self.propToolPanel = PropToolPanel.PropToolPanel(self.notebook, -1)
         self.notebook.AddPage(self.propToolPanel, "Props")
-
-        self.materialToolPanel = MaterialToolPanel.MaterialToolPanel(self.notebook, -1)
-        #self.notebook.AddPage(self.materialToolPanel, "Materials")
-        self.notebook.AddPage(self.materialToolPanel, "Mats")
 
         self.collisionToolPanel = CollisionToolPanel.CollisionToolPanel(self.notebook, -1)
         #self.notebook.AddPage(self.collisionToolPanel, "Collision")

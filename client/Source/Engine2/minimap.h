@@ -8,7 +8,8 @@
 namespace pammo
 {
 
-const uint32_t kMapBucketCount = 15;
+class ImageEntity;
+const uint32_t kMinimapBucketCount = 15;
 
 class Minimap : public View
 {
@@ -24,7 +25,8 @@ class Minimap : public View
     
     private:
         Vector2 mBucketSize;
-        bool mBuckets[kMapBucketCount][kMapBucketCount];
+        bool mBuckets[kMinimapBucketCount][kMinimapBucketCount];
+        ImageEntity* mLifebar;
 };
 
 }

@@ -1,11 +1,8 @@
 import sys
 import wx
 import MapEditorPanel
-import MaterialLibrary
 
-#----------------------------------------------------------------------------
-
-class PammoEditorFrame(wx.Frame):
+class IrradiatedEditorFrame(wx.Frame):
     def __init__(self, parent, title):
         wx.Frame.__init__(self, parent, -1, title,
                           pos=(150, 150), size=(800, 600))
@@ -48,14 +45,12 @@ class PammoEditorFrame(wx.Frame):
         #self.notebook.GetPage(self.notebook.GetSelection()).AddPendingEvent(event)
         self.mapEditor.AddPendingEvent(event)
 
-class PammoEditorApp(wx.App):
+class IrradiatedEditorApp(wx.App):
     def OnInit(self):
-        MaterialLibrary.reloadFromFilesystem()
-
-        frame = PammoEditorFrame(None, "Pammo Editor")
+        frame = IrradiatedEditorFrame(None, "Irradiated Map Editor")
         self.SetTopWindow(frame)
         frame.Show(True)
         return True    
 
-app = PammoEditorApp(redirect=False)
+app = IrradiatedEditorApp(redirect=False)
 app.MainLoop()

@@ -1,7 +1,6 @@
 import wx
 import math
 import NumValidator
-import MaterialLibrary
 import POI
 
 class POIToolPanel(wx.Panel):
@@ -142,8 +141,7 @@ class POIToolPanel(wx.Panel):
     def onMapDraw(self, display, gc, rect):
         # Draw snap if I'm supposeda.
         if self.snapButton.GetValue() and self.snapAmount.GetValue():
-            (worldX, worldY) = display.getMap().getProperties().getSize()
-            (worldX, worldY) = (worldX*MaterialLibrary.getMaterialSize(), worldY*MaterialLibrary.getMaterialSize())
+            (worldX, worldY) = display.getMap().getSize()
             
             tileSize = float(self.snapAmount.GetValue())
             sizeX, sizeY = (int(worldX // tileSize), int(worldY // tileSize))
@@ -165,16 +163,12 @@ class POIToolPanel(wx.Panel):
         # Draw all POIs.
         for poi in pois:
             type = poi.getType()
-            if type == POI.SpawnPointTypeName:
-                gc.SetBrush(wx.Brush(wx.Color(0, 100, 0, 92)))
-                gc.SetPen(wx.Pen(wx.Color(0, 128, 0, 168), self.strokeSize))
-            elif type == POI.PlayerStartTypeName:
+            if type == POI.PlayerStartTypeName:
                 gc.SetBrush(wx.Brush(wx.Color(0, 0, 100, 92)))
                 gc.SetPen(wx.Pen(wx.Color(0, 0, 128, 168), self.strokeSize))
-            elif type == POI.DisabledTypeName:
-                gc.SetBrush(wx.Brush(wx.Color(100, 100, 100, 92)))
-                gc.SetPen(wx.Pen(wx.Color(128, 128, 128, 168), self.strokeSize))
-            else: continue
+            else:
+                gc.SetBrush(wx.Brush(wx.Color(0, 100, 0, 92)))
+                gc.SetPen(wx.Pen(wx.Color(0, 128, 0, 168), self.strokeSize))
 
             pos = poi.getPos()
             gc.DrawEllipse(pos[0] - self.displaySize/2 + self.strokeSize - 1, pos[1] - self.displaySize/2 + self.strokeSize - 1,

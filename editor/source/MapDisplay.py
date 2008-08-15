@@ -1,7 +1,6 @@
 import wx
 
 import Map
-import MaterialLibrary
 
 class MapDisplay(wx.ScrolledWindow):
     def __init__(self, parent, id, map):
@@ -44,9 +43,8 @@ class MapDisplay(wx.ScrolledWindow):
         self.Refresh()
 
     def updateVirtualSize(self):
-        (sizeX, sizeY) = self.map.getProperties().getSize()
-        tileSize = MaterialLibrary.getMaterialSize()
-        self.SetVirtualSize((sizeX*tileSize*self.drawScale, sizeY*tileSize*self.drawScale))
+        (sizeX, sizeY) = self.map.getSizeX(), self.map.getSizeY()
+        self.SetVirtualSize((sizeX*self.drawScale, sizeY*self.drawScale))
 
     def onMouseEvent(self, event):
         for observer in self.mouseObservers: observer(self, event)
@@ -73,21 +71,9 @@ class MapDisplay(wx.ScrolledWindow):
 
         gc.Scale(self.drawScale, self.drawScale)
         #gc.Translate(-drawLeft, -drawTop)
-        
-        (sizeX, sizeY) = self.map.getProperties().getSize()
-        tileSize = MaterialLibrary.getMaterialSize()
-        startX = int(drawLeft // tileSize)
-        startY = int(drawTop // tileSize)
-        endX = int(drawRight // tileSize + 1)
-        endY = int(drawBottom // tileSize + 1)
-        if endX > sizeX: endX = sizeX
-        if endY > sizeY: endY = sizeY
 
-        for y in range(startY, endY):
-            for x in range(startX, endX):
-                materialTile = MaterialLibrary.getMaterial(self.map.getMaterialTile(x, y))
-                if not materialTile: continue
-                gc.DrawBitmap(materialTile.getBitmap(), x*tileSize, y*tileSize, tileSize, tileSize)
+        #gc.DrawBitmap(self.map.getBackdrop().getBitmap(), drawLeft, drawTop, drawRight, drawBottom)
+        gc.DrawBitmap(self.map.getBackdrop().getBitmap(), 0, 0, self.map.getSizeX(), self.map.getSizeY())
 
         for e in self.map.getEntities():
             p = e.getProp()

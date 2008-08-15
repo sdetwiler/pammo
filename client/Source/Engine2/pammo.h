@@ -24,6 +24,12 @@ using namespace std;
 namespace pammo
 {
 
+struct RawImage
+{
+    Vector2 mSize;
+    uint8_t* mPixels;
+};
+
 struct Image
 {
     Vector2 mSize;
@@ -44,6 +50,8 @@ struct Touch
 };
 
 void dprintf(char const* format, ...);
+void openRawImage(char const* filename, RawImage* image);
+Image* makeSubImage(RawImage* raw, Vector2 start, Vector2 size);
 Image* openImage(char const* filename);
 Vector2 getFrameSize();
 uint64_t getTime(void);

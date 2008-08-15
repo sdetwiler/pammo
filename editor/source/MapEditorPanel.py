@@ -5,11 +5,10 @@ import osfix
 
 import Map
 import MapEditor
-import MapProperties
-import MapPropertiesDialog
 import MapPreviewDialog
 import ToolBrowser
 import BinaryMap
+import Backdrop
 
 class MapEditorPanel(wx.Panel):
     def __init__(self, parent, id):
@@ -28,26 +27,25 @@ class MapEditorPanel(wx.Panel):
         self.openMenu = 102
         self.closeMenu = 103
         self.saveMenu = 104
-        self.deleteMenu = 105
-        self.propertiesMenu = 106
+        self.saveAsMenu = 105
+        self.backdropMenu = 106
         self.previewMenu = 107
         self.Bind(wx.EVT_MENU, self.onNewMenu, id=self.newMenu)
         self.Bind(wx.EVT_MENU, self.onOpenMenu, id=self.openMenu)
         self.Bind(wx.EVT_MENU, self.onCloseMenu, id=self.closeMenu)
         self.Bind(wx.EVT_MENU, self.onSaveMenu, id=self.saveMenu)
-        self.Bind(wx.EVT_MENU, self.onDeleteMenu, id=self.deleteMenu)
-        self.Bind(wx.EVT_MENU, self.onPropertiesMenu, id=self.propertiesMenu)
+        self.Bind(wx.EVT_MENU, self.onSaveAsMenu, id=self.saveAsMenu)
+        self.Bind(wx.EVT_MENU, self.onBackdropMenu, id=self.backdropMenu)
         self.Bind(wx.EVT_MENU, self.onPreviewMenu, id=self.previewMenu)
         fileMenu = wx.Menu()
         fileMenu.Append(self.newMenu, "&New Map...\tCtrl+N", "")
         fileMenu.Append(self.openMenu, "&Open Map...\tCtrl+O", "")
         fileMenu.Append(self.closeMenu, "&Close Map\tCtrl+W", "")
         fileMenu.AppendSeparator()
-        fileMenu.Append(self.saveMenu, "&Save Map\tCtrl+S", "")
+        fileMenu.Append(self.saveMenu, "&Save\tCtrl+S", "")
+        fileMenu.Append(self.saveAsMenu, "&Save As...\tCtrl+Shift+S", "")
         fileMenu.AppendSeparator()
-        fileMenu.Append(self.deleteMenu, "&Delete Map", "")
-        fileMenu.AppendSeparator()
-        fileMenu.Append(self.propertiesMenu, "&Map Properties...\tCtrl+P", "")
+        fileMenu.Append(self.backdropMenu, "&Change Backdrop...\tCtrl+B", "")
         fileMenu.Append(self.previewMenu, "&iPhone View...\tCtrl+I", "")
         fileMenu.AppendSeparator()
         fileMenu.Append(wx.ID_EXIT, "&Quit\tCtrl+Q", "")
@@ -69,40 +67,28 @@ class MapEditorPanel(wx.Panel):
         #self.newEditorForMap(map)
 
     def onNewMenu(self, event):
-        properties = MapProperties.MapProperties()
-        properties.setSize(10, 10)
-
+        backdrop = self.askChooseBackdrop()
+        if not backdrop: return
+        
         # Find a unique name in this notebook.
         nameExtra = 2
-        while not self.isUniqueMapName(properties.getName()):
-            properties.setName(properties.getName().split(" ")[0] + " " + str(nameExtra))
+        name = "Untitled"
+        while not self.isUniqueMapName(name):
+            name = name.split(" ")[0] + " " + str(nameExtra)
             nameExtra += 1
 
-        # Show dialog.
-        dialog = MapPropertiesDialog.MapPropertiesDialog(self, -1, "New Map", properties)
-        dialog.CenterOnScreen()
-        res = dialog.ShowModal()
-        dialog.Destroy()
-        
-        if res == wx.ID_OK:
-            properties = dialog.getProperties()
-
-            # Verify that this is a unique name.
-            if not self.isUniqueMapName(properties.getName()):
-                self.tellAlreadyEditing(properties.getName())
-                return
-
-            map = Map.Map()
-            map.setProperties(properties)
-            self.newEditorForMap(map)
+        map = Map.Map()
+        map.setName(name)
+        map.setBackdrop(backdrop)
+        self.newEditorForMap(map)
 
     def onOpenMenu(self, event):
         base = osfix.path("../data/maps")
         dialog = wx.FileDialog(self,
-            message="Choose a map (This folder only!)",
+            message="Open a map (This folder only!)",
             defaultDir=base, 
             defaultFile="",
-            wildcard="Pammo Map (*.map)|*.map",
+            wildcard="Irradiated Map (*.map)|*.map",
             style=wx.OPEN)
         res = dialog.ShowModal()
         if res != wx.ID_OK: return
@@ -140,32 +126,14 @@ class MapEditorPanel(wx.Panel):
         editor = self.mapNotebook.GetPage(self.mapNotebook.GetSelection())
         self.trySaveMap(editor.getMap())
 
-    def onDeleteMenu(self, event):
-        index = self.mapNotebook.GetSelection()
-        editor = self.mapNotebook.GetPage(index)
-        if not self.askDeleteMap(editor.getMap()): return
-        os.remove(osfix.path('../data/maps/%s.map' % editor.getMap().getProperties().getName()))
-        os.remove(osfix.path('../data/maps/%s.vmap' % editor.getMap().getProperties().getName()))
-        os.remove(osfix.path('../data/maps/%s.omap' % editor.getMap().getProperties().getName()))
-        self.mapNotebook.RemovePage(index)
-        self.onMapNotebookPageChanged(None)
-        editor.Destroy()
-
-    def onPropertiesMenu(self, event):
+    def onSaveAsMenu(self, event):
         editor = self.mapNotebook.GetPage(self.mapNotebook.GetSelection())
-        dialog = MapPropertiesDialog.MapPropertiesDialog(self, -1, "Map Properties", editor.getMap().getProperties())
-        dialog.CenterOnScreen()
-        res = dialog.ShowModal()
-        
-        if res == wx.ID_OK:
-            properties = dialog.getProperties()
+        self.trySaveMapAs(editor.getMap())
 
-            # If the name changed, verify it is unique.
-            if editor.getMap().getProperties().getName() != properties.getName() and not self.isUniqueMapName(properties.getName()):
-                self.tellAlreadyEditing(properties.getName())
-                return
-
-            editor.getMap().setProperties(properties)
+    def onBackdropMenu(self, event):
+        backdrop = self.askChooseBackdrop()
+        if not backdrop: return
+        self.mapNotebook.GetPage(self.mapNotebook.GetSelection()).getMap().setBackdrop(backdrop)
 
     def onPreviewMenu(self, event):
         editor = self.mapNotebook.GetPage(self.mapNotebook.GetSelection())
@@ -204,7 +172,7 @@ class MapEditorPanel(wx.Panel):
 
     def isUniqueMapName(self, name, skipName=None):
         for i in range(self.mapNotebook.GetPageCount()):
-            cur = self.mapNotebook.GetPage(i).getMap().getProperties().getName()
+            cur = self.mapNotebook.GetPage(i).getMap().getName()
             if cur == name: return False
         return True
 
@@ -213,8 +181,27 @@ class MapEditorPanel(wx.Panel):
         res = dialog.ShowModal()
         dialog.Destroy()
 
+    def askChooseBackdrop(self):
+        base = osfix.path("../data/backdrops")
+        dialog = wx.FileDialog(self,
+            message="Choose a backdrop (This folder only!)",
+            defaultDir=base, 
+            defaultFile="",
+            wildcard="PNG (*.png)|*.png",
+            style=wx.OPEN)
+        res = dialog.ShowModal()
+        if res != wx.ID_OK: return
+        path = dialog.GetPath()
+        dialog.Destroy()
+        
+        name = Backdrop.pathToName(path)
+        if not name:
+            self.showMessage('Invalid backdrop "%s"' % path)
+            return None
+        return Backdrop.Backdrop(name)
+
     def askSaveMap(self, map, caption):
-        dialog = wx.MessageDialog(self, 'Map "%s" has been modified.' % map.getProperties().getName(),
+        dialog = wx.MessageDialog(self, 'Map "%s" has been modified.' % map.getName(),
                                   caption, wx.YES_NO | wx.CANCEL | wx.ICON_QUESTION)
         res = dialog.ShowModal()
         dialog.Destroy()
@@ -225,60 +212,80 @@ class MapEditorPanel(wx.Panel):
         if res == wx.ID_YES:
             return self.trySaveMap(map)
 
-    def askDeleteMap(self, map):
-        dialog = wx.MessageDialog(self, '', ('Are you sure you want to delete map "%s"?' % map.getProperties().getName()),
-                                  wx.YES_NO | wx.ICON_QUESTION)
-        res = dialog.ShowModal()
-        dialog.Destroy()
-        if res == wx.ID_YES: return True
-        else: return False
-
     def tellAlreadyEditing(self, name):
-        self.showMessage('You are already editing a map named "%s".' % name)
+        self.showMessage('Map "%s" is already open.' % name)
 
     def trySaveMap(self, map):
-        path = osfix.path('../data/maps/%s.map' % map.getProperties().getName())
         if not map.getHasSavedOnce():
-            if os.path.exists(path):
-                dialog = wx.MessageDialog(self, '',
-                    'A map named "%s" already exists. Do you want to replace it?' % map.getProperties().getName(),
-                    wx.YES_NO | wx.ICON_QUESTION)
-                res = dialog.ShowModal()
-                dialog.Destroy()
-                if res == wx.ID_NO: return False
+            return self.trySaveMapAs(map)
+
+        self.saveMap(map)
+        return True
+
+    def trySaveMapAs(self, map):
+        base = osfix.path("../data/maps")
+        dialog = wx.FileDialog(self,
+            message="Save a map (This folder only!)",
+            defaultDir=base, 
+            defaultFile=map.getName() + '.map',
+            wildcard="Irradiated Map (*.map)|*.map",
+            style=wx.SAVE)
+        res = dialog.ShowModal()
+        if res != wx.ID_OK: return False
+        path = dialog.GetPath()
+        dialog.Destroy()
+
+        path = osfix.path(path)
+        if path[-4:] != '.map': path = path + '.map'
+        (newBase, name) = os.path.split(path)
+        if newBase != base:
+            self.showMessage('Invalid map location.')
+            return False
+        
+        if os.path.exists(path):
+            dialog = wx.MessageDialog(self, '',
+                'A map named "%s" already exists. Do you want to replace it?' % map.getName(),
+                wx.YES_NO | wx.ICON_QUESTION)
+            res = dialog.ShowModal()
+            dialog.Destroy()
+            if res == wx.ID_NO: return False
+
+        map.setName(path[len(base)+1:-4])
+        self.saveMap(map)
+
+    def saveMap(self, map):
+        path = osfix.path('../data/maps/%s.map' % map.getName())
         f = open(path, "w")
         map.saveToFile(f)
         try: BinaryMap.save(map)
         except: self.showMessage('Could not save map in binary format')
         #BinaryMap.save(map)
-        return True
 
     def updateMenuState(self):
         saveMenu = self.menuBar.FindItemById(self.saveMenu)
+        saveAsMenu = self.menuBar.FindItemById(self.saveAsMenu)
         closeMenu = self.menuBar.FindItemById(self.closeMenu)
-        deleteMenu = self.menuBar.FindItemById(self.deleteMenu)
-        propertiesMenu = self.menuBar.FindItemById(self.propertiesMenu)
+        backdropMenu = self.menuBar.FindItemById(self.backdropMenu)
         previewMenu = self.menuBar.FindItemById(self.previewMenu)
 
         if self.mapNotebook.GetPageCount() == 0:
             saveMenu.Enable(False)
+            saveAsMenu.Enable(False)
             closeMenu.Enable(False)
-            deleteMenu.Enable(False)
-            propertiesMenu.Enable(False)
+            backdropMenu.Enable(False)
             previewMenu.Enable(False)
             return
 
+        saveAsMenu.Enable(True)
         closeMenu.Enable(True)
-        propertiesMenu.Enable(True)
+        backdropMenu.Enable(True)
         previewMenu.Enable(True)
         
         editor = self.mapNotebook.GetPage(self.mapNotebook.GetSelection())
         if editor.getMap().getIsDirty():
             saveMenu.Enable(True)
-            deleteMenu.Enable(False)
         else:
             saveMenu.Enable(False)
-            deleteMenu.Enable(True)
 
     def onMapChanged(self, map):
         self.updateMapPageName(map)
@@ -288,9 +295,9 @@ class MapEditorPanel(wx.Panel):
         i = self.findMapNotebookIndex(map)
         assert(i != None)
         if map.getIsDirty():
-            self.mapNotebook.SetPageText(i, "* " + map.getProperties().getName())
+            self.mapNotebook.SetPageText(i, "* " + map.getName())
         else:
-            self.mapNotebook.SetPageText(i, map.getProperties().getName())
+            self.mapNotebook.SetPageText(i, map.getName())
 
     def findMapNotebookIndex(self, map):
         for i in range(self.mapNotebook.GetPageCount()):

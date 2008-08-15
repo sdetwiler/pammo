@@ -1,8 +1,6 @@
 import wx
 
 import MapDisplay
-import MaterialLibrary
-
 import Prop
 import Entity
 

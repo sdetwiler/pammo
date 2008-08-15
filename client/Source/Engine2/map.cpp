@@ -11,76 +11,30 @@ namespace pammo
 Map::Map()
     : View()
 {
-    mNumMaterials = 0;
-    mMaterials = 0;
-    mSizeMaterial = 0;
-    mSizeX = 0;
-    mSizeY = 0;
-    mTiles = NULL;
+    memset(mBuckets, 0, sizeof(mBuckets));
 }
     
 Map::~Map()
 {
-    if(mMaterials)
+}
+
+void Map::setBackdrop(RawImage* raw)
+{
+    mSize = raw->mSize;
+    mBucketSize.x = mSize.x / kMapBucketCount;
+    mBucketSize.y = mSize.y / kMapBucketCount;
+    
+    uint32_t texSize = 128;
+    for(uint32_t x=0; x < mSize.x/texSize; ++x)
     {
-        for(uint32_t i=0; i < mNumMaterials; ++i)
+        for(uint32_t y=0; y < mSize.y/texSize; ++y)
         {
-            gImageLibrary->unreference(mMaterials[i]);
+            Image* img = makeSubImage(raw, Vector2(x*texSize, y*texSize), Vector2(texSize, texSize));
+            ImageEntity* entity = new ImageEntity(img);
+            entity->mCenter = Vector2(x*texSize + texSize/2, y*texSize + texSize/2);
+            addProp(entity);
         }
-        delete[] mMaterials;
     }
-    
-    if(mTiles)
-        delete[] mTiles;
-}
-
-void Map::setNumMaterials(uint16_t numMaterials, uint16_t sizeMaterial)
-{
-    // Verify that this function has not yet been called.
-    assert(mNumMaterials == 0);
-    assert(mSizeMaterial == 0);
-    assert(mMaterials == NULL);
-
-    mNumMaterials = numMaterials;
-    mSizeMaterial = sizeMaterial;
-    
-    mMaterials = new Image*[numMaterials];
-    memset(mMaterials, 0, sizeof(void*)*numMaterials);
-}
-    
-void Map::setMaterial(uint16_t index, char const* materialPath)
-{
-    // Verify that this slot hasn't been set yet.
-    assert(mMaterials[index] == 0);
-    
-    Image* img = gImageLibrary->reference(materialPath);
-    assert(img != 0);
-    mMaterials[index] = img;
-}
-    
-void Map::setNumTiles(uint16_t sizeX, uint16_t sizeY)
-{
-    assert(mSizeX == 0);
-    assert(mSizeY == 0);
-    assert(mTiles == NULL);
-    
-    mSizeX = sizeX;
-    mSizeY = sizeY;
-    
-    mTiles = new uint16_t[sizeX*sizeY];
-    memset(mTiles, 0, sizeof(uint16_t)*sizeX*sizeY);
-    
-    mProps = new Prop*[sizeX*sizeY];
-    memset(mProps, 0, sizeof(Prop*)*sizeX*sizeY);
-}
-    
-void Map::setTile(uint16_t x, uint16_t y, uint16_t index)
-{
-    assert(x < mSizeX);
-    assert(y < mSizeY);
-    assert(index < mNumMaterials);
-    
-    mTiles[x + y*mSizeY] = index;
 }
 
 void Map::addProp(ImageEntity* entity)
@@ -94,18 +48,18 @@ void Map::addProp(ImageEntity* entity)
     br.x = roundf(br.x); br.y = roundf(br.y);
     
     // If the prop is completely off the map, return;
-    if(br.x <= 0 || br.y <= 0 || ul.x >= mSizeX*mSizeMaterial || ul.y >= mSizeY*mSizeMaterial)
+    if(br.x <= 0 || br.y <= 0 || ul.x >= mSize.x || ul.y >= mSize.y)
         return;
     
-    int16_t startX = floor(ul.x/mSizeMaterial);
-    int16_t startY = floor(ul.y/mSizeMaterial);
-    int16_t endX = floor(br.x/mSizeMaterial);
-    int16_t endY = floor(br.y/mSizeMaterial);
+    int16_t startX = floor(ul.x/mBucketSize.x);
+    int16_t startY = floor(ul.y/mBucketSize.y);
+    int16_t endX = floor(br.x/mBucketSize.x);
+    int16_t endY = floor(br.y/mBucketSize.y);
     
     if(startX < 0) startX = 0;
     if(startY < 0) startY = 0;
-    if(endX >= mSizeX) endX = mSizeX-1;
-    if(endY >= mSizeY) endY = mSizeY-1;
+    if(endX >= kMapBucketCount) endX = kMapBucketCount-1;
+    if(endY >= kMapBucketCount) endY = kMapBucketCount-1;
 
     for(uint16_t x=startX; x <= endX; ++x)
     {
@@ -134,7 +88,7 @@ void Map::addSubProp(Image* image, Vector2 ul, Vector2 br, uint16_t x, uint16_t 
     float clamp;
     
     // Clamp left.
-    clamp = x*mSizeMaterial;
+    clamp = x*mBucketSize.x;
     if(ul.x < clamp)
     {
         float over = (clamp - ul.x) / (br.x - ul.x);
@@ -145,7 +99,7 @@ void Map::addSubProp(Image* image, Vector2 ul, Vector2 br, uint16_t x, uint16_t 
     }
     
     // Clamp top.
-    clamp = y*mSizeMaterial;
+    clamp = y*mBucketSize.y;
     if(ul.y < clamp)
     {
         float over = (clamp - ul.y) / (br.y - ul.y);
@@ -156,7 +110,7 @@ void Map::addSubProp(Image* image, Vector2 ul, Vector2 br, uint16_t x, uint16_t 
     }
     
     // Clamp right.
-    clamp = (x+1)*mSizeMaterial;
+    clamp = (x+1)*mBucketSize.x;
     if(br.x > clamp)
     {
         float over = 1 - (br.x - clamp) / (br.x - ul.x);
@@ -167,7 +121,7 @@ void Map::addSubProp(Image* image, Vector2 ul, Vector2 br, uint16_t x, uint16_t 
     }
     
     // Clamp bottom.
-    clamp = (y+1)*mSizeMaterial;
+    clamp = (y+1)*mBucketSize.y;
     if(br.y > clamp)
     {
         float over = 1 - (br.y - clamp) / (br.y - ul.y);
@@ -179,7 +133,7 @@ void Map::addSubProp(Image* image, Vector2 ul, Vector2 br, uint16_t x, uint16_t 
     
     prop->mNext = 0;
     
-    Prop* cur = mProps[x + y*mSizeY];
+    Prop* cur = mBuckets[x][y];
     if(cur)
     {
        while(cur->mNext) cur = cur->mNext;
@@ -187,43 +141,13 @@ void Map::addSubProp(Image* image, Vector2 ul, Vector2 br, uint16_t x, uint16_t 
     }
     else
     {
-        mProps[x + y*mSizeY] = prop;
+        mBuckets[x][y] = prop;
     }
 }
 
 uint32_t Map::getDrawPriority() const
 {
     return kMapPriority;
-}
-    
-void Map::draw()
-{
-    Camera* camera = gWorld->getCamera();
-    camera->set();
-    
-    // Calculate lower-right and upper-left corners of camera view.
-    assert(camera->mRotation == 0);
-    Vector2 ul = (camera->mCenter - camera->mSize/2) / mSizeMaterial;
-    if(ul.x < 0) ul.x = 0;
-    if(ul.x > mSizeX) ul.x = mSizeX;
-    if(ul.y < 0) ul.y = 0;
-    if(ul.y > mSizeY) ul.y = mSizeY;
-    Vector2 lr = (camera->mCenter + camera->mSize/2) / mSizeMaterial;
-    if(lr.x < 0) lr.x = 0;
-    if(lr.x > mSizeX) lr.x = mSizeX;
-    if(lr.y < 0) lr.y = 0;
-    if(lr.y > mSizeY) lr.y = mSizeY;
-    
-    uint16_t startX = floorf(ul.x);
-    uint16_t startY = floorf(ul.y);
-    uint16_t endX = ceilf(lr.x);
-    uint16_t endY = ceilf(lr.y);
-    
-    drawTiles(startX, startY, endX, endY);
-    drawProps(startX, startY, endX, endY);
-    //drawEntities();
-    
-    camera->unset();
 }
 
 // Sets up an array of values for the texture coordinates.
@@ -233,49 +157,36 @@ const GLfloat spriteTexcoords[] = {
 0.0, 1.0,
 1.0, 1.0,
 };
-
-void Map::drawTiles(uint16_t startX, uint16_t startY, uint16_t endX, uint16_t endY)
-{
-    glDisable(GL_BLEND);
-    glLoadIdentity();
     
-    glTexCoordPointer(2, GL_FLOAT, 0, spriteTexcoords);
-    
-    for(uint16_t y=startY; y < endY; ++y)
-    {
-        Vector2 vertices[4];
-        vertices[0] = Vector2(startX*mSizeMaterial, y*mSizeMaterial);
-        vertices[1] = Vector2((startX+1)*mSizeMaterial, y*mSizeMaterial);
-        vertices[2] = Vector2(startX*mSizeMaterial, (y+1)*mSizeMaterial);
-        vertices[3] = Vector2((startX+1)*mSizeMaterial, (y+1)*mSizeMaterial);
-        
-        for(uint16_t x=startX; x < endX; ++x)
-        {
-            Image* img = mMaterials[mTiles[x + y*mSizeY]];
-            //drawImage(img, curXTrans, 1);
-            
-            glBindTexture(GL_TEXTURE_2D, img->mTexture);
-            glVertexPointer(2, GL_FLOAT, 0, (float*)vertices);
-            glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-            
-            // Translate one tile to the right.
-            vertices[0].x += mSizeMaterial;
-            vertices[1].x += mSizeMaterial;
-            vertices[2].x += mSizeMaterial;
-            vertices[3].x += mSizeMaterial;
-        }
-    }
-    glEnable(GL_BLEND);
-}
-
-void Map::drawProps(uint16_t startX, uint16_t startY, uint16_t endX, uint16_t endY)
+void Map::draw()
 {
+    Camera* camera = gWorld->getCamera();
+    camera->set();
+    
+    // Calculate lower-right and upper-left corners of camera view.
+    assert(camera->mRotation == 0);
+    Vector2 ul = (camera->mCenter - camera->mSize/2) / mBucketSize;
+    if(ul.x < 0) ul.x = 0;
+    if(ul.x > kMapBucketCount) ul.x = kMapBucketCount;
+    if(ul.y < 0) ul.y = 0;
+    if(ul.y > kMapBucketCount) ul.y = kMapBucketCount;
+    Vector2 lr = (camera->mCenter + camera->mSize/2) / mBucketSize;
+    if(lr.x < 0) lr.x = 0;
+    if(lr.x > kMapBucketCount) lr.x = kMapBucketCount;
+    if(lr.y < 0) lr.y = 0;
+    if(lr.y > kMapBucketCount) lr.y = kMapBucketCount;
+    
+    uint16_t startX = floorf(ul.x);
+    uint16_t startY = floorf(ul.y);
+    uint16_t endX = ceilf(lr.x);
+    uint16_t endY = ceilf(lr.y);
+    
     glLoadIdentity();
     for(uint16_t y=startY; y < endY; ++y)
     {
         for(uint16_t x=startX; x < endX; ++x)
         {
-            Prop* prop = mProps[x + y*mSizeY];
+            Prop* prop = mBuckets[x][y];
             while(prop)
             {
                 glTexCoordPointer(2, GL_FLOAT, 0, (float*)prop->mTexCoords);
@@ -286,29 +197,13 @@ void Map::drawProps(uint16_t startX, uint16_t startY, uint16_t endX, uint16_t en
             }
         }
     }
+    
+    camera->unset();
 }
 
-void Map::drawEntities()
+Vector2 Map::getSize() const
 {
-    for(ImageEntityVector::iterator i=mEntities.begin(); i != mEntities.end(); ++i)
-    {
-        (*i)->draw();
-    }
+    return mSize;
 }
-
-uint16_t Map::getSizeX() const
-{
-    return mSizeX;
-}
-uint16_t Map::getSizeY() const
-{
-    return mSizeY;
-}
-
-uint16_t Map::getSizeMaterial() const
-{
-    return mSizeMaterial;
-}
-
 
 }

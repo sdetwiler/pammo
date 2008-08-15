@@ -2,6 +2,8 @@
 
 #include "world.h"
 #include "player.h"
+#include "imageLibrary.h"
+#include "imageEntity.h"
 
 namespace pammo
 {
@@ -10,6 +12,10 @@ Minimap::Minimap()
     : View()
 {
     memset(mBuckets, 0, sizeof(mBuckets));
+    
+    mLifebar = new ImageEntity(gImageLibrary->reference("data/interface/shield-map-lifeBar.png"));
+    mLifebar->mCenter = Vector2(240, 36);
+    mLifebar->mSize = Vector2(256, 64);
 }
 
 Minimap::~Minimap()
@@ -18,7 +24,7 @@ Minimap::~Minimap()
 
 void Minimap::setMapSize(Vector2 mapBounds)
 {
-    mBucketSize = mapBounds / kMapBucketCount;
+    mBucketSize = mapBounds / kMinimapBucketCount;
 }
 
 void Minimap::markEnemy(Vector2 pos)
@@ -28,8 +34,8 @@ void Minimap::markEnemy(Vector2 pos)
     
     if(x < 0) x = 0;
     if(y < 0) y = 0;
-    if(x > kMapBucketCount) x = kMapBucketCount;
-    if(y > kMapBucketCount) y = kMapBucketCount;
+    if(x > kMinimapBucketCount) x = kMinimapBucketCount;
+    if(y > kMinimapBucketCount) y = kMinimapBucketCount;
     
     mBuckets[x][y] = true;
 }
@@ -41,9 +47,11 @@ uint32_t Minimap::getDrawPriority() const
 
 void Minimap::draw()
 {
-    Vector2 mapSize(52, 52);
-    Vector2 mapOffset(4, 4);
-    Vector2 mapSlice(mapSize / kMapBucketCount);
+    Vector2 mapSize(64, 64);
+    Vector2 mapOffset(208, 4);
+    Vector2 mapSlice(mapSize / kMinimapBucketCount);
+    
+    mLifebar->draw();
 
     // Draw minimap.
     glLoadIdentity();
@@ -51,6 +59,7 @@ void Minimap::draw()
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
     
     // Draw outline.
+    #if 0
     Vector2 outline[4];
     outline[0] = mapOffset;
     outline[1] = mapOffset + Vector2(mapSize.x, 0);
@@ -59,6 +68,7 @@ void Minimap::draw()
     glColor4f(.1, .15, .8, .3);
     glVertexPointer(2, GL_FLOAT, 0, (float*)outline);
     glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+    #endif
     
     uint32_t const num = 8;
     Vector2 points[num];
@@ -67,9 +77,9 @@ void Minimap::draw()
     glVertexPointer(2, GL_FLOAT, 0, (float*)points);
     
     glColor4f(.8, .15, .1, .4);
-    for(uint32_t x=0; x < kMapBucketCount; ++x)
+    for(uint32_t x=0; x < kMinimapBucketCount; ++x)
     {
-        for(uint32_t y=0; y < kMapBucketCount; ++y)
+        for(uint32_t y=0; y < kMinimapBucketCount; ++y)
         {
             if(!mBuckets[x][y]) continue;
             

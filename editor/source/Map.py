@@ -1,14 +1,15 @@
-import MapProperties
+import Backdrop
 import Entity
 import POI
 
 class Map:
     def __init__(self):
-        self.properties = MapProperties.MapProperties()
-        self.materialTiles = []
+        self.name = None
         self.isDirty = True
         self.hasSavedOnce = False
         self.observers = []
+
+        self.backdrop = None
         self.entities = []
         self.collisionGroups = []
         self.pois = []
@@ -23,7 +24,6 @@ class Map:
         for observer in self.observers: observer(self)
 
     def getIsDirty(self): return self.isDirty
-
     def getHasSavedOnce(self): return self.hasSavedOnce
 
     def onEntityChanged(self, entity):
@@ -35,8 +35,7 @@ class Map:
         self._notify()
 
     def saveToFile(self, f):
-        output = {"version":4, "sizeX": self.properties.getSizeX(), "sizeY": self.properties.getSizeY()}
-        output["materialTiles"] = self.materialTiles
+        output = {'version': 5, 'backdrop': self.backdrop.getName()}
         
         entities = []
         for s in self.entities:
@@ -57,78 +56,60 @@ class Map:
         self._notify()
 
     def loadFromFile(self, name, f):
-        self.properties.setName(name)
-        
+        self.name = name
         dic = eval(f.readline())
-        
-        if dic['version'] < 3: raise ''
-        self.resizeMaterialTiles(dic['sizeX'] - self.properties.getSizeX(), dic['sizeY'] - self.properties.getSizeY())
-        self.properties.setSize(dic['sizeX'], dic['sizeY'])
+        if dic['version'] < 5: raise ''
 
-        self.materialTiles = dic['materialTiles']
+        # Load backdrop.
+        self.backdrop = Backdrop.Backdrop(dic['backdrop'])
 
+        # Load entities.
         for s in dic['entities']:
             e = Entity.Entity()
             e.loadFromDic(s)
             e.addObserver(self.onEntityChanged)
             self.entities.append(e)
 
-        # Load collision groups if they exist.
-        if 'collisionGroups' in dic:
-            self.collisionGroups = dic['collisionGroups']
+        # Load collision groups.
+        self.collisionGroups = dic['collisionGroups']
 
-        # Load pois if they exist.
-        if 'pois' in dic:
-            for s in dic['pois']:
-                p = POI.POI()
-                p.loadFromDic(s)
-                p.addObserver(self.onPOIChanged)
-                self.pois.append(p)
+        # Load pois.
+        for s in dic['pois']:
+            p = POI.POI()
+            p.loadFromDic(s)
+            p.addObserver(self.onPOIChanged)
+            self.pois.append(p)
 
         self.isDirty = False
         self.hasSavedOnce = True
         self._notify()
 
-    def getProperties(self): return self.properties
+    def getName(self):
+        return self.name
 
-    def setProperties(self, properties):
-        deltaX = properties.getSizeX() - self.properties.getSizeX()
-        deltaY = properties.getSizeY() - self.properties.getSizeY()
-        
-        if self.properties.getName() != properties.getName():
-            self.hasSavedOnce = False
-
-        self.resizeMaterialTiles(deltaX, deltaY)
-        self.properties = properties
+    def setName(self, name):
+        self.name = name
         self.isDirty = True
         self._notify()
 
-    def setMaterialTile(self, x, y, material):
-        if self.materialTiles[y][x] == material: return
+    def getSize(self):
+        return (self.getSizeX(), self.getSizeY())
 
-        self.materialTiles[y][x] = material
+    def getSizeX(self):
+        if self.backdrop: return self.backdrop.getBitmap().GetWidth()
+        else: return 0
+
+    def getSizeY(self):
+        if self.backdrop: return self.backdrop.getBitmap().GetHeight()
+        else: return 0
+
+    def getBackdrop(self):
+        return self.backdrop
+
+    def setBackdrop(self, backdrop):
+        self.backdrop = backdrop
         self.isDirty = True
         self._notify()
-
-    def getMaterialTile(self, x, y):
-        return self.materialTiles[y][x]
-
-    def resizeMaterialTiles(self, deltaX, deltaY):
-        # Shrink in Y?
-        if deltaY < 0:
-            self.materialTiles = self.materialTiles[:deltaY]
-        # Grow in Y?
-        elif deltaY > 0:
-            for i in range(deltaY):
-                self.materialTiles.append(["" for tmp in range(self.properties.getSizeX())])
-        
-        # Shrink in X?
-        if deltaX < 0:
-            for i in range(self.properties.getSizeY() + deltaY):
-                self.materialTiles[i] = self.materialTiles[i][:deltaX]
-        elif deltaX > 0:
-            for i in range(self.properties.getSizeY() + deltaY):
-                self.materialTiles[i].extend(["" for tmp in range(deltaX)])
 
     def addEntity(self, entity):
         self.entities.append(entity)

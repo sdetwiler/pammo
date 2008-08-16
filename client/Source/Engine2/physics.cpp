@@ -273,12 +273,19 @@ void Physics::integrate()
 
 void Physics::collide()
 {
-    Body* b1 = mEdges;
-    while(b1)
+    Body* b1i = mEdges;
+    while(b1i)
     {
+        Body* b1 = b1i;
+        b1i = b1i->mEdgeNext;
         collideAgainstBodies(b1);
-        collideAgainstShapes(b1);
-        b1 = b1->mEdgeNext;
+    }
+    
+    b1i = mBodies;
+    while(b1i)
+    {
+        collideAgainstShapes(b1i);
+        b1i = b1i->mNext;
     }
 }
 

@@ -9,6 +9,10 @@
 
 #include "imageLibrary.h"
 
+#ifndef GL_CLAMP_TO_EDGE
+#define GL_CLAMP_TO_EDGE GL_CLAMP
+#endif
+
 namespace pammo
 {
 
@@ -39,8 +43,12 @@ Image* makeSubImage(RawImage* raw, Vector2 start, Vector2 size)
 	// Use OpenGL ES to generate a name for the texture.
 	glGenTextures(1, &image->mTexture);
 	glBindTexture(GL_TEXTURE_2D, image->mTexture);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    
 	glTexImage2D(GL_TEXTURE_2D, 0, mode, size.x, size.y, 0, mode, GL_UNSIGNED_BYTE, pixels);
     
     // Restore pixel store.
@@ -66,8 +74,10 @@ Image* openImage(char const* path)
 	// Use OpenGL ES to generate a name for the texture.
 	glGenTextures(1, &image->mTexture);
 	glBindTexture(GL_TEXTURE_2D, image->mTexture);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST); // scale linearly when image bigger than texture
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); // scale linearly when image smalled than texture
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexImage2D(GL_TEXTURE_2D, 0, mode, image->mSize.x, image->mSize.y, 0, mode, GL_UNSIGNED_BYTE, raw.mPixels);
 	
 	delete[] raw.mPixels;

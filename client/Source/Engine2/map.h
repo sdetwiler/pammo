@@ -10,8 +10,6 @@ namespace pammo
 class Camera;
 struct Image;
 class ImageEntity;
-
-const uint32_t kMapBucketCount = 15;
     
 class Map : public View
 {
@@ -38,9 +36,10 @@ protected:
         Prop* mNext;
     };
     
-    Vector2 mSize;
-    Vector2 mBucketSize;
-    Prop* mBuckets[kMapBucketCount][kMapBucketCount];
+    uint32_t mSizeX, mSizeY;
+    uint32_t mBucketSizeX, mBucketSizeY;
+    uint32_t mBucketCountX, mBucketCountY;
+    Prop** mBuckets;
     
     typedef vector< ImageEntity* > ImageEntityVector;
     ImageEntityVector mEntities;

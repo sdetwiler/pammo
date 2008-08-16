@@ -11,12 +11,21 @@
 #include "imageLibrary.h"
 #include "minimap.h"
 
-float clamp(float v,float min, float max)
+float clamp(float v, float min, float max)
 {
-    if(v<min)
-        return min;
-    if(v>max)
+    float cmpMin = min;
+    float cmpMax = max;
+
+    if(v>cmpMin && cmpMin>cmpMax)
+    {
+        cmpMax+=(M_PI*2.0f);
+    }
+    if(v>cmpMax)
         return max;
+
+    if(v<cmpMin)
+        return min;
+
     return v;
 }
 
@@ -88,34 +97,51 @@ void weaponFlamethrowerFireCollisionCb(Body* self, Body* other, Contact* contact
 
 void weaponFlamethrowerCb(Enemy* e, EnemyWeapon* w, EnemyManager* manager)
 {
-
     FlamethrowerWeaponData* data = (FlamethrowerWeaponData*)w->mData;
 
-    Vector2 targetDirection = gWorld->getPlayer()->getCenter() - e->mBody->mCenter;
-    float rot = atan2(targetDirection.y, targetDirection.x);
+    // Calculate center. Vehicle center, plus turret offset rotated for vehicle, plus turret rotated for direction.
+    Vector2 turretCenter = e->mBody->mCenter
+                     + data->mTurret.mPosition
+                     * Transform2::createRotation(e->mController.mRotation);
 
-    //dprintf("%.2f %.2f    %.2f", targetDirection.x, targetDirection.y, targetRot);
-    
-    rot = clamp(rot, data->mTurret.mRotationMin-M_PI, data->mTurret.mRotationMax+M_PI);
+    Vector2 targetDirection = gWorld->getPlayer()->getCenter() - turretCenter;
+    float rot;
+    rot = atan2(targetDirection.y, targetDirection.x);
 
+    // shift atan2 to 0-2PI
+    rot+=M_PI;
+
+    // Remove vehicle rotation.
+    rot-=e->mController.mRotation;
     if(rot > ((float)M_PI*2.0f))
         rot-= ((float)M_PI*2.0f);
-    //else if(rot < 0)
-    //    rot+= (float)M_PI*2.0f;
+    else if(rot < 0.0f)
+        rot+= ((float)M_PI*2.0f);
 
-    // Calculate center. Vehicle center plus arm rotated for direction.
-    Vector2 center = e->mBody->mCenter
-                     + data->mTurret.mPosition
+    // Clamp local rotation.
+    rot = clamp(rot, data->mTurret.mRotationMin, data->mTurret.mRotationMax);
+
+    // Add back vehicle rotation.
+    rot+= e->mController.mRotation;
+    if(rot > ((float)M_PI*2.0f))
+        rot-= ((float)M_PI*2.0f);
+    else if(rot < 0.0f)
+        rot+= ((float)M_PI*2.0f);
+
+    float particleRot = rot+M_PI;
+    Vector2 turretTip = turretCenter
                      + data->mTurret.mFirePosition
-                     * Transform2::createRotation(rot);
+                     * Transform2::createRotation(particleRot);
+
+    // Rotate 90 degrees to orient image.
+    w->mEntity.mRotation = rot - (float)M_PI/2.0f;
+    if(w->mEntity.mRotation < 0)
+        w->mEntity.mRotation+= ((float)M_PI*2.0f);
 
     // Update weapon image entity.
-    w->mEntity.mCenter = e->mBody->mCenter
-                     + data->mTurret.mPosition
-                     * Transform2::createRotation(rot+ (float)M_PI/2.0f);
-    w->mEntity.mRotation = rot + (float)M_PI/2;
+    w->mEntity.mCenter = turretCenter;
     w->mEntity.makeDirty();
-    return;
+
     // Get a particle.
     Particle* p = gWorld->getParticleSystem()->addParticleWithBody(2);
     if(!p)
@@ -127,8 +153,8 @@ void weaponFlamethrowerCb(Enemy* e, EnemyWeapon* w, EnemyManager* manager)
     
     // Setup image.
     p->mImage.setImage(gImageLibrary->reference("data/particles/flame01.png"));
-    p->mImage.mCenter = center;
-    p->mImage.mRotation = rot;
+    p->mImage.mCenter = turretTip;
+    p->mImage.mRotation = particleRot;
     p->mImage.makeDirty();
         
     // Properties about fire particles.
@@ -138,8 +164,8 @@ void weaponFlamethrowerCb(Enemy* e, EnemyWeapon* w, EnemyManager* manager)
     p->mBody->mDamping = 0;
     p->mBody->mRadius = 15;
     p->mBody->mMass = 1;
-    p->mBody->mCenter = center;
-    p->mBody->mVelocity = e->mBody->mVelocity + Vector2(300, 0) * Transform2::createRotation(rot);
+    p->mBody->mCenter = turretTip;
+    p->mBody->mVelocity = e->mBody->mVelocity + Vector2(300, 0) * Transform2::createRotation(particleRot);
 }
 
 

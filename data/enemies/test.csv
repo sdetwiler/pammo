@@ -5,9 +5,9 @@
 "Behavior","Type","Speed","Target Radius","","","","","","","","","",""
 ,"Surround",5,200,,,,,,,,,,
 "Weapon","Type","Image Path","Image Position X","Image Position Y","Fire Position X","Fire Position Y","Rotation Min","Rotation Max","Accuracy","Damage","Distance Max","Spread Angle",""
-,"Flamethrower","data/vehicles/test/turret/00.png",9,0,16,0,0,360,80,10,200,15,
-"Weapon","Type","","","","","","","","","","","",""
-,"None",,,,,,,,,,,,
+,"Flamethrower","data/vehicles/test/turret/00.png",9,0,20,0,0,360,80,10,200,15,
+"Weapon","Type","Image Path","Image Position X","Image Position Y","Fire Position X","Fire Position Y","Rotation Min","Rotation Max","Accuracy","Damage","Distance Max","Spread Angle",""
+,"Flamethrower","data/vehicles/test/turret/00.png",9,0,20,0,0,0,80,10,200,15,
 "Weapon","Type","","","","","","","","","","","",""
 ,"None",,,,,,,,,,,,
 "Weapon","Type","","","","","","","","","","","",""

@@ -1,4 +1,4 @@
-"Map Name",,,,
-"TheMap",,,,
-"Start Time (s)","Duration (s)","Enemy Count","Enemy Type","Spawn Point"
-0,10,1,"test",0
+"Map Name",,,,,
+"TheMap",,,,,
+"Start Time (s)","Duration (s)","Enemy Count","Enemy Type","Spawn Point","Map Name"
+0,20,5,"flametank",0,"TheMap"

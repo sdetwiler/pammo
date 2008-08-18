@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1121D1370E2F0BA2008C8598 /* builder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1121D1350E2F0BA2008C8598 /* builder.cpp */; };
+		1123883A0E59FCB20051B761 /* Entitlements.plist in Resources */ = {isa = PBXBuildFile; fileRef = 112388390E59FCB20051B761 /* Entitlements.plist */; };
 		112A588D0E303B5800A3C218 /* imageEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 112A588A0E303B5800A3C218 /* imageEntity.cpp */; };
 		112A588F0E303B7600A3C218 /* targetRingWidget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 112A588E0E303B7600A3C218 /* targetRingWidget.cpp */; };
 		112A59FB0E3056BC00A3C218 /* particleSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 112A59FA0E3056BC00A3C218 /* particleSystem.cpp */; };
@@ -47,6 +48,7 @@
 /* Begin PBXFileReference section */
 		1121D1350E2F0BA2008C8598 /* builder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = builder.cpp; sourceTree = "<group>"; };
 		1121D1360E2F0BA2008C8598 /* builder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = builder.h; sourceTree = "<group>"; };
+		112388390E59FCB20051B761 /* Entitlements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Entitlements.plist; path = Source/iPhone/Entitlements.plist; sourceTree = "<group>"; };
 		112A588A0E303B5800A3C218 /* imageEntity.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = imageEntity.cpp; sourceTree = "<group>"; };
 		112A588B0E303B5800A3C218 /* imageEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = imageEntity.h; sourceTree = "<group>"; };
 		112A588E0E303B7600A3C218 /* targetRingWidget.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = targetRingWidget.cpp; sourceTree = "<group>"; };
@@ -284,6 +286,7 @@
 			isa = PBXGroup;
 			children = (
 				8D1107310486CEB800E47090 /* Info.plist */,
+				112388390E59FCB20051B761 /* Entitlements.plist */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -343,6 +346,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				11EFFC750E563C3E003B2DB3 /* data in Resources */,
+				1123883A0E59FCB20051B761 /* Entitlements.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -392,11 +396,17 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: James Marr";
+				CODE_SIGN_ENTITLEMENTS = Source/iPhone/Entitlements.plist;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = Source/iPhone/header.pch;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = Source/Engine2/iPhone;
+				INFOPLIST_FILE = Source/iPhone/Info.plist;
 				PREBINDING = NO;
+				PRODUCT_NAME = Irradiated;
 				SDKROOT = iphoneos2.0;
 			};
 			name = Distribution;
@@ -404,42 +414,18 @@
 		11EBD6CC0E57798C000D5705 /* Distribution */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: James Marr";
-				COPY_PHASE_STRIP = YES;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = Source/iPhone/header.pch;
-				HEADER_SEARCH_PATHS = Source/Engine2/iPhone;
-				INFOPLIST_FILE = Source/iPhone/Info.plist;
-				PRODUCT_NAME = Irradiated;
 			};
 			name = Distribution;
 		};
 		1D6058940D05DD3E006BFB54 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = Source/iPhone/header.pch;
-				HEADER_SEARCH_PATHS = Source/Engine2/iPhone;
-				INFOPLIST_FILE = Source/iPhone/Info.plist;
-				PRODUCT_NAME = Irradiated;
 			};
 			name = Debug;
 		};
 		1D6058950D05DD3E006BFB54 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = YES;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = Source/iPhone/header.pch;
-				HEADER_SEARCH_PATHS = Source/Engine2/iPhone;
-				INFOPLIST_FILE = Source/iPhone/Info.plist;
-				PRODUCT_NAME = Irradiated;
 			};
 			name = Release;
 		};
@@ -449,10 +435,16 @@
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = Source/iPhone/header.pch;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = Source/Engine2/iPhone;
+				INFOPLIST_FILE = Source/iPhone/Info.plist;
 				ONLY_ACTIVE_ARCH = YES;
 				PREBINDING = NO;
+				PRODUCT_NAME = Irradiated;
 				SDKROOT = iphoneos2.0;
 			};
 			name = Debug;
@@ -463,9 +455,14 @@
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = Source/iPhone/header.pch;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = Source/Engine2/iPhone;
+				INFOPLIST_FILE = Source/iPhone/Info.plist;
 				PREBINDING = NO;
+				PRODUCT_NAME = Irradiated;
 				SDKROOT = iphoneos2.0;
 			};
 			name = Release;

@@ -4,13 +4,19 @@
 #include "enemyLoader.h"
 #include "world.h"
 #include "physics.h"
-#include "trebuchetEnemy.h"
-#include "flameTankEnemy.h"
-#include "sideShooterEnemy.h"
+
+#include "enemyWeaponFlamethrower.h"
+#include "enemyWeaponTrebuchet.h"
+
 #include "camera.h"
 #include "imageLibrary.h"
 #include "minimap.h"
 
+
+namespace pammo
+{
+
+    
 float clamp(float v, float min, float max)
 {
     float cmpMin = min;
@@ -18,7 +24,7 @@ float clamp(float v, float min, float max)
 
     if(v>cmpMin && cmpMin>cmpMax)
     {
-        cmpMax+=(M_PI*2.0f);
+        cmpMax+=(float)(M_PI*2.0f);
     }
     if(v>cmpMax)
         return max;
@@ -29,8 +35,74 @@ float clamp(float v, float min, float max)
     return v;
 }
 
-namespace pammo
+
+void enemyWeaponTurretGetParticleWithBody(Enemy* e, EnemyWeapon* w, EnemyManager* manager, TurretWeaponData* data, Particle** p)
 {
+    // Calculate center. Vehicle center, plus turret offset rotated for vehicle, plus turret rotated for direction.
+    Vector2 turretCenter = e->mBody->mCenter
+                     + data->mPosition
+                     * Transform2::createRotation(e->mController.mRotation);
+
+    Vector2 targetDirection = gWorld->getPlayer()->getCenter() - turretCenter;
+    
+    float rot;
+    rot = atan2(targetDirection.y, targetDirection.x);
+
+    // shift atan2 to 0-2PI
+    rot+=M_PI;
+
+    // Remove vehicle rotation.
+    rot-=e->mController.mRotation;
+    if(rot > ((float)M_PI*2.0f))
+        rot-= ((float)M_PI*2.0f);
+    else if(rot < 0.0f)
+        rot+= ((float)M_PI*2.0f);
+
+    // Clamp local rotation.
+    rot = clamp(rot, data->mRotationMin, data->mRotationMax);
+
+    // Add back vehicle rotation.
+    rot+= e->mController.mRotation;
+    if(rot > ((float)M_PI*2.0f))
+        rot-= ((float)M_PI*2.0f);
+    else if(rot < 0.0f)
+        rot+= ((float)M_PI*2.0f);
+
+    float particleRot = rot+M_PI;
+    Vector2 turretTip = turretCenter
+                     + data->mFirePosition
+                     * Transform2::createRotation(particleRot);
+
+    // Rotate 90 degrees to orient image.
+    w->mEntity.mRotation = rot - (float)M_PI/2.0f;
+    if(w->mEntity.mRotation < 0)
+        w->mEntity.mRotation+= ((float)M_PI*2.0f);
+
+    // Update weapon image entity.
+    w->mEntity.mCenter = turretCenter;
+    w->mEntity.makeDirty();
+
+    // Get a particle.
+    *p = gWorld->getParticleSystem()->addParticleWithBody(2);
+    if(!*p)
+        return;
+
+    // Set basic particle properties.
+    (*p)->mAlpha = 1.0f;
+    
+    // Setup base image properties.
+    (*p)->mImage.mCenter = turretTip;
+    (*p)->mImage.mRotation = particleRot;
+    (*p)->mImage.makeDirty();
+        
+    // Base properties about particle bodies.
+    (*p)->mBody->mProperties = kPlayerBulletCollisionProperties;
+    (*p)->mBody->mCollideProperties = kPlayerCollisionProperties | kBarrierCollisionProperties;
+    (*p)->mBody->mCenter = turretTip;
+}
+
+
+
 void behaviorSurroundCb(Enemy* e, EnemyManager* manager)
 {
     SurroundBehaviorData* data = (SurroundBehaviorData*)e->mBehavior.mData;
@@ -51,13 +123,40 @@ void behaviorSurroundCb(Enemy* e, EnemyManager* manager)
     else if(rot > (float)M_PI*2.0f)
         rot-= (float)M_PI*2.0f;
 
-    e->mController.mAcceleration = data->mSpeed * e->mBody->mMass; // SCD magic 7?
+    e->mController.mAcceleration = data->mSpeed * e->mBody->mMass;
     e->mController.mRotationTarget = rot;
     e->mEntity.makeDirty();
 }
 
 void behaviorApproachAndFireCb(Enemy* e, EnemyManager* manager)
-{}
+{
+    ApproachAndFireBehaviorData* data = (ApproachAndFireBehaviorData*)e->mBehavior.mData;
+
+    e->mController.update();
+
+    e->mEntity.mRotation = e->mController.mRotation + (float)M_PI/2;
+    e->mEntity.mCenter = e->mBody->mCenter;
+    e->mEntity.makeDirty();
+
+    Vector2 heading = gWorld->getPlayer()->getCenter() - e->mBody->mCenter;
+    float mag = magnitude(heading);
+    float speed = .5f;
+    float rot = atan2(heading.y, heading.x);
+    if(rot < 0) 
+        rot += (float)M_PI*2;
+    e->mController.mRotationTarget = rot;
+
+    if(mag < data->mDistance)
+    {
+        e->mController.mAcceleration = 0;
+    }
+    else
+    {
+        e->mController.mAcceleration = data->mSpeed * e->mBody->mMass;
+    }
+
+    e->mEntity.makeDirty();
+}
 
 void behaviorDriveByCb(Enemy* e, EnemyManager* manager)
 {}
@@ -68,111 +167,6 @@ void behaviorCampCb(Enemy* e, EnemyManager* manager)
 void behaviorKamikazeCb(Enemy* e, EnemyManager* manager)
 {}
 
-//// Flamethrower /////
-
-
-void weaponFlamethrowerFireParticleCb(Particle* p, ParticleSystem* system)
-{
-    p->mImage.mCenter = p->mBody->mCenter;
-    p->mImage.mRotation += 0.08f;
-    p->mImage.mSize *= 1.05f;
-    p->mImage.makeDirty();
-    
-    if(p->mAlpha <= 0)
-    {
-		system->removeParticle(p);
-		return;
-    }
-
-    p->mAlpha-=0.085f;
-}
-
-void weaponFlamethrowerFireCollisionCb(Body* self, Body* other, Contact* contact, ContactResponse* response)
-{
-	response->mBounceThem = true;
-	response->mBounceMe = true;
-
-	doDamage(self, other, Fire, 10.0f);
-}
-
-void weaponFlamethrowerCb(Enemy* e, EnemyWeapon* w, EnemyManager* manager)
-{
-    FlamethrowerWeaponData* data = (FlamethrowerWeaponData*)w->mData;
-
-    // Calculate center. Vehicle center, plus turret offset rotated for vehicle, plus turret rotated for direction.
-    Vector2 turretCenter = e->mBody->mCenter
-                     + data->mTurret.mPosition
-                     * Transform2::createRotation(e->mController.mRotation);
-
-    Vector2 targetDirection = gWorld->getPlayer()->getCenter() - turretCenter;
-    float rot;
-    rot = atan2(targetDirection.y, targetDirection.x);
-
-    // shift atan2 to 0-2PI
-    rot+=M_PI;
-
-    // Remove vehicle rotation.
-    rot-=e->mController.mRotation;
-    if(rot > ((float)M_PI*2.0f))
-        rot-= ((float)M_PI*2.0f);
-    else if(rot < 0.0f)
-        rot+= ((float)M_PI*2.0f);
-
-    // Clamp local rotation.
-    rot = clamp(rot, data->mTurret.mRotationMin, data->mTurret.mRotationMax);
-
-    // Add back vehicle rotation.
-    rot+= e->mController.mRotation;
-    if(rot > ((float)M_PI*2.0f))
-        rot-= ((float)M_PI*2.0f);
-    else if(rot < 0.0f)
-        rot+= ((float)M_PI*2.0f);
-
-    float particleRot = rot+M_PI;
-    Vector2 turretTip = turretCenter
-                     + data->mTurret.mFirePosition
-                     * Transform2::createRotation(particleRot);
-
-    // Rotate 90 degrees to orient image.
-    w->mEntity.mRotation = rot - (float)M_PI/2.0f;
-    if(w->mEntity.mRotation < 0)
-        w->mEntity.mRotation+= ((float)M_PI*2.0f);
-
-    // Update weapon image entity.
-    w->mEntity.mCenter = turretCenter;
-    w->mEntity.makeDirty();
-
-    // Get a particle.
-    Particle* p = gWorld->getParticleSystem()->addParticleWithBody(2);
-    if(!p)
-        return;
-
-    // Set basic particle properties.
-    p->mCallback = weaponFlamethrowerFireParticleCb;
-    p->mAlpha = 1.0f;
-    
-    // Setup image.
-    p->mImage.setImage(gImageLibrary->reference("data/particles/flame01.png"));
-    p->mImage.mCenter = turretTip;
-    p->mImage.mRotation = particleRot;
-    p->mImage.makeDirty();
-        
-    // Properties about fire particles.
-    p->mBody->mProperties = kPlayerBulletCollisionProperties;
-    p->mBody->mCollideProperties = kPlayerCollisionProperties | kBarrierCollisionProperties;
-    p->mBody->mBodyCallback = weaponFlamethrowerFireCollisionCb;
-    p->mBody->mDamping = 0;
-    p->mBody->mRadius = 15;
-    p->mBody->mMass = 1;
-    p->mBody->mCenter = turretTip;
-    p->mBody->mVelocity = e->mBody->mVelocity + Vector2(300, 0) * Transform2::createRotation(particleRot);
-}
-
-
-//// Trebuchet ////
-
-void weaponTrebuchetCb(Enemy* e, EnemyWeapon* w, EnemyManager* manager)
-{}
 void weaponMachineGunCb(Enemy* e, EnemyWeapon* w, EnemyManager* manager)
 {}
 
@@ -344,13 +338,13 @@ bool EnemyManager::initializeEnemy(Enemy* e, char const* name)
         switch(e->mWeapon[i].mType)
         {
         case Flamethrower:
-            e->mWeapon[i].mCb = weaponFlamethrowerCb;
+            e->mWeapon[i].mCb = enemyWeaponFlamethrowerCb;
             break;
         case MachineGun:
             e->mWeapon[i].mCb = weaponMachineGunCb;
             break;
         case Trebuchet:
-            e->mWeapon[i].mCb = weaponTrebuchetCb;
+            e->mWeapon[i].mCb = enemyWeaponTrebuchetCb;
             break;
         }
     }    
@@ -431,6 +425,7 @@ void EnemyManager::update()
         if(((*i).mStartTime + (*i).mDuration) < now)
         {
             // erase.
+            dprintf("Deleting expired spawn event");
             i = mSpawnEvents.erase(i);
         }
         else

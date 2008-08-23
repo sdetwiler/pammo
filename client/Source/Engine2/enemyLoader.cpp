@@ -161,22 +161,20 @@ bool EnemyLoader::parseWeaponTrebuchet(char* s)
     {
         switch(column)
         {
-        case 2:
-            if(!parseWeaponTurret(s, &mTemplate->mWeapons[mTemplate->mWeaponCount], &data->mTurret))
-                return false;
-            column = 8;
+        case 2: // Image path
+            strcpy(mTemplate->mWeapons[mTemplate->mWeaponCount].mImagePath, s);
             break;
-        case 9: // Accuracy
+        case 3:
             data->mAccuracy = atol(s);
             break;
-        case 10: // Damage
+        case 4: // Damage
             data->mDamage = atol(s);
             break;
-        case 11: // Max distance
+        case 5: // Max distance
             data->mMaxDistance = atol(s);
             break;
-        case 12: // Firing rate
-            data->mFireRate = atol(s);
+        case 6: // Firing rate
+            data->mFireRate = (float)atof(s);
             ++mTemplate->mWeaponCount;
             return true;
         }

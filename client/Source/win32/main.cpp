@@ -383,6 +383,7 @@ int main(int argc, char *argv[])
     InputProcessor input;
 
     uint64_t start = getTime();
+    uint64_t lastCheck = start;
     uint64_t now;
     uint32_t frames = 0;
     while(true)
@@ -407,14 +408,13 @@ int main(int argc, char *argv[])
 
         Sleep((DWORD)(33.0f-delta));
 
-        if(now - start > 2000000)
+        if(now - lastCheck > 2000000)
         {
-            float delta = now-start;
+            float delta = now-lastCheck;
             float seconds = (delta)/1000000.0f;
-            dprintf("%.2f FPS", (float)frames/seconds);
-
+            dprintf("Runtime: %.2f\tFPS: %.2f", ((float)now-(float)start)/1000000.0f, (float)frames/seconds);
             frames = 0;
-            start = now;
+            lastCheck = now;
         }
     }
 

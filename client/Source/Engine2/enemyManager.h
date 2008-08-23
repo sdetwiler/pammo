@@ -18,6 +18,7 @@ namespace pammo
 class EnemyManager;
 struct Enemy;
 struct EnemyWeapon;
+struct TurretWeaponData;
 
 typedef void (*EnemyBehaviorCb)(Enemy* e, EnemyManager* manager);
 typedef void (*EnemyWeaponCb)(Enemy* e, EnemyWeapon* w, EnemyManager* manager);
@@ -27,6 +28,8 @@ typedef void (*EnemyDrawCb)(Enemy* e, EnemyManager* manager);
 typedef void (*EnemyDamageCb)(Enemy* e, ParticleType type, float amount);
 typedef void (*EnemyDestroyCb)(Enemy* e, EnemyManager* manager);
 
+float clamp(float v, float min, float max);
+void enemyWeaponTurretGetParticleWithBody(Enemy* e, EnemyWeapon* w, EnemyManager* manager, TurretWeaponData* data, Particle** p);
 
 enum WeaponType
 {
@@ -60,7 +63,9 @@ struct TrebuchetWeaponData
     uint32_t mAccuracy;
     uint32_t mDamage;
     uint32_t mMaxDistance;
-    uint32_t mFireRate;
+    float mFireRate;
+
+    uint64_t mLastFire;
 };
 
 struct MachineGunWeaponData

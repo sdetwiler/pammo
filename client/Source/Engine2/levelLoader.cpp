@@ -133,11 +133,15 @@ bool LevelLoader::load(char const* filename, char* mapName)
         switch(stage)
         {
         case 0: // header.
+            ++stage;
             break;
         case 1:
             ret = parseMapName(s, mapName);
+            ++stage;
+
             break;
         case 2: // header.
+            ++stage;
             break;
         case 3:
             ret = parseSpawnEvent(s, &spawnEvent);
@@ -146,17 +150,12 @@ bool LevelLoader::load(char const* filename, char* mapName)
                 gWorld->getEnemyManager()->addSpawnEvent(spawnEvent);
                 dumpSpawnEvent(&spawnEvent);
             }
-            else
-                delete[] buf;
-                return true;
             break;
         default:
             ret = false;
             dprintf("Unknown data found");
         }
 
-        ++stage;
-        
         if(ret == false)
         {
             dprintf("Error parsing at stage %d", stage-1);
@@ -167,7 +166,7 @@ bool LevelLoader::load(char const* filename, char* mapName)
     }
 
     delete[] buf;
-    return false;
+    return true;
 }
 
 } // namespace pammo

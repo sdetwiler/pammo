@@ -39,7 +39,7 @@ Player::Player() : View()
     mTargetRing->setObserver(this);
     mTargetRing->setCenter(Vector2(420, 260));
 
-    mEntity = new ImageEntity(gImageLibrary->reference("data/vehicles/singlePlayerAnimationFrames_noTurret/frame1.png"));
+    mEntity = new ImageEntity(gImageLibrary->reference("data/vehicles/tank/00.png"));
     
     mBody = gWorld->getPhysics()->addBody();
     
@@ -141,7 +141,8 @@ void Player::update()
 		mWeapon->fire();
     }
 
-	if(magnitude(mBody->mVelocity) > 8.0f)
+    float vmag = magnitude(mBody->mVelocity); 
+	if(vmag > 45.0f)
 		createDust();
 }
 
@@ -203,7 +204,7 @@ void Player::onWeaponSelectorUpdated(WeaponSelector* widget, Weapon* weapon)
 
 void Player::damage(ParticleType type, float amount)
 {
-	dprintf("ouch");
+	//dprintf("ouch");
 }
 
 }

@@ -3,9 +3,9 @@
 "Properties","Image Type","Image Path","Mass","Radius","Health",,,,,,,,
 ,"Single","data/vehicles/flameTank/00.png",50,20,100,,,,,,,,
 "Behavior","Type","Speed","Target Radius","","","","","","","","","",""
-,"Surround",10,200,,,,,,,,,,
-"Weapon","Type","Image Path","Image Position X","Image Position Y","Fire Position X","Fire Position Y","Rotation Min","Rotation Max","Accuracy","Damage","Distance Max","Spread Angle",""
-,"Flamethrower","data/vehicles/flameTank/turret/00.png",10,0,20,0,0,360,80,5,200,15,
+,"Surround",5,200,,,,,,,,,,
+"Weapon","Type","Image Path","Image Position X","Image Position Y","Fire Position X","Fire Position Y","Rotation Min","Rotation Max","Accuracy","Damage","Distance Max","Spread Angle","Firing Rate"
+,"Flamethrower","data/vehicles/flameTank/turret/00.png",10,0,20,0,0,360,80,5,200,15,0.1
 "Weapon","Type","","","","","","","","","","","",""
 ,"None",,,,,,,,,,,,
 "Weapon","Type","","","","","","","","","","","",""

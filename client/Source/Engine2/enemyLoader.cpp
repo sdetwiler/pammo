@@ -143,6 +143,10 @@ bool EnemyLoader::parseWeaponFlamethrower(char* s)
         case 12: // Spread angle
             data->mSpreadAngle= atol(s);
             ++mTemplate->mWeaponCount;
+            break;
+        case 13: // Firing rate
+            data->mFireRate = (float)atof(s);
+            data->mFiring = false;
             return true;
         }
 

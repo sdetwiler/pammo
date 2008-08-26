@@ -11,7 +11,8 @@ namespace pammo
 enum ParticleType
 {
     Fire,
-    Lightning
+    Lightning,
+    Vehicle
 };
 
 struct Body;

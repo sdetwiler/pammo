@@ -37,7 +37,8 @@ enum WeaponType
     None,
     Flamethrower,
     MachineGun,
-    Trebuchet
+    Trebuchet,
+    SelfDestruct
 };
 
 struct TurretWeaponData
@@ -82,6 +83,11 @@ struct MachineGunWeaponData
     uint32_t mDamage;
     uint32_t mMaxDistance;
     uint32_t mFireRate;
+};
+
+struct SelfDestructWeaponData
+{
+    uint32_t mDamage;
 };
 
 struct EnemyWeapon

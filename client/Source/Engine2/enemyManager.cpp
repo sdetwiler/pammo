@@ -7,6 +7,7 @@
 
 #include "enemyWeaponFlamethrower.h"
 #include "enemyWeaponTrebuchet.h"
+#include "enemyWeaponSelfDestruct.h"
 
 #include "camera.h"
 #include "imageLibrary.h"
@@ -168,7 +169,22 @@ void behaviorCampCb(Enemy* e, EnemyManager* manager)
 {}
 
 void behaviorKamikazeCb(Enemy* e, EnemyManager* manager)
-{}
+{
+    ApproachAndFireBehaviorData* data = (ApproachAndFireBehaviorData*)e->mBehavior.mData;
+
+    e->mController.update();
+
+    e->mEntity.mRotation = e->mController.mRotation + (float)M_PI/2;
+    e->mEntity.mCenter = e->mBody->mCenter;
+    e->mEntity.makeDirty();
+
+    Vector2 heading = gWorld->getPlayer()->getCenter() - e->mBody->mCenter;
+    float rot = atan2(heading.y, heading.x);
+    if(rot < 0) 
+        rot += (float)M_PI*2;
+    e->mController.mRotationTarget = rot;
+    e->mController.mAcceleration = data->mSpeed * e->mBody->mMass;
+}
 
 void weaponMachineGunCb(Enemy* e, EnemyWeapon* w, EnemyManager* manager)
 {}
@@ -349,6 +365,10 @@ bool EnemyManager::initializeEnemy(Enemy* e, char const* name)
         case Trebuchet:
             e->mWeapon[i].mCb = enemyWeaponTrebuchetCb;
             break;
+        case SelfDestruct:
+            e->mWeapon[i].mCb = enemyWeaponSelfDestructCb;
+            break;
+
         }
     }    
     

@@ -1,6 +1,7 @@
 "Map Name",,,,,
 "TheMap",,,,,
 "Start Time (s)","Duration (s)","Enemy Count","Enemy Type","Spawn Point"
-0,30,10,"torpedo",2
-20,30,4,"flameTank",1
+0,30,50,"torpedo",2
+20,30,5,"flameTank",1
+25,40,20,"torpedo",1
 50,31,1,"bigBoy",0

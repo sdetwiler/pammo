@@ -88,6 +88,8 @@ bool EnemyLoader::parseWeapon(char* s)
                 mTemplate->mWeapons[mTemplate->mWeaponCount].mWeapon.mType = MachineGun;
             else if(!strcmp(s, "Trebuchet"))
                 mTemplate->mWeapons[mTemplate->mWeaponCount].mWeapon.mType = Trebuchet;
+            else if(!strcmp(s, "SelfDestruct"))
+                mTemplate->mWeapons[mTemplate->mWeaponCount].mWeapon.mType = SelfDestruct;
             else
             {
                 dprintf("Unknown weapon type: %s", s);
@@ -106,6 +108,8 @@ bool EnemyLoader::parseWeapon(char* s)
                 return parseWeaponMachineGun(s);
             case Trebuchet:
                 return parseWeaponTrebuchet(s);
+            case SelfDestruct:
+                return parseWeaponSelfDestruct(s);
             default:
                 dprintf("Can't parse specific weapon data.");
                 return false;
@@ -142,11 +146,11 @@ bool EnemyLoader::parseWeaponFlamethrower(char* s)
             break;
         case 12: // Spread angle
             data->mSpreadAngle= atol(s);
-            ++mTemplate->mWeaponCount;
             break;
         case 13: // Firing rate
             data->mFireRate = (float)atof(s);
             data->mFiring = false;
+            ++mTemplate->mWeaponCount;
             return true;
         }
 
@@ -264,7 +268,30 @@ bool EnemyLoader::parseWeaponTurret(char* s, EnemyWeaponTemplate* weaponTemplate
     return false;
 }
 
+bool EnemyLoader::parseWeaponSelfDestruct(char* s)
+{
+    EnemyWeaponTemplate* weaponTemplate = &mTemplate->mWeapons[mTemplate->mWeaponCount];
+    SelfDestructWeaponData* data = (SelfDestructWeaponData*)weaponTemplate->mWeapon.mData;
+    int column = 2;
+    while(s)
+    {
+        switch(column)
+        {
+        case 2: // Image path
+            strcpy(weaponTemplate->mImagePath, s);
+            break;
+        case 3: // Damage
+            data->mDamage = atol(s);
+            ++mTemplate->mWeaponCount;
+            return true;
+        }
 
+        ++column;
+        s=strtok(NULL, ",\"");
+    }
+
+    return false;
+}
 
 bool EnemyLoader::parseWeaponNone(char* s)
 {
@@ -445,6 +472,7 @@ char const* sNone         = "None";
 char const* sFlamethrower = "Flamethrower";
 char const* sTrebuchet    = "Trebuchet";
 char const* sMachineGun   = "Machine Gun";
+char const* sSelfDestruct = "Self Destruct";
 char const* EnemyLoader::getWeaponName(WeaponType type)
 {
     switch(type)
@@ -457,6 +485,8 @@ char const* EnemyLoader::getWeaponName(WeaponType type)
         return sTrebuchet;
     case MachineGun:
         return sMachineGun;
+    case SelfDestruct:
+        return sSelfDestruct;
     default:
         return sUnknown;
     }
@@ -537,6 +567,9 @@ void EnemyLoader::dumpWeapon(EnemyWeaponTemplate* w)
     case MachineGun:
         dumpWeaponMachineGun((MachineGunWeaponData*)w->mWeapon.mData);
         break;
+    case SelfDestruct:
+        dumpWeaponSelfDestruct((SelfDestructWeaponData*)w->mWeapon.mData);
+        break;
     }
 }
 
@@ -602,6 +635,15 @@ void EnemyLoader::dumpWeaponMachineGun(MachineGunWeaponData* d)
         d->mFireRate
     );
 }
+
+void EnemyLoader::dumpWeaponSelfDestruct(SelfDestructWeaponData* d)
+{
+    dprintf("\
+    Damage:       %u\n",
+        d->mDamage
+    );
+}
+
 bool EnemyLoader::load(char const* filename, EnemyTemplate* enemyTemplate)
 {
     mTemplate = enemyTemplate;

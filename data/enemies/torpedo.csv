@@ -1,0 +1,14 @@
+"Enemy","Name",,,,,,,,,,,,
+,"torpedo",,,,,,,,,,,,
+"Properties","Image Type","Image Path","Mass","Radius","Health",,,,,,,,
+,"Single","data/vehicles/torpedo/00.png",5,10,10,,,,,,,,
+"Behavior","Type","Speed","","","","","","","","","","",""
+,"Kamikaze",50,,,,,,,,,,,
+"Weapon","Type","Damage","","","","","","","","","","",""
+,"SelfDestruct","data/vehicles/torpedo/fakeWeapon/00.png",60,,,,,,,,,,
+"Weapon","Type","","","","","","","","","","","",""
+,"None",,,,,,,,,,,,
+"Weapon","Type","","","","","","","","","","","",""
+,"None",,,,,,,,,,,,
+"Weapon","Type","","","","","","","","","","","",""
+,"None",,,,,,,,,,,,

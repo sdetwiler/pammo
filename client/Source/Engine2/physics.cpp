@@ -382,15 +382,15 @@ void Physics::collideAgainstShapes(Body* b1)
     float radiusSquared = b1->mRadius * b1->mRadius;
     
     // Calculate bucket coverage.
-    uint16_t minX, minY;
-    uint16_t maxX, maxY;
+    int16_t minX, minY;
+    int16_t maxX, maxY;
     if(b1->mCenter.x - b1->mRadius < 0) minX = 0;
     else minX = floor((b1->mCenter.x - b1->mRadius) / mShapeBucketSize.x);
     if(b1->mCenter.y - b1->mRadius < 0) minY = 0;
     else minY = floor((b1->mCenter.y - b1->mRadius) / mShapeBucketSize.y);
-    if(b1->mCenter.x + b1->mRadius > mShapeBucketSize.x * kShapeBucketCount) minX = kShapeBucketCount;
+    if(b1->mCenter.x + b1->mRadius > mShapeBucketSize.x * kShapeBucketCount) maxX = kShapeBucketCount;
     else maxX = ceil((b1->mCenter.x + b1->mRadius) / mShapeBucketSize.x);
-    if(b1->mCenter.y + b1->mRadius > mShapeBucketSize.y * kShapeBucketCount) minY = kShapeBucketCount;
+    if(b1->mCenter.y + b1->mRadius > mShapeBucketSize.y * kShapeBucketCount) maxY = kShapeBucketCount;
     else maxY = ceil((b1->mCenter.y + b1->mRadius) / mShapeBucketSize.y);
     
     // Increment the shape query counter.

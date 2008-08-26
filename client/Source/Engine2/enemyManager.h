@@ -29,6 +29,7 @@ typedef void (*EnemyDamageCb)(Enemy* e, ParticleType type, float amount);
 typedef void (*EnemyDestroyCb)(Enemy* e, EnemyManager* manager);
 
 float clamp(float v, float min, float max);
+void enemyWeaponTurretUpdate(Enemy* e, EnemyWeapon* w, EnemyManager* manager, TurretWeaponData* data);
 void enemyWeaponTurretGetParticleWithBody(Enemy* e, EnemyWeapon* w, EnemyManager* manager, TurretWeaponData* data, Particle** p);
 
 enum WeaponType
@@ -45,7 +46,10 @@ struct TurretWeaponData
     Vector2        mFirePosition;
     float          mRotationMin;
     float          mRotationMax;
-    float          mRotationCur;
+
+    Vector2        mTurretCenter;
+    Vector2        mTurretTip;
+    float          mTurretRotation;
 };
 
 struct FlamethrowerWeaponData

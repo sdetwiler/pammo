@@ -220,6 +220,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\Source\Engine2\healthMeter.h"
+				>
+			</File>
+			<File
 				RelativePath="..\Source\Engine2\imageEntity.h"
 				>
 			</File>
@@ -357,6 +361,10 @@
 			</File>
 			<File
 				RelativePath="..\Source\Engine2\game.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\Source\Engine2\healthMeter.cpp"
 				>
 			</File>
 			<File

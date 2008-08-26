@@ -35,12 +35,22 @@ void enemyWeaponFlamethrowerFireCollisionCb(Body* self, Body* other, Contact* co
 void enemyWeaponFlamethrowerCb(Enemy* e, EnemyWeapon* w, EnemyManager* manager)
 {
     FlamethrowerWeaponData* data = (FlamethrowerWeaponData*)w->mData;
-    
+
+    enemyWeaponTurretUpdate(e, w, manager, &data->mTurret);
+
     uint64_t now = getTime();
     if(data->mFireStateChange < now)
     {
         data->mFiring = !data->mFiring;
-        data->mFireStateChange = now + ((float)(rand() % 1000) * (10000.0f * data->mFireRate));
+        float period = 2.0f * 1000000.0f * (((float)(rand()%100))/50.0f);
+        float duration;
+        duration = period * data->mFireRate;
+        if(!data->mFiring)
+        {
+            duration = period - duration;
+        }
+
+        data->mFireStateChange = now + duration;
     }
     if(data->mFiring == false)
     {

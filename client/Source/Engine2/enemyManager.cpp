@@ -36,14 +36,14 @@ float clamp(float v, float min, float max)
 }
 
 
-void enemyWeaponTurretGetParticleWithBody(Enemy* e, EnemyWeapon* w, EnemyManager* manager, TurretWeaponData* data, Particle** p)
+void enemyWeaponTurretUpdate(Enemy* e, EnemyWeapon* w, EnemyManager* manager, TurretWeaponData* data)
 {
     // Calculate center. Vehicle center, plus turret offset rotated for vehicle, plus turret rotated for direction.
-    Vector2 turretCenter = e->mBody->mCenter
+    data->mTurretCenter = e->mBody->mCenter
                      + data->mPosition
                      * Transform2::createRotation(e->mController.mRotation);
 
-    Vector2 targetDirection = gWorld->getPlayer()->getCenter() - turretCenter;
+    Vector2 targetDirection = gWorld->getPlayer()->getCenter() - data->mTurretCenter;
     
     float rot;
     rot = atan2(targetDirection.y, targetDirection.x);
@@ -68,10 +68,10 @@ void enemyWeaponTurretGetParticleWithBody(Enemy* e, EnemyWeapon* w, EnemyManager
     else if(rot < 0.0f)
         rot+= ((float)M_PI*2.0f);
 
-    float particleRot = rot+M_PI;
-    Vector2 turretTip = turretCenter
+    data->mTurretRotation = rot+M_PI;
+    data->mTurretTip = data->mTurretCenter
                      + data->mFirePosition
-                     * Transform2::createRotation(particleRot);
+                     * Transform2::createRotation(data->mTurretRotation);
 
     // Rotate 90 degrees to orient image.
     w->mEntity.mRotation = rot - (float)M_PI/2.0f;
@@ -79,9 +79,12 @@ void enemyWeaponTurretGetParticleWithBody(Enemy* e, EnemyWeapon* w, EnemyManager
         w->mEntity.mRotation+= ((float)M_PI*2.0f);
 
     // Update weapon image entity.
-    w->mEntity.mCenter = turretCenter;
+    w->mEntity.mCenter = data->mTurretCenter;
     w->mEntity.makeDirty();
+}
 
+void enemyWeaponTurretGetParticleWithBody(Enemy* e, EnemyWeapon* w, EnemyManager* manager, TurretWeaponData* data, Particle** p)
+{
     // Get a particle.
     *p = gWorld->getParticleSystem()->addParticleWithBody(2);
     if(!*p)
@@ -91,14 +94,14 @@ void enemyWeaponTurretGetParticleWithBody(Enemy* e, EnemyWeapon* w, EnemyManager
     (*p)->mAlpha = 1.0f;
     
     // Setup base image properties.
-    (*p)->mImage.mCenter = turretTip;
-    (*p)->mImage.mRotation = particleRot;
+    (*p)->mImage.mCenter = data->mTurretTip;
+    (*p)->mImage.mRotation = data->mTurretRotation;
     (*p)->mImage.makeDirty();
         
     // Base properties about particle bodies.
     (*p)->mBody->mProperties = kPlayerBulletCollisionProperties;
     (*p)->mBody->mCollideProperties = kPlayerCollisionProperties | kBarrierCollisionProperties;
-    (*p)->mBody->mCenter = turretTip;
+    (*p)->mBody->mCenter = data->mTurretTip;
 }
 
 

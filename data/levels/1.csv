@@ -1,5 +1,6 @@
 "Map Name",,,,,
 "TheMap",,,,,
 "Start Time (s)","Duration (s)","Enemy Count","Enemy Type","Spawn Point"
-0,30,10,"flameTank",0
-30,31,1,"bigBoy",0
+0,30,10,"flametank",2
+20,30,4,"flameTank",1
+50,31,1,"bigBoy",0

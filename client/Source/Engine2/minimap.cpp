@@ -14,7 +14,7 @@ Minimap::Minimap()
     memset(mBuckets, 0, sizeof(mBuckets));
     
     mLifebar = new ImageEntity(gImageLibrary->reference("data/interface/shield-map-lifeBar.png"));
-    mLifebar->mCenter = Vector2(240, 36);
+    mLifebar->mCenter = Vector2(240, 32);
     mLifebar->mSize = Vector2(256, 64);
     mLifebar->mRotation = 0;
 }

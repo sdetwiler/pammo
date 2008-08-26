@@ -160,7 +160,7 @@ void buildCollisionMap(World* world, char const* mapName)
     
     // Read num shapes.
     uint16_t numShapes = readUInt16(&cur, &remain);
-    dprintf("Collision Shapes: %d", numShapes);
+    //dprintf("Collision Shapes: %d", numShapes);
     
     // Read each shape.
     for(uint32_t s=0; s < numShapes; ++s)
@@ -168,13 +168,13 @@ void buildCollisionMap(World* world, char const* mapName)
 		uint16_t properties = readUInt16(&cur, &remain);
 		if(properties == 0) properties = kBarrierCollisionProperties;
         uint16_t numPoints = readUInt16(&cur, &remain);
-        dprintf(" Points: %d", numPoints);
+        //dprintf(" Points: %d", numPoints);
         Vector2* points = new Vector2[numPoints];
         for(uint32_t i=0; i < numPoints; ++i)
         {
             points[i].x = readFloat(&cur, &remain);
             points[i].y = readFloat(&cur, &remain);
-            dprintf("  (%f, %f)", points[i].x, points[i].y);
+            //dprintf("  (%f, %f)", points[i].x, points[i].y);
         }
         
         physics->addShape(properties, numPoints, points);
@@ -182,9 +182,7 @@ void buildCollisionMap(World* world, char const* mapName)
     
     // Read num POIs.
     uint16_t numPOIs = readUInt16(&cur, &remain);
-    dprintf("POIs: %d", numPOIs);
-    
-    uint32_t spawnPoints = 0;
+    //dprintf("POIs: %d", numPOIs);
     
     // Read each poi.
     for(uint32_t poi=0; poi<numPOIs; ++poi)
@@ -199,15 +197,10 @@ void buildCollisionMap(World* world, char const* mapName)
         }
         else
         {
-            ++spawnPoints;
-            dprintf("Spawn Point: %f, %f", x, y);
+            //dprintf("Spawn Point: %f, %f", x, y);
             world->getEnemyManager()->addSpawnPoint(Vector2(x, y));
         }
     }
-    
-    // Add a default POI if non are defined in the file.
-    if(spawnPoints == 0)
-        world->getEnemyManager()->addSpawnPoint(Vector2(0, 0));
     
     // Free the buffer;
     delete[] buffer;

@@ -7,6 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1106640E0E5B6BC60023ABB1 /* backdrops in Copy Data */ = {isa = PBXBuildFile; fileRef = 1106640B0E5B6BC60023ABB1 /* backdrops */; };
+		110664170E5B6D280023ABB1 /* maps in Copy Data */ = {isa = PBXBuildFile; fileRef = 110664120E5B6D280023ABB1 /* maps */; };
+		110664D40E5B70DF0023ABB1 /* particles in Copy Data */ = {isa = PBXBuildFile; fileRef = 110664C70E5B70DF0023ABB1 /* particles */; };
+		110664D90E5B70EA0023ABB1 /* enemies in Copy Data */ = {isa = PBXBuildFile; fileRef = 110664D50E5B70EA0023ABB1 /* enemies */; };
+		110665600E5B70FB0023ABB1 /* interface in Copy Data */ = {isa = PBXBuildFile; fileRef = 110664DA0E5B70FB0023ABB1 /* interface */; };
+		110665610E5B70FB0023ABB1 /* levels in Copy Data */ = {isa = PBXBuildFile; fileRef = 110664ED0E5B70FB0023ABB1 /* levels */; };
+		110665620E5B70FB0023ABB1 /* props in Copy Data */ = {isa = PBXBuildFile; fileRef = 110664F00E5B70FB0023ABB1 /* props */; };
+		110665630E5B70FB0023ABB1 /* vehicles in Copy Data */ = {isa = PBXBuildFile; fileRef = 110665160E5B70FB0023ABB1 /* vehicles */; };
+		110665810E635A240023ABB1 /* healthMeter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1106657F0E635A240023ABB1 /* healthMeter.cpp */; };
+		110665A90E6372AE0023ABB1 /* enemyWeaponFlamethrower.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 110665A50E6372AE0023ABB1 /* enemyWeaponFlamethrower.cpp */; };
+		110665AA0E6372AE0023ABB1 /* enemyWeaponTrebuchet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 110665A70E6372AE0023ABB1 /* enemyWeaponTrebuchet.cpp */; };
 		1121D1370E2F0BA2008C8598 /* builder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1121D1350E2F0BA2008C8598 /* builder.cpp */; };
 		1123883A0E59FCB20051B761 /* Entitlements.plist in Resources */ = {isa = PBXBuildFile; fileRef = 112388390E59FCB20051B761 /* Entitlements.plist */; };
 		112A588D0E303B5800A3C218 /* imageEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 112A588A0E303B5800A3C218 /* imageEntity.cpp */; };
@@ -36,7 +47,6 @@
 		11EEB7230DEBC73F009F3B13 /* drawImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11EEB70E0DEBC73F009F3B13 /* drawImage.cpp */; };
 		11EEB7250DEBC73F009F3B13 /* game.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11EEB7110DEBC73F009F3B13 /* game.cpp */; };
 		11EEB72A0DEBC73F009F3B13 /* world.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11EEB71F0DEBC73F009F3B13 /* world.cpp */; };
-		11EFFC750E563C3E003B2DB3 /* data in Resources */ = {isa = PBXBuildFile; fileRef = 11EFFBA20E563C3E003B2DB3 /* data */; };
 		11F1374A0DF34A7F00651323 /* imageLibrary.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11F137490DF34A7F00651323 /* imageLibrary.cpp */; };
 		1D3623EC0D0F72F000981E51 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D3623EB0D0F72F000981E51 /* CoreGraphics.framework */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
@@ -45,7 +55,42 @@
 		28FD15080DC6FC5B0079059D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD15070DC6FC5B0079059D /* QuartzCore.framework */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		110664BA0E5B700A0023ABB1 /* Copy Data */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 12;
+			dstPath = data;
+			dstSubfolderSpec = 1;
+			files = (
+				110664D40E5B70DF0023ABB1 /* particles in Copy Data */,
+				110664D90E5B70EA0023ABB1 /* enemies in Copy Data */,
+				110665600E5B70FB0023ABB1 /* interface in Copy Data */,
+				110665610E5B70FB0023ABB1 /* levels in Copy Data */,
+				110665620E5B70FB0023ABB1 /* props in Copy Data */,
+				110665630E5B70FB0023ABB1 /* vehicles in Copy Data */,
+				110664170E5B6D280023ABB1 /* maps in Copy Data */,
+				1106640E0E5B6BC60023ABB1 /* backdrops in Copy Data */,
+			);
+			name = "Copy Data";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		1106640B0E5B6BC60023ABB1 /* backdrops */ = {isa = PBXFileReference; lastKnownFileType = folder; name = backdrops; path = ../data/backdrops; sourceTree = SOURCE_ROOT; };
+		110664120E5B6D280023ABB1 /* maps */ = {isa = PBXFileReference; lastKnownFileType = folder; name = maps; path = ../data/maps; sourceTree = SOURCE_ROOT; };
+		110664C70E5B70DF0023ABB1 /* particles */ = {isa = PBXFileReference; lastKnownFileType = folder; name = particles; path = ../data/particles; sourceTree = SOURCE_ROOT; };
+		110664D50E5B70EA0023ABB1 /* enemies */ = {isa = PBXFileReference; lastKnownFileType = folder; name = enemies; path = ../data/enemies; sourceTree = SOURCE_ROOT; };
+		110664DA0E5B70FB0023ABB1 /* interface */ = {isa = PBXFileReference; lastKnownFileType = folder; name = interface; path = ../data/interface; sourceTree = SOURCE_ROOT; };
+		110664ED0E5B70FB0023ABB1 /* levels */ = {isa = PBXFileReference; lastKnownFileType = folder; name = levels; path = ../data/levels; sourceTree = SOURCE_ROOT; };
+		110664F00E5B70FB0023ABB1 /* props */ = {isa = PBXFileReference; lastKnownFileType = folder; name = props; path = ../data/props; sourceTree = SOURCE_ROOT; };
+		110665160E5B70FB0023ABB1 /* vehicles */ = {isa = PBXFileReference; lastKnownFileType = folder; name = vehicles; path = ../data/vehicles; sourceTree = SOURCE_ROOT; };
+		1106657F0E635A240023ABB1 /* healthMeter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = healthMeter.cpp; sourceTree = "<group>"; };
+		110665800E635A240023ABB1 /* healthMeter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = healthMeter.h; sourceTree = "<group>"; };
+		110665A50E6372AE0023ABB1 /* enemyWeaponFlamethrower.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = enemyWeaponFlamethrower.cpp; sourceTree = "<group>"; };
+		110665A60E6372AE0023ABB1 /* enemyWeaponFlamethrower.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = enemyWeaponFlamethrower.h; sourceTree = "<group>"; };
+		110665A70E6372AE0023ABB1 /* enemyWeaponTrebuchet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = enemyWeaponTrebuchet.cpp; sourceTree = "<group>"; };
+		110665A80E6372AE0023ABB1 /* enemyWeaponTrebuchet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = enemyWeaponTrebuchet.h; sourceTree = "<group>"; };
 		1121D1350E2F0BA2008C8598 /* builder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = builder.cpp; sourceTree = "<group>"; };
 		1121D1360E2F0BA2008C8598 /* builder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = builder.h; sourceTree = "<group>"; };
 		112388390E59FCB20051B761 /* Entitlements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Entitlements.plist; path = Source/iPhone/Entitlements.plist; sourceTree = "<group>"; };
@@ -107,7 +152,6 @@
 		11EEB71F0DEBC73F009F3B13 /* world.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = world.cpp; sourceTree = "<group>"; };
 		11EEB7200DEBC73F009F3B13 /* world.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = world.h; sourceTree = "<group>"; };
 		11EEB7380DEBC769009F3B13 /* platform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = platform.h; sourceTree = "<group>"; };
-		11EFFBA20E563C3E003B2DB3 /* data */ = {isa = PBXFileReference; lastKnownFileType = folder; name = data; path = ../data; sourceTree = SOURCE_ROOT; };
 		11F137480DF34A7F00651323 /* imageLibrary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = imageLibrary.h; sourceTree = "<group>"; };
 		11F137490DF34A7F00651323 /* imageLibrary.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = imageLibrary.cpp; sourceTree = "<group>"; };
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -150,6 +194,21 @@
 			path = Source/iPhone;
 			sourceTree = "<group>";
 		};
+		110664090E5B6BA00023ABB1 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				110664DA0E5B70FB0023ABB1 /* interface */,
+				110664ED0E5B70FB0023ABB1 /* levels */,
+				110664F00E5B70FB0023ABB1 /* props */,
+				110665160E5B70FB0023ABB1 /* vehicles */,
+				110664D50E5B70EA0023ABB1 /* enemies */,
+				110664C70E5B70DF0023ABB1 /* particles */,
+				1106640B0E5B6BC60023ABB1 /* backdrops */,
+				110664120E5B6D280023ABB1 /* maps */,
+			);
+			name = Data;
+			sourceTree = "<group>";
+		};
 		11C875090E40E641008B701A /* Weapon Subsystem */ = {
 			isa = PBXGroup;
 			children = (
@@ -168,6 +227,8 @@
 		11C8750A0E40E652008B701A /* Player Subsystem */ = {
 			isa = PBXGroup;
 			children = (
+				1106657F0E635A240023ABB1 /* healthMeter.cpp */,
+				110665800E635A240023ABB1 /* healthMeter.h */,
 				11C3F42D0E2F0F3A00EE8D28 /* player.cpp */,
 				11C3F42F0E2F0F7E00EE8D28 /* player.h */,
 				112A588E0E303B7600A3C218 /* targetRingWidget.cpp */,
@@ -184,6 +245,10 @@
 				11B6858A0E53B9CA00BB0872 /* enemyLoader.h */,
 				118F3E5B0E35A01E00ECCDFE /* enemyManager.cpp */,
 				118F3E5C0E35A01E00ECCDFE /* enemyManager.h */,
+				110665A50E6372AE0023ABB1 /* enemyWeaponFlamethrower.cpp */,
+				110665A60E6372AE0023ABB1 /* enemyWeaponFlamethrower.h */,
+				110665A70E6372AE0023ABB1 /* enemyWeaponTrebuchet.cpp */,
+				110665A80E6372AE0023ABB1 /* enemyWeaponTrebuchet.h */,
 				113E76BA0E4BA9A7005A8070 /* flameTankEnemy.cpp */,
 				113E76BB0E4BA9A7005A8070 /* flameTankEnemy.h */,
 				11B684ED0E5236D000BB0872 /* minimap.cpp */,
@@ -272,7 +337,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
-				11EFFBA20E563C3E003B2DB3 /* data */,
+				110664090E5B6BA00023ABB1 /* Data */,
 				11EEB7080DEBC73F009F3B13 /* Engine2 */,
 				080E96DDFE201D6D7F000001 /* iPhone */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
@@ -310,6 +375,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "Irradiated" */;
 			buildPhases = (
+				110664BA0E5B700A0023ABB1 /* Copy Data */,
 				1D60588D0D05DD3D006BFB54 /* Resources */,
 				1D60588E0D05DD3D006BFB54 /* Sources */,
 				1D60588F0D05DD3D006BFB54 /* Frameworks */,
@@ -345,7 +411,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				11EFFC750E563C3E003B2DB3 /* data in Resources */,
 				1123883A0E59FCB20051B761 /* Entitlements.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -386,6 +451,9 @@
 				113E76BC0E4BA9A7005A8070 /* flameTankEnemy.cpp in Sources */,
 				11B684EE0E5236D000BB0872 /* minimap.cpp in Sources */,
 				11B6858B0E53B9CA00BB0872 /* enemyLoader.cpp in Sources */,
+				110665810E635A240023ABB1 /* healthMeter.cpp in Sources */,
+				110665A90E6372AE0023ABB1 /* enemyWeaponFlamethrower.cpp in Sources */,
+				110665AA0E6372AE0023ABB1 /* enemyWeaponTrebuchet.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

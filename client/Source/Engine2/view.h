@@ -23,6 +23,7 @@ enum ViewPriorities
     kFireRingPriority = 201,
     kMinimapPriority = 230,
     kWeaponSelectorPriority = 250,
+    kHealthMeterPriority = 260,
 };
 
 class View

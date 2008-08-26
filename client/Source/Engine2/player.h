@@ -16,6 +16,7 @@ class ImageEntity;
 class VehicleController;
 class Weapon;
 class WeaponSelector;
+class HealthMeter;
 
 class Player : 
     public View,
@@ -53,6 +54,9 @@ class Player :
         ImageEntity* mEntity;
         
         Weapon* mWeapon;
+        
+        HealthMeter* mHealthMeter;
+        float mHealth;
         
         bool mFiring;
         Vector2 mFireDirection;

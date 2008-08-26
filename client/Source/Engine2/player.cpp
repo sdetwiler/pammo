@@ -12,6 +12,7 @@
 #include "lightningWeapon.h"
 #include "enemyManager.h"
 #include "weaponSelector.h"
+#include "healthMeter.h"
 
 namespace pammo
 {
@@ -45,6 +46,7 @@ Player::Player() : View()
     
     mBody->mProperties = kPlayerCollisionProperties;
     mBody->mCollideProperties = kBarrierCollisionProperties;
+    mBody->mUserArg = this;
     mBody->mDamping = 0.1;
     mBody->mRadius = 20;
     mBody->mMass = 100;
@@ -57,6 +59,10 @@ Player::Player() : View()
     mWeaponSelector->setObserver(this);
     mWeaponSelector->addWeapon(new LightningWeapon);
     mWeaponSelector->addWeapon(new FlamethrowerWeapon);
+    
+    mHealth = 1000.0;
+    mHealthMeter = new HealthMeter();
+    mHealthMeter->setPercent(mHealth);
     
     mFiring = false;
 }
@@ -84,7 +90,6 @@ bool Player::touch(uint32_t count, Touch* touches)
 {
     return false;
 }
-
 
 void Player::createDust()
 {
@@ -123,7 +128,6 @@ void Player::createDust()
 	p->mBody->mVelocity = player->mBody->mVelocity - Vector2(mag*.8, 0) * Transform2::createRotation(initialRotation+r);
 }
 
-
 void Player::update()
 {
     mController->update();
@@ -144,6 +148,12 @@ void Player::update()
     float vmag = magnitude(mBody->mVelocity); 
 	if(vmag > 45.0f)
 		createDust();
+        
+    if(mHealth < 1000)
+    {
+        mHealth += 2;
+        mHealthMeter->setPercent(mHealth);
+    }
 }
 
 void Player::draw()
@@ -204,7 +214,8 @@ void Player::onWeaponSelectorUpdated(WeaponSelector* widget, Weapon* weapon)
 
 void Player::damage(ParticleType type, float amount)
 {
-	//dprintf("ouch");
+	mHealth -= amount;
+    mHealthMeter->setPercent(mHealth);
 }
 
 }

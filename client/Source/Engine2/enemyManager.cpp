@@ -9,6 +9,9 @@
 #include "enemyWeaponTrebuchet.h"
 #include "enemyWeaponSelfDestruct.h"
 
+#include "enemyParticleJetFlame.h"
+#include "enemyParticleSmoke.h"
+
 #include "camera.h"
 #include "imageLibrary.h"
 #include "minimap.h"
@@ -50,7 +53,7 @@ void enemyWeaponTurretUpdate(Enemy* e, EnemyWeapon* w, EnemyManager* manager, Tu
     rot = atan2(targetDirection.y, targetDirection.x);
 
     // shift atan2 to 0-2PI
-    rot+=M_PI;
+    rot+=(float)M_PI;
 
     // Remove vehicle rotation.
     rot-=e->mController.mRotation;
@@ -69,7 +72,7 @@ void enemyWeaponTurretUpdate(Enemy* e, EnemyWeapon* w, EnemyManager* manager, Tu
     else if(rot < 0.0f)
         rot+= ((float)M_PI*2.0f);
 
-    data->mTurretRotation = rot+M_PI;
+    data->mTurretRotation = rot+(float)M_PI;
     data->mTurretTip = data->mTurretCenter
                      + data->mFirePosition
                      * Transform2::createRotation(data->mTurretRotation);
@@ -202,6 +205,12 @@ void enemyUpdateCb(Enemy* e, EnemyManager* manager)
         e->mWeapon[i].mCb(e, &e->mWeapon[i], manager);
     }
 
+    // Update particles.
+    for(uint32_t i=0; i<e->mParticleCount; ++i)
+    {
+        e->mParticle[i].mCb(e, &e->mParticle[i], manager);
+    }
+
     // Update image entity.
     e->mEntity.mRotation = e->mController.mRotation + (float)M_PI/2;
     e->mEntity.mCenter = e->mBody->mCenter;
@@ -230,14 +239,11 @@ void enemyDamageCb(Enemy* e, ParticleType type, float amount)
         {
             gImageLibrary->unreference(e->mWeapon[i].mEntity.getImage());
         }
-		
         
         gWorld->getEnemyManager()->removeEnemy(e);
 		e->mDamageCb = NULL;
 	}
 }
-
-
 
 
 
@@ -372,7 +378,22 @@ bool EnemyManager::initializeEnemy(Enemy* e, char const* name)
         }
     }    
     
-    
+    // Particles.
+    e->mParticleCount = enemyTemplate->mParticleCount;
+    for(uint32_t i=0; i<e->mParticleCount; ++i)
+    {
+        memcpy(&e->mParticle[i], &enemyTemplate->mParticles[i].mParticle, sizeof(EnemyParticle));
+        strcpy(e->mParticle[i].mImagePath, enemyTemplate->mParticles[i].mImagePath);
+        switch(e->mParticle[i].mType)
+        {
+        case Smoke:
+            e->mParticle[i].mCb = enemyParticleSmokeCb;
+            break;
+        case JetFlame:
+            e->mParticle[i].mCb = enemyParticleJetFlameCb;
+            break;
+        };
+    }
     return true;
 }
 

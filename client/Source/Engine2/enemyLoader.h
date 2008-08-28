@@ -49,8 +49,18 @@ private:
     bool parseBehaviorCamp(char* s);
     bool parseBehaviorKamikaze(char* s);
 
+    bool parseParticle(char* s);
+    bool parseParticleNone(char* s);
+    bool parseParticleSmoke(char* s);
+    bool parseParticleJetFlame(char* s);
+
+    void dumpParticle(EnemyParticleTemplate* p);
+    void dumpParticleSmoke(SmokeParticleData* d);
+    void dumpParticleJetFlame(JetFlameParticleData* d);
+
     char const* getWeaponName(WeaponType type);
     char const* getBehaviorName(BehaviorType type);
+    char const* getParticleName(EnemyParticleType type);
 
     EnemyTemplate* mTemplate;
 };

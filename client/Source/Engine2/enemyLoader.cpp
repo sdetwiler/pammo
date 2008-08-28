@@ -466,6 +466,126 @@ bool EnemyLoader::parseBehaviorKamikaze(char* s)
     return false;
 }
 
+
+bool EnemyLoader::parseParticle(char* s)
+{
+    int column = 1;
+    s=strtok(s, ",\"");
+    while(s)
+    {
+        switch(column)
+        {
+        case 1: // Particle Type
+            if(!strcmp(s, "None"))
+                mTemplate->mParticles[mTemplate->mParticleCount].mParticle.mType = ParticleNone;
+            else if(!strcmp(s, "Smoke"))
+                mTemplate->mParticles[mTemplate->mParticleCount].mParticle.mType = Smoke;
+            else if(!strcmp(s, "Jet Flame"))
+                mTemplate->mParticles[mTemplate->mParticleCount].mParticle.mType = JetFlame;
+            else
+            {
+                dprintf("Unknown particle type: %s", s);
+                return false;
+            }
+            break;
+
+        case 2: // Specific particle data
+            switch(mTemplate->mParticles[mTemplate->mParticleCount].mParticle.mType)
+            {
+            case ParticleNone:
+                return parseParticleNone(s);
+            case Smoke:
+                return parseParticleSmoke(s);
+            case JetFlame:
+                return parseParticleJetFlame(s);
+            default:
+                dprintf("Can't parse specific particle data.");
+                return false;
+            }
+        }
+
+        ++column;
+        s=strtok(NULL, ",\"");
+    }
+    return false;
+}
+
+bool EnemyLoader::parseParticleNone(char* s)
+{
+    return true;
+}
+
+bool EnemyLoader::parseParticleSmoke(char* s)
+{
+    EnemyParticleTemplate* particleTemplate = &mTemplate->mParticles[mTemplate->mParticleCount];
+    SmokeParticleData* data = (SmokeParticleData*)particleTemplate->mParticle.mData;
+    int column = 2;
+    while(s)
+    {
+        switch(column)
+        {
+        case 2: // Image path
+            strcpy(particleTemplate->mImagePath, s);
+            break;
+        case 3: // Position X
+            data->mPosition.x = (float)atof(s);
+            break;
+        case 4: // Position Y
+            data->mPosition.y = (float)atof(s);
+            break;
+        case 5: // Rotation
+            data->mRotation = (float)atof(s) * 0.0174532925f;
+            break;
+        case 6: // Speed
+            data->mSpeed = (float)atof(s);
+            ++mTemplate->mParticleCount;
+            return true;
+        }
+
+        ++column;
+        s=strtok(NULL, ",\"");
+    }
+
+    return false;
+}
+
+bool EnemyLoader::parseParticleJetFlame(char* s)
+{
+    EnemyParticleTemplate* particleTemplate = &mTemplate->mParticles[mTemplate->mParticleCount];
+    JetFlameParticleData* data = (JetFlameParticleData*)particleTemplate->mParticle.mData;
+    int column = 2;
+    while(s)
+    {
+        switch(column)
+        {
+        case 2: // Image path
+            strcpy(particleTemplate->mImagePath, s);
+            break;
+        case 3: // Position X
+            data->mPosition.x = (float)atof(s);
+            break;
+        case 4: // Position Y
+            data->mPosition.y = (float)atof(s);
+            break;
+        case 5: // Rotation
+            data->mRotation = (float)atof(s) * 0.0174532925f;
+            break;
+        case 6: // Speed
+            data->mSpeed = (float)atof(s);
+            ++mTemplate->mParticleCount;
+            return true;
+        }
+
+        ++column;
+        s=strtok(NULL, ",\"");
+    }
+
+    return false;
+}
+
+
+
+
 char const* sUnknown      = "Unknown";
 
 char const* sNone         = "None";
@@ -516,6 +636,23 @@ char const* EnemyLoader::getBehaviorName(BehaviorType type)
     }
 }
 
+char const* sSmoke = "Smoke";
+char const* sJetFlame = "JetFlame";
+char const* EnemyLoader::getParticleName(EnemyParticleType type)
+{
+    switch(type)
+    {
+    case None:
+        return sNone;
+    case Smoke:
+        return sSmoke;
+    case JetFlame:
+        return sJetFlame;
+    default:
+        return sUnknown;
+    }
+}
+
 void EnemyLoader::dump()
 {
     char buf[1024];
@@ -545,6 +682,11 @@ Enemy: %s\n\
     for(uint32_t i=0; i<mTemplate->mWeaponCount; ++i)
     {
         dumpWeapon(&mTemplate->mWeapons[i]);
+    }
+
+    for(uint32_t i=0; i<mTemplate->mParticleCount; ++i)
+    {
+        dumpParticle(&mTemplate->mParticles[i]);
     }
 }
 
@@ -639,10 +781,59 @@ void EnemyLoader::dumpWeaponMachineGun(MachineGunWeaponData* d)
 void EnemyLoader::dumpWeaponSelfDestruct(SelfDestructWeaponData* d)
 {
     dprintf("\
-    Damage:       %u\n",
+    Damage:       %u",
         d->mDamage
     );
 }
+
+void EnemyLoader::dumpParticle(EnemyParticleTemplate* p)
+{
+    dprintf("  Particle\n    Type:         %s", getParticleName(p->mParticle.mType));
+    
+    dprintf("\
+    Image File:   %s",
+    p->mImagePath);
+
+    switch(p->mParticle.mType)
+    {
+    case Smoke:
+        dumpParticleSmoke((SmokeParticleData*)p->mParticle.mData);
+        break;
+    case JetFlame:
+        dumpParticleJetFlame((JetFlameParticleData*)p->mParticle.mData);
+        break;
+    }
+}
+
+void EnemyLoader::dumpParticleSmoke(SmokeParticleData* d)
+{
+    dprintf("\
+    Position X:   %.2f\n\
+    Position Y:   %.2f\n\
+    Rotation:     %.2f\n\
+    Speed:        %.2f",
+        d->mPosition.x,
+        d->mPosition.y,
+        d->mRotation,
+        d->mSpeed
+    );
+}
+
+void EnemyLoader::dumpParticleJetFlame(JetFlameParticleData* d)
+{
+    dprintf("\
+    Position X:   %.2f\n\
+    Position Y:   %.2f\n\
+    Rotation:     %.2f\n\
+    Speed:        %.2f",
+        d->mPosition.x,
+        d->mPosition.y,
+        d->mRotation,
+        d->mSpeed
+    );
+}
+
+
 
 bool EnemyLoader::load(char const* filename, EnemyTemplate* enemyTemplate)
 {
@@ -682,14 +873,17 @@ bool EnemyLoader::load(char const* filename, EnemyTemplate* enemyTemplate)
     int stage = 0;
     /**
 
-    0 name
-    1 properties
-    2 behavior
-    3 weapon (optional)
-    4 weapon (optional)
-    5 weapon (optional)
-    6 weapon (optional)
-
+    0  name
+    1  properties
+    2  behavior
+    3  weapon 
+    4  weapon 
+    5  weapon 
+    6  weapon 
+    7  particle
+    8  particle
+    9  particle
+    10 particle
     **/
     bool ret = true;
     bool header = true;
@@ -721,6 +915,12 @@ bool EnemyLoader::load(char const* filename, EnemyTemplate* enemyTemplate)
             case 5:
             case 6:
                 ret = parseWeapon(s);
+                break;
+            case 7:
+            case 8:
+            case 9:
+            case 10:
+                ret = parseParticle(s);
                 break;
             default:
                 ret = false;

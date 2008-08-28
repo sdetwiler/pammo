@@ -10,6 +10,8 @@
 #include <vector>
 
 #define ENEMY_MAX_WEAPON_COUNT 4
+#define ENEMY_MAX_PARTICLE_COUNT 4
+
 //#define ENEMY_DATA_SIZE 128
 //#define ENEMY_COUNT
 namespace pammo
@@ -18,10 +20,12 @@ namespace pammo
 class EnemyManager;
 struct Enemy;
 struct EnemyWeapon;
+struct EnemyParticle;
 struct TurretWeaponData;
 
 typedef void (*EnemyBehaviorCb)(Enemy* e, EnemyManager* manager);
 typedef void (*EnemyWeaponCb)(Enemy* e, EnemyWeapon* w, EnemyManager* manager);
+typedef void (*EnemyParticleCb)(Enemy* e, EnemyParticle* w, EnemyManager* manager);
 
 typedef void (*EnemyUpdateCb)(Enemy* e, EnemyManager* manager);
 typedef void (*EnemyDrawCb)(Enemy* e, EnemyManager* manager);
@@ -32,6 +36,10 @@ float clamp(float v, float min, float max);
 void enemyWeaponTurretUpdate(Enemy* e, EnemyWeapon* w, EnemyManager* manager, TurretWeaponData* data);
 void enemyWeaponTurretGetParticleWithBody(Enemy* e, EnemyWeapon* w, EnemyManager* manager, TurretWeaponData* data, Particle** p);
 
+//////////////////////////////////////////////////////////
+//// Weapons.
+//////////////////////////////////////////////////////////
+
 enum WeaponType
 {
     None,
@@ -39,6 +47,21 @@ enum WeaponType
     MachineGun,
     Trebuchet,
     SelfDestruct
+};
+
+struct EnemyWeapon
+{
+	WeaponType     mType;
+    ImageEntity    mEntity;
+    EnemyWeaponCb  mCb;
+
+    uint8_t        mData[256];
+};
+
+struct EnemyWeaponTemplate
+{
+    EnemyWeapon  mWeapon;
+    char         mImagePath[256];
 };
 
 struct TurretWeaponData
@@ -90,20 +113,9 @@ struct SelfDestructWeaponData
     uint32_t mDamage;
 };
 
-struct EnemyWeapon
-{
-	WeaponType     mType;
-    ImageEntity    mEntity;
-    EnemyWeaponCb  mCb;
-
-    uint8_t        mData[256];
-};
-
-struct EnemyWeaponTemplate
-{
-    EnemyWeapon  mWeapon;
-    char         mImagePath[256];
-};
+//////////////////////////////////////////////////////////
+//// Behaviors.
+//////////////////////////////////////////////////////////
 
 enum BehaviorType
 {
@@ -112,6 +124,13 @@ enum BehaviorType
 	DriveBy,
 	Camp,
 	Kamikaze
+};
+
+struct EnemyBehavior
+{
+	BehaviorType    mType;
+    EnemyBehaviorCb mCb;
+	uint8_t         mData[256];
 };
 
 struct ApproachAndFireBehaviorData
@@ -142,12 +161,49 @@ struct KamikazeBehaviorData
     float mSpeed;
 };
 
-struct EnemyBehavior
+
+//////////////////////////////////////////////////////////
+//// Particles.
+//////////////////////////////////////////////////////////
+
+enum EnemyParticleType
 {
-	BehaviorType    mType;
-    EnemyBehaviorCb mCb;
-	uint8_t         mData[256];
+    ParticleNone,
+    Smoke,
+    JetFlame
 };
+
+struct EnemyParticle
+{
+    EnemyParticleType mType;
+    char              mImagePath[256];
+    EnemyParticleCb   mCb;
+    uint8_t           mData[256];
+};
+
+struct EnemyParticleTemplate
+{
+    EnemyParticle     mParticle; 
+    char              mImagePath[256];
+};
+
+struct SmokeParticleData
+{
+    Vector2 mPosition;
+    float   mRotation;
+    float   mSpeed;
+};
+
+struct JetFlameParticleData
+{
+    Vector2 mPosition;
+    float   mRotation;
+    float   mSpeed;
+};
+
+//////////////////////////////////////////////////////////
+//// Images.
+//////////////////////////////////////////////////////////
 
 enum EnemyImageType
 {
@@ -155,17 +211,24 @@ enum EnemyImageType
     Flipbook
 };
 
+
+//////////////////////////////////////////////////////////
+//// Enemy.
+//////////////////////////////////////////////////////////
+
 struct EnemyTemplate
 {
-    char                mName[64];
-    EnemyImageType      mImageType;
-    char                mImagePath[256];
-    float               mHealth;
-    float               mMass;
-    float               mRadius;
-    EnemyBehavior       mBehavior;
-    EnemyWeaponTemplate mWeapons[ENEMY_MAX_WEAPON_COUNT];
-    uint32_t            mWeaponCount;
+    char                  mName[64];
+    EnemyImageType        mImageType;
+    char                  mImagePath[256];
+    float                 mHealth;
+    float                 mMass;
+    float                 mRadius;
+    EnemyBehavior         mBehavior;
+    EnemyWeaponTemplate   mWeapons[ENEMY_MAX_WEAPON_COUNT];
+    uint32_t              mWeaponCount;
+    EnemyParticleTemplate mParticles[ENEMY_MAX_PARTICLE_COUNT];
+    uint32_t              mParticleCount;
 };
 
 struct Enemy
@@ -176,9 +239,13 @@ struct Enemy
     
 	float                mHealth;
 
-	EnemyWeapon          mWeapon[ENEMY_MAX_WEAPON_COUNT];
-    uint32_t             mWeaponCount;
     EnemyBehavior        mBehavior;
+	
+    EnemyWeapon          mWeapon[ENEMY_MAX_WEAPON_COUNT];
+    uint32_t             mWeaponCount;
+    
+    EnemyParticle        mParticle[ENEMY_MAX_PARTICLE_COUNT];
+    uint32_t             mParticleCount;
 
 	EnemyUpdateCb        mUpdateCb;
     EnemyDrawCb          mDrawCb;
@@ -201,6 +268,10 @@ struct SpawnEvent
     uint64_t mFreq;      // Calculated from def. in usec.
     uint64_t mLastSpawn; // in usec.
 };
+
+//////////////////////////////////////////////////////////
+//// Manager.
+//////////////////////////////////////////////////////////
 
 class EnemyManager
     : public View

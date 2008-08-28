@@ -4,11 +4,19 @@
 ,"Single","data/vehicles/torpedo/00.png",5,10,10,,,,,,,,
 "Behavior","Type","Speed","","","","","","","","","","",""
 ,"Kamikaze",50,,,,,,,,,,,
-"Weapon","Type","Damage","","","","","","","","","","",""
-,"SelfDestruct","data/vehicles/torpedo/fakeWeapon/00.png",60,,,,,,,,,,
+"Weapon","Type","Image Path","Damage","","","","","","","","","",""
+,"SelfDestruct","data/vehicles/torpedo/fakeWeapon/00.png",100,,,,,,,,,,
 "Weapon","Type","","","","","","","","","","","",""
 ,"None",,,,,,,,,,,,
 "Weapon","Type","","","","","","","","","","","",""
 ,"None",,,,,,,,,,,,
 "Weapon","Type","","","","","","","","","","","",""
+,"None",,,,,,,,,,,,
+"Particle","Type","Image Path","Image Position X","Image Position Y","Rotation","Speed","","","","","","",""
+,"Jet Flame","data/particles/jetFlame/00.png",-16,0,-90,-200,,,,,,,
+"Particle","Type","","","","","","","","","","","",""
+,"None",,,,,,,,,,,,
+"Particle","Type","","","","","","","","","","","",""
+,"None",,,,,,,,,,,,
+"Particle","Type","","","","","","","","","","","",""
 ,"None",,,,,,,,,,,,

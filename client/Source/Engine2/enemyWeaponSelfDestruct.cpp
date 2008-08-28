@@ -3,24 +3,37 @@
 #include "physics.h"
 #include "imageLibrary.h"
 #include "enemyManager.h"
-#include "enemyWeaponTrebuchet.h"
+#include "enemyWeaponSelfDestruct.h"
 
 namespace pammo
 {
 
+void enemyWeaponSelfDestructCollisionCb(Body* self, Body* other, Contact* contact, ContactResponse* response)
+{
+	response->mBounceThem = true;
+	response->mBounceMe = true;
+
+    if(other == gWorld->getPlayer()->mBody)
+    {
+        Enemy* e = (Enemy*)self->mUserArg;
+
+        // Do not have pointer to weapon, so must find it.
+        for(uint32_t i=0; i<e->mWeaponCount; ++i)
+        {
+            if(e->mWeapon[i].mType == SelfDestruct)
+            {
+                SelfDestructWeaponData* data = (SelfDestructWeaponData*)&(e->mWeapon[i].mData);
+                gWorld->getPlayer()->damage(Vehicle, (float)data->mDamage); 
+                e->mDamageCb(e, Vehicle, 100.0f);
+                return;
+            }
+        }
+    }
+}
+
 void enemyWeaponSelfDestructCb(Enemy* e, EnemyWeapon* w, EnemyManager* manager)
 {
-    SelfDestructWeaponData* data = (SelfDestructWeaponData*)(w->mData);
-
-    float distance = fabs(magnitude(e->mBody->mCenter - gWorld->getPlayer()->getCenter()));
-//    dprintf("%.2f", distance);
-    if(distance < 35.0f)
-    {
-        e->mDamageCb(e, Vehicle, 100.0f);
-        gWorld->getPlayer()->damage(Vehicle, data->mDamage); 
-        return;
-    }
-
+    return;
 }
 
 } // namespace pammo

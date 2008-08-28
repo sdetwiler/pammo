@@ -316,6 +316,7 @@ bool EnemyManager::initializeEnemy(Enemy* e, char const* name)
     EnemyTemplate* enemyTemplate = i->second;
 
     // Properties.
+    e->mBody->mBodyCallback = NULL;
     e->mBody->mMass =   enemyTemplate->mMass;
     e->mBody->mRadius = enemyTemplate->mRadius;
     e->mHealth =        enemyTemplate->mHealth;
@@ -330,7 +331,7 @@ bool EnemyManager::initializeEnemy(Enemy* e, char const* name)
     }
 
     e->mUpdateCb = enemyUpdateCb;
-    e->mDrawCb = enemyDrawCb;
+    e->mDrawCb   = enemyDrawCb;
     e->mDamageCb = enemyDamageCb;
 
     // Behavior.
@@ -373,6 +374,7 @@ bool EnemyManager::initializeEnemy(Enemy* e, char const* name)
             break;
         case SelfDestruct:
             e->mWeapon[i].mCb = enemyWeaponSelfDestructCb;
+            e->mBody->mBodyCallback = enemyWeaponSelfDestructCollisionCb;
             break;
 
         }

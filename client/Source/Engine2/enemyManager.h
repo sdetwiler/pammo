@@ -105,7 +105,9 @@ struct MachineGunWeaponData
     uint32_t mAccuracy;
     uint32_t mDamage;
     uint32_t mMaxDistance;
-    uint32_t mFireRate;
+    float    mFireRate;
+    uint64_t mFireStateChange;
+    uint64_t mFiring;
 };
 
 struct SelfDestructWeaponData

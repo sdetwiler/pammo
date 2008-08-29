@@ -108,6 +108,22 @@ void explosionParticleCb(Particle* p, ParticleSystem* system)
 	}
 }
 
+void rubbleParticleCb(Particle* p, ParticleSystem* system)
+{
+    //p->mImage.mSize*=1.07f;
+    //p->mImage.mRotation+= ((float)(rand()%10)-5.0f)/100.0f;
+    p->mImage.makeDirty();
+
+    p->mImage.mSize*=.99f;
+    p->mAlpha-=0.01f;
+    if(p->mAlpha<=0)
+	{
+		system->removeParticle(p);
+	}
+}
+
+
+
 ////////////////////////////////////////////////////////
 
 ParticleSystem::ParticleSystem(uint32_t numParticles)
@@ -265,6 +281,24 @@ void ParticleSystem::initExplosionParticle(Vector2 const& initialPosition)
     p->mImage.mCenter = initialPosition + Vector2((float)(rand()%20), (float)(rand()%20));
     p->mImage.makeDirty();
 }
+
+void ParticleSystem::initRubbleParticle(Vector2 const& initialPosition)
+{
+    // Grab a particle.
+    Particle* p = addParticle(2);
+    if(!p) return;
+
+    // Set basic particle properties.
+    p->mCallback = rubbleParticleCb;
+    p->mAlpha = 0.8f;
+
+    // Setup image.
+    p->mImage.setImage(gImageLibrary->reference("data/particles/rubble00.png"));
+    //p->mImage.mSize = Vector2(2.0f, 2.0f);
+    p->mImage.mCenter = initialPosition;// + Vector2((float)(rand()%20), (float)(rand()%20));
+    p->mImage.makeDirty();
+}
+
 
 void ParticleSystem::initBallParticle(InitBallParticleArgs const& args)
 {

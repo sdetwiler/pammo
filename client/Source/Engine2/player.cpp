@@ -19,7 +19,7 @@ namespace pammo
 
 void dustParticleCallback(Particle* p, ParticleSystem* system)
 {
-    p->mImage.mCenter = p->mBody->mCenter;
+    //p->mImage.mCenter = p->mBody->mCenter;
     p->mImage.mRotation += 0.08f;
     p->mImage.mSize *= 1.1;
     p->mImage.makeDirty();
@@ -94,12 +94,11 @@ bool Player::touch(uint32_t count, Touch* touches)
 void Player::createDust()
 {
 	    // Get a particle.
-	Particle* p = gWorld->getParticleSystem()->addParticleWithBody(1);
+	Particle* p = gWorld->getParticleSystem()->addParticle(1);
     if(!p) return;
     
     // Get player.
     Player* player = gWorld->getPlayer();
-	float mag = magnitude(mBody->mVelocity);
 
     // Set basic particle properties.
     p->mCallback = dustParticleCallback;
@@ -115,17 +114,6 @@ void Player::createDust()
     p->mImage.mCenter = player->mBody->mCenter;
     p->mImage.mRotation = initialRotation + r;
 	p->mImage.makeDirty();
-        
-    // Properties about dust particles.
-    p->mBody->mProperties = 0;
-    p->mBody->mCollideProperties = 0;
-    p->mBody->mBodyCallback = 0;
-    p->mBody->mDamping = 0;
-    p->mBody->mRadius = 20;
-    p->mBody->mMass = 50;
-    p->mBody->mCenter = player->mBody->mCenter - Vector2(5,0) * Transform2::createRotation(initialRotation+r);
-    
-	p->mBody->mVelocity = player->mBody->mVelocity - Vector2(mag*.8, 0) * Transform2::createRotation(initialRotation+r);
 }
 
 void Player::update()

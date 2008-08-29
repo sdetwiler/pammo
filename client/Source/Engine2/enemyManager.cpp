@@ -8,6 +8,7 @@
 #include "enemyWeaponFlamethrower.h"
 #include "enemyWeaponTrebuchet.h"
 #include "enemyWeaponSelfDestruct.h"
+#include "enemyWeaponMachineGun.h"
 
 #include "enemyParticleJetFlame.h"
 #include "enemyParticleSmoke.h"
@@ -189,9 +190,6 @@ void behaviorKamikazeCb(Enemy* e, EnemyManager* manager)
     e->mController.mAcceleration = data->mSpeed * e->mBody->mMass;
 }
 
-void weaponMachineGunCb(Enemy* e, EnemyWeapon* w, EnemyManager* manager)
-{}
-
 void enemyUpdateCb(Enemy* e, EnemyManager* manager)
 {
     e->mController.update();
@@ -234,6 +232,7 @@ void enemyDamageCb(Enemy* e, ParticleType type, float amount)
 	{
 		dprintf("dead", e);
 		gWorld->getParticleSystem()->initExplosionParticle(e->mBody->mCenter);
+		gWorld->getParticleSystem()->initRubbleParticle(e->mBody->mCenter);
 		gImageLibrary->unreference(e->mEntity.getImage());
         for(uint32_t i=0; i<e->mWeaponCount; ++i)
         {
@@ -367,7 +366,7 @@ bool EnemyManager::initializeEnemy(Enemy* e, char const* name)
             e->mWeapon[i].mCb = enemyWeaponFlamethrowerCb;
             break;
         case MachineGun:
-            e->mWeapon[i].mCb = weaponMachineGunCb;
+            e->mWeapon[i].mCb = enemyWeaponMachineGunCb;
             break;
         case Trebuchet:
             e->mWeapon[i].mCb = enemyWeaponTrebuchetCb;
@@ -468,7 +467,7 @@ void EnemyManager::update()
     SpawnEventVector::iterator i= mSpawnEvents.begin();
     while(i!=mSpawnEvents.end())
     {
-        if(((*i).mStartTime + (*i).mDuration) < now)
+        if(((*i).mStartTime + (*i).mDuration) <= now)
         {
             // erase.
             dprintf("Deleting expired spawn event");
@@ -488,7 +487,6 @@ void EnemyManager::update()
 		assert(e!=e->mNext);
 		e = e->mNext;
 	}
-
 }
 
 void EnemyManager::draw()

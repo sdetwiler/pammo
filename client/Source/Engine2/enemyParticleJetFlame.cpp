@@ -10,11 +10,9 @@ namespace pammo
 
 void enemyParticleJetFlameParticleCb(Particle* p, ParticleSystem* system)
 {
-    float r = ((rand()%100)/10.0f);
-    p->mBody->mAcceleration = r;
-    p->mImage.mCenter = p->mBody->mCenter;
-    p->mImage.mRotation += ((r/20.0f));
-    p->mImage.mSize *= 1.08f;
+    float r = ((rand()%100)/200.0f);
+    p->mImage.mRotation += r;
+    p->mImage.mSize *= 1.03f;
     p->mImage.makeDirty();
     
     if(p->mAlpha <= 0)
@@ -23,15 +21,8 @@ void enemyParticleJetFlameParticleCb(Particle* p, ParticleSystem* system)
 		return;
     }
 
-    p->mAlpha-=0.25f;
+    p->mAlpha-=0.15f;
 }
-
-void enemyParticleJetFlameCollisionCb(Body* self, Body* other, Contact* contact, ContactResponse* response)
-{
-	response->mBounceThem = false;
-	response->mBounceMe = true;
-}
-
 
 void enemyParticleJetFlameCb(Enemy* e, EnemyParticle* ep, EnemyManager* manager)
 {
@@ -40,7 +31,7 @@ void enemyParticleJetFlameCb(Enemy* e, EnemyParticle* ep, EnemyManager* manager)
     Particle* p = NULL;
 
     // Get a particle.
-    p = gWorld->getParticleSystem()->addParticleWithBody(2);
+    p = gWorld->getParticleSystem()->addParticle(2);//WithBody(2);
     if(!p)
         return;
 
@@ -55,21 +46,9 @@ void enemyParticleJetFlameCb(Enemy* e, EnemyParticle* ep, EnemyManager* manager)
     p->mImage.setImage(gImageLibrary->reference(ep->mImagePath));
     p->mImage.makeDirty();
 
-    // Base properties about particle bodies.
-    p->mBody->mProperties = kPlayerBulletCollisionProperties;
-    p->mBody->mCollideProperties = kPlayerCollisionProperties | kBarrierCollisionProperties;
-    p->mBody->mCenter = center;
-        
     // Set jet flame specific particle properties.
     p->mCallback = enemyParticleJetFlameParticleCb;
     p->mAlpha = 1.0f;
-    
-    // Properties about fire particle bodies.
-    p->mBody->mBodyCallback = enemyParticleJetFlameCollisionCb;
-    p->mBody->mDamping = 0;
-    p->mBody->mRadius = 15;
-    p->mBody->mMass = 1;
-    p->mBody->mVelocity = e->mBody->mVelocity + Vector2(data->mSpeed, 0) * Transform2::createRotation(e->mController.mRotation);
 }
 
 } // namespace pammo

@@ -12,7 +12,8 @@ enum ParticleType
 {
     Fire,
     Lightning,
-    Vehicle
+    Vehicle,
+    Bullet
 };
 
 struct Body;
@@ -41,6 +42,7 @@ public:
 	void initSmokeParticle(Vector2 const& initialPosition, float initialRotation, Vector2 const& initialVelocity);
 
 	void initExplosionParticle(Vector2 const& initialPosition);
+    void initRubbleParticle(Vector2 const& initialPosition);
 
     struct InitBallParticleArgs
     {
@@ -114,6 +116,7 @@ struct Particle
 
 	Vector2      mStartPosition;
     Vector2      mEndPosition;
+    float        mMaxDistance;
 
 	Particle*    mNext;
 	Particle*    mPrev;

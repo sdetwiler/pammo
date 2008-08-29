@@ -218,7 +218,7 @@ bool EnemyLoader::parseWeaponMachineGun(char* s)
             data->mMaxDistance = atol(s);
             break;
         case 12: // Firing rate
-            data->mFireRate = atol(s);
+            data->mFireRate = (float)atof(s);
             ++mTemplate->mWeaponCount;
             return true;
         }

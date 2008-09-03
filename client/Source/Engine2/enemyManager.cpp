@@ -9,6 +9,7 @@
 #include "enemyWeaponTrebuchet.h"
 #include "enemyWeaponSelfDestruct.h"
 #include "enemyWeaponMachineGun.h"
+#include "enemyWeaponHeatSeaker.h"
 
 #include "enemyParticleJetFlame.h"
 #include "enemyParticleSmoke.h"
@@ -367,6 +368,9 @@ bool EnemyManager::initializeEnemy(Enemy* e, char const* name)
             break;
         case MachineGun:
             e->mWeapon[i].mCb = enemyWeaponMachineGunCb;
+            break;
+        case HeatSeaker:
+            e->mWeapon[1].mCb = enemyWeaponHeatSeakerCb;
             break;
         case Trebuchet:
             e->mWeapon[i].mCb = enemyWeaponTrebuchetCb;

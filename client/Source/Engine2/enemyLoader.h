@@ -34,6 +34,7 @@ private:
     bool parseWeaponTrebuchet(char* s);
     bool parseWeaponMachineGun(char* s);
     bool parseWeaponSelfDestruct(char* s);
+    bool parseWeaponHeatSeaker(char* s);
 
     void dumpWeapon(EnemyWeaponTemplate* w);
     void dumpWeaponTurret(TurretWeaponData* d);
@@ -41,6 +42,7 @@ private:
     void dumpWeaponTrebuchet(TrebuchetWeaponData* d);
     void dumpWeaponMachineGun(MachineGunWeaponData* d);
     void dumpWeaponSelfDestruct(SelfDestructWeaponData* d);
+    void dumpWeaponHeatSeaker(HeatSeakerWeaponData* d);
 
     bool parseBehavior(char* s);
     bool parseBehaviorApproachAndFire(char* s);

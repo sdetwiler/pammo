@@ -90,6 +90,8 @@ bool EnemyLoader::parseWeapon(char* s)
                 mTemplate->mWeapons[mTemplate->mWeaponCount].mWeapon.mType = Trebuchet;
             else if(!strcmp(s, "SelfDestruct"))
                 mTemplate->mWeapons[mTemplate->mWeaponCount].mWeapon.mType = SelfDestruct;
+            else if(!strcmp(s, "HeatSeaker"))
+                mTemplate->mWeapons[mTemplate->mWeaponCount].mWeapon.mType = HeatSeaker;
             else
             {
                 dprintf("Unknown weapon type: %s", s);
@@ -110,6 +112,8 @@ bool EnemyLoader::parseWeapon(char* s)
                 return parseWeaponTrebuchet(s);
             case SelfDestruct:
                 return parseWeaponSelfDestruct(s);
+            case HeatSeaker:
+                return parseWeaponHeatSeaker(s);
             default:
                 dprintf("Can't parse specific weapon data.");
                 return false;
@@ -230,6 +234,41 @@ bool EnemyLoader::parseWeaponMachineGun(char* s)
     return false;
 }
 
+bool EnemyLoader::parseWeaponHeatSeaker(char* s)
+{
+    EnemyWeaponTemplate* weaponTemplate = &mTemplate->mWeapons[mTemplate->mWeaponCount];
+    HeatSeakerWeaponData* data = (HeatSeakerWeaponData*)weaponTemplate->mWeapon.mData;
+    int column = 2;
+    while(s)
+    {
+        switch(column)
+        {
+        case 2:
+            if(!parseWeaponTurret(s, &mTemplate->mWeapons[mTemplate->mWeaponCount], &data->mTurret))
+                return false;
+            column = 8;
+            break;
+        case 9: // Accuracy
+            data->mAccuracy = atol(s);
+            break;
+        case 10: // Damage
+            data->mDamage = atol(s);
+            break;
+        case 11: // Max distance
+            data->mMaxDistance = atol(s);
+            break;
+        case 12: // Firing rate
+            data->mFireRate = (float)atof(s);
+            ++mTemplate->mWeaponCount;
+            return true;
+        }
+
+        ++column;
+        s=strtok(NULL, ",\"");
+    }
+
+    return false;
+}
 
 bool EnemyLoader::parseWeaponTurret(char* s, EnemyWeaponTemplate* weaponTemplate, TurretWeaponData* data)
 {
@@ -593,6 +632,7 @@ char const* sFlamethrower = "Flamethrower";
 char const* sTrebuchet    = "Trebuchet";
 char const* sMachineGun   = "Machine Gun";
 char const* sSelfDestruct = "Self Destruct";
+char const* sHeatSeaker    = "Heat Seaker";
 char const* EnemyLoader::getWeaponName(WeaponType type)
 {
     switch(type)
@@ -607,6 +647,8 @@ char const* EnemyLoader::getWeaponName(WeaponType type)
         return sMachineGun;
     case SelfDestruct:
         return sSelfDestruct;
+    case HeatSeaker:
+        return sHeatSeaker;
     default:
         return sUnknown;
     }
@@ -764,6 +806,21 @@ void EnemyLoader::dumpWeaponTrebuchet(TrebuchetWeaponData* d)
 }
 
 void EnemyLoader::dumpWeaponMachineGun(MachineGunWeaponData* d)
+{
+    dumpWeaponTurret(&d->mTurret);
+    dprintf("\
+    Accuracy:     %u\n\
+    Damage:       %u\n\
+    Max Distance: %u\n\
+    Fire Rate:    %u",
+        d->mAccuracy,
+        d->mDamage,
+        d->mMaxDistance,
+        d->mFireRate
+    );
+}
+
+void EnemyLoader::dumpWeaponHeatSeaker(HeatSeakerWeaponData* d)
 {
     dumpWeaponTurret(&d->mTurret);
     dprintf("\

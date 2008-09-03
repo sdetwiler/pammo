@@ -216,6 +216,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\Source\Engine2\enemyWeaponHeatSeaker.h"
+				>
+			</File>
+			<File
 				RelativePath="..\Source\Engine2\enemyWeaponMachineGun.h"
 				>
 			</File>
@@ -373,6 +377,10 @@
 			</File>
 			<File
 				RelativePath="..\Source\Engine2\enemyWeaponFlamethrower.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\Source\Engine2\enemyWeaponHeatSeaker.cpp"
 				>
 			</File>
 			<File

@@ -46,7 +46,8 @@ enum WeaponType
     Flamethrower,
     MachineGun,
     Trebuchet,
-    SelfDestruct
+    SelfDestruct,
+    HeatSeaker
 };
 
 struct EnemyWeapon
@@ -100,6 +101,17 @@ struct TrebuchetWeaponData
 };
 
 struct MachineGunWeaponData
+{
+    TurretWeaponData mTurret;
+    uint32_t mAccuracy;
+    uint32_t mDamage;
+    uint32_t mMaxDistance;
+    float    mFireRate;
+    uint64_t mFireStateChange;
+    uint64_t mFiring;
+};
+
+struct HeatSeakerWeaponData
 {
     TurretWeaponData mTurret;
     uint32_t mAccuracy;

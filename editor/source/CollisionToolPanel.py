@@ -1,12 +1,15 @@
 import wx
 import NumValidator
 import math
+import CommonDrawing
 
 class CollisionToolPanel(wx.Panel):
     def __init__(self, parent, id):
         wx.Panel.__init__(self, parent, id)
 
         self.editor = None
+        self.showPOIs = True
+        self.showSafeZone = False
         self.deselect()
 
         sizer = wx.BoxSizer(wx.VERTICAL)
@@ -21,26 +24,57 @@ class CollisionToolPanel(wx.Panel):
         row.Add(self.snapAmount, 0, wx.ALIGN_RIGHT)
         sizer.Add(row, 0, wx.EXPAND | wx.ALL, 5)
 
+        self.showPOIsButton = wx.CheckBox(self, -1, "Show POIs")
+        self.showPOIsButton.SetValue(self.showPOIs)
+        self.Bind(wx.EVT_CHECKBOX, self.onShowPOIsChanged, self.showPOIsButton)
+        sizer.Add(self.showPOIsButton, 0, wx.ALIGN_LEFT | wx.ALL, 5)
+
+        self.showSafeZoneButton = wx.CheckBox(self, -1, "Show Safe Zone")
+        self.showSafeZoneButton.SetValue(self.showSafeZone)
+        self.Bind(wx.EVT_CHECKBOX, self.onSafeZoneChanged, self.showSafeZoneButton)
+        sizer.Add(self.showSafeZoneButton, 0, wx.ALIGN_LEFT | wx.ALL, 5)
+
         self.newButton = wx.Button(self, -1, "New Shape")
         self.Bind(wx.EVT_BUTTON, self.onNewButton, self.newButton)
-        sizer.Add(self.newButton, 0, wx.ALIGN_RIGHT | wx.ALL, 5)
-
+        sizer.Add(self.newButton, 0, wx.ALIGN_LEFT | wx.ALL, 5)
         line = wx.StaticLine(self, -1, style = wx.LI_HORIZONTAL)
         sizer.Add(line, 0, wx.EXPAND | wx.ALL, 5)
 
+        self.playerCollideButton = wx.CheckBox(self, -1, "Player Collide")
+        self.Bind(wx.EVT_CHECKBOX, self.onPlayerCollideChanged, self.playerCollideButton)
+        sizer.Add(self.playerCollideButton, 0, wx.ALIGN_LEFT | wx.ALL, 5)
+
+        self.enemyCollideButton = wx.CheckBox(self, -1, "Enemies Collide")
+        self.Bind(wx.EVT_CHECKBOX, self.onEnemyCollideChanged, self.enemyCollideButton)
+        sizer.Add(self.enemyCollideButton, 0, wx.ALIGN_LEFT | wx.ALL, 5)
+
         self.duplicateButton = wx.Button(self, -1, "Duplicate")
         self.Bind(wx.EVT_BUTTON, self.onDuplicateButton, self.duplicateButton)
-        sizer.Add(self.duplicateButton, 0, wx.ALIGN_RIGHT | wx.ALL, 5)
+        sizer.Add(self.duplicateButton, 0, wx.ALIGN_LEFT | wx.ALL, 5)
 
         self.deleteButton = wx.Button(self, -1, "Delete")
         self.Bind(wx.EVT_BUTTON, self.onDeleteButton, self.deleteButton)
-        sizer.Add(self.deleteButton, 0, wx.ALIGN_RIGHT | wx.ALL, 5)
+        sizer.Add(self.deleteButton, 0, wx.ALIGN_LEFT | wx.ALL, 5)
 
         self.SetSizerAndFit(sizer)
         self.setState()
 
     def onSnapChanged(self, event):
         if self.editor: self.editor.Refresh()
+
+    def onShowPOIsChanged(self, event):
+        self.showPOIs = self.showPOIsButton.GetValue()
+        if self.editor: self.editor.Refresh()
+
+    def onSafeZoneChanged(self, event):
+        self.showSafeZone = self.showSafeZoneButton.GetValue()
+        if self.editor: self.editor.Refresh()
+
+    def onPlayerCollideChanged(self, event):
+        pass
+
+    def onEnemyCollideChanged(self, event):
+        pass
 
     def onDeleteButton(self, event):
         groups = self.editor.getMap().getCollisionGroups()
@@ -212,40 +246,23 @@ class CollisionToolPanel(wx.Panel):
             self.initialClick = pos
 
     def onMapDraw(self, display, gc, rect):
+        # Draw POIs.
+        if self.showPOIs:
+            CommonDrawing.drawPOIs(display, gc, rect)
+
+        # Draw safe zone.
+        if self.showSafeZone:
+            CommonDrawing.drawSafeZone(display, gc, rect)
+
         # Draw snap if I'm supposeda.
         if self.snapButton.GetValue() and self.snapAmount.GetValue():
-            (worldX, worldY) = display.getMap().getSize()
-            
-            tileSize = float(self.snapAmount.GetValue())
-            sizeX, sizeY = (int(worldX // tileSize), int(worldY // tileSize))
-            startX = int(rect[0] // tileSize)
-            startY = int(rect[1] // tileSize)
-            endX = int(rect[2] // tileSize + 1)
-            endY = int(rect[3] // tileSize + 1)
-            if endX > sizeX: endX = sizeX
-            if endY > sizeY: endY = sizeY
-
-            gc.SetPen(wx.Pen(wx.Color(0, 0, 0, 32), 2))
-            for x in range(startX, endX+1):
-                gc.StrokeLine(x*tileSize, 0, x*tileSize, sizeY*tileSize)
-            for y in range(startY, endY+1):
-                gc.StrokeLine(0, y*tileSize, sizeX*tileSize, y*tileSize)
-
-        groups = display.getMap().getCollisionGroups()
+            CommonDrawing.drawGrid(display, gc, rect, self.snapAmount.GetValue())
 
         # Draw all collision shapes.
-        gc.SetBrush(wx.Brush(wx.Color(0, 100, 0, 92)))
-        gc.SetPen(wx.Pen(wx.Color(0, 128, 0, 168), 3))
-        for group in groups:
-            path = gc.CreatePath()
-            path.MoveToPoint(group[0][0], group[0][1])
-            for point in group[1:]:
-                path.AddLineToPoint(point[0], point[1])
-            path.CloseSubpath()
-            gc.FillPath(path)
-            gc.StrokePath(path)
+        CommonDrawing.drawCollisionShapes(display, gc, rect)
 
         # If one is selcted, draw it perty and special.
+        groups = display.getMap().getCollisionGroups()
         if self.selectedGroup != -1:
             group = groups[self.selectedGroup]
 

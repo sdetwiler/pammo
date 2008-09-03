@@ -1,5 +1,6 @@
 import wx
 import NumValidator
+import CommonDrawing
 
 class PropToolPanel(wx.Panel):
     def __init__(self, parent, id):
@@ -49,7 +50,7 @@ class PropToolPanel(wx.Panel):
         self.Bind(wx.EVT_TEXT, self.onScaleChanged, self.scaleField)
         row = wx.BoxSizer(wx.HORIZONTAL)
         row.Add(wx.StaticText(self, -1, "Scale:"), 1, wx.ALIGN_LEFT | wx.RIGHT, 5)
-        row.Add(self.scaleField, 0, wx.ALIGN_RIGHT)
+        row.Add(self.scaleField, 0, wx.ALIGN_LEFT)
         sizer.Add(row, 0, wx.EXPAND | wx.ALL, 5)
 
         #self.rotField = wx.TextCtrl(self, -1, "", validator = NumValidator.NumValidator())
@@ -64,12 +65,12 @@ class PropToolPanel(wx.Panel):
         self.moveBackwardButton = wx.Button(self, -1, "Move Backward")
         self.Bind(wx.EVT_BUTTON, self.onMoveForwardButton, self.moveForwardButton)
         self.Bind(wx.EVT_BUTTON, self.onMoveBackwardButton, self.moveBackwardButton)
-        sizer.Add(self.moveForwardButton, 0, wx.ALIGN_RIGHT | wx.ALL, 5)
-        sizer.Add(self.moveBackwardButton, 0, wx.ALIGN_RIGHT | wx.ALL, 5)
+        sizer.Add(self.moveForwardButton, 0, wx.ALIGN_LEFT | wx.ALL, 5)
+        sizer.Add(self.moveBackwardButton, 0, wx.ALIGN_LEFT | wx.ALL, 5)
 
         self.deleteButton = wx.Button(self, -1, "Delete")
         self.Bind(wx.EVT_BUTTON, self.onDeleteButton, self.deleteButton)
-        sizer.Add(self.deleteButton, 0, wx.ALIGN_RIGHT | wx.ALL, 5)
+        sizer.Add(self.deleteButton, 0, wx.ALIGN_LEFT | wx.ALL, 5)
 
         self.SetSizerAndFit(sizer)
         self.updateState()
@@ -269,23 +270,9 @@ class PropToolPanel(wx.Panel):
             self.editor.Refresh()
 
     def onMapDraw(self, display, gc, rect):
+        # Draw snap.
         if self.snapButton.GetValue() and self.snapAmount.GetValue():
-            (worldX, worldY) = display.getMap().getSize()
-            
-            tileSize = float(self.snapAmount.GetValue())
-            sizeX, sizeY = (int(worldX // tileSize), int(worldY // tileSize))
-            startX = int(rect[0] // tileSize)
-            startY = int(rect[1] // tileSize)
-            endX = int(rect[2] // tileSize + 1)
-            endY = int(rect[3] // tileSize + 1)
-            if endX > sizeX: endX = sizeX
-            if endY > sizeY: endY = sizeY
-
-            gc.SetPen(wx.Pen(wx.Color(0, 0, 0, 32), 2))
-            for x in range(startX, endX+1):
-                gc.StrokeLine(x*tileSize, 0, x*tileSize, sizeY*tileSize)
-            for y in range(startY, endY+1):
-                gc.StrokeLine(0, y*tileSize, sizeX*tileSize, y*tileSize)
+            CommonDrawing.drawGrid(display, gc, rect, self.snapAmount.GetValue())
 
         if self.outlineButton.GetValue():
             gc.SetPen(wx.Pen(wx.Color(80, 80, 200, 128), 2))

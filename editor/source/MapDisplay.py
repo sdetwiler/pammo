@@ -1,5 +1,4 @@
 import wx
-
 import Map
 
 class MapDisplay(wx.ScrolledWindow):
@@ -18,10 +17,12 @@ class MapDisplay(wx.ScrolledWindow):
         self.drawScale = 1
         self.map = map
         self.map.addObserver(self.onMapChanged)
+        self.border = [480, 320]
 
         self.SetBackgroundStyle(wx.BG_STYLE_CUSTOM)
 
         self.updateVirtualSize()
+        self.setCenter((self.map.getSizeX()/2, self.map.getSizeY()/2))
 
     def onDestroy(self, event):
         self.map.removeObserver(self.onMapChanged)
@@ -38,12 +39,26 @@ class MapDisplay(wx.ScrolledWindow):
     def getDrawScale(self): return self.drawScale
     
     def setDrawScale(self, drawScale):
+        pos = self.getCenter()
         self.drawScale = drawScale
         self.updateVirtualSize()
+        self.setCenter(pos)
         self.Refresh()
 
+    def getCenter(self):
+        x = (self.GetViewStart()[0] * self.GetScrollPixelsPerUnit()[0] + self.GetSize()[0]/2) / self.drawScale
+        y = (self.GetViewStart()[1] * self.GetScrollPixelsPerUnit()[1] + self.GetSize()[1]/2) / self.drawScale
+        return x, y
+
+    def setCenter(self, center):
+        #print center
+        x = (center[0] * self.drawScale - self.GetSize()[0]/2) / self.GetScrollPixelsPerUnit()[0]
+        y = (center[1] * self.drawScale - self.GetSize()[1]/2) / self.GetScrollPixelsPerUnit()[1]
+        #print x, y
+        self.Scroll(round(x), round(y))
+
     def updateVirtualSize(self):
-        (sizeX, sizeY) = self.map.getSizeX(), self.map.getSizeY()
+        (sizeX, sizeY) = self.map.getSizeX() + self.border[0]*2, self.map.getSizeY() + self.border[1]*2
         self.SetVirtualSize((sizeX*self.drawScale, sizeY*self.drawScale))
 
     def onMouseEvent(self, event):
@@ -51,7 +66,7 @@ class MapDisplay(wx.ScrolledWindow):
 
     def calcMapLocationFromScreen(self, x, y):
         wx, wy = self.CalcUnscrolledPosition(x, y)
-        wx, wy = wx / self.drawScale, wy / self.drawScale
+        wx, wy = wx / self.drawScale - self.border[0], wy / self.drawScale - self.border[1]
         return wx, wy
 
     def onMapChanged(self, map):
@@ -70,9 +85,8 @@ class MapDisplay(wx.ScrolledWindow):
         gc = wx.GraphicsContext.Create(dc)
 
         gc.Scale(self.drawScale, self.drawScale)
-        #gc.Translate(-drawLeft, -drawTop)
+        gc.Translate(self.border[0], self.border[1])
 
-        #gc.DrawBitmap(self.map.getBackdrop().getBitmap(), drawLeft, drawTop, drawRight, drawBottom)
         gc.DrawBitmap(self.map.getBackdrop().getBitmap(), 0, 0, self.map.getSizeX(), self.map.getSizeY())
 
         for e in self.map.getEntities():

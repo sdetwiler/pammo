@@ -2,6 +2,7 @@ import wx
 import math
 import NumValidator
 import POI
+import CommonDrawing
 
 class POIToolPanel(wx.Panel):
     def __init__(self, parent, id):
@@ -9,8 +10,9 @@ class POIToolPanel(wx.Panel):
 
         self.editor = None
         self.selected = None
+        self.showCollision = True
+        self.showSafeZone = False
         self.displaySize = 32
-        self.strokeSize = 3
 
         sizer = wx.BoxSizer(wx.VERTICAL)
 
@@ -24,9 +26,19 @@ class POIToolPanel(wx.Panel):
         row.Add(self.snapAmount, 0, wx.ALIGN_RIGHT)
         sizer.Add(row, 0, wx.EXPAND | wx.ALL, 5)
 
+        self.showCollisionButton = wx.CheckBox(self, -1, "Show Collision")
+        self.showCollisionButton.SetValue(self.showCollision)
+        self.Bind(wx.EVT_CHECKBOX, self.onShowCollisionChanged, self.showCollisionButton)
+        sizer.Add(self.showCollisionButton, 0, wx.ALIGN_LEFT | wx.ALL, 5)
+
+        self.showSafeZoneButton = wx.CheckBox(self, -1, "Show Safe Zone")
+        self.showSafeZoneButton.SetValue(self.showSafeZone)
+        self.Bind(wx.EVT_CHECKBOX, self.onSafeZoneChanged, self.showSafeZoneButton)
+        sizer.Add(self.showSafeZoneButton, 0, wx.ALIGN_LEFT | wx.ALL, 5)
+
         self.newButton = wx.Button(self, -1, "New POI")
         self.Bind(wx.EVT_BUTTON, self.onNewButton, self.newButton)
-        sizer.Add(self.newButton, 0, wx.ALIGN_RIGHT | wx.ALL, 5)
+        sizer.Add(self.newButton, 0, wx.ALIGN_LEFT | wx.ALL, 5)
 
         line = wx.StaticLine(self, -1, style = wx.LI_HORIZONTAL)
         sizer.Add(line, 0, wx.EXPAND | wx.ALL, 5)
@@ -34,16 +46,24 @@ class POIToolPanel(wx.Panel):
         self.typeRadioBox = wx.RadioBox(self, -1, "Type", wx.DefaultPosition, wx.DefaultSize,
                                         POI.TypeNames, 1, wx.RA_SPECIFY_COLS)
         self.Bind(wx.EVT_RADIOBOX, self.onTypeChanged, self.typeRadioBox)
-        sizer.Add(self.typeRadioBox, 0, wx.ALIGN_RIGHT | wx.ALL, 5)
+        sizer.Add(self.typeRadioBox, 0, wx.ALIGN_LEFT | wx.ALL, 5)
 
         self.deleteButton = wx.Button(self, -1, "Delete")
         self.Bind(wx.EVT_BUTTON, self.onDeleteButton, self.deleteButton)
-        sizer.Add(self.deleteButton, 0, wx.ALIGN_RIGHT | wx.ALL, 5)
+        sizer.Add(self.deleteButton, 0, wx.ALIGN_LEFT | wx.ALL, 5)
 
         self.SetSizerAndFit(sizer)
         self.setState()
 
     def onSnapChanged(self, event):
+        if self.editor: self.editor.Refresh()
+
+    def onShowCollisionChanged(self, event):
+        self.showCollision = self.showCollisionButton.GetValue()
+        if self.editor: self.editor.Refresh()
+
+    def onSafeZoneChanged(self, event):
+        self.showSafeZone = self.showSafeZoneButton.GetValue()
         if self.editor: self.editor.Refresh()
 
     def onDeleteButton(self, event):
@@ -139,46 +159,27 @@ class POIToolPanel(wx.Panel):
             self.editor.Refresh()
 
     def onMapDraw(self, display, gc, rect):
-        # Draw snap if I'm supposeda.
+        # Draw Collision.
+        if self.showCollision:
+            CommonDrawing.drawCollisionShapes(display, gc, rect)
+
+        # Draw safe zone.
+        if self.showSafeZone:
+            CommonDrawing.drawSafeZone(display, gc, rect)
+
+        # Draw snap.
         if self.snapButton.GetValue() and self.snapAmount.GetValue():
-            (worldX, worldY) = display.getMap().getSize()
-            
-            tileSize = float(self.snapAmount.GetValue())
-            sizeX, sizeY = (int(worldX // tileSize), int(worldY // tileSize))
-            startX = int(rect[0] // tileSize)
-            startY = int(rect[1] // tileSize)
-            endX = int(rect[2] // tileSize + 1)
-            endY = int(rect[3] // tileSize + 1)
-            if endX > sizeX: endX = sizeX
-            if endY > sizeY: endY = sizeY
+            CommonDrawing.drawGrid(display, gc, rect, self.snapAmount.GetValue())
 
-            gc.SetPen(wx.Pen(wx.Color(0, 0, 0, 32), 2))
-            for x in range(startX, endX+1):
-                gc.StrokeLine(x*tileSize, 0, x*tileSize, sizeY*tileSize)
-            for y in range(startY, endY+1):
-                gc.StrokeLine(0, y*tileSize, sizeX*tileSize, y*tileSize)
-
-        pois = display.getMap().getPOIs()
-        
         # Draw all POIs.
-        for poi in pois:
-            type = poi.getType()
-            if type == POI.PlayerStartTypeName:
-                gc.SetBrush(wx.Brush(wx.Color(0, 0, 100, 92)))
-                gc.SetPen(wx.Pen(wx.Color(0, 0, 128, 168), self.strokeSize))
-            else:
-                gc.SetBrush(wx.Brush(wx.Color(0, 100, 0, 92)))
-                gc.SetPen(wx.Pen(wx.Color(0, 128, 0, 168), self.strokeSize))
-
-            pos = poi.getPos()
-            gc.DrawEllipse(pos[0] - self.displaySize/2 + self.strokeSize - 1, pos[1] - self.displaySize/2 + self.strokeSize - 1,
-                           self.displaySize - self.strokeSize*2 + 1, self.displaySize - self.strokeSize*2 + 1)
+        CommonDrawing.drawPOIs(display, gc, rect)
         
         # If one is selcted, draw it perty and special.
+        strokeSize = 3
         if self.selected:
             gc.SetBrush(wx.Brush(wx.Color(100, 0, 0, 92)))
-            gc.SetPen(wx.Pen(wx.Color(128, 0, 0, 168), self.strokeSize))
+            gc.SetPen(wx.Pen(wx.Color(128, 0, 0, 168), strokeSize))
             pos = self.selected.getPos()
-            gc.DrawEllipse(pos[0] - self.displaySize/2 + self.strokeSize - 1, pos[1] - self.displaySize/2 + self.strokeSize - 1,
-                           self.displaySize - self.strokeSize*2 + 1, self.displaySize - self.strokeSize*2 + 1)
+            gc.DrawEllipse(pos[0] - self.displaySize/2 + strokeSize - 1, pos[1] - self.displaySize/2 + strokeSize - 1,
+                           self.displaySize - strokeSize*2 + 1, self.displaySize - strokeSize*2 + 1)
         

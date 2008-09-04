@@ -73,12 +73,17 @@ def saveOverlays(map):
     output += pack('4B', 0x50, 0x49, 0x4F, 0x01)
 
     # Collions shapes.
-    groups = map.getCollisionGroups()
-    output += pack('!H', len(groups))
-    for group in groups:
-        output += pack('!H', 0)
-        output += pack('!H', len(group))
-        for x, y in group:
+    shapes = map.getCollisionShapes()
+    output += pack('!H', len(shapes))
+    for shape in shapes:
+        points = shape.getPoints()
+        properties = 0
+        if shape.getPlayerCollide(): properties |= 1<<0
+        if shape.getEnemiesCollide(): properties |= 1<<1
+
+        output += pack('!H', properties)
+        output += pack('!H', len(points))
+        for x, y in points:
             output += pack('!2f', x, y)
 
     # Spawn points.

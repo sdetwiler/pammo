@@ -77,7 +77,7 @@ class MapDisplay(wx.ScrolledWindow):
         drawTop = self.GetViewStart()[1] * self.GetScrollPixelsPerUnit()[1] / self.drawScale
         drawRight = drawLeft + self.GetSize()[0] / self.drawScale
         drawBottom = drawTop + self.GetSize()[1] / self.drawScale
-        drawRect = (drawLeft, drawTop, drawRight, drawBottom)
+        drawRect = (drawLeft - self.border[0], drawTop - self.border[1], drawRight - self.border[0], drawBottom - self.border[1])
 
         dc = wx.AutoBufferedPaintDCFactory(self)
         dc.Clear()

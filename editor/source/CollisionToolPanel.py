@@ -2,6 +2,7 @@ import wx
 import NumValidator
 import math
 import CommonDrawing
+import CollisionShape
 
 class CollisionToolPanel(wx.Panel):
     def __init__(self, parent, id):
@@ -44,9 +45,9 @@ class CollisionToolPanel(wx.Panel):
         self.Bind(wx.EVT_CHECKBOX, self.onPlayerCollideChanged, self.playerCollideButton)
         sizer.Add(self.playerCollideButton, 0, wx.ALIGN_LEFT | wx.ALL, 5)
 
-        self.enemyCollideButton = wx.CheckBox(self, -1, "Enemies Collide")
-        self.Bind(wx.EVT_CHECKBOX, self.onEnemyCollideChanged, self.enemyCollideButton)
-        sizer.Add(self.enemyCollideButton, 0, wx.ALIGN_LEFT | wx.ALL, 5)
+        self.enemiesCollideButton = wx.CheckBox(self, -1, "Enemies Collide")
+        self.Bind(wx.EVT_CHECKBOX, self.onEnemiesCollideChanged, self.enemiesCollideButton)
+        sizer.Add(self.enemiesCollideButton, 0, wx.ALIGN_LEFT | wx.ALL, 5)
 
         self.duplicateButton = wx.Button(self, -1, "Duplicate")
         self.Bind(wx.EVT_BUTTON, self.onDuplicateButton, self.duplicateButton)
@@ -71,51 +72,54 @@ class CollisionToolPanel(wx.Panel):
         if self.editor: self.editor.Refresh()
 
     def onPlayerCollideChanged(self, event):
-        pass
+        self.selectedShape.setPlayerCollide(self.playerCollideButton.GetValue())
 
-    def onEnemyCollideChanged(self, event):
-        pass
+    def onEnemiesCollideChanged(self, event):
+        self.selectedShape.setEnemiesCollide(self.enemiesCollideButton.GetValue())
 
     def onDeleteButton(self, event):
-        groups = self.editor.getMap().getCollisionGroups()
-
         # Delete a point or a shape?
-        if self.selectedPoint != -1 and len(groups[self.selectedGroup]) > 3:
-            del groups[self.selectedGroup][self.selectedPoint]
-            self.selectedPoint = (self.selectedPoint - 1) % len(groups[self.selectedGroup])
+        points = self.selectedShape.getPoints()
+        if self.selectedPoint != None and len(points) > 3:
+            del points[self.selectedPoint]
+            self.selectedPoint = (self.selectedPoint - 1) % len(points)
+            self.selectedShape.setPoints(points)
         else:
-            del groups[self.selectedGroup]
+            selectedShape = self.selectedShape
             self.deselect()
-
-        self.editor.getMap().setCollisionGroups(groups)
-        self.setState()
+            self.setState()
+            self.editor.getMap().removeCollisionShape(selectedShape)
 
     def onDuplicateButton(self, event):
-        groups = self.editor.getMap().getCollisionGroups()
-        newGroup = list(groups[self.selectedGroup])
-        for i in range(len(newGroup)):
-            newGroup[i] = (newGroup[i][0] + 50, newGroup[i][1] + 50)
-        groups.append(newGroup)
-        self.selectedGroup = len(groups)-1
-        self.selectedPoint = -1
+        newShape = CollisionShape.CollisionShape()
+        newShape.setPlayerCollide(self.selectedShape.getPlayerCollide())
+        newShape.setEnemiesCollide(self.selectedShape.getEnemiesCollide())
+
+        points = []
+        for i in self.selectedShape.getPoints():
+            points.append([i[0]+50, i[1]+50])
+        newShape.setPoints(points)
+
+        self.selectedShape = newShape
+        self.selectedPoint = None
         self.setState()
-        self.editor.getMap().setCollisionGroups(groups)
+        self.editor.getMap().addCollisionShape(newShape)
 
     def onNewButton(self, event):
         # Find the middle of the screen in world space.
         size = self.editor.Size
         center = self.editor.getDisplay().calcMapLocationFromScreen(size[0]/2, size[1]/2)
 
-        grow = 50        
-        groups = self.editor.getMap().getCollisionGroups()
-        groups.append([[center[0] - grow, center[1] - grow],
-                       [center[0] - grow, center[1] + grow],
-                       [center[0] + grow, center[1] + grow],
-                       [center[0] + grow, center[1] - grow]])
-        self.selectedGroup = len(groups)-1
-        self.selectedPoint = 0
-        self.editor.getMap().setCollisionGroups(groups)
+        grow = 50
+        shape = CollisionShape.CollisionShape()
+        shape.setPoints([[center[0] - grow, center[1] - grow],
+                         [center[0] - grow, center[1] + grow],
+                         [center[0] + grow, center[1] + grow],
+                         [center[0] + grow, center[1] - grow]])
+        self.selectedShape = shape
+        self.selectedPoint = None
         self.setState()
+        self.editor.getMap().addCollisionShape(shape)
 
     def setState(self):
         if self.editor:
@@ -123,10 +127,20 @@ class CollisionToolPanel(wx.Panel):
         else:
             self.newButton.Enable(False)
 
-        if self.editor and self.selectedGroup != -1:
+        if self.editor and self.selectedShape:
+            self.playerCollideButton.Enable(True)
+            self.playerCollideButton.SetValue(self.selectedShape.getPlayerCollide())
+            self.enemiesCollideButton.Enable(True)
+            self.enemiesCollideButton.SetValue(self.selectedShape.getEnemiesCollide())
+
             self.duplicateButton.Enable(True)
             self.deleteButton.Enable(True)
         else:
+            self.playerCollideButton.Enable(False)
+            self.playerCollideButton.SetValue(False)
+            self.enemiesCollideButton.Enable(False)
+            self.enemiesCollideButton.SetValue(False)
+
             self.duplicateButton.Enable(False)
             self.deleteButton.Enable(False)
 
@@ -144,105 +158,106 @@ class CollisionToolPanel(wx.Panel):
         self.setState()
 
     def deselect(self):
-        self.selectedGroup = -1
-        self.selectedPoint = -1
+        self.selectedShape = None
+        self.selectedPoint = None
 
-    def findClosestGroupAndPoint(self, groups, pos):
+    def findClosestShapeAndPoint(self, shapes, pos):
         dist = 1e300
-        foundGroupIndex = -1
-        foundPointIndex = -1
+        foundShape = None
+        foundPointIndex = None
 
-        for (groupIndex, group) in enumerate(groups):
-            for (pointIndex, point) in enumerate(group):
+        for shape in shapes:
+            for (pointIndex, point) in enumerate(shape.getPoints()):
                 d = (point[0] - pos[0])**2 + (point[1] - pos[1])**2
                 if d < dist:
                     dist = d
-                    foundGroupIndex = groupIndex
+                    foundShape = shape
                     foundPointIndex = pointIndex
         if dist < 300:
-            return foundGroupIndex, foundPointIndex
+            return foundShape, foundPointIndex
         else:
-            return -1, -1
+            return None, None
 
-    def findClosestNewGroupAndPoint(self, groups, pos):
+    def findClosestNewShapeAndPoint(self, shapes, pos):
         dist = 1e300
-        foundGroupIndex = -1
-        foundPointIndex = -1
+        foundShape = None
+        foundPointIndex = None
         insertCoordinate = (0, 0)
 
-        for (groupIndex, group) in enumerate(groups):
-            for (pointIndex, point) in enumerate(group):
-                point2 = group[(pointIndex+1)%len(group)]
+        for shape in shapes:
+            points = shape.getPoints()
+            for (pointIndex, point) in enumerate(points):
+                point2 = points[(pointIndex+1)%len(points)]
                 vec = ((point[0] + point2[0])/2., (point[1] + point2[1])/2.)
                 d = (vec[0] - pos[0])**2 + (vec[1] - pos[1])**2
                 if d < dist:
                     dist = d
-                    foundGroupIndex = groupIndex
+                    foundShape = shape
                     foundPointIndex = pointIndex
                     insertCoordinate = vec
         if dist < 300:
-            groups[foundGroupIndex].insert(foundPointIndex+1, insertCoordinate)
-            return foundGroupIndex, foundPointIndex+1
+            points = foundShape.getPoints()
+            points.insert(foundPointIndex+1, insertCoordinate)
+            foundShape.setPoints(points)
+            return foundShape, foundPointIndex+1
         else:
-            return -1, -1
+            return None, None
 
-    def findInteriorGroup(self, groups, p):
-        for (groupIndex, group) in enumerate(groups):
+    def findInteriorShape(self, shapes, p):
+        for shape in shapes:
             
             # Point in polygon
             # http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html
             c = 0
             testx, testy = p
-            for i in range(len(group)):
-                vertxi, vertyi = group[i]
-                vertxj, vertyj = group[(i-1) % len(group)]
+            points = shape.getPoints()
+            for i in range(len(points)):
+                vertxi, vertyi = points[i]
+                vertxj, vertyj = points[(i-1) % len(points)]
 
                 if (vertyi>testy) != (vertyj>testy):
                     if testx < (vertxj-vertxi) * (testy-vertyi) / (vertyj-vertyi) + vertxi:
                         c = not c;
-            if c: return groupIndex
-        return -1
+            if c: return shape
+        return None
 
     def onMapMouseEvent(self, display, event):
         pos = display.calcMapLocationFromScreen(event.GetX(), event.GetY())
 
         # Determin if anything was hit by this click.
         if event.LeftDown():
-            collisionGroup = display.getMap().getCollisionGroups()
-            g, p = self.findClosestGroupAndPoint(collisionGroup, pos)
-            if g == -1:
-                g, p = self.findClosestNewGroupAndPoint(collisionGroup, pos)
-                if g != -1:
-                    display.getMap().setCollisionGroups(collisionGroup)
-                else:
+            shapes = display.getMap().getCollisionShapes()
+            g, p = self.findClosestShapeAndPoint(shapes, pos)
+            if g == None:
+                g, p = self.findClosestNewShapeAndPoint(shapes, pos)
+                if g == None:
                     self.initialClick = pos
-                    g = self.findInteriorGroup(display.getMap().getCollisionGroups(), pos)
-                    p = -1
+                    g = self.findInteriorShape(shapes, pos)
+                    p = None
                 
-            self.selectedGroup, self.selectedPoint = g, p
+            self.selectedShape, self.selectedPoint = g, p
             self.setState()
             display.Refresh()
         
         # Drag a vertex.
-        if event.LeftIsDown() and event.Dragging() and self.selectedPoint != -1:
+        if event.LeftIsDown() and event.Dragging() and self.selectedPoint != None:
             if self.snapButton.GetValue():
                 snap = float(self.snapAmount.GetValue())
                 pos = (round(pos[0]/snap) * snap, round(pos[1]/snap) * snap)
-            collisionGroups = display.getMap().getCollisionGroups()
-            collisionGroups[self.selectedGroup][self.selectedPoint] = pos
-            display.getMap().setCollisionGroups(collisionGroups)
+            points = self.selectedShape.getPoints()
+            points[self.selectedPoint] = pos
+            self.selectedShape.setPoints(points)
         
         # Drag a poly.
-        if event.LeftIsDown() and event.Dragging() and self.selectedGroup != -1 and self.selectedPoint == -1:
+        if event.LeftIsDown() and event.Dragging() and self.selectedShape != None and self.selectedPoint == None:
             offset = (pos[0] - self.initialClick[0], pos[1] - self.initialClick[1])
             #if self.snapButton.GetValue():
             #    snap = float(self.snapAmount.GetValue())
             #    pos = (round(pos[0]/snap) * snap, round(pos[1]/snap) * snap)
-            collisionGroups = display.getMap().getCollisionGroups()
-            group = collisionGroups[self.selectedGroup]
-            for i in range(len(group)):
-                group[i] = (group[i][0] + offset[0], group[i][1] + offset[1])
-            display.getMap().setCollisionGroups(collisionGroups)
+            points = self.selectedShape.getPoints()
+            for i in range(len(points)):
+                points[i] = (points[i][0] + offset[0], points[i][1] + offset[1])
+            self.selectedShape.setPoints(points)
             self.initialClick = pos
 
     def onMapDraw(self, display, gc, rect):
@@ -262,41 +277,40 @@ class CollisionToolPanel(wx.Panel):
         CommonDrawing.drawCollisionShapes(display, gc, rect)
 
         # If one is selcted, draw it perty and special.
-        groups = display.getMap().getCollisionGroups()
-        if self.selectedGroup != -1:
-            group = groups[self.selectedGroup]
+        if self.selectedShape != None:
+            points = self.selectedShape.getPoints()
 
             # Draw the path more different.
             gc.SetBrush(wx.Brush(wx.Color(100, 0, 0, 92)))
             gc.SetPen(wx.Pen(wx.Color(128, 0, 0, 168), 3))
             path = gc.CreatePath()
-            path.MoveToPoint(group[0][0], group[0][1])
-            for point in group[1:]:
+            path.MoveToPoint(points[0][0], points[0][1])
+            for point in points[1:]:
                 path.AddLineToPoint(point[0], point[1])
             path.CloseSubpath()
             gc.FillPath(path)
             gc.StrokePath(path)
 
             # Draw the selected point most different.
-            if self.selectedPoint != -1:
+            if self.selectedPoint != None:
                 gc.SetBrush(wx.Brush(wx.Color(0, 0, 128, 228)))
                 gc.SetPen(wx.Pen(wx.Color(0, 0, 128, 228), 6))
-                point = groups[self.selectedGroup][self.selectedPoint]
+                point = points[self.selectedPoint]
                 gc.DrawEllipse(point[0]-7, point[1]-7, 14, 14)
 
             # Draw new point handles more different.
             gc.SetBrush(wx.Brush(wx.Color(148, 32, 64, 128)))
             gc.SetPen(wx.Pen(wx.Color(148, 32, 64, 128), 3))
-            for i in range(len(group)):
-                v1 = group[i]
-                v2 = group[(i+1)%len(group)]
+            for i in range(len(points)):
+                v1 = points[i]
+                v2 = points[(i+1)%len(points)]
                 a = ((v1[0] + v2[0]) / 2., (v1[1] + v2[1])/2.)
                 gc.DrawEllipse(a[0]-3, a[1]-3, 6, 6)
 
             # Draw vertexes more different.
             gc.SetBrush(wx.Brush(wx.Color(64, 32, 192, 200)))
             gc.SetPen(wx.Pen(wx.Color(64, 32, 192, 200), 3))
-            for point in group:
+            for point in points:
                 gc.DrawEllipse(point[0]-3, point[1]-3, 6, 6)
         
         

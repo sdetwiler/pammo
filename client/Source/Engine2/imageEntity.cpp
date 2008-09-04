@@ -48,6 +48,7 @@ void ImageEntity::makeDirty()
 
 void ImageEntity::setImage(Image* image)
 {
+    assert(image);
     mImage = image;
     mSize = mImage->mSize;
     mDirty = true;
@@ -55,6 +56,7 @@ void ImageEntity::setImage(Image* image)
 
 void ImageEntity::setImageAndInit(Image* image)
 {
+    assert(image);
     mAlpha = 1.0f;
 	mCenter.x = 0;
 	mCenter.y = 0;

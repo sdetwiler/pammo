@@ -11,9 +11,10 @@ enum CollisionProperties
 {
     kPlayerCollisionProperties = 1 << 0,
     kPlayerBulletCollisionProperties = 1 << 1,
-    kEnemyCollisionProperties = 1 << 2,
-    kEnemyBulletCollisionProperties = 1 << 3,
-    kBarrierCollisionProperties = 1 << 4,
+    kPlayerBarrierCollisionProperties = 1 << 2,
+    kEnemyCollisionProperties = 1 << 3,
+    kEnemyBulletCollisionProperties = 1 << 4,
+    kEnemyBarrierCollisionProperties = 1 << 5,
 };
 
 class Physics;

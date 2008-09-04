@@ -18,15 +18,15 @@ class ToolBrowser(wx.Panel):
         self.selectedTool = None
         self.selectedEditor = None
 
-        self.propToolPanel = PropToolPanel.PropToolPanel(self.notebook, -1)
-        self.notebook.AddPage(self.propToolPanel, "Props")
-
         self.collisionToolPanel = CollisionToolPanel.CollisionToolPanel(self.notebook, -1)
         #self.notebook.AddPage(self.collisionToolPanel, "Collision")
         self.notebook.AddPage(self.collisionToolPanel, "Col")
 
         self.poiToolPanel = POIToolPanel.POIToolPanel(self.notebook, -1)
         self.notebook.AddPage(self.poiToolPanel, "POI")
+
+        self.propToolPanel = PropToolPanel.PropToolPanel(self.notebook, -1)
+        self.notebook.AddPage(self.propToolPanel, "Props")
 
     def addObserver(self, observer): self.observers.append(observer)
     def removeObserver(self, observer): self.observers.remove(observer)

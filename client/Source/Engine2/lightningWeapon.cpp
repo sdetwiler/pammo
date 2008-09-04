@@ -70,7 +70,7 @@ void LightningWeapon::fire()
         
     // Properties about lightning bullet particles.
     p->mBody->mProperties = kPlayerBulletCollisionProperties;
-    p->mBody->mCollideProperties = kEnemyCollisionProperties | kBarrierCollisionProperties;
+    p->mBody->mCollideProperties = kEnemyCollisionProperties | kPlayerBarrierCollisionProperties;
     p->mBody->mBodyCallback = lightningBulletCollisionCallback;
     p->mBody->mShapeCallback = lightningBulletShapeCollisionCallback;
     p->mBody->mDamping = 0;

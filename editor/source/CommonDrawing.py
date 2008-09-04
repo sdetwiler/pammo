@@ -2,15 +2,21 @@ import wx
 import POI
 
 def drawCollisionShapes(display, gc, rect):
-    groups = display.getMap().getCollisionGroups()
+    collisionShapes = display.getMap().getCollisionShapes()
 
     # Draw all collision shapes.
-    gc.SetBrush(wx.Brush(wx.Color(0, 100, 0, 92)))
-    gc.SetPen(wx.Pen(wx.Color(0, 128, 0, 168), 3))
-    for group in groups:
+    for shape in collisionShapes:
+        if not shape.getEnemiesCollide():
+            gc.SetBrush(wx.Brush(wx.Color(50, 128, 50, 92)))
+            gc.SetPen(wx.Pen(wx.Color(64, 192, 64, 168), 3))
+        else:
+            gc.SetBrush(wx.Brush(wx.Color(0, 100, 0, 92)))
+            gc.SetPen(wx.Pen(wx.Color(0, 128, 0, 168), 3))
+
+        points = shape.getPoints()
         path = gc.CreatePath()
-        path.MoveToPoint(group[0][0], group[0][1])
-        for point in group[1:]:
+        path.MoveToPoint(points[0][0], points[0][1])
+        for point in points[1:]:
             path.AddLineToPoint(point[0], point[1])
         path.CloseSubpath()
         gc.FillPath(path)

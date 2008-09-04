@@ -62,7 +62,7 @@ void flameTankEnemyInitFireParticle(Enemy* e)
         
     // Properties about fire particles.
     p->mBody->mProperties = kPlayerBulletCollisionProperties;
-    p->mBody->mCollideProperties = kPlayerCollisionProperties | kBarrierCollisionProperties;
+    p->mBody->mCollideProperties = kPlayerCollisionProperties | kEnemyBarrierCollisionProperties;
     p->mBody->mBodyCallback = flameTankEnemyFireCollisionCb;
     p->mBody->mDamping = 0;
     p->mBody->mRadius = 15;
@@ -75,7 +75,7 @@ void flameTankEnemyInitFireParticle(Enemy* e)
 
 void flameTankEnemyInit(Enemy* e, EnemyManager* manager)
 {
-    e->mEntity.setImageAndInit(gImageLibrary->reference("data/vehicles/flameTank5/00.png"));
+    e->mEntity.setImageAndInit(gImageLibrary->reference("data/vehicles/flameTank/00.png"));
     e->mDrawCb = flameTankEnemyDraw;
     e->mUpdateCb = flameTankEnemySurroundUpdate;
 	e->mDamageCb = flameTankEnemyDamage;

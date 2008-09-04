@@ -321,7 +321,7 @@ void ParticleSystem::initBallParticle(InitBallParticleArgs const& args)
 
     // Get a body.
     p->mBody->mProperties = kEnemyBulletCollisionProperties;
-    p->mBody->mCollideProperties = kPlayerCollisionProperties | kBarrierCollisionProperties;
+    p->mBody->mCollideProperties = kPlayerCollisionProperties | kPlayerBarrierCollisionProperties;
     p->mBody->mDamping = 0;
     p->mBody->mRadius = 8;
     p->mBody->mMass = 50;

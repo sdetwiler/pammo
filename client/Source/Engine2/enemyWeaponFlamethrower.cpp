@@ -72,7 +72,7 @@ void enemyWeaponFlamethrowerCb(Enemy* e, EnemyWeapon* w, EnemyManager* manager)
         
     // Properties about fire particle bodies.
     p->mBody->mProperties = kEnemyBulletCollisionProperties;
-    p->mBody->mCollideProperties = kPlayerCollisionProperties | kBarrierCollisionProperties;
+    p->mBody->mCollideProperties = kPlayerCollisionProperties | kEnemyBarrierCollisionProperties;
     p->mBody->mBodyCallback = enemyWeaponFlamethrowerFireCollisionCb;
     p->mBody->mDamping = 0;
     p->mBody->mRadius = 15;

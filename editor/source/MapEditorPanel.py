@@ -61,14 +61,14 @@ class MapEditorPanel(wx.Panel):
         #map.setProperties(properties)
         #self.newEditorForMap(map)
 
-        #f = open("/Users/jmarr/Desktop/Pammo/data/maps/Desert.map")
+        #f = open("/Users/jmarr/Desktop/Irradiated/data/maps/TheMap.map")
         #map = Map.Map()
         #map.loadFromFile("Desert", f)
         #self.newEditorForMap(map)
 
     def onNewMenu(self, event):
         backdrop = self.askChooseBackdrop()
-        if not backdrop: return
+        if not backdrop: return2
         
         # Find a unique name in this notebook.
         nameExtra = 2
@@ -106,6 +106,7 @@ class MapEditorPanel(wx.Panel):
 
         f = open(path, "r")
         map = Map.Map()
+        #map.loadFromFile(name, f)
         try:
             map.loadFromFile(name, f)
         except:

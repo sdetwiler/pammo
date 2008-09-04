@@ -166,7 +166,10 @@ void buildCollisionMap(World* world, char const* mapName)
     for(uint32_t s=0; s < numShapes; ++s)
     {
 		uint16_t properties = readUInt16(&cur, &remain);
-		if(properties == 0) properties = kBarrierCollisionProperties;
+        uint16_t shapeProperties = 0;
+		if(properties & (1 << 0)) shapeProperties |= kPlayerBarrierCollisionProperties;
+		if(properties & (1 << 1)) shapeProperties |= kEnemyBarrierCollisionProperties;
+        
         uint16_t numPoints = readUInt16(&cur, &remain);
         //dprintf(" Points: %d", numPoints);
         Vector2* points = new Vector2[numPoints];
@@ -176,8 +179,8 @@ void buildCollisionMap(World* world, char const* mapName)
             points[i].y = readFloat(&cur, &remain);
             //dprintf("  (%f, %f)", points[i].x, points[i].y);
         }
-        
-        physics->addShape(properties, numPoints, points);
+        dprintf("Properties: %d Shape Properties: %d", properties, shapeProperties);
+        physics->addShape(shapeProperties, numPoints, points);
     }
     
     // Read num POIs.

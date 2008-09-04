@@ -55,7 +55,7 @@ void enemyParticleSmokeCb(Enemy* e, EnemyParticle* ep, EnemyManager* manager)
 
     // Base properties about particle bodies.
     p->mBody->mProperties = kPlayerBulletCollisionProperties;
-    p->mBody->mCollideProperties = kPlayerCollisionProperties | kBarrierCollisionProperties;
+    p->mBody->mCollideProperties = kPlayerCollisionProperties | kEnemyBarrierCollisionProperties;
     p->mBody->mCenter = center;
         
     // Set jet flame specific particle properties.

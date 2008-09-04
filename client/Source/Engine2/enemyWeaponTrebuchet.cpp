@@ -64,7 +64,7 @@ void enemyWeaponTrebuchetCb(Enemy* e, EnemyWeapon* w, EnemyManager* manager)
         
     // Properties about ball particles.
     p->mBody->mProperties = kPlayerBulletCollisionProperties;
-    p->mBody->mCollideProperties = kPlayerCollisionProperties | kBarrierCollisionProperties;
+    p->mBody->mCollideProperties = kPlayerCollisionProperties | kEnemyBarrierCollisionProperties;
     p->mBody->mBodyCallback = enemyWeaponTrebuchetBallCollisionCb;
     p->mBody->mDamping = 0;
     p->mBody->mRadius = 15;

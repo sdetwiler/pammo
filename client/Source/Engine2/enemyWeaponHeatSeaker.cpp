@@ -143,7 +143,7 @@ void enemyWeaponHeatSeakerCb(Enemy* e, EnemyWeapon* w, EnemyManager* manager)
     // Properties about heat seaker particle bodies.
     p->mBody->mUserArg = p;
     p->mBody->mProperties = kEnemyBulletCollisionProperties;
-    p->mBody->mCollideProperties = kPlayerBulletCollisionProperties | kPlayerCollisionProperties | kBarrierCollisionProperties;
+    p->mBody->mCollideProperties = kPlayerBulletCollisionProperties | kPlayerCollisionProperties | kEnemyBarrierCollisionProperties;
     p->mBody->mBodyCallback = enemyWeaponHeatSeakerCollisionCb;
     p->mBody->mShapeCallback = enemyWeaponHeatSeakerShapeCollisionCb;
     p->mBody->mDamping = 0;

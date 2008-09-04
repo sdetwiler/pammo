@@ -1,5 +1,6 @@
 import Backdrop
 import Entity
+import CollisionShape
 import POI
 
 class Map:
@@ -11,7 +12,7 @@ class Map:
 
         self.backdrop = None
         self.entities = []
-        self.collisionGroups = []
+        self.collisionShapes = []
         self.pois = []
 
     def addObserver(self, observer):
@@ -30,23 +31,27 @@ class Map:
         self.isDirty = True
         self._notify()
 
+    def onCollisionShapeChanged(self, shape):
+        self.isDirty = True
+        self._notify()
+
     def onPOIChanged(self, poi):
         self.isDirty = True
         self._notify()
 
     def saveToFile(self, f):
-        output = {'version': 5, 'backdrop': self.backdrop.getName()}
+        output = {'version': 6, 'backdrop': self.backdrop.getName()}
         
         entities = []
-        for s in self.entities:
-            entities.append(s.saveToDic())
+        for s in self.entities: entities.append(s.saveToDic())
         output['entities'] = entities
 
-        output['collisionGroups'] = self.collisionGroups
+        collisionShapes = []
+        for s in self.collisionShapes: collisionShapes.append(s.saveToDic())
+        output['collisionShapes'] = collisionShapes
 
         pois = []
-        for s in self.pois:
-            pois.append(s.saveToDic())
+        for s in self.pois: pois.append(s.saveToDic())
         output['pois'] = pois
 
         f.write(str(output))
@@ -64,19 +69,32 @@ class Map:
         self.backdrop = Backdrop.Backdrop(dic['backdrop'])
 
         # Load entities.
-        for s in dic['entities']:
+        for d in dic['entities']:
             e = Entity.Entity()
-            e.loadFromDic(s)
+            e.loadFromDic(d)
             e.addObserver(self.onEntityChanged)
             self.entities.append(e)
 
-        # Load collision groups.
-        self.collisionGroups = dic['collisionGroups']
+        # Load collision shapes.
+        if 'collisionShapes' in dic:
+            for d in dic['collisionShapes']:
+                s = CollisionShape.CollisionShape()
+                s.loadFromDic(d)
+                s.addObserver(self.onCollisionShapeChanged)
+                self.collisionShapes.append(s)
+
+        # Convert collision groups to collision shapes.
+        if 'collisionGroups' in dic:
+            for d in dic['collisionGroups']:
+                s = CollisionShape.CollisionShape()
+                s.setPoints(d)
+                s.addObserver(self.onCollisionShapeChanged)
+                self.collisionShapes.append(s)
 
         # Load pois.
-        for s in dic['pois']:
+        for d in dic['pois']:
             p = POI.POI()
-            p.loadFromDic(s)
+            p.loadFromDic(d)
             p.addObserver(self.onPOIChanged)
             self.pois.append(p)
 
@@ -126,13 +144,20 @@ class Map:
     def getEntities(self):
         return self.entities
 
-    def getCollisionGroups(self):
-        return self.collisionGroups
-
-    def setCollisionGroups(self, collisionGroups):
-        self.collisionGroups = collisionGroups
+    def addCollisionShape(self, collisionShape):
+        self.collisionShapes.append(collisionShape)
+        collisionShape.addObserver(self.onCollisionShapeChanged)
         self.isDirty = True
         self._notify()
+
+    def removeCollisionShape(self, collisionShape):
+        collisionShape.removeObserver(self.onCollisionShapeChanged)
+        self.collisionShapes.remove(collisionShape)
+        self.isDirty = True
+        self._notify()
+
+    def getCollisionShapes(self):
+        return self.collisionShapes
 
     def addPOI(self, poi):
         self.pois.append(poi)

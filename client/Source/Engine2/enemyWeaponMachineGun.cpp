@@ -83,7 +83,7 @@ void enemyWeaponMachineGunCb(Enemy* e, EnemyWeapon* w, EnemyManager* manager)
     // Properties about machine gun particle bodies.
     p->mBody->mUserArg = p;
     p->mBody->mProperties = kEnemyBulletCollisionProperties;
-    p->mBody->mCollideProperties = kPlayerCollisionProperties | kBarrierCollisionProperties;
+    p->mBody->mCollideProperties = kPlayerCollisionProperties | kEnemyBarrierCollisionProperties;
     p->mBody->mBodyCallback = enemyWeaponMachineGunCollisionCb;
     p->mBody->mShapeCallback = enemyWeaponMachineGunShapeCollisionCb;
     p->mBody->mDamping = 0;

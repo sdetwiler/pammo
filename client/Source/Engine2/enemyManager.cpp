@@ -106,7 +106,7 @@ void enemyWeaponTurretGetParticleWithBody(Enemy* e, EnemyWeapon* w, EnemyManager
         
     // Base properties about particle bodies.
     (*p)->mBody->mProperties = kPlayerBulletCollisionProperties;
-    (*p)->mBody->mCollideProperties = kPlayerCollisionProperties | kBarrierCollisionProperties;
+    (*p)->mBody->mCollideProperties = kPlayerCollisionProperties | kEnemyBarrierCollisionProperties;
     (*p)->mBody->mCenter = data->mTurretTip;
 }
 
@@ -603,7 +603,7 @@ Enemy* EnemyManager::addEnemy()
 
     e->mBody = gWorld->getPhysics()->addBody();
     e->mBody->mProperties = kEnemyCollisionProperties;
-    e->mBody->mCollideProperties= kEnemyCollisionProperties | kPlayerCollisionProperties | kBarrierCollisionProperties;
+    e->mBody->mCollideProperties= kEnemyCollisionProperties | kPlayerCollisionProperties | kEnemyBarrierCollisionProperties;
     e->mBody->mDamping = 0.1f;
     e->mBody->mRadius = 20;
     e->mBody->mMass = 100;

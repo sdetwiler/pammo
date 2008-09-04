@@ -195,10 +195,14 @@ void buildCollisionMap(World* world, char const* mapName)
         {
             world->getPlayer()->setCenter(Vector2(x, y));
         }
-        else
+        else if(properties == 1)
         {
             //dprintf("Spawn Point: %f, %f", x, y);
             world->getEnemyManager()->addSpawnPoint(Vector2(x, y));
+        }
+        else if(properties == 2)
+        {
+            dprintf("Infastructure Point: %f, %f", x, y);
         }
     }
     

@@ -106,6 +106,7 @@ void enemyWeaponHeatSeakerCb(Enemy* e, EnemyWeapon* w, EnemyManager* manager)
 
     Particle* p = NULL;
     enemyWeaponTurretGetParticleWithBody(e, w, manager, &data->mTurret, &p);
+    if(!p) return;
 
     // Set HeatSeaker specific particle properties.
     p->mCallback = enemyWeaponHeatSeakerFireParticleCb;

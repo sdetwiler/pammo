@@ -32,8 +32,7 @@ void enemyParticleJetFlameCb(Enemy* e, EnemyParticle* ep, EnemyManager* manager)
 
     // Get a particle.
     p = gWorld->getParticleSystem()->addParticle(2);//WithBody(2);
-    if(!p)
-        return;
+    if(!p) return;
 
     // Calculate center. Vehicle center, plus particle offset rotated for vehicle, plus turret rotated for direction.
     Vector2 center = e->mBody->mCenter

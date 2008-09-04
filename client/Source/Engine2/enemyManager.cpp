@@ -93,8 +93,7 @@ void enemyWeaponTurretGetParticleWithBody(Enemy* e, EnemyWeapon* w, EnemyManager
 {
     // Get a particle.
     *p = gWorld->getParticleSystem()->addParticleWithBody(2);
-    if(!*p)
-        return;
+    if(!*p) return;
 
     // Set basic particle properties.
     (*p)->mAlpha = 1.0f;

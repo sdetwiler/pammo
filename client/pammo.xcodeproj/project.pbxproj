@@ -18,6 +18,11 @@
 		110665810E635A240023ABB1 /* healthMeter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1106657F0E635A240023ABB1 /* healthMeter.cpp */; };
 		110665A90E6372AE0023ABB1 /* enemyWeaponFlamethrower.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 110665A50E6372AE0023ABB1 /* enemyWeaponFlamethrower.cpp */; };
 		110665AA0E6372AE0023ABB1 /* enemyWeaponTrebuchet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 110665A70E6372AE0023ABB1 /* enemyWeaponTrebuchet.cpp */; };
+		1106667E0E63D4630023ABB1 /* enemyWeaponSelfDestruct.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1106667C0E63D4630023ABB1 /* enemyWeaponSelfDestruct.cpp */; };
+		110666A60E6865A70023ABB1 /* enemyParticleJetFlame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 110666A00E6865A70023ABB1 /* enemyParticleJetFlame.cpp */; };
+		110666A70E6865A70023ABB1 /* enemyParticleSmoke.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 110666A20E6865A70023ABB1 /* enemyParticleSmoke.cpp */; };
+		110666A80E6865A70023ABB1 /* enemyWeaponMachineGun.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 110666A40E6865A70023ABB1 /* enemyWeaponMachineGun.cpp */; };
+		110666C20E6F8E450023ABB1 /* enemyWeaponHeatSeaker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 110666C00E6F8E450023ABB1 /* enemyWeaponHeatSeaker.cpp */; };
 		1121D1370E2F0BA2008C8598 /* builder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1121D1350E2F0BA2008C8598 /* builder.cpp */; };
 		1123883A0E59FCB20051B761 /* Entitlements.plist in Resources */ = {isa = PBXBuildFile; fileRef = 112388390E59FCB20051B761 /* Entitlements.plist */; };
 		112A588D0E303B5800A3C218 /* imageEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 112A588A0E303B5800A3C218 /* imageEntity.cpp */; };
@@ -91,6 +96,16 @@
 		110665A60E6372AE0023ABB1 /* enemyWeaponFlamethrower.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = enemyWeaponFlamethrower.h; sourceTree = "<group>"; };
 		110665A70E6372AE0023ABB1 /* enemyWeaponTrebuchet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = enemyWeaponTrebuchet.cpp; sourceTree = "<group>"; };
 		110665A80E6372AE0023ABB1 /* enemyWeaponTrebuchet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = enemyWeaponTrebuchet.h; sourceTree = "<group>"; };
+		1106667C0E63D4630023ABB1 /* enemyWeaponSelfDestruct.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = enemyWeaponSelfDestruct.cpp; sourceTree = "<group>"; };
+		1106667D0E63D4630023ABB1 /* enemyWeaponSelfDestruct.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = enemyWeaponSelfDestruct.h; sourceTree = "<group>"; };
+		110666A00E6865A70023ABB1 /* enemyParticleJetFlame.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = enemyParticleJetFlame.cpp; sourceTree = "<group>"; };
+		110666A10E6865A70023ABB1 /* enemyParticleJetFlame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = enemyParticleJetFlame.h; sourceTree = "<group>"; };
+		110666A20E6865A70023ABB1 /* enemyParticleSmoke.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = enemyParticleSmoke.cpp; sourceTree = "<group>"; };
+		110666A30E6865A70023ABB1 /* enemyParticleSmoke.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = enemyParticleSmoke.h; sourceTree = "<group>"; };
+		110666A40E6865A70023ABB1 /* enemyWeaponMachineGun.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = enemyWeaponMachineGun.cpp; sourceTree = "<group>"; };
+		110666A50E6865A70023ABB1 /* enemyWeaponMachineGun.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = enemyWeaponMachineGun.h; sourceTree = "<group>"; };
+		110666C00E6F8E450023ABB1 /* enemyWeaponHeatSeaker.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = enemyWeaponHeatSeaker.cpp; sourceTree = "<group>"; };
+		110666C10E6F8E450023ABB1 /* enemyWeaponHeatSeaker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = enemyWeaponHeatSeaker.h; sourceTree = "<group>"; };
 		1121D1350E2F0BA2008C8598 /* builder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = builder.cpp; sourceTree = "<group>"; };
 		1121D1360E2F0BA2008C8598 /* builder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = builder.h; sourceTree = "<group>"; };
 		112388390E59FCB20051B761 /* Entitlements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Entitlements.plist; path = Source/iPhone/Entitlements.plist; sourceTree = "<group>"; };
@@ -245,8 +260,18 @@
 				11B6858A0E53B9CA00BB0872 /* enemyLoader.h */,
 				118F3E5B0E35A01E00ECCDFE /* enemyManager.cpp */,
 				118F3E5C0E35A01E00ECCDFE /* enemyManager.h */,
+				110666A00E6865A70023ABB1 /* enemyParticleJetFlame.cpp */,
+				110666A10E6865A70023ABB1 /* enemyParticleJetFlame.h */,
+				110666A20E6865A70023ABB1 /* enemyParticleSmoke.cpp */,
+				110666A30E6865A70023ABB1 /* enemyParticleSmoke.h */,
 				110665A50E6372AE0023ABB1 /* enemyWeaponFlamethrower.cpp */,
 				110665A60E6372AE0023ABB1 /* enemyWeaponFlamethrower.h */,
+				110666C00E6F8E450023ABB1 /* enemyWeaponHeatSeaker.cpp */,
+				110666C10E6F8E450023ABB1 /* enemyWeaponHeatSeaker.h */,
+				110666A40E6865A70023ABB1 /* enemyWeaponMachineGun.cpp */,
+				110666A50E6865A70023ABB1 /* enemyWeaponMachineGun.h */,
+				1106667C0E63D4630023ABB1 /* enemyWeaponSelfDestruct.cpp */,
+				1106667D0E63D4630023ABB1 /* enemyWeaponSelfDestruct.h */,
 				110665A70E6372AE0023ABB1 /* enemyWeaponTrebuchet.cpp */,
 				110665A80E6372AE0023ABB1 /* enemyWeaponTrebuchet.h */,
 				113E76BA0E4BA9A7005A8070 /* flameTankEnemy.cpp */,
@@ -454,6 +479,11 @@
 				110665810E635A240023ABB1 /* healthMeter.cpp in Sources */,
 				110665A90E6372AE0023ABB1 /* enemyWeaponFlamethrower.cpp in Sources */,
 				110665AA0E6372AE0023ABB1 /* enemyWeaponTrebuchet.cpp in Sources */,
+				1106667E0E63D4630023ABB1 /* enemyWeaponSelfDestruct.cpp in Sources */,
+				110666A60E6865A70023ABB1 /* enemyParticleJetFlame.cpp in Sources */,
+				110666A70E6865A70023ABB1 /* enemyParticleSmoke.cpp in Sources */,
+				110666A80E6865A70023ABB1 /* enemyWeaponMachineGun.cpp in Sources */,
+				110666C20E6F8E450023ABB1 /* enemyWeaponHeatSeaker.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -4,7 +4,7 @@ import Map
 class MapDisplay(wx.ScrolledWindow):
     def __init__(self, parent, id, map):
         wx.ScrolledWindow.__init__(self, parent, id, style=wx.BORDER_SUNKEN)
-        self.SetScrollRate(5, 5)
+        self.SetScrollRate(4, 4)
         self.Bind(wx.EVT_LEFT_DOWN, self.onMouseEvent)
         self.Bind(wx.EVT_LEFT_UP, self.onMouseEvent)
         self.Bind(wx.EVT_MOTION, self.onMouseEvent)

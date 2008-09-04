@@ -26,9 +26,13 @@ def drawPOIs(display, gc, rect):
         if type == POI.PlayerStartTypeName:
             gc.SetBrush(wx.Brush(wx.Color(0, 0, 100, 92)))
             gc.SetPen(wx.Pen(wx.Color(0, 0, 128, 168), strokeSize))
-        else:
+        elif type == POI.InfastructurePointTypeName:
+            gc.SetBrush(wx.Brush(wx.Color(0, 100, 100, 92)))
+            gc.SetPen(wx.Pen(wx.Color(0, 128, 128, 168), strokeSize))
+        elif type == POI.SpawnPointTypeName:
             gc.SetBrush(wx.Brush(wx.Color(0, 100, 0, 92)))
             gc.SetPen(wx.Pen(wx.Color(0, 128, 0, 168), strokeSize))
+        else: continue
 
         pos = poi.getPos()
         gc.DrawEllipse(pos[0] - displaySize/2 + strokeSize - 1, pos[1] - displaySize/2 + strokeSize - 1,
@@ -55,9 +59,9 @@ def drawGrid(display, gc, rect, amount):
 
 def drawSafeZone(display, gc, rect):
     (worldX, worldY) = display.getMap().getSize()
-    bounds = [320/2, 480/2,
-              worldX - 320/2,
-              worldY - 480/2]
+    bounds = [480/2, 320/2,
+              worldX - 480/2,
+              worldY - 320/2]
     
     gc.SetPen(wx.Pen(wx.Color(192, 48, 192, 128), 5))
     gc.StrokeLine(bounds[0], bounds[1], bounds[0], bounds[3])

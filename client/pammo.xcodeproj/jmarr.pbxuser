@@ -308,7 +308,7 @@
 		fRef = 1121D1350E2F0BA2008C8598 /* builder.cpp */;
 		name = "builder.cpp: 204";
 		rLen = 0;
-		rLoc = 5533;
+		rLoc = 5553;
 		rType = 0;
 		vrLen = 1403;
 		vrLoc = 4538;
@@ -334,7 +334,7 @@
 		fRef = 1121D1350E2F0BA2008C8598 /* builder.cpp */;
 		name = "builder.cpp: 204";
 		rLen = 0;
-		rLoc = 5533;
+		rLoc = 5553;
 		rType = 0;
 		vrLen = 1403;
 		vrLoc = 4538;
@@ -352,7 +352,7 @@
 		fRef = 118F3E5B0E35A01E00ECCDFE /* enemyManager.cpp */;
 		name = "enemyManager.cpp: 110";
 		rLen = 0;
-		rLoc = 2695;
+		rLoc = 2687;
 		rType = 0;
 		vrLen = 1609;
 		vrLoc = 1857;
@@ -392,7 +392,7 @@
 		fRef = 118F3E5B0E35A01E00ECCDFE /* enemyManager.cpp */;
 		name = "enemyManager.cpp: 110";
 		rLen = 0;
-		rLoc = 2695;
+		rLoc = 2687;
 		rType = 0;
 		vrLen = 1609;
 		vrLoc = 1857;
@@ -763,9 +763,16 @@
 	};
 	110665A50E6372AE0023ABB1 /* enemyWeaponFlamethrower.cpp */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1544, 1078}}";
-			sepNavSelRange = "{0, 0}";
-			sepNavVisRange = "{0, 866}";
+			sepNavIntBoundsRect = "{{0, 0}, {1272, 1148}}";
+			sepNavSelRange = "{1417, 36}";
+			sepNavVisRange = "{391, 1863}";
+		};
+	};
+	110665A60E6372AE0023ABB1 /* enemyWeaponFlamethrower.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1304, 919}}";
+			sepNavSelRange = "{216, 0}";
+			sepNavVisRange = "{0, 216}";
 		};
 	};
 	110665AF0E6372E30023ABB1 /* PBXTextBookmark */ = {
@@ -1134,7 +1141,7 @@
 		fRef = 1121D1350E2F0BA2008C8598 /* builder.cpp */;
 		name = "builder.cpp: 212";
 		rLen = 0;
-		rLoc = 5578;
+		rLoc = 5709;
 		rType = 0;
 		vrLen = 1003;
 		vrLoc = 4968;
@@ -1204,7 +1211,7 @@
 		fRef = 1121D1350E2F0BA2008C8598 /* builder.cpp */;
 		name = "builder.cpp: 212";
 		rLen = 0;
-		rLoc = 5578;
+		rLoc = 5709;
 		rType = 0;
 		vrLen = 1003;
 		vrLoc = 4968;
@@ -1244,7 +1251,7 @@
 		fRef = 1121D1350E2F0BA2008C8598 /* builder.cpp */;
 		name = "builder.cpp: 204";
 		rLen = 0;
-		rLoc = 5533;
+		rLoc = 5553;
 		rType = 0;
 		vrLen = 1803;
 		vrLoc = 4024;
@@ -1592,7 +1599,7 @@
 		fRef = 118F3E5B0E35A01E00ECCDFE /* enemyManager.cpp */;
 		name = "enemyManager.cpp: 102";
 		rLen = 0;
-		rLoc = 2695;
+		rLoc = 2687;
 		rType = 0;
 		vrLen = 1164;
 		vrLoc = 1791;
@@ -1642,7 +1649,7 @@
 		fRef = 118F3E5B0E35A01E00ECCDFE /* enemyManager.cpp */;
 		name = "enemyManager.cpp: 425";
 		rLen = 0;
-		rLoc = 10903;
+		rLoc = 10895;
 		rType = 0;
 		vrLen = 1023;
 		vrLoc = 10010;
@@ -1674,7 +1681,7 @@
 		fRef = 118F3E5B0E35A01E00ECCDFE /* enemyManager.cpp */;
 		name = "enemyManager.cpp: 425";
 		rLen = 0;
-		rLoc = 10903;
+		rLoc = 10895;
 		rType = 0;
 		vrLen = 1023;
 		vrLoc = 10010;
@@ -1837,7 +1844,7 @@
 		fRef = 118F3E5B0E35A01E00ECCDFE /* enemyManager.cpp */;
 		name = "enemyManager.cpp: 106";
 		rLen = 0;
-		rLoc = 2895;
+		rLoc = 2887;
 		rType = 0;
 		vrLen = 1770;
 		vrLoc = 9585;
@@ -1864,7 +1871,7 @@
 		fRef = 118F3E5B0E35A01E00ECCDFE /* enemyManager.cpp */;
 		name = "enemyManager.cpp: 106";
 		rLen = 0;
-		rLoc = 2895;
+		rLoc = 2887;
 		rType = 0;
 		vrLen = 1770;
 		vrLoc = 9585;
@@ -1889,11 +1896,772 @@
 		vrLen = 596;
 		vrLoc = 4795;
 	};
+	1106667B0E63D4480023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 1121D1350E2F0BA2008C8598 /* builder.cpp */;
+		name = "builder.cpp: 185";
+		rLen = 0;
+		rLoc = 5053;
+		rType = 0;
+		vrLen = 596;
+		vrLoc = 4795;
+	};
+	1106667C0E63D4630023ABB1 /* enemyWeaponSelfDestruct.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1272, 896}}";
+			sepNavSelRange = "{633, 0}";
+			sepNavVisRange = "{0, 1024}";
+		};
+	};
+	110666800E63D46C0023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 118321120E328D710037B9B4 /* physics.cpp */;
+		name = "physics.cpp: 407";
+		rLen = 0;
+		rLoc = 11638;
+		rType = 0;
+		vrLen = 2946;
+		vrLoc = 10508;
+	};
+	110666810E63D46C0023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 11B6858A0E53B9CA00BB0872 /* enemyLoader.h */;
+		name = "enemyLoader.h: 24";
+		rLen = 0;
+		rLoc = 391;
+		rType = 0;
+		vrLen = 2081;
+		vrLoc = 0;
+	};
+	110666820E63D46C0023ABB1 /* PBXBookmark */ = {
+		isa = PBXBookmark;
+		fRef = 1106667C0E63D4630023ABB1 /* enemyWeaponSelfDestruct.cpp */;
+	};
+	110666830E63D46C0023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 118321120E328D710037B9B4 /* physics.cpp */;
+		name = "physics.cpp: 407";
+		rLen = 0;
+		rLoc = 11638;
+		rType = 0;
+		vrLen = 2946;
+		vrLoc = 10508;
+	};
+	110666840E63D46C0023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 11B6858A0E53B9CA00BB0872 /* enemyLoader.h */;
+		name = "enemyLoader.h: 24";
+		rLen = 0;
+		rLoc = 391;
+		rType = 0;
+		vrLen = 2081;
+		vrLoc = 0;
+	};
+	110666850E63D46C0023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 1106667C0E63D4630023ABB1 /* enemyWeaponSelfDestruct.cpp */;
+		name = "enemyWeaponSelfDestruct.cpp: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 633;
+		vrLoc = 0;
+	};
+	110666870E63D4D80023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 1106667C0E63D4630023ABB1 /* enemyWeaponSelfDestruct.cpp */;
+		name = "enemyWeaponSelfDestruct.cpp: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 633;
+		vrLoc = 0;
+	};
+	1106668A0E63D9260023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 1106667C0E63D4630023ABB1 /* enemyWeaponSelfDestruct.cpp */;
+		name = "enemyWeaponSelfDestruct.cpp: 26";
+		rLen = 0;
+		rLoc = 633;
+		rType = 0;
+		vrLen = 633;
+		vrLoc = 0;
+	};
+	1106668B0E63D9260023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 110665A60E6372AE0023ABB1 /* enemyWeaponFlamethrower.h */;
+		name = "enemyWeaponFlamethrower.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 216;
+		vrLoc = 0;
+	};
+	1106668C0E63D9260023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 1106667C0E63D4630023ABB1 /* enemyWeaponSelfDestruct.cpp */;
+		name = "enemyWeaponSelfDestruct.cpp: 26";
+		rLen = 0;
+		rLoc = 633;
+		rType = 0;
+		vrLen = 633;
+		vrLoc = 0;
+	};
+	1106668D0E63D9260023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 110665A60E6372AE0023ABB1 /* enemyWeaponFlamethrower.h */;
+		name = "enemyWeaponFlamethrower.h: 7";
+		rLen = 0;
+		rLoc = 216;
+		rType = 0;
+		vrLen = 216;
+		vrLoc = 0;
+	};
+	110666900E64E31B0023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 110665A60E6372AE0023ABB1 /* enemyWeaponFlamethrower.h */;
+		name = "enemyWeaponFlamethrower.h: 7";
+		rLen = 0;
+		rLoc = 216;
+		rType = 0;
+		vrLen = 216;
+		vrLoc = 0;
+	};
+	110666910E64E31B0023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 1106667C0E63D4630023ABB1 /* enemyWeaponSelfDestruct.cpp */;
+		name = "enemyWeaponSelfDestruct.cpp: 26";
+		rLen = 0;
+		rLoc = 633;
+		rType = 0;
+		vrLen = 633;
+		vrLoc = 0;
+	};
+	110666920E64E31B0023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 110665A50E6372AE0023ABB1 /* enemyWeaponFlamethrower.cpp */;
+		name = "enemyWeaponFlamethrower.cpp: 65";
+		rLen = 0;
+		rLoc = 1643;
+		rType = 0;
+		vrLen = 1892;
+		vrLoc = 364;
+	};
+	110666930E64E31B0023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 112A58910E303B9500A3C218 /* targetRingWidget.h */;
+		name = "targetRingWidget.h: 29";
+		rLen = 0;
+		rLoc = 565;
+		rType = 0;
+		vrLen = 1017;
+		vrLoc = 0;
+	};
+	110666940E64E31B0023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 112A588E0E303B7600A3C218 /* targetRingWidget.cpp */;
+		name = "targetRingWidget.cpp: 6";
+		rLen = 0;
+		rLoc = 97;
+		rType = 0;
+		vrLen = 1341;
+		vrLoc = 0;
+	};
+	110666950E64E31B0023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 118F3FFE0E36B87C00ECCDFE /* flamethrowerWeapon.cpp */;
+		name = "flamethrowerWeapon.cpp: 64";
+		rLen = 0;
+		rLoc = 1815;
+		rType = 0;
+		vrLen = 1982;
+		vrLoc = 0;
+	};
+	110666960E64E31B0023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 11C3F42D0E2F0F3A00EE8D28 /* player.cpp */;
+		name = "player.cpp: 60";
+		rLen = 0;
+		rLoc = 1607;
+		rType = 0;
+		vrLen = 1608;
+		vrLoc = 362;
+	};
+	110666970E64E31B0023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 110665A60E6372AE0023ABB1 /* enemyWeaponFlamethrower.h */;
+		name = "enemyWeaponFlamethrower.h: 7";
+		rLen = 0;
+		rLoc = 216;
+		rType = 0;
+		vrLen = 216;
+		vrLoc = 0;
+	};
+	110666980E64E31B0023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 110665A50E6372AE0023ABB1 /* enemyWeaponFlamethrower.cpp */;
+		name = "enemyWeaponFlamethrower.cpp: 60";
+		rLen = 0;
+		rLoc = 1412;
+		rType = 0;
+		vrLen = 1892;
+		vrLoc = 364;
+	};
+	110666990E64E31B0023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 1106667C0E63D4630023ABB1 /* enemyWeaponSelfDestruct.cpp */;
+		name = "enemyWeaponSelfDestruct.cpp: 26";
+		rLen = 0;
+		rLoc = 633;
+		rType = 0;
+		vrLen = 633;
+		vrLoc = 0;
+	};
+	1106669A0E64E31B0023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 110665A50E6372AE0023ABB1 /* enemyWeaponFlamethrower.cpp */;
+		name = "enemyWeaponFlamethrower.cpp: 65";
+		rLen = 0;
+		rLoc = 1643;
+		rType = 0;
+		vrLen = 1892;
+		vrLoc = 364;
+	};
+	1106669B0E64E31B0023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 118F3FFE0E36B87C00ECCDFE /* flamethrowerWeapon.cpp */;
+		name = "flamethrowerWeapon.cpp: 60";
+		rLen = 0;
+		rLoc = 1665;
+		rType = 0;
+		vrLen = 1947;
+		vrLoc = 589;
+	};
+	1106669C0E64E31B0023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 112A58910E303B9500A3C218 /* targetRingWidget.h */;
+		name = "targetRingWidget.h: 29";
+		rLen = 0;
+		rLoc = 565;
+		rType = 0;
+		vrLen = 1017;
+		vrLoc = 0;
+	};
+	1106669D0E64E31B0023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 112A588E0E303B7600A3C218 /* targetRingWidget.cpp */;
+		name = "targetRingWidget.cpp: 6";
+		rLen = 0;
+		rLoc = 97;
+		rType = 0;
+		vrLen = 1341;
+		vrLoc = 0;
+	};
+	1106669E0E64E31B0023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 118F3FFE0E36B87C00ECCDFE /* flamethrowerWeapon.cpp */;
+		name = "flamethrowerWeapon.cpp: 64";
+		rLen = 0;
+		rLoc = 1815;
+		rType = 0;
+		vrLen = 1982;
+		vrLoc = 0;
+	};
+	1106669F0E64E31B0023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 11C3F42D0E2F0F3A00EE8D28 /* player.cpp */;
+		name = "player.cpp: 207";
+		rLen = 0;
+		rLoc = 4915;
+		rType = 0;
+		vrLen = 1482;
+		vrLoc = 3657;
+	};
+	110666A00E6865A70023ABB1 /* enemyParticleJetFlame.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1272, 896}}";
+			sepNavSelRange = "{762, 0}";
+			sepNavVisRange = "{0, 1407}";
+		};
+	};
+	110666A20E6865A70023ABB1 /* enemyParticleSmoke.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1544, 1069}}";
+			sepNavSelRange = "{654, 0}";
+			sepNavVisRange = "{0, 2110}";
+		};
+	};
+	110666A40E6865A70023ABB1 /* enemyWeaponMachineGun.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1272, 1358}}";
+			sepNavSelRange = "{1902, 0}";
+			sepNavVisRange = "{911, 2015}";
+		};
+	};
+	110666A50E6865A70023ABB1 /* enemyWeaponMachineGun.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1544, 1069}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 208}";
+		};
+	};
+	110666AA0E6865D50023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 11C3F42D0E2F0F3A00EE8D28 /* player.cpp */;
+		name = "player.cpp: 209";
+		rLen = 0;
+		rLoc = 4625;
+		rType = 0;
+		vrLen = 1503;
+		vrLoc = 3120;
+	};
+	110666AB0E6865D50023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 110666A20E6865A70023ABB1 /* enemyParticleSmoke.cpp */;
+		name = "enemyParticleSmoke.cpp: 31";
+		rLen = 0;
+		rLoc = 654;
+		rType = 0;
+		vrLen = 2110;
+		vrLoc = 0;
+	};
+	110666AC0E6865D50023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 110666A50E6865A70023ABB1 /* enemyWeaponMachineGun.h */;
+		name = "enemyWeaponMachineGun.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 208;
+		vrLoc = 0;
+	};
+	110666AD0E6865D50023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 110665A50E6372AE0023ABB1 /* enemyWeaponFlamethrower.cpp */;
+		name = "enemyWeaponFlamethrower.cpp: 65";
+		rLen = 0;
+		rLoc = 1643;
+		rType = 0;
+		vrLen = 2167;
+		vrLoc = 89;
+	};
+	110666AE0E6865D50023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 110666A40E6865A70023ABB1 /* enemyWeaponMachineGun.cpp */;
+		name = "enemyWeaponMachineGun.cpp: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 2064;
+		vrLoc = 0;
+	};
+	110666AF0E6865D50023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 11C3F42D0E2F0F3A00EE8D28 /* player.cpp */;
+		name = "player.cpp: 209";
+		rLen = 0;
+		rLoc = 4625;
+		rType = 0;
+		vrLen = 1503;
+		vrLoc = 3120;
+	};
+	110666B00E6865D50023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 110666A20E6865A70023ABB1 /* enemyParticleSmoke.cpp */;
+		name = "enemyParticleSmoke.cpp: 31";
+		rLen = 0;
+		rLoc = 654;
+		rType = 0;
+		vrLen = 2110;
+		vrLoc = 0;
+	};
+	110666B10E6865D50023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 110666A50E6865A70023ABB1 /* enemyWeaponMachineGun.h */;
+		name = "enemyWeaponMachineGun.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 208;
+		vrLoc = 0;
+	};
+	110666B20E6865D50023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 110666A40E6865A70023ABB1 /* enemyWeaponMachineGun.cpp */;
+		name = "enemyWeaponMachineGun.cpp: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 2064;
+		vrLoc = 0;
+	};
+	110666B30E6865D50023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 110665A50E6372AE0023ABB1 /* enemyWeaponFlamethrower.cpp */;
+		name = "enemyWeaponFlamethrower.cpp: 65";
+		rLen = 0;
+		rLoc = 1643;
+		rType = 0;
+		vrLen = 2167;
+		vrLoc = 89;
+	};
+	110666B40E6865D50023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 110666A40E6865A70023ABB1 /* enemyWeaponMachineGun.cpp */;
+		name = "enemyWeaponMachineGun.cpp: 24";
+		rLen = 0;
+		rLoc = 488;
+		rType = 0;
+		vrLen = 2020;
+		vrLoc = 0;
+	};
+	110666B80E6871EE0023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 110666A40E6865A70023ABB1 /* enemyWeaponMachineGun.cpp */;
+		name = "enemyWeaponMachineGun.cpp: 19";
+		rLen = 0;
+		rLoc = 414;
+		rType = 0;
+		vrLen = 2064;
+		vrLoc = 0;
+	};
+	110666B90E6F8E090023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 110666A40E6865A70023ABB1 /* enemyWeaponMachineGun.cpp */;
+		name = "enemyWeaponMachineGun.cpp: 19";
+		rLen = 0;
+		rLoc = 414;
+		rType = 0;
+		vrLen = 1776;
+		vrLoc = 0;
+	};
+	110666BA0E6F8E090023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 1121D1350E2F0BA2008C8598 /* builder.cpp */;
+		name = "builder.cpp: 201";
+		rLen = 0;
+		rLoc = 5553;
+		rType = 0;
+		vrLen = 1894;
+		vrLoc = 3846;
+	};
+	110666BB0E6F8E090023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 110666A40E6865A70023ABB1 /* enemyWeaponMachineGun.cpp */;
+		name = "enemyWeaponMachineGun.cpp: 19";
+		rLen = 0;
+		rLoc = 414;
+		rType = 0;
+		vrLen = 1776;
+		vrLoc = 0;
+	};
+	110666BC0E6F8E090023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 1121D1350E2F0BA2008C8598 /* builder.cpp */;
+		name = "builder.cpp: 205";
+		rLen = 0;
+		rLoc = 5664;
+		rType = 0;
+		vrLen = 2017;
+		vrLoc = 3774;
+	};
+	110666BF0E6F8E350023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 1121D1350E2F0BA2008C8598 /* builder.cpp */;
+		name = "builder.cpp: 185";
+		rLen = 0;
+		rLoc = 5053;
+		rType = 0;
+		vrLen = 632;
+		vrLoc = 4691;
+	};
+	110666C00E6F8E450023ABB1 /* enemyWeaponHeatSeaker.cpp */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1272, 1890}}";
+			sepNavSelRange = "{3066, 0}";
+			sepNavVisRange = "{2037, 2046}";
+		};
+	};
+	110666C50E6F8E810023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 1121D1350E2F0BA2008C8598 /* builder.cpp */;
+		name = "builder.cpp: 203";
+		rLen = 0;
+		rLoc = 5590;
+		rType = 0;
+		vrLen = 2017;
+		vrLoc = 3774;
+	};
+	110666C60E6F8E810023ABB1 /* PBXBookmark */ = {
+		isa = PBXBookmark;
+		fRef = 110666C00E6F8E450023ABB1 /* enemyWeaponHeatSeaker.cpp */;
+	};
+	110666C70E6F8E810023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 1121D1350E2F0BA2008C8598 /* builder.cpp */;
+		name = "builder.cpp: 203";
+		rLen = 0;
+		rLoc = 5590;
+		rType = 0;
+		vrLen = 2017;
+		vrLoc = 3774;
+	};
+	110666C80E6F8E810023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 110666C00E6F8E450023ABB1 /* enemyWeaponHeatSeaker.cpp */;
+		name = "enemyWeaponHeatSeaker.cpp: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1792;
+		vrLoc = 0;
+	};
+	110666CC0E6F901D0023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 1121D1350E2F0BA2008C8598 /* builder.cpp */;
+		name = "builder.cpp: 185";
+		rLen = 0;
+		rLoc = 5053;
+		rType = 0;
+		vrLen = 632;
+		vrLoc = 4691;
+	};
+	110666CD0E6F90200023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 1121D1350E2F0BA2008C8598 /* builder.cpp */;
+		name = "builder.cpp: 185";
+		rLen = 0;
+		rLoc = 5053;
+		rType = 0;
+		vrLen = 632;
+		vrLoc = 4691;
+	};
+	110666CE0E6F90290023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 110666C00E6F8E450023ABB1 /* enemyWeaponHeatSeaker.cpp */;
+		name = "enemyWeaponHeatSeaker.cpp: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1792;
+		vrLoc = 0;
+	};
+	110666CF0E6F90290023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 118F3E5C0E35A01E00ECCDFE /* enemyManager.h */;
+		name = "enemyManager.h: 46";
+		rLen = 0;
+		rLoc = 1434;
+		rType = 0;
+		vrLen = 1529;
+		vrLoc = 6120;
+	};
+	110666D00E6F90290023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 110665A50E6372AE0023ABB1 /* enemyWeaponFlamethrower.cpp */;
+		name = "enemyWeaponFlamethrower.cpp: 61";
+		rLen = 36;
+		rLoc = 1417;
+		rType = 0;
+		vrLen = 1863;
+		vrLoc = 391;
+	};
+	110666D10E6F90290023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 118F3E5B0E35A01E00ECCDFE /* enemyManager.cpp */;
+		rLen = 1;
+		rLoc = 91;
+		rType = 1;
+	};
+	110666D20E6F90290023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 110666C00E6F8E450023ABB1 /* enemyWeaponHeatSeaker.cpp */;
+		name = "enemyWeaponHeatSeaker.cpp: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1792;
+		vrLoc = 0;
+	};
+	110666D30E6F90290023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 110665A50E6372AE0023ABB1 /* enemyWeaponFlamethrower.cpp */;
+		name = "enemyWeaponFlamethrower.cpp: 49";
+		rLen = 0;
+		rLoc = 1220;
+		rType = 0;
+		vrLen = 1855;
+		vrLoc = 257;
+	};
+	110666D40E6F90290023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 118F3E5C0E35A01E00ECCDFE /* enemyManager.h */;
+		name = "enemyManager.h: 46";
+		rLen = 0;
+		rLoc = 1434;
+		rType = 0;
+		vrLen = 1529;
+		vrLoc = 6120;
+	};
+	110666D50E6F90290023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 110665A50E6372AE0023ABB1 /* enemyWeaponFlamethrower.cpp */;
+		name = "enemyWeaponFlamethrower.cpp: 61";
+		rLen = 36;
+		rLoc = 1417;
+		rType = 0;
+		vrLen = 1863;
+		vrLoc = 391;
+	};
+	110666D60E6F90290023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 118F3E5B0E35A01E00ECCDFE /* enemyManager.cpp */;
+		name = "enemyManager.cpp: 96";
+		rLen = 0;
+		rLoc = 2586;
+		rType = 0;
+		vrLen = 2085;
+		vrLoc = 1441;
+	};
+	110666D90E6F93BB0023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 118F3E5B0E35A01E00ECCDFE /* enemyManager.cpp */;
+		name = "enemyManager.cpp: 96";
+		rLen = 0;
+		rLoc = 2586;
+		rType = 0;
+		vrLen = 2052;
+		vrLoc = 1441;
+	};
+	110666DA0E6F93BB0023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 1106667C0E63D4630023ABB1 /* enemyWeaponSelfDestruct.cpp */;
+		name = "enemyWeaponSelfDestruct.cpp: 25";
+		rLen = 0;
+		rLoc = 633;
+		rType = 0;
+		vrLen = 1024;
+		vrLoc = 0;
+	};
+	110666DB0E6F93BB0023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 110666A40E6865A70023ABB1 /* enemyWeaponMachineGun.cpp */;
+		name = "enemyWeaponMachineGun.cpp: 71";
+		rLen = 0;
+		rLoc = 1902;
+		rType = 0;
+		vrLen = 2015;
+		vrLoc = 911;
+	};
+	110666DC0E6F93BB0023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 110666C00E6F8E450023ABB1 /* enemyWeaponHeatSeaker.cpp */;
+		name = "enemyWeaponHeatSeaker.cpp: 109";
+		rLen = 0;
+		rLoc = 3066;
+		rType = 0;
+		vrLen = 2046;
+		vrLoc = 2037;
+	};
+	110666DD0E6F93BB0023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 110665A50E6372AE0023ABB1 /* enemyWeaponFlamethrower.cpp */;
+		name = "enemyWeaponFlamethrower.cpp: 61";
+		rLen = 36;
+		rLoc = 1417;
+		rType = 0;
+		vrLen = 1863;
+		vrLoc = 391;
+	};
+	110666DE0E6F93BB0023ABB1 /* PBXBookmark */ = {
+		isa = PBXBookmark;
+		fRef = 110666A00E6865A70023ABB1 /* enemyParticleJetFlame.cpp */;
+	};
+	110666DF0E6F93BB0023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 118F3E5B0E35A01E00ECCDFE /* enemyManager.cpp */;
+		name = "enemyManager.cpp: 96";
+		rLen = 0;
+		rLoc = 2586;
+		rType = 0;
+		vrLen = 2052;
+		vrLoc = 1441;
+	};
+	110666E00E6F93BB0023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 110666C00E6F8E450023ABB1 /* enemyWeaponHeatSeaker.cpp */;
+		name = "enemyWeaponHeatSeaker.cpp: 109";
+		rLen = 0;
+		rLoc = 3066;
+		rType = 0;
+		vrLen = 2046;
+		vrLoc = 2037;
+	};
+	110666E10E6F93BB0023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 110666A40E6865A70023ABB1 /* enemyWeaponMachineGun.cpp */;
+		name = "enemyWeaponMachineGun.cpp: 71";
+		rLen = 0;
+		rLoc = 1902;
+		rType = 0;
+		vrLen = 2015;
+		vrLoc = 911;
+	};
+	110666E20E6F93BB0023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 1106667C0E63D4630023ABB1 /* enemyWeaponSelfDestruct.cpp */;
+		name = "enemyWeaponSelfDestruct.cpp: 25";
+		rLen = 0;
+		rLoc = 633;
+		rType = 0;
+		vrLen = 1024;
+		vrLoc = 0;
+	};
+	110666E30E6F93BB0023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 110666A40E6865A70023ABB1 /* enemyWeaponMachineGun.cpp */;
+		name = "enemyWeaponMachineGun.cpp: 71";
+		rLen = 0;
+		rLoc = 1902;
+		rType = 0;
+		vrLen = 2015;
+		vrLoc = 911;
+	};
+	110666E40E6F93BB0023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 110666C00E6F8E450023ABB1 /* enemyWeaponHeatSeaker.cpp */;
+		name = "enemyWeaponHeatSeaker.cpp: 109";
+		rLen = 0;
+		rLoc = 3066;
+		rType = 0;
+		vrLen = 2046;
+		vrLoc = 2037;
+	};
+	110666E50E6F93BB0023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 110665A50E6372AE0023ABB1 /* enemyWeaponFlamethrower.cpp */;
+		name = "enemyWeaponFlamethrower.cpp: 61";
+		rLen = 36;
+		rLoc = 1417;
+		rType = 0;
+		vrLen = 1863;
+		vrLoc = 391;
+	};
+	110666E60E6F93BB0023ABB1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 110666A00E6865A70023ABB1 /* enemyParticleJetFlame.cpp */;
+		name = "enemyParticleJetFlame.cpp: 35";
+		rLen = 0;
+		rLoc = 762;
+		rType = 0;
+		vrLen = 1407;
+		vrLoc = 0;
+	};
 	1121D1350E2F0BA2008C8598 /* builder.cpp */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1602, 3024}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1602, 2926}}";
 			sepNavSelRange = "{5053, 0}";
-			sepNavVisRange = "{4795, 596}";
+			sepNavVisRange = "{4691, 632}";
 			sepNavWindowFrame = "{{76, 5}, {1165, 1018}}";
 		};
 	};
@@ -2090,16 +2858,16 @@
 	};
 	112A588E0E303B7600A3C218 /* targetRingWidget.cpp */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1544, 1442}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1304, 1526}}";
 			sepNavSelRange = "{97, 0}";
-			sepNavVisRange = "{0, 668}";
+			sepNavVisRange = "{0, 1341}";
 		};
 	};
 	112A58910E303B9500A3C218 /* targetRingWidget.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1544, 686}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1304, 919}}";
 			sepNavSelRange = "{565, 0}";
-			sepNavVisRange = "{104, 885}";
+			sepNavVisRange = "{0, 1017}";
 		};
 	};
 	112A59F90E3056BC00A3C218 /* particleSystem.h */ = {
@@ -2567,9 +3335,9 @@
 	};
 	118321120E328D710037B9B4 /* physics.cpp */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1272, 7756}}";
-			sepNavSelRange = "{10596, 0}";
-			sepNavVisRange = "{10508, 2946}";
+			sepNavIntBoundsRect = "{{0, 0}, {1570, 7210}}";
+			sepNavSelRange = "{10659, 0}";
+			sepNavVisRange = "{9959, 1666}";
 			sepNavWindowFrame = "{{192, 400}, {990, 778}}";
 		};
 	};
@@ -2705,17 +3473,17 @@
 	};
 	118F3E5B0E35A01E00ECCDFE /* enemyManager.cpp */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1272, 7350}}";
-			sepNavSelRange = "{2895, 0}";
-			sepNavVisRange = "{9585, 1770}";
+			sepNavIntBoundsRect = "{{0, 0}, {1272, 7826}}";
+			sepNavSelRange = "{2586, 0}";
+			sepNavVisRange = "{1441, 2052}";
 			sepNavWindowFrame = "{{627, 118}, {1165, 1018}}";
 		};
 	};
 	118F3E5C0E35A01E00ECCDFE /* enemyManager.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1544, 2072}}";
-			sepNavSelRange = "{980, 0}";
-			sepNavVisRange = "{895, 630}";
+			sepNavIntBoundsRect = "{{0, 0}, {1272, 4830}}";
+			sepNavSelRange = "{1434, 0}";
+			sepNavVisRange = "{6120, 1529}";
 		};
 	};
 	118F3E5D0E35A01E00ECCDFE /* sideShooterEnemy.cpp */ = {
@@ -2805,9 +3573,9 @@
 	};
 	118F3FFE0E36B87C00ECCDFE /* flamethrowerWeapon.cpp */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1500, 1288}}";
-			sepNavSelRange = "{1665, 0}";
-			sepNavVisRange = "{936, 1335}";
+			sepNavIntBoundsRect = "{{0, 0}, {1304, 1260}}";
+			sepNavSelRange = "{1815, 0}";
+			sepNavVisRange = "{0, 1982}";
 			sepNavWindowFrame = "{{66, 245}, {990, 778}}";
 		};
 	};
@@ -2986,16 +3754,16 @@
 	};
 	11B6858A0E53B9CA00BB0872 /* enemyLoader.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1512, 1036}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1304, 1036}}";
 			sepNavSelRange = "{391, 0}";
-			sepNavVisRange = "{0, 1106}";
+			sepNavVisRange = "{0, 2081}";
 		};
 	};
 	11C3F42D0E2F0F3A00EE8D28 /* player.cpp */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1272, 3010}}";
-			sepNavSelRange = "{3385, 0}";
-			sepNavVisRange = "{2983, 892}";
+			sepNavIntBoundsRect = "{{0, 0}, {1544, 2940}}";
+			sepNavSelRange = "{4625, 0}";
+			sepNavVisRange = "{3120, 1503}";
 			sepNavWindowFrame = "{{41, 0}, {990, 778}}";
 		};
 	};
@@ -3461,7 +4229,7 @@
 		fRef = 1121D1350E2F0BA2008C8598 /* builder.cpp */;
 		name = "builder.cpp: 204";
 		rLen = 0;
-		rLoc = 5533;
+		rLoc = 5553;
 		rType = 0;
 		vrLen = 1122;
 		vrLoc = 4688;
@@ -3980,6 +4748,80 @@
 			110666740E63CD630023ABB1 /* PBXTextBookmark */ = 110666740E63CD630023ABB1 /* PBXTextBookmark */;
 			110666750E63CD630023ABB1 /* PBXTextBookmark */ = 110666750E63CD630023ABB1 /* PBXTextBookmark */;
 			110666790E63D22A0023ABB1 /* PBXTextBookmark */ = 110666790E63D22A0023ABB1 /* PBXTextBookmark */;
+			1106667B0E63D4480023ABB1 /* PBXTextBookmark */ = 1106667B0E63D4480023ABB1 /* PBXTextBookmark */;
+			110666800E63D46C0023ABB1 /* PBXTextBookmark */ = 110666800E63D46C0023ABB1 /* PBXTextBookmark */;
+			110666810E63D46C0023ABB1 /* PBXTextBookmark */ = 110666810E63D46C0023ABB1 /* PBXTextBookmark */;
+			110666820E63D46C0023ABB1 /* PBXBookmark */ = 110666820E63D46C0023ABB1 /* PBXBookmark */;
+			110666830E63D46C0023ABB1 /* PBXTextBookmark */ = 110666830E63D46C0023ABB1 /* PBXTextBookmark */;
+			110666840E63D46C0023ABB1 /* PBXTextBookmark */ = 110666840E63D46C0023ABB1 /* PBXTextBookmark */;
+			110666850E63D46C0023ABB1 /* PBXTextBookmark */ = 110666850E63D46C0023ABB1 /* PBXTextBookmark */;
+			110666870E63D4D80023ABB1 /* PBXTextBookmark */ = 110666870E63D4D80023ABB1 /* PBXTextBookmark */;
+			1106668A0E63D9260023ABB1 /* PBXTextBookmark */ = 1106668A0E63D9260023ABB1 /* PBXTextBookmark */;
+			1106668B0E63D9260023ABB1 /* PBXTextBookmark */ = 1106668B0E63D9260023ABB1 /* PBXTextBookmark */;
+			1106668C0E63D9260023ABB1 /* PBXTextBookmark */ = 1106668C0E63D9260023ABB1 /* PBXTextBookmark */;
+			1106668D0E63D9260023ABB1 /* PBXTextBookmark */ = 1106668D0E63D9260023ABB1 /* PBXTextBookmark */;
+			110666900E64E31B0023ABB1 /* PBXTextBookmark */ = 110666900E64E31B0023ABB1 /* PBXTextBookmark */;
+			110666910E64E31B0023ABB1 /* PBXTextBookmark */ = 110666910E64E31B0023ABB1 /* PBXTextBookmark */;
+			110666920E64E31B0023ABB1 /* PBXTextBookmark */ = 110666920E64E31B0023ABB1 /* PBXTextBookmark */;
+			110666930E64E31B0023ABB1 /* PBXTextBookmark */ = 110666930E64E31B0023ABB1 /* PBXTextBookmark */;
+			110666940E64E31B0023ABB1 /* PBXTextBookmark */ = 110666940E64E31B0023ABB1 /* PBXTextBookmark */;
+			110666950E64E31B0023ABB1 /* PBXTextBookmark */ = 110666950E64E31B0023ABB1 /* PBXTextBookmark */;
+			110666960E64E31B0023ABB1 /* PBXTextBookmark */ = 110666960E64E31B0023ABB1 /* PBXTextBookmark */;
+			110666970E64E31B0023ABB1 /* PBXTextBookmark */ = 110666970E64E31B0023ABB1 /* PBXTextBookmark */;
+			110666980E64E31B0023ABB1 /* PBXTextBookmark */ = 110666980E64E31B0023ABB1 /* PBXTextBookmark */;
+			110666990E64E31B0023ABB1 /* PBXTextBookmark */ = 110666990E64E31B0023ABB1 /* PBXTextBookmark */;
+			1106669A0E64E31B0023ABB1 /* PBXTextBookmark */ = 1106669A0E64E31B0023ABB1 /* PBXTextBookmark */;
+			1106669B0E64E31B0023ABB1 /* PBXTextBookmark */ = 1106669B0E64E31B0023ABB1 /* PBXTextBookmark */;
+			1106669C0E64E31B0023ABB1 /* PBXTextBookmark */ = 1106669C0E64E31B0023ABB1 /* PBXTextBookmark */;
+			1106669D0E64E31B0023ABB1 /* PBXTextBookmark */ = 1106669D0E64E31B0023ABB1 /* PBXTextBookmark */;
+			1106669E0E64E31B0023ABB1 /* PBXTextBookmark */ = 1106669E0E64E31B0023ABB1 /* PBXTextBookmark */;
+			1106669F0E64E31B0023ABB1 /* PBXTextBookmark */ = 1106669F0E64E31B0023ABB1 /* PBXTextBookmark */;
+			110666AA0E6865D50023ABB1 /* PBXTextBookmark */ = 110666AA0E6865D50023ABB1 /* PBXTextBookmark */;
+			110666AB0E6865D50023ABB1 /* PBXTextBookmark */ = 110666AB0E6865D50023ABB1 /* PBXTextBookmark */;
+			110666AC0E6865D50023ABB1 /* PBXTextBookmark */ = 110666AC0E6865D50023ABB1 /* PBXTextBookmark */;
+			110666AD0E6865D50023ABB1 /* PBXTextBookmark */ = 110666AD0E6865D50023ABB1 /* PBXTextBookmark */;
+			110666AE0E6865D50023ABB1 /* PBXTextBookmark */ = 110666AE0E6865D50023ABB1 /* PBXTextBookmark */;
+			110666AF0E6865D50023ABB1 /* PBXTextBookmark */ = 110666AF0E6865D50023ABB1 /* PBXTextBookmark */;
+			110666B00E6865D50023ABB1 /* PBXTextBookmark */ = 110666B00E6865D50023ABB1 /* PBXTextBookmark */;
+			110666B10E6865D50023ABB1 /* PBXTextBookmark */ = 110666B10E6865D50023ABB1 /* PBXTextBookmark */;
+			110666B20E6865D50023ABB1 /* PBXTextBookmark */ = 110666B20E6865D50023ABB1 /* PBXTextBookmark */;
+			110666B30E6865D50023ABB1 /* PBXTextBookmark */ = 110666B30E6865D50023ABB1 /* PBXTextBookmark */;
+			110666B40E6865D50023ABB1 /* PBXTextBookmark */ = 110666B40E6865D50023ABB1 /* PBXTextBookmark */;
+			110666B80E6871EE0023ABB1 /* PBXTextBookmark */ = 110666B80E6871EE0023ABB1 /* PBXTextBookmark */;
+			110666B90E6F8E090023ABB1 /* PBXTextBookmark */ = 110666B90E6F8E090023ABB1 /* PBXTextBookmark */;
+			110666BA0E6F8E090023ABB1 /* PBXTextBookmark */ = 110666BA0E6F8E090023ABB1 /* PBXTextBookmark */;
+			110666BB0E6F8E090023ABB1 /* PBXTextBookmark */ = 110666BB0E6F8E090023ABB1 /* PBXTextBookmark */;
+			110666BC0E6F8E090023ABB1 /* PBXTextBookmark */ = 110666BC0E6F8E090023ABB1 /* PBXTextBookmark */;
+			110666BF0E6F8E350023ABB1 /* PBXTextBookmark */ = 110666BF0E6F8E350023ABB1 /* PBXTextBookmark */;
+			110666C50E6F8E810023ABB1 /* PBXTextBookmark */ = 110666C50E6F8E810023ABB1 /* PBXTextBookmark */;
+			110666C60E6F8E810023ABB1 /* PBXBookmark */ = 110666C60E6F8E810023ABB1 /* PBXBookmark */;
+			110666C70E6F8E810023ABB1 /* PBXTextBookmark */ = 110666C70E6F8E810023ABB1 /* PBXTextBookmark */;
+			110666C80E6F8E810023ABB1 /* PBXTextBookmark */ = 110666C80E6F8E810023ABB1 /* PBXTextBookmark */;
+			110666CC0E6F901D0023ABB1 /* PBXTextBookmark */ = 110666CC0E6F901D0023ABB1 /* PBXTextBookmark */;
+			110666CD0E6F90200023ABB1 /* PBXTextBookmark */ = 110666CD0E6F90200023ABB1 /* PBXTextBookmark */;
+			110666CE0E6F90290023ABB1 /* PBXTextBookmark */ = 110666CE0E6F90290023ABB1 /* PBXTextBookmark */;
+			110666CF0E6F90290023ABB1 /* PBXTextBookmark */ = 110666CF0E6F90290023ABB1 /* PBXTextBookmark */;
+			110666D00E6F90290023ABB1 /* PBXTextBookmark */ = 110666D00E6F90290023ABB1 /* PBXTextBookmark */;
+			110666D10E6F90290023ABB1 /* PBXTextBookmark */ = 110666D10E6F90290023ABB1 /* PBXTextBookmark */;
+			110666D20E6F90290023ABB1 /* PBXTextBookmark */ = 110666D20E6F90290023ABB1 /* PBXTextBookmark */;
+			110666D30E6F90290023ABB1 /* PBXTextBookmark */ = 110666D30E6F90290023ABB1 /* PBXTextBookmark */;
+			110666D40E6F90290023ABB1 /* PBXTextBookmark */ = 110666D40E6F90290023ABB1 /* PBXTextBookmark */;
+			110666D50E6F90290023ABB1 /* PBXTextBookmark */ = 110666D50E6F90290023ABB1 /* PBXTextBookmark */;
+			110666D60E6F90290023ABB1 /* PBXTextBookmark */ = 110666D60E6F90290023ABB1 /* PBXTextBookmark */;
+			110666D90E6F93BB0023ABB1 /* PBXTextBookmark */ = 110666D90E6F93BB0023ABB1 /* PBXTextBookmark */;
+			110666DA0E6F93BB0023ABB1 /* PBXTextBookmark */ = 110666DA0E6F93BB0023ABB1 /* PBXTextBookmark */;
+			110666DB0E6F93BB0023ABB1 /* PBXTextBookmark */ = 110666DB0E6F93BB0023ABB1 /* PBXTextBookmark */;
+			110666DC0E6F93BB0023ABB1 /* PBXTextBookmark */ = 110666DC0E6F93BB0023ABB1 /* PBXTextBookmark */;
+			110666DD0E6F93BB0023ABB1 /* PBXTextBookmark */ = 110666DD0E6F93BB0023ABB1 /* PBXTextBookmark */;
+			110666DE0E6F93BB0023ABB1 /* PBXBookmark */ = 110666DE0E6F93BB0023ABB1 /* PBXBookmark */;
+			110666DF0E6F93BB0023ABB1 /* PBXTextBookmark */ = 110666DF0E6F93BB0023ABB1 /* PBXTextBookmark */;
+			110666E00E6F93BB0023ABB1 /* PBXTextBookmark */ = 110666E00E6F93BB0023ABB1 /* PBXTextBookmark */;
+			110666E10E6F93BB0023ABB1 /* PBXTextBookmark */ = 110666E10E6F93BB0023ABB1 /* PBXTextBookmark */;
+			110666E20E6F93BB0023ABB1 /* PBXTextBookmark */ = 110666E20E6F93BB0023ABB1 /* PBXTextBookmark */;
+			110666E30E6F93BB0023ABB1 /* PBXTextBookmark */ = 110666E30E6F93BB0023ABB1 /* PBXTextBookmark */;
+			110666E40E6F93BB0023ABB1 /* PBXTextBookmark */ = 110666E40E6F93BB0023ABB1 /* PBXTextBookmark */;
+			110666E50E6F93BB0023ABB1 /* PBXTextBookmark */ = 110666E50E6F93BB0023ABB1 /* PBXTextBookmark */;
+			110666E60E6F93BB0023ABB1 /* PBXTextBookmark */ = 110666E60E6F93BB0023ABB1 /* PBXTextBookmark */;
 			112387EC0E577FD10051B761 = 112387EC0E577FD10051B761 /* PBXTextBookmark */;
 			112387EE0E577FD10051B761 = 112387EE0E577FD10051B761 /* PBXTextBookmark */;
 			112387F90E57814E0051B761 = 112387F90E57814E0051B761 /* PBXTextBookmark */;

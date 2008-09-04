@@ -59,6 +59,7 @@ void enemyWeaponFlamethrowerCb(Enemy* e, EnemyWeapon* w, EnemyManager* manager)
 
     Particle* p = NULL;
     enemyWeaponTurretGetParticleWithBody(e, w, manager, &data->mTurret, &p);
+    if(!p) return;
 
     // Set flamethrower specific particle properties.
     p->mCallback = enemyWeaponFlamethrowerFireParticleCb;

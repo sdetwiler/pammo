@@ -68,6 +68,7 @@ void enemyWeaponMachineGunCb(Enemy* e, EnemyWeapon* w, EnemyManager* manager)
 
     Particle* p = NULL;
     enemyWeaponTurretGetParticleWithBody(e, w, manager, &data->mTurret, &p);
+    if(!p) return;
 
     // Set MachineGun specific particle properties.
     p->mCallback = enemyWeaponMachineGunFireParticleCb;

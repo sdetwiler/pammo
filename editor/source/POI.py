@@ -1,26 +1,17 @@
 PlayerStartTypeName = 'Player Start'
-SpawnPoint1TypeName = 'Spawn Point 1'
-SpawnPoint2TypeName = 'Spawn Point 2'
-SpawnPoint3TypeName = 'Spawn Point 3'
-SpawnPoint4TypeName = 'Spawn Point 4'
-SpawnPoint5TypeName = 'Spawn Point 5'
+SpawnPointTypeName = 'Spawn Point'
+InfastructurePointTypeName = 'Infastructure Point'
 
 TypeNames = [PlayerStartTypeName,
-             SpawnPoint1TypeName,
-             SpawnPoint2TypeName,
-             SpawnPoint3TypeName,
-             SpawnPoint4TypeName,
-             SpawnPoint5TypeName]
+             SpawnPointTypeName,
+             InfastructurePointTypeName]
 
 PlayerStartTypeIndex = TypeNames.index(PlayerStartTypeName)
-SpawnPoint1TypeIndex = TypeNames.index(SpawnPoint1TypeName)
-SpawnPoint2TypeIndex = TypeNames.index(SpawnPoint2TypeName)
-SpawnPoint3TypeIndex = TypeNames.index(SpawnPoint3TypeName)
-SpawnPoint4TypeIndex = TypeNames.index(SpawnPoint4TypeName)
-SpawnPoint5TypeIndex = TypeNames.index(SpawnPoint5TypeName)
+SpawnPointTypeIndex = TypeNames.index(SpawnPointTypeName)
+InfastructurePointTypeIndex = TypeNames.index(InfastructurePointTypeName)
 
 class POI:
-    def __init__(self, pos=(0, 0), type=SpawnPoint1TypeName):
+    def __init__(self, pos=(0, 0), type=SpawnPointTypeName):
         self.pos = pos
         self.type = type
 
@@ -41,6 +32,8 @@ class POI:
     def loadFromDic(self, data):
         self.pos = data['pos']
         self.type = data['type']
+        if not self.type in TypeNames:
+            self.type = SpawnPointTypeName
 
     def getPos(self): return self.pos
     def setPos(self, pos):

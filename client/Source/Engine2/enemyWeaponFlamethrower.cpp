@@ -59,7 +59,8 @@ void enemyWeaponFlamethrowerCb(Enemy* e, EnemyWeapon* w, EnemyManager* manager)
 
     Particle* p = NULL;
     enemyWeaponTurretGetParticleWithBody(e, w, manager, &data->mTurret, &p);
-    if(!p) return;
+    if(!p)
+        return;
 
     // Set flamethrower specific particle properties.
     p->mCallback = enemyWeaponFlamethrowerFireParticleCb;
@@ -70,7 +71,7 @@ void enemyWeaponFlamethrowerCb(Enemy* e, EnemyWeapon* w, EnemyManager* manager)
     p->mImage.makeDirty();
         
     // Properties about fire particle bodies.
-    p->mBody->mProperties = kPlayerBulletCollisionProperties;
+    p->mBody->mProperties = kEnemyBulletCollisionProperties;
     p->mBody->mCollideProperties = kPlayerCollisionProperties | kBarrierCollisionProperties;
     p->mBody->mBodyCallback = enemyWeaponFlamethrowerFireCollisionCb;
     p->mBody->mDamping = 0;

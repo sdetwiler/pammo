@@ -138,6 +138,20 @@ void ImageLibrary::unreference(Image* image)
     }
 }
 
+void ImageLibrary::reference(Image* image)
+{
+    // SCD TOTAL CRAP.
+    for(StringImageRefMap::iterator i = mImages.begin(); i!=mImages.end(); ++i)
+    {
+        if(i->second->mImage == image)
+        {
+            ++(i->second->mRefCount);
+            return;
+        }
+    }
+}
+
+
 }
 
 

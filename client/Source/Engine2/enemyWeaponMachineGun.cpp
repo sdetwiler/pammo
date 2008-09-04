@@ -26,8 +26,8 @@ void enemyWeaponMachineGunShapeCollisionCb(Body* self, Shape* other, Contact* co
 {
     response = false;
     Particle* p = (Particle*)self->mUserArg;
+    gWorld->getParticleSystem()->initSmokeParticle(p->mBody->mCenter, 0, Vector2());
     gWorld->getParticleSystem()->removeParticle(p);
-    gWorld->getParticleSystem()->initSmokeParticle(self->mCenter, 0, self->mVelocity);
 }
 
 void enemyWeaponMachineGunCollisionCb(Body* self, Body* other, Contact* contact, ContactResponse* response)
@@ -68,8 +68,8 @@ void enemyWeaponMachineGunCb(Enemy* e, EnemyWeapon* w, EnemyManager* manager)
 
     Particle* p = NULL;
     enemyWeaponTurretGetParticleWithBody(e, w, manager, &data->mTurret, &p);
-    if(!p) return;
-
+    if(!p)
+        return;
     // Set MachineGun specific particle properties.
     p->mCallback = enemyWeaponMachineGunFireParticleCb;
     p->mAlpha = 1.0f;
@@ -82,7 +82,7 @@ void enemyWeaponMachineGunCb(Enemy* e, EnemyWeapon* w, EnemyManager* manager)
         
     // Properties about machine gun particle bodies.
     p->mBody->mUserArg = p;
-    p->mBody->mProperties = kPlayerBulletCollisionProperties;
+    p->mBody->mProperties = kEnemyBulletCollisionProperties;
     p->mBody->mCollideProperties = kPlayerCollisionProperties | kBarrierCollisionProperties;
     p->mBody->mBodyCallback = enemyWeaponMachineGunCollisionCb;
     p->mBody->mShapeCallback = enemyWeaponMachineGunShapeCollisionCb;

@@ -7,7 +7,7 @@
 "Weapon","Type","Image Path","Image Position X","Image Position Y","Fire Position X","Fire Position Y","Rotation Min","Rotation Max","Accuracy","Damage","Distance Max","Firing Rate",""
 ,"MachineGun","data/particles/machineGun/00.png",0,0,0,0,0,360,80,5,250,0.8,
 "Weapon","Type","Image Path","Image Position X","Image Position Y","Fire Position X","Fire Position Y","Rotation Min","Rotation Max","Accuracy","Damage","Distance Max","Firing Rate",""
-,"HeatSeaker","data/particles/heatSeaker/00.png",0,0,0,0,0,360,100,40,500,1,
+,"HeatSeaker","data/particles/heatSeaker/00.png",0,0,0,0,0,360,.5,40,500,1,
 "Weapon","Type","","","","","","","","","","","",""
 ,"None",,,,,,,,,,,,
 "Weapon","Type","","","","","","","","","","","",""

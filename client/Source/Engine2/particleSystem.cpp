@@ -250,7 +250,6 @@ void ParticleSystem::initSmokeParticle(Vector2 const& initialPosition, float ini
     if(!p) return;
         
     // Properties about smoke particles.
-    float velocity = 5.0f;
 
     // Set basic particle properties.
     p->mCallback = smokeParticleCb;
@@ -263,7 +262,7 @@ void ParticleSystem::initSmokeParticle(Vector2 const& initialPosition, float ini
     p->mImage.makeDirty();
     
     // Setup velocity. InitialVelocity from vehicle plus particle speed rotated for direction.
-    p->mVelocity = initialVelocity + Vector2(velocity, 0) * Transform2::createRotation(initialRotation);
+    p->mVelocity = initialVelocity * Transform2::createRotation(initialRotation);
 }
 
 void ParticleSystem::initExplosionParticle(Vector2 const& initialPosition)

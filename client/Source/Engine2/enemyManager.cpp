@@ -93,7 +93,8 @@ void enemyWeaponTurretGetParticleWithBody(Enemy* e, EnemyWeapon* w, EnemyManager
 {
     // Get a particle.
     *p = gWorld->getParticleSystem()->addParticleWithBody(2);
-    if(!*p) return;
+    if(!*p)
+        return;
 
     // Set basic particle properties.
     (*p)->mAlpha = 1.0f;
@@ -210,6 +211,8 @@ void enemyUpdateCb(Enemy* e, EnemyManager* manager)
     }
 
     // Update image entity.
+    e->mCurrImage = (e->mCurrImage+1) % e->mImageCount;
+    e->mEntity.setImage(e->mImages[e->mCurrImage]);
     e->mEntity.mRotation = e->mController.mRotation + (float)M_PI/2;
     e->mEntity.mCenter = e->mBody->mCenter;
     e->mEntity.makeDirty();
@@ -233,7 +236,14 @@ void enemyDamageCb(Enemy* e, ParticleType type, float amount)
 		dprintf("dead", e);
 		gWorld->getParticleSystem()->initExplosionParticle(e->mBody->mCenter);
 		gWorld->getParticleSystem()->initRubbleParticle(e->mBody->mCenter);
-		gImageLibrary->unreference(e->mEntity.getImage());
+
+        for(uint32_t i=0; i<e->mImageCount; ++i)
+        {
+            gImageLibrary->unreference(e->mImages[i]);
+        }
+
+        //gImageLibrary->unreference(e->mEntity.getImage());
+
         for(uint32_t i=0; i<e->mWeaponCount; ++i)
         {
             gImageLibrary->unreference(e->mWeapon[i].mEntity.getImage());
@@ -295,6 +305,53 @@ bool EnemyManager::loadEnemyTemplate(char const* enemyName)
         return false;
     }
 
+    if(enemyTemplate->mImageType == Single)
+    {
+        enemyTemplate->mImages[0] = gImageLibrary->reference(enemyTemplate->mImagePath);
+        enemyTemplate->mImageCount = 1;
+    }    
+    else
+    {
+        DIR* dir;
+        dir = opendir(enemyTemplate->mImagePath);
+        if(!dir)
+        {
+            dprintf("Failed to open flipbook directory: %s", enemyTemplate->mImagePath);
+            assert(0);
+            return false;
+        }
+
+        typedef std::set< std::string > StringSet;
+        StringSet filenames;
+        struct dirent* item;
+
+        while((item = readdir(dir)) != NULL)
+        {
+            int len = strlen(item->d_name);
+            if(!strcmp(&(item->d_name[len-3]), "png"))
+            {
+                filenames.insert(item->d_name);
+            }
+        }
+
+        closedir(dir);
+
+        int i=0;
+        for(StringSet::iterator j = filenames.begin(); j!=filenames.end() && i<ENEMY_MAX_IMAGE_COUNT; ++i, ++j)
+        {
+            char filename[256];
+            snprintf(filename, 255, "%s/%s", enemyTemplate->mImagePath, (*j).c_str());
+            enemyTemplate->mImages[i] = gImageLibrary->reference(filename);
+            ++enemyTemplate->mImageCount;
+            if(!enemyTemplate->mImages[i])
+            {
+                dprintf("Failed to load image %s", filename);
+                assert(0);
+                return false;
+            }
+        }
+    }
+
     mEnemyTemplates[std::string(enemyName)] = enemyTemplate;
     return true;
 }
@@ -319,14 +376,15 @@ bool EnemyManager::initializeEnemy(Enemy* e, char const* name)
     e->mBody->mMass =   enemyTemplate->mMass;
     e->mBody->mRadius = enemyTemplate->mRadius;
     e->mHealth =        enemyTemplate->mHealth;
-    if(enemyTemplate->mImageType == Single)
+    e->mCurrImage = 0;
+    e->mEntity.mAlpha = 1.0f;
+    e->mEntity.mCenter = Vector2();
+    e->mEntity.mRotation = 0;
+    e->mImageCount = enemyTemplate->mImageCount;
+    for(uint32_t i=0; i<e->mImageCount; ++i)
     {
-        e->mEntity.setImageAndInit(gImageLibrary->reference(enemyTemplate->mImagePath));
-    }    
-    else
-    {
-        dprintf("Only single images are currenly supported.");
-        assert(0);
+        e->mImages[i] = enemyTemplate->mImages[i];
+        gImageLibrary->reference(e->mImages[i]);
     }
 
     e->mUpdateCb = enemyUpdateCb;
@@ -369,7 +427,7 @@ bool EnemyManager::initializeEnemy(Enemy* e, char const* name)
             e->mWeapon[i].mCb = enemyWeaponMachineGunCb;
             break;
         case HeatSeaker:
-            e->mWeapon[1].mCb = enemyWeaponHeatSeakerCb;
+            e->mWeapon[i].mCb = enemyWeaponHeatSeakerCb;
             break;
         case Trebuchet:
             e->mWeapon[i].mCb = enemyWeaponTrebuchetCb;

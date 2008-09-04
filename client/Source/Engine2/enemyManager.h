@@ -11,9 +11,8 @@
 
 #define ENEMY_MAX_WEAPON_COUNT 4
 #define ENEMY_MAX_PARTICLE_COUNT 4
+#define ENEMY_MAX_IMAGE_COUNT 8
 
-//#define ENEMY_DATA_SIZE 128
-//#define ENEMY_COUNT
 namespace pammo
 {
 
@@ -114,7 +113,7 @@ struct MachineGunWeaponData
 struct HeatSeakerWeaponData
 {
     TurretWeaponData mTurret;
-    uint32_t mAccuracy;
+    float    mAccuracy;
     uint32_t mDamage;
     uint32_t mMaxDistance;
     float    mFireRate;
@@ -243,11 +242,18 @@ struct EnemyTemplate
     uint32_t              mWeaponCount;
     EnemyParticleTemplate mParticles[ENEMY_MAX_PARTICLE_COUNT];
     uint32_t              mParticleCount;
+    
+    Image*                mImages[ENEMY_MAX_IMAGE_COUNT];
+    uint32_t              mImageCount;
 };
 
 struct Enemy
 {
     ImageEntity          mEntity;
+    Image*               mImages[ENEMY_MAX_IMAGE_COUNT];
+    uint32_t             mImageCount;
+    uint32_t             mCurrImage;
+
     Body*                mBody;
     VehicleController    mController;
     

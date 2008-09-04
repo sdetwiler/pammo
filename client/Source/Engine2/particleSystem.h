@@ -13,7 +13,8 @@ enum ParticleType
     Fire,
     Lightning,
     Vehicle,
-    Bullet
+    Bullet,
+    HeatSeakerMissle
 };
 
 struct Body;
@@ -117,6 +118,8 @@ struct Particle
 	Vector2      mStartPosition;
     Vector2      mEndPosition;
     float        mMaxDistance;
+
+    uint8_t      mData[256];
 
 	Particle*    mNext;
 	Particle*    mPrev;

@@ -249,7 +249,7 @@ bool EnemyLoader::parseWeaponHeatSeaker(char* s)
             column = 8;
             break;
         case 9: // Accuracy
-            data->mAccuracy = atol(s);
+            data->mAccuracy = atof(s);
             break;
         case 10: // Damage
             data->mDamage = atol(s);

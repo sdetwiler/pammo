@@ -8,6 +8,12 @@
 namespace pammo
 {
 
+struct HeatSeakerParticleData
+{
+    float mMaxRotation;
+    HeatSeakerWeaponData* mWeaponData;
+};
+
 void enemyWeaponHeatSeakerParticleTailCb(Particle* p, ParticleSystem* system)
 {
     //float r = ((rand()%100)/200.0f);
@@ -23,30 +29,38 @@ void enemyWeaponHeatSeakerParticleTailCb(Particle* p, ParticleSystem* system)
 
     p->mAlpha-=0.10f;
 }
-void enemyWeaponHeatSeakerFireParticleCb(Particle* p, ParticleSystem* system)
+
+void enemyWeaponHeatSeakerMissleParticleCb(Particle* p, ParticleSystem* system)
 {
-    
     float mag = magnitude(p->mBody->mCenter - p->mStartPosition);
     if(mag>p->mMaxDistance)
     {
+        gWorld->getParticleSystem()->initSmokeParticle(p->mBody->mCenter, 0, Vector2());
         system->removeParticle(p);
         return;
     }
 
-    p->mImage.mCenter = p->mBody->mCenter;
+    HeatSeakerParticleData* data = (HeatSeakerParticleData*)p->mData;
+    Vector2 heading = gWorld->getPlayer()->getCenter() - p->mBody->mCenter;
+    float rot = atan2(heading.y, heading.x);
+    float deltaRot = rot - p->mImage.mRotation;
+    if(deltaRot > data->mMaxRotation)
+        deltaRot = 0;
+    else if(deltaRot < -data->mMaxRotation)
+        deltaRot = 0;
+
+    p->mImage.mRotation += deltaRot;
+
+    p->mBody->mVelocity = (Vector2(1.0f,0.0f) * Transform2::createRotation(p->mImage.mRotation)) * magnitude(p->mVelocity);
+    p->mImage.mCenter = p->mBody->mCenter; 
     p->mImage.makeDirty();
 
-    Particle* tailP = gWorld->getParticleSystem()->addParticle(2);//WithBody(2);
+    Particle* tailP = gWorld->getParticleSystem()->addParticle(2);
     if(!tailP)
         return;
 
-    // Calculate center. Vehicle center, plus particle offset rotated for vehicle, plus turret rotated for direction.
-    Vector2 center = p->mBody->mCenter
-                     + 0.0f
-                     * Transform2::createRotation(p->mImage.mRotation);
-
     // Setup image properties.
-    tailP->mImage.mCenter = center;
+    tailP->mImage.mCenter = p->mBody->mCenter;
     tailP->mImage.mRotation = p->mImage.mRotation+(M_PI/2.0f);
     tailP->mImage.setImage(gImageLibrary->reference("data/particles/heatSeaker/tail/00.png"));
     tailP->mImage.makeDirty();
@@ -54,7 +68,6 @@ void enemyWeaponHeatSeakerFireParticleCb(Particle* p, ParticleSystem* system)
     // Set jet flame specific particle properties.
     tailP->mCallback = enemyWeaponHeatSeakerParticleTailCb;
     tailP->mAlpha = 1.0f;
-
 }
 
 void enemyWeaponHeatSeakerShapeCollisionCb(Body* self, Shape* other, Contact* contact, bool* response)
@@ -70,9 +83,10 @@ void enemyWeaponHeatSeakerCollisionCb(Body* self, Body* other, Contact* contact,
 	response->mBounceThem = true;
 	response->mBounceMe = false;
 
-	doDamage(self, other, Fire, 10.0f);
-
     Particle* p = (Particle*)self->mUserArg;
+    HeatSeakerParticleData* data = (HeatSeakerParticleData*)p->mData;
+    doDamage(self, other, HeatSeakerMissle, data->mWeaponData->mDamage);
+
     gWorld->getParticleSystem()->removeParticle(p);
     gWorld->getParticleSystem()->initExplosionParticle(self->mCenter);
 }
@@ -106,28 +120,36 @@ void enemyWeaponHeatSeakerCb(Enemy* e, EnemyWeapon* w, EnemyManager* manager)
 
     Particle* p = NULL;
     enemyWeaponTurretGetParticleWithBody(e, w, manager, &data->mTurret, &p);
-    if(!p) return;
+    if(!p)
+        return;
+    HeatSeakerParticleData* particleData = (HeatSeakerParticleData*)&(p->mData);
+    particleData->mMaxRotation = (M_PI*data->mAccuracy);
+    particleData->mWeaponData = data;
 
     // Set HeatSeaker specific particle properties.
-    p->mCallback = enemyWeaponHeatSeakerFireParticleCb;
+    p->mCallback = enemyWeaponHeatSeakerMissleParticleCb;
     p->mAlpha = 1.0f;
-    
+    p->mVelocity = Vector2(300.0f, 0);    
     // Setup image.
     char filename[256];
     sprintf(filename, "data/particles/heatSeaker/00.png");
     p->mImage.setImage(gImageLibrary->reference(filename));
+
+    Vector2 heading = gWorld->getPlayer()->getCenter() - p->mBody->mCenter;
+    float rot = atan2(heading.y, heading.x);
+    p->mImage.mRotation = rot;
     p->mImage.makeDirty();
         
     // Properties about heat seaker particle bodies.
     p->mBody->mUserArg = p;
-    p->mBody->mProperties = kPlayerBulletCollisionProperties;
-    p->mBody->mCollideProperties = kPlayerCollisionProperties | kBarrierCollisionProperties;
+    p->mBody->mProperties = kEnemyBulletCollisionProperties;
+    p->mBody->mCollideProperties = kPlayerBulletCollisionProperties | kPlayerCollisionProperties | kBarrierCollisionProperties;
     p->mBody->mBodyCallback = enemyWeaponHeatSeakerCollisionCb;
     p->mBody->mShapeCallback = enemyWeaponHeatSeakerShapeCollisionCb;
     p->mBody->mDamping = 0;
     p->mBody->mRadius = 5;
     p->mBody->mMass = 10.0f;
-    p->mBody->mVelocity = e->mBody->mVelocity + Vector2(400, 0) * Transform2::createRotation(p->mImage.mRotation-.2f);
+    p->mBody->mVelocity = e->mBody->mVelocity + p->mVelocity * Transform2::createRotation(p->mImage.mRotation);
     p->mStartPosition = p->mBody->mCenter;
     p->mMaxDistance = data->mMaxDistance;
 }

@@ -24,7 +24,9 @@ public:
     ~ImageLibrary();
     
     Image* reference(char const* path);
+    void reference(Image* image);
     void unreference(Image* image);
+
     
 private:
     struct ImageRef

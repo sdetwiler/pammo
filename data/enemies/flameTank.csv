@@ -1,7 +1,7 @@
 "Enemy","Name",,,,,,,,,,,,
 ,"flametank",,,,,,,,,,,,
 "Properties","Image Type","Image Path","Mass","Radius","Health",,,,,,,,
-,"Single","data/vehicles/flameTank/00.png",50,20,100,,,,,,,,
+,"Flipbook","data/vehicles/flameTank/",50,20,100,,,,,,,,
 "Behavior","Type","Speed","Target Radius","","","","","","","","","",""
 ,"Surround",5,200,,,,,,,,,,
 "Weapon","Type","Image Path","Image Position X","Image Position Y","Fire Position X","Fire Position Y","Rotation Min","Rotation Max","Accuracy","Damage","Distance Max","Spread Angle","Firing Rate"

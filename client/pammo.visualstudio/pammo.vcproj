@@ -192,6 +192,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\external-libs\dirent\dirent.h"
+				>
+			</File>
+			<File
 				RelativePath="..\Source\Engine2\drawImage.h"
 				>
 			</File>
@@ -349,6 +353,10 @@
 			</File>
 			<File
 				RelativePath="..\Source\Engine2\camera.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\external-libs\dirent\dirent.c"
 				>
 			</File>
 			<File

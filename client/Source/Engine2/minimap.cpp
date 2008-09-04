@@ -35,8 +35,8 @@ void Minimap::markEnemy(Vector2 pos)
     
     if(x < 0) x = 0;
     if(y < 0) y = 0;
-    if(x > kMinimapBucketCount) x = kMinimapBucketCount;
-    if(y > kMinimapBucketCount) y = kMinimapBucketCount;
+    if(x >= kMinimapBucketCount) x = kMinimapBucketCount-1;
+    if(y >= kMinimapBucketCount) y = kMinimapBucketCount-1;
     
     mBuckets[x][y] = true;
 }

@@ -112,6 +112,7 @@ Image* ImageLibrary::reference(char const* path)
     str = path;
     ImageRef* ref = new ImageRef;
     ref->mImage = openImage(path);
+    dprintf("%d\t%s", ref->mImage->mTexture, path);
     ref->mRefCount = 1;
     mImages.insert(pair<string, ImageRef*>(str, ref));
     

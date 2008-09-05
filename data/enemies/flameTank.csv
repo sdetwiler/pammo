@@ -1,5 +1,5 @@
 "Enemy","Name",,,,,,,,,,,,
-,"flametank",,,,,,,,,,,,
+,"flameTank",,,,,,,,,,,,
 "Properties","Image Type","Image Path","Mass","Radius","Health","Point Value","Minimum Player Score","Max Instance Per Wave",,,,,
 ,"Flipbook","data/vehicles/flameTank/",50,20,100,50,200,3,,,,,
 "Behavior","Type","Speed","Target Radius","","","","","","","","","",""

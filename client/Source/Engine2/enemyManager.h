@@ -287,7 +287,7 @@ struct SpawnEvent
 {
     uint64_t mStartTime; // in usec from process start time.
     uint64_t mDuration;  // in usec.
-    uint32_t mCount;     // Count of how many to spawn.
+    int32_t mCount;     // Count of how many to spawn.
     char     mEnemyName[256]; // Name of file, sans .csv
     uint32_t mSpawnId;   // Which spawn point?
 

@@ -7,6 +7,8 @@
 #include "weaponSelector.h"
 #include "particleSystem.h" // For particle types.
 
+#define PLAYER_MAX_IMAGE_COUNT 3
+
 namespace pammo
 {
 
@@ -51,8 +53,10 @@ class Player :
         
         Body* mBody;
         VehicleController* mController;
-        ImageEntity* mEntity;
-        
+        ImageEntity  mEntity;
+        Image*       mImages[PLAYER_MAX_IMAGE_COUNT];
+        uint32_t     mImageCount;
+        uint32_t     mCurrImage;
         Weapon* mWeapon;
         
         HealthMeter* mHealthMeter;

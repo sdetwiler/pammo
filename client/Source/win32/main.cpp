@@ -419,8 +419,8 @@ int main(int argc, char *argv[])
             dprintf("Runtime: %.2f\tFPS: %.2f\tscore: %u\tnext wave: %u", 
                 ((float)now-(float)start)/1000000.0f, 
                 (float)frames/seconds,
-                gWorld->getPlayer()?gWorld->getPlayer()->mScore:0,
-                gWorld->getEnemyManager()?gWorld->getEnemyManager()->mNextWaveScore:0
+                gWorld?(gWorld->getPlayer()?gWorld->getPlayer()->mScore:0):0,
+                gWorld?(gWorld->getEnemyManager()?gWorld->getEnemyManager()->mNextWaveScore:0):0
                 );
             frames = 0;
             lastCheck = now;

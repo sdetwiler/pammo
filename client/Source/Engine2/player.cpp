@@ -13,6 +13,7 @@
 #include "enemyManager.h"
 #include "weaponSelector.h"
 #include "healthMeter.h"
+#include "flipbookLoader.h"
 
 namespace pammo
 {
@@ -40,8 +41,10 @@ Player::Player() : View()
     mTargetRing->setObserver(this);
     mTargetRing->setCenter(Vector2(420, 260));
 
-    mEntity = new ImageEntity(gImageLibrary->reference("data/vehicles/tank/00.png"));
-    
+    //mEntity = new ImageEntity(gImageLibrary->reference("data/vehicles/tank/00.png"));
+    loadFlipbook("data/vehicles/tank/", mImages, PLAYER_MAX_IMAGE_COUNT, &mImageCount);
+    mCurrImage = 0;
+    mEntity.setImage(mImages[mCurrImage]);
     mBody = gWorld->getPhysics()->addBody();
     
     mBody->mProperties = kPlayerCollisionProperties;
@@ -66,6 +69,8 @@ Player::Player() : View()
     mHealthMeter->setPercent(mHealth);
     
     mFiring = false;
+
+
 }
 
 Player::~Player()
@@ -120,10 +125,17 @@ void Player::createDust()
 void Player::update()
 {
     mController->update();
+    float vmag = magnitude(mBody->mVelocity); 
 
-    mEntity->mRotation = mController->mRotation + M_PI/2;
-    mEntity->mCenter = mBody->mCenter;
-    mEntity->makeDirty();
+    if(vmag > 7.0f)
+    {
+        mCurrImage = (mCurrImage+1) % mImageCount;
+        mEntity.setImage(mImages[mCurrImage]);
+    }
+
+    mEntity.mRotation = mController->mRotation + M_PI/2;
+    mEntity.mCenter = mBody->mCenter;
+    mEntity.makeDirty();
     
     gWorld->getCamera()->mCenter = mBody->mCenter;
     gWorld->getCamera()->makeDirty();
@@ -134,7 +146,6 @@ void Player::update()
 		mWeapon->fire();
     }
 
-    float vmag = magnitude(mBody->mVelocity); 
 	if(vmag > 45.0f)
 		createDust();
         
@@ -149,7 +160,7 @@ void Player::draw()
 {
     gWorld->getCamera()->set();
     
-    mEntity->draw();
+    mEntity.draw();
     
     gWorld->getCamera()->unset();
 }
@@ -161,7 +172,7 @@ void Player::setCenter(Vector2 center)
 
 Vector2 const& Player::getCenter() const
 {
-    return mEntity->mCenter;
+    return mEntity.mCenter;
 }
 
 void Player::onTargetRingUpdated(TargetRingWidget *widget, Vector2 value)

@@ -4,6 +4,7 @@
 #include "enemyLoader.h"
 #include "world.h"
 #include "physics.h"
+#include "flipbookLoader.h"
 
 #include "enemyWeaponFlamethrower.h"
 #include "enemyWeaponTrebuchet.h"
@@ -236,6 +237,7 @@ void enemyDamageCb(Enemy* e, ParticleType type, float amount)
 		dprintf("dead", e);
 		gWorld->getParticleSystem()->initExplosionParticle(e->mBody->mCenter);
 		gWorld->getParticleSystem()->initRubbleParticle(e->mBody->mCenter);
+        gWorld->getPlayer()->mScore += e->mPointValue;
 
         for(uint32_t i=0; i<e->mImageCount; ++i)
         {
@@ -288,10 +290,11 @@ uint32_t EnemyManager::getDrawPriority() const
 
 void EnemyManager::addSpawnEvent(SpawnEvent& evt)
 {
-    uint64_t now = getTime();
-    evt.mStartTime += now; // Change from 0 based to now based.
     if(evt.mCount == 0)
         return;
+
+    uint64_t now = getTime();
+    evt.mStartTime += now; // Change from 0 based to now based.
 
     evt.mFreq = evt.mDuration/evt.mCount;
     evt.mLastSpawn = 0;
@@ -322,47 +325,49 @@ bool EnemyManager::loadEnemyTemplate(char const* enemyName)
     }    
     else
     {
-        DIR* dir;
-        dir = opendir(enemyTemplate->mImagePath);
-        if(!dir)
-        {
-            dprintf("Failed to open flipbook directory: %s", enemyTemplate->mImagePath);
-            assert(0);
-            return false;
-        }
+        loadFlipbook(enemyTemplate->mImagePath, enemyTemplate->mImages, ENEMY_MAX_IMAGE_COUNT, &enemyTemplate->mImageCount);
 
-        typedef std::set< std::string > StringSet;
-        StringSet filenames;
-        struct dirent* item;
+        //DIR* dir;
+        //dir = opendir(enemyTemplate->mImagePath);
+        //if(!dir)
+        //{
+        //    dprintf("Failed to open flipbook directory: %s", enemyTemplate->mImagePath);
+        //    assert(0);
+        //    return false;
+        //}
 
-        while((item = readdir(dir)) != NULL)
-        {
-            int len = strlen(item->d_name);
-            if(!strcmp(&(item->d_name[len-3]), "png"))
-            {
-                filenames.insert(item->d_name);
-            }
-        }
+        //typedef std::set< std::string > StringSet;
+        //StringSet filenames;
+        //struct dirent* item;
 
-        closedir(dir);
+        //while((item = readdir(dir)) != NULL)
+        //{
+        //    int len = strlen(item->d_name);
+        //    if(!strcmp(&(item->d_name[len-3]), "png"))
+        //    {
+        //        filenames.insert(item->d_name);
+        //    }
+        //}
 
-        int i=0;
-        for(StringSet::iterator j = filenames.begin(); j!=filenames.end() && i<ENEMY_MAX_IMAGE_COUNT; ++i, ++j)
-        {
-            char filename[256];
-            snprintf(filename, 255, "%s/%s", enemyTemplate->mImagePath, (*j).c_str());
-            enemyTemplate->mImages[i] = gImageLibrary->reference(filename);
-            if(!enemyTemplate->mImages[i])
-            {
-                dprintf("Failed to load image %s", filename);
-                assert(0);
-                return false;
-            }
+        //closedir(dir);
 
-            ++enemyTemplate->mImageCount;
-        }
+        //int i=0;
+        //for(StringSet::iterator j = filenames.begin(); j!=filenames.end() && i<ENEMY_MAX_IMAGE_COUNT; ++i, ++j)
+        //{
+        //    char filename[256];
+        //    snprintf(filename, 255, "%s/%s", enemyTemplate->mImagePath, (*j).c_str());
+        //    enemyTemplate->mImages[i] = gImageLibrary->reference(filename);
+        //    if(!enemyTemplate->mImages[i])
+        //    {
+        //        dprintf("Failed to load image %s", filename);
+        //        assert(0);
+        //        return false;
+        //    }
 
-        dprintf("Flipbook loaded %u images. ImageCount is %u", i, enemyTemplate->mImageCount);
+        //    ++enemyTemplate->mImageCount;
+        //}
+
+        //dprintf("Flipbook loaded %u images. ImageCount is %u", i, enemyTemplate->mImageCount);
     }
 
     mEnemyTemplates[std::string(enemyName)] = enemyTemplate;
@@ -516,15 +521,15 @@ void EnemyManager::update()
 		mFreed = e;
 	}
 
-    // Spawn event structure
     // Service spawn events.
     uint64_t now = getTime();
     for(SpawnEventVector::iterator i=mSpawnEvents.begin(); i!=mSpawnEvents.end(); ++i)
     {
-        if((*i).mStartTime < now)
+        if((*i).mStartTime <= now)
         {
             if(((*i).mLastSpawn + (*i).mFreq) <= now)
             {
+                --(*i).mCount;
                 // spawn.
                 Vector2 const* pos = getSpawnPoint((*i).mSpawnId);
                 if(!pos)
@@ -551,19 +556,22 @@ void EnemyManager::update()
     SpawnEventVector::iterator i= mSpawnEvents.begin();
     while(i!=mSpawnEvents.end())
     {
-        if(((*i).mStartTime + (*i).mDuration) <= now)
+        if((*i).mCount == 0)
         {
             // erase.
-            dprintf("Deleting expired spawn event");
+            dprintf("Deleting expired spawn event. Count is %u", (*i).mCount);
             i = mSpawnEvents.erase(i);
         }
         else
             ++i;
     }
 
+    // Check if a new wave should be created.
     if(gWorld->getPlayer()->mScore >= mNextWaveScore)
     {
-        uint32_t wavePoints = 50 + gWorld->getPlayer()->mScore;
+        uint32_t wavePoints = gWorld->getPlayer()->mScore;
+        if(!wavePoints)
+            wavePoints = 50;
         mNextWaveScore+= createWave(wavePoints);
     }
     
@@ -646,7 +654,6 @@ Enemy* EnemyManager::addEnemy()
 
 void EnemyManager::removeEnemy(Enemy* e)
 {
-    gWorld->getPlayer()->mScore += e->mPointValue;
 
     gWorld->getPhysics()->removeBody(e->mBody);
     // Push onto remove stack.
@@ -676,6 +683,7 @@ uint32_t EnemyManager::createWave(uint32_t pointValue)
         EnemyTemplate* mEnemyTemplate;
     };
 
+    // Find all enemy templates that should be unlocked.
     typedef vector< EnemyTemplateCount > EnemyTemplateCountVector;
     EnemyTemplateCountVector templates;
     for(IntEnemyTemplateMap::iterator i = mEnemyTemplatesByMinScore.begin(); i!=mEnemyTemplatesByMinScore.end(); ++i)
@@ -695,18 +703,17 @@ uint32_t EnemyManager::createWave(uint32_t pointValue)
     //Vector2 const* pos = getSpawnPoint(rand() % getSpawnPointCount());
 
     int noOpPassCount = 0;
-    // While there are points left to distribute.
+    // While there are points left to distribute for this wave.
     uint32_t pointsRemain = pointValue;
-    while(pointsRemain && noOpPassCount<3)
+    while(pointsRemain && noOpPassCount<3 && templates.size())
     {
         ++noOpPassCount;
 
-        // Pick a random unlocked enemy.
+        // Pick a random unlocked enemy and create a spawn event sometime in the near future.
         EnemyTemplateCount& enemyTemplateCount = templates[rand()%templates.size()];
         SpawnEvent spawnEvent;
         strcpy(spawnEvent.mEnemyName, enemyTemplateCount.mEnemyTemplate->mName);
-        spawnEvent.mDuration = (rand()%10)*1000000;
-        spawnEvent.mStartTime = (rand()%5)*1000000;
+        spawnEvent.mStartTime = (rand()%2)*1000000;
         spawnEvent.mCount = 0;
         spawnEvent.mSpawnId = rand() % getSpawnPointCount();
         // Pick a random amount of points to assign to a group of these enemies.
@@ -714,22 +721,25 @@ uint32_t EnemyManager::createWave(uint32_t pointValue)
         pointsRemain-= groupPoints;
         while(groupPoints >= enemyTemplateCount.mEnemyTemplate->mPointValue)
         {
-            spawnEvent.mCount++;
-            noOpPassCount = 0;
-            //Enemy* e = addEnemy();
-            //if(initializeEnemy(e, enemyTemplateCount.mEnemyTemplate) == false)
-            //{
-            //    assert(0);
-            //}
-            //e->mBody->mCenter = *pos;
-    
-            enemyTemplateCount.mCount++;
+            // Add another enemy to this spawn event.
+            ++spawnEvent.mCount;
 
+            // Reset the noOp pass counter.
+            noOpPassCount = 0;
+    
+            // Track that another of this enemy type has been added.
+            ++enemyTemplateCount.mCount;
+
+            // Remove points from this group.
             groupPoints-= enemyTemplateCount.mEnemyTemplate->mPointValue;
+            
+            // Track how many total points have been scheduled for this wave.
             pointsAdded+= enemyTemplateCount.mEnemyTemplate->mPointValue;
 
+            // If the maximum number of enemies of this type has been reached for this wave.
             if(enemyTemplateCount.mCount >= enemyTemplateCount.mEnemyTemplate->mMaxWaveCount)
             {
+                // Remove this enemyTemplate from the possible canidates.
                 dprintf("Reached instance cap");
                 for(EnemyTemplateCountVector::iterator it = templates.begin(); it!=templates.end(); ++it)
                 {
@@ -741,20 +751,20 @@ uint32_t EnemyManager::createWave(uint32_t pointValue)
                         break;
                     }
                 }
-
-                if(templates.size() == 0)
-                {
-                    addSpawnEvent(spawnEvent);
-                    dprintf("addedPoints: %u pointsRemain: %u\tnoOpPassCount: %d\n", pointsAdded, pointsRemain, noOpPassCount);
-                    return pointsAdded;
-                }
+                
+                groupPoints = 0;
             }
         }
 
-        addSpawnEvent(spawnEvent);
+        if(spawnEvent.mCount)
+        {
+            // At least 1 a second.
+            spawnEvent.mDuration = 1+(rand()%spawnEvent.mCount)*1000000;
+            addSpawnEvent(spawnEvent);
+        }
     }
 
-    dprintf("addedPoints: %u pointsRemain: %u\tnoOpPassCount: %d\n", pointsAdded, pointsRemain, noOpPassCount);
+    dprintf("targetPoints: %u addedPoints: %u pointsRemain: %u\tnoOpPassCount: %d\n", pointValue, pointsAdded, pointsRemain, noOpPassCount);
     return pointsAdded;
 }
 

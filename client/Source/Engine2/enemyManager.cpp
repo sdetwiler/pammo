@@ -11,6 +11,7 @@
 #include "enemyWeaponSelfDestruct.h"
 #include "enemyWeaponMachineGun.h"
 #include "enemyWeaponHeatSeaker.h"
+#include "enemyWeaponMineLayer.h"
 
 #include "enemyParticleJetFlame.h"
 #include "enemyParticleSmoke.h"
@@ -266,10 +267,6 @@ EnemyManager::EnemyManager()
 	mRemoveEnemies = NULL;
 	mEnemies = NULL;
 	mFreed = NULL;
-
-    loadEnemyTemplate("torpedo");
-    loadEnemyTemplate("flameTank");
-    loadEnemyTemplate("bigBoy");
 }
 
 EnemyManager::~EnemyManager()
@@ -462,6 +459,9 @@ bool EnemyManager::initializeEnemy(Enemy* e, EnemyTemplate* enemyTemplate)
         case SelfDestruct:
             e->mWeapon[i].mCb = enemyWeaponSelfDestructCb;
             e->mBody->mBodyCallback = enemyWeaponSelfDestructCollisionCb;
+            break;
+        case MineLayer:
+            e->mWeapon[i].mCb = enemyWeaponMineLayerCb;
             break;
 
         }

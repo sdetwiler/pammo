@@ -35,7 +35,7 @@ bool LevelLoader::parseMapName(char* s, char* mapName)
     return false;
 }
 
-bool LevelLoader::parseSpawnEvent(char* s, SpawnEvent* evt)
+bool LevelLoader::parseEnemyName(char* s, char** enemyName)
 {
     int column = 1;
     s=strtok(s, ",\"");
@@ -43,24 +43,8 @@ bool LevelLoader::parseSpawnEvent(char* s, SpawnEvent* evt)
     {
         switch(column)
         {
-        case 1: // Start time
-            evt->mStartTime = atol(s)*1000000;
-            break;
-
-        case 2: // Duration
-            evt->mDuration = atol(s)*1000000;
-            break;
-
-        case 3: // Enemy count
-            evt->mCount = atol(s);
-            break;
-
-        case 4: // Enemy name
-            strcpy(evt->mEnemyName, s);
-            break;
-
-        case 5: // Spawn point
-            evt->mSpawnId = atol(s);
+        case 1: // Enemy name
+            *enemyName = s;
             return true;
         }
 
@@ -70,21 +54,57 @@ bool LevelLoader::parseSpawnEvent(char* s, SpawnEvent* evt)
     return false;
 }
 
-void LevelLoader::dumpSpawnEvent(SpawnEvent* evt)
-{
-    dprintf("\
-SpawnEvent\n\
-  StartTime:  %u\n\
-  Duration:   %u\n\
-  Frequency:  %u\n\
-  EnemyName:  %s\n\
-  EnemyCount: %u",
-    (uint32_t)(evt->mStartTime/1000000),
-    (uint32_t)(evt->mDuration/1000000),
-    (uint32_t)(evt->mFreq/1000000),
-    evt->mEnemyName,
-    evt->mCount);
-};
+
+//bool LevelLoader::parseSpawnEvent(char* s, SpawnEvent* evt)
+//{
+//    int column = 1;
+//    s=strtok(s, ",\"");
+//    while(s)
+//    {
+//        switch(column)
+//        {
+//        case 1: // Start time
+//            evt->mStartTime = atol(s)*1000000;
+//            break;
+//
+//        case 2: // Duration
+//            evt->mDuration = atol(s)*1000000;
+//            break;
+//
+//        case 3: // Enemy count
+//            evt->mCount = atol(s);
+//            break;
+//
+//        case 4: // Enemy name
+//            strcpy(evt->mEnemyName, s);
+//            break;
+//
+//        case 5: // Spawn point
+//            evt->mSpawnId = atol(s);
+//            return true;
+//        }
+//
+//        ++column;
+//        s=strtok(NULL, ",\"");
+//    }
+//    return false;
+//}
+//
+//void LevelLoader::dumpSpawnEvent(SpawnEvent* evt)
+//{
+//    dprintf("\
+//SpawnEvent\n\
+//  StartTime:  %u\n\
+//  Duration:   %u\n\
+//  Frequency:  %u\n\
+//  EnemyName:  %s\n\
+//  EnemyCount: %u",
+//    (uint32_t)(evt->mStartTime/1000000),
+//    (uint32_t)(evt->mDuration/1000000),
+//    (uint32_t)(evt->mFreq/1000000),
+//    evt->mEnemyName,
+//    evt->mCount);
+//};
 
 bool LevelLoader::load(char const* filename, char* mapName)
 {
@@ -116,7 +136,8 @@ bool LevelLoader::load(char const* filename, char* mapName)
     }
     fclose(f);
 
-    SpawnEvent spawnEvent;
+//    SpawnEvent spawnEvent;
+    char* enemyName;
     bool ret = true;
     bool header = true;
     cur = buf;
@@ -144,12 +165,23 @@ bool LevelLoader::load(char const* filename, char* mapName)
             ++stage;
             break;
         case 3:
-            ret = parseSpawnEvent(s, &spawnEvent);
+            //ret = parseSpawnEvent(s, &spawnEvent);
+            //if(ret)
+            //{
+            //    gWorld->getEnemyManager()->addSpawnEvent(spawnEvent);
+            //    dumpSpawnEvent(&spawnEvent);
+            //}
+            ret = parseEnemyName(s, &enemyName);
             if(ret)
             {
-                gWorld->getEnemyManager()->addSpawnEvent(spawnEvent);
-                dumpSpawnEvent(&spawnEvent);
+                ret = gWorld->getEnemyManager()->loadEnemyTemplate(enemyName);
+                if(ret == false)
+                {
+                    dprintf("Failed to load %s", enemyName);
+                    assert(0);
+                }
             }
+
             break;
         default:
             ret = false;

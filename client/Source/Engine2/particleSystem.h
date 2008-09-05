@@ -14,7 +14,8 @@ enum ParticleType
     Lightning,
     Vehicle,
     Bullet,
-    HeatSeakerMissle
+    HeatSeakerMissle,
+    Mine
 };
 
 struct Body;
@@ -126,9 +127,6 @@ struct Particle
 	Particle*    mRemoveNext;
 	Particle*    mDrawNext;
 };
-
-
-
 
 } // namespace pammo
 

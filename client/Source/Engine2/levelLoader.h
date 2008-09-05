@@ -19,9 +19,10 @@ protected:
 
 private:
     bool parseMapName(char* s, char* mapName);
-    bool parseSpawnEvent(char* s, SpawnEvent* evt);
+    bool parseEnemyName(char* s, char** enemyName);
+    //    bool parseSpawnEvent(char* s, SpawnEvent* evt);
 
-    void dumpSpawnEvent(SpawnEvent* evt);
+//    void dumpSpawnEvent(SpawnEvent* evt);
 };
 
 

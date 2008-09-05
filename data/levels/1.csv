@@ -1,3 +1,7 @@
 "Map Name",,,,,
 "TheMap",,,,,
-"Start Time (s)","Duration (s)","Enemy Count","Enemy Type","Spawn Point"
+"Enemy Name",,,,,
+"torpedo",,,,,
+"flameTank",,,,,
+"mineLayer",,,,,
+"bigBoy",,,,,

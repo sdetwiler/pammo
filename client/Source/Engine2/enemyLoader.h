@@ -33,16 +33,21 @@ private:
     bool parseWeaponFlamethrower(char* s);
     bool parseWeaponTrebuchet(char* s);
     bool parseWeaponMachineGun(char* s);
-    bool parseWeaponSelfDestruct(char* s);
     bool parseWeaponHeatSeaker(char* s);
+
+    // Non-turret weapons.
+    bool parseWeaponSelfDestruct(char* s);
+    bool parseWeaponMineLayer(char* s);
 
     void dumpWeapon(EnemyWeaponTemplate* w);
     void dumpWeaponTurret(TurretWeaponData* d);
     void dumpWeaponFlamethrower(FlamethrowerWeaponData* d);
     void dumpWeaponTrebuchet(TrebuchetWeaponData* d);
     void dumpWeaponMachineGun(MachineGunWeaponData* d);
-    void dumpWeaponSelfDestruct(SelfDestructWeaponData* d);
     void dumpWeaponHeatSeaker(HeatSeakerWeaponData* d);
+
+    void dumpWeaponSelfDestruct(SelfDestructWeaponData* d);
+    void dumpWeaponMineLayer(MineLayerWeaponData* d);
 
     bool parseBehavior(char* s);
     bool parseBehaviorApproachAndFire(char* s);

@@ -50,15 +50,12 @@ bool EnemyLoader::parseProperties(char* s)
         case 2: // Image Location
             strcpy(mTemplate->mImagePath, s);
             break;
-
         case 3: // Mass
             mTemplate->mMass = (float)atof(s);
             break;
-            
         case 4: // Radius
             mTemplate->mRadius = (float)atof(s);
             break;
-
         case 5: // Health
             mTemplate->mHealth = (float)atof(s);
             break;
@@ -101,6 +98,8 @@ bool EnemyLoader::parseWeapon(char* s)
                 mTemplate->mWeapons[mTemplate->mWeaponCount].mWeapon.mType = SelfDestruct;
             else if(!strcmp(s, "HeatSeaker"))
                 mTemplate->mWeapons[mTemplate->mWeaponCount].mWeapon.mType = HeatSeaker;
+            else if(!strcmp(s, "MineLayer"))
+                mTemplate->mWeapons[mTemplate->mWeaponCount].mWeapon.mType = MineLayer;
             else
             {
                 dprintf("Unknown weapon type: %s", s);
@@ -123,6 +122,8 @@ bool EnemyLoader::parseWeapon(char* s)
                 return parseWeaponSelfDestruct(s);
             case HeatSeaker:
                 return parseWeaponHeatSeaker(s);
+            case MineLayer:
+                return parseWeaponMineLayer(s);
             default:
                 dprintf("Can't parse specific weapon data.");
                 return false;
@@ -340,6 +341,41 @@ bool EnemyLoader::parseWeaponSelfDestruct(char* s)
 
     return false;
 }
+
+
+bool EnemyLoader::parseWeaponMineLayer(char* s)
+{
+    EnemyWeaponTemplate* weaponTemplate = &mTemplate->mWeapons[mTemplate->mWeaponCount];
+    MineLayerWeaponData* data = (MineLayerWeaponData*)weaponTemplate->mWeapon.mData;
+    int column = 2;
+    while(s)
+    {
+        switch(column)
+        {
+        case 2: // Image path
+            strcpy(weaponTemplate->mImagePath, s);
+            break;
+        case 3: // Damage
+            data->mDamage = atol(s);
+            break;
+        case 4: // Max Lifetime
+            data->mMaxLifetime = atol(s) * 1000000;
+            break;
+        case 5: // Fire Rate
+            data->mFireRate= atof(s);
+            break;
+        case 6:
+            ++mTemplate->mWeaponCount;
+            return true;
+        }
+
+        ++column;
+        s=strtok(NULL, ",\"");
+    }
+
+    return false;
+}
+
 
 bool EnemyLoader::parseWeaponNone(char* s)
 {
@@ -641,7 +677,8 @@ char const* sFlamethrower = "Flamethrower";
 char const* sTrebuchet    = "Trebuchet";
 char const* sMachineGun   = "Machine Gun";
 char const* sSelfDestruct = "Self Destruct";
-char const* sHeatSeaker    = "Heat Seaker";
+char const* sHeatSeaker   = "Heat Seaker";
+char const* sMineLayer    = "Mine Layer";
 char const* EnemyLoader::getWeaponName(WeaponType type)
 {
     switch(type)
@@ -812,7 +849,7 @@ void EnemyLoader::dumpWeaponTrebuchet(TrebuchetWeaponData* d)
     Accuracy:     %u\n\
     Damage:       %u\n\
     Max Distance: %u\n\
-    Fire Rate:    %u",
+    Fire Rate:    %.2f",
         d->mAccuracy,
         d->mDamage,
         d->mMaxDistance,
@@ -827,7 +864,7 @@ void EnemyLoader::dumpWeaponMachineGun(MachineGunWeaponData* d)
     Accuracy:     %u\n\
     Damage:       %u\n\
     Max Distance: %u\n\
-    Fire Rate:    %u",
+    Fire Rate:    %.2f",
         d->mAccuracy,
         d->mDamage,
         d->mMaxDistance,
@@ -842,7 +879,7 @@ void EnemyLoader::dumpWeaponHeatSeaker(HeatSeakerWeaponData* d)
     Accuracy:     %u\n\
     Damage:       %u\n\
     Max Distance: %u\n\
-    Fire Rate:    %u",
+    Fire Rate:    %.2f",
         d->mAccuracy,
         d->mDamage,
         d->mMaxDistance,
@@ -855,6 +892,18 @@ void EnemyLoader::dumpWeaponSelfDestruct(SelfDestructWeaponData* d)
     dprintf("\
     Damage:       %u",
         d->mDamage
+    );
+}
+
+void EnemyLoader::dumpWeaponMineLayer(MineLayerWeaponData* d)
+{
+    dprintf("\
+    Damage:       %u\n\
+    Max Lifetime: %u\n\
+    Fire Rate:    %.2f",
+        d->mDamage,
+        d->mMaxLifetime/1000000,
+        d->mFireRate
     );
 }
 

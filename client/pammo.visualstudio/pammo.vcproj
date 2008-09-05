@@ -228,6 +228,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\Source\Engine2\enemyWeaponMineLayer.h"
+				>
+			</File>
+			<File
 				RelativePath="..\Source\Engine2\enemyWeaponSelfDestruct.h"
 				>
 			</File>
@@ -393,6 +397,10 @@
 			</File>
 			<File
 				RelativePath="..\Source\Engine2\enemyWeaponMachineGun.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\Source\Engine2\enemyWeaponMineLayer.cpp"
 				>
 			</File>
 			<File

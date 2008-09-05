@@ -16,8 +16,6 @@ struct HeatSeakerParticleData
 
 void enemyWeaponHeatSeakerParticleTailCb(Particle* p, ParticleSystem* system)
 {
-    //float r = ((rand()%100)/200.0f);
-  //  p->mImage.mRotation += r;
     p->mImage.mSize *= 1.03f;
     p->mImage.makeDirty();
     

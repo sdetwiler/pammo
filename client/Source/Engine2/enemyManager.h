@@ -46,7 +46,8 @@ enum WeaponType
     MachineGun,
     Trebuchet,
     SelfDestruct,
-    HeatSeaker
+    HeatSeaker,
+    MineLayer
 };
 
 struct EnemyWeapon
@@ -125,6 +126,16 @@ struct SelfDestructWeaponData
 {
     uint32_t mDamage;
 };
+
+struct MineLayerWeaponData
+{
+    uint32_t mDamage;
+    uint64_t mMaxLifetime; // in usec
+    float mFireRate;
+
+    uint64_t mLastFire;
+};
+
 
 //////////////////////////////////////////////////////////
 //// Behaviors.
@@ -317,6 +328,9 @@ public:
 
     void addSpawnEvent(SpawnEvent& evt);
 
+    // Loads the template for the named enemy.
+    bool loadEnemyTemplate(char const* enemyName);
+
     // Initializes the passed enemy with named template.
     bool initializeEnemy(Enemy* e, char const* enemyName);
     bool initializeEnemy(Enemy* e, EnemyTemplate* enemyTemplate);
@@ -331,8 +345,6 @@ protected:
 
 private:
 
-    // Loads the template for the named enemy.
-    bool loadEnemyTemplate(char const* enemyName);
 
     typedef vector< Vector2 > Vector2Vector;
     Vector2Vector mSpawnPoints;

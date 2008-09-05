@@ -32,16 +32,15 @@
 		113B2C2D0DF65EB20095A737 /* map.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 113B2C2C0DF65EB20095A737 /* map.cpp */; };
 		113E769A0E4A6FE3005A8070 /* levelLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 113E76960E4A6FE3005A8070 /* levelLoader.cpp */; };
 		113E769B0E4A6FE3005A8070 /* mainScreenView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 113E76980E4A6FE3005A8070 /* mainScreenView.cpp */; };
-		113E76BC0E4BA9A7005A8070 /* flameTankEnemy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 113E76BA0E4BA9A7005A8070 /* flameTankEnemy.cpp */; };
 		115E19870DEBA14E00BD1F3A /* appDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 115E19860DEBA14E00BD1F3A /* appDelegate.mm */; };
 		115E199E0DEBA2A100BD1F3A /* mainView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 115E199A0DEBA2A100BD1F3A /* mainView.mm */; };
 		115E1A3A0DEBAE8D00BD1F3A /* iPhone.mm in Sources */ = {isa = PBXBuildFile; fileRef = 115E1A390DEBAE8D00BD1F3A /* iPhone.mm */; };
 		118320AC0E31545F0037B9B4 /* vehicleController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 118320AB0E31545F0037B9B4 /* vehicleController.cpp */; };
 		118321130E328D710037B9B4 /* physics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 118321120E328D710037B9B4 /* physics.cpp */; };
 		118F3E620E35A01E00ECCDFE /* enemyManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 118F3E5B0E35A01E00ECCDFE /* enemyManager.cpp */; };
-		118F3E630E35A01E00ECCDFE /* sideShooterEnemy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 118F3E5D0E35A01E00ECCDFE /* sideShooterEnemy.cpp */; };
-		118F3E640E35A01E00ECCDFE /* trebuchetEnemy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 118F3E5F0E35A01E00ECCDFE /* trebuchetEnemy.cpp */; };
 		118F3FFF0E36B87C00ECCDFE /* flamethrowerWeapon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 118F3FFE0E36B87C00ECCDFE /* flamethrowerWeapon.cpp */; };
+		119214590E71E1C2001E43AC /* enemyWeaponMineLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 119214550E71E1C2001E43AC /* enemyWeaponMineLayer.cpp */; };
+		1192145A0E71E1C2001E43AC /* flipbookLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 119214570E71E1C2001E43AC /* flipbookLoader.cpp */; };
 		11B684EE0E5236D000BB0872 /* minimap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11B684ED0E5236D000BB0872 /* minimap.cpp */; };
 		11B6858B0E53B9CA00BB0872 /* enemyLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11B685890E53B9CA00BB0872 /* enemyLoader.cpp */; };
 		11C3F42E0E2F0F3A00EE8D28 /* player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11C3F42D0E2F0F3A00EE8D28 /* player.cpp */; };
@@ -123,8 +122,6 @@
 		113E76970E4A6FE3005A8070 /* levelLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = levelLoader.h; sourceTree = "<group>"; };
 		113E76980E4A6FE3005A8070 /* mainScreenView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mainScreenView.cpp; sourceTree = "<group>"; };
 		113E76990E4A6FE3005A8070 /* mainScreenView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mainScreenView.h; sourceTree = "<group>"; };
-		113E76BA0E4BA9A7005A8070 /* flameTankEnemy.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = flameTankEnemy.cpp; sourceTree = "<group>"; };
-		113E76BB0E4BA9A7005A8070 /* flameTankEnemy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = flameTankEnemy.h; sourceTree = "<group>"; };
 		115E19850DEBA14E00BD1F3A /* appDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = appDelegate.h; sourceTree = "<group>"; };
 		115E19860DEBA14E00BD1F3A /* appDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = appDelegate.mm; sourceTree = "<group>"; };
 		115E19990DEBA2A100BD1F3A /* mainView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mainView.h; sourceTree = "<group>"; };
@@ -136,12 +133,12 @@
 		118321120E328D710037B9B4 /* physics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = physics.cpp; sourceTree = "<group>"; };
 		118F3E5B0E35A01E00ECCDFE /* enemyManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = enemyManager.cpp; sourceTree = "<group>"; };
 		118F3E5C0E35A01E00ECCDFE /* enemyManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = enemyManager.h; sourceTree = "<group>"; };
-		118F3E5D0E35A01E00ECCDFE /* sideShooterEnemy.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sideShooterEnemy.cpp; sourceTree = "<group>"; };
-		118F3E5E0E35A01E00ECCDFE /* sideShooterEnemy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sideShooterEnemy.h; sourceTree = "<group>"; };
-		118F3E5F0E35A01E00ECCDFE /* trebuchetEnemy.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = trebuchetEnemy.cpp; sourceTree = "<group>"; };
-		118F3E600E35A01E00ECCDFE /* trebuchetEnemy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = trebuchetEnemy.h; sourceTree = "<group>"; };
 		118F3FFD0E36B87C00ECCDFE /* flamethrowerWeapon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = flamethrowerWeapon.h; sourceTree = "<group>"; };
 		118F3FFE0E36B87C00ECCDFE /* flamethrowerWeapon.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = flamethrowerWeapon.cpp; sourceTree = "<group>"; };
+		119214550E71E1C2001E43AC /* enemyWeaponMineLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = enemyWeaponMineLayer.cpp; sourceTree = "<group>"; };
+		119214560E71E1C2001E43AC /* enemyWeaponMineLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = enemyWeaponMineLayer.h; sourceTree = "<group>"; };
+		119214570E71E1C2001E43AC /* flipbookLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = flipbookLoader.cpp; sourceTree = "<group>"; };
+		119214580E71E1C2001E43AC /* flipbookLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = flipbookLoader.h; sourceTree = "<group>"; };
 		11B684EC0E5236D000BB0872 /* minimap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = minimap.h; sourceTree = "<group>"; };
 		11B684ED0E5236D000BB0872 /* minimap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = minimap.cpp; sourceTree = "<group>"; };
 		11B685890E53B9CA00BB0872 /* enemyLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = enemyLoader.cpp; sourceTree = "<group>"; };
@@ -270,18 +267,14 @@
 				110666C10E6F8E450023ABB1 /* enemyWeaponHeatSeaker.h */,
 				110666A40E6865A70023ABB1 /* enemyWeaponMachineGun.cpp */,
 				110666A50E6865A70023ABB1 /* enemyWeaponMachineGun.h */,
+				119214550E71E1C2001E43AC /* enemyWeaponMineLayer.cpp */,
+				119214560E71E1C2001E43AC /* enemyWeaponMineLayer.h */,
 				1106667C0E63D4630023ABB1 /* enemyWeaponSelfDestruct.cpp */,
 				1106667D0E63D4630023ABB1 /* enemyWeaponSelfDestruct.h */,
 				110665A70E6372AE0023ABB1 /* enemyWeaponTrebuchet.cpp */,
 				110665A80E6372AE0023ABB1 /* enemyWeaponTrebuchet.h */,
-				113E76BA0E4BA9A7005A8070 /* flameTankEnemy.cpp */,
-				113E76BB0E4BA9A7005A8070 /* flameTankEnemy.h */,
 				11B684ED0E5236D000BB0872 /* minimap.cpp */,
 				11B684EC0E5236D000BB0872 /* minimap.h */,
-				118F3E5D0E35A01E00ECCDFE /* sideShooterEnemy.cpp */,
-				118F3E5E0E35A01E00ECCDFE /* sideShooterEnemy.h */,
-				118F3E5F0E35A01E00ECCDFE /* trebuchetEnemy.cpp */,
-				118F3E600E35A01E00ECCDFE /* trebuchetEnemy.h */,
 			);
 			name = "Enemy Subsystem";
 			sourceTree = "<group>";
@@ -313,6 +306,8 @@
 				1121D1360E2F0BA2008C8598 /* builder.h */,
 				11EEB70B0DEBC73F009F3B13 /* camera.cpp */,
 				11EEB70C0DEBC73F009F3B13 /* camera.h */,
+				119214570E71E1C2001E43AC /* flipbookLoader.cpp */,
+				119214580E71E1C2001E43AC /* flipbookLoader.h */,
 				11EEB7110DEBC73F009F3B13 /* game.cpp */,
 				11EEB7120DEBC73F009F3B13 /* game.h */,
 				112A588A0E303B5800A3C218 /* imageEntity.cpp */,
@@ -465,15 +460,12 @@
 				118320AC0E31545F0037B9B4 /* vehicleController.cpp in Sources */,
 				118321130E328D710037B9B4 /* physics.cpp in Sources */,
 				118F3E620E35A01E00ECCDFE /* enemyManager.cpp in Sources */,
-				118F3E630E35A01E00ECCDFE /* sideShooterEnemy.cpp in Sources */,
-				118F3E640E35A01E00ECCDFE /* trebuchetEnemy.cpp in Sources */,
 				118F3FFF0E36B87C00ECCDFE /* flamethrowerWeapon.cpp in Sources */,
 				11C874530E4028B9008B701A /* weapon.cpp in Sources */,
 				11C8750E0E40E6B4008B701A /* lightningWeapon.cpp in Sources */,
 				11C875140E40E7B2008B701A /* weaponSelector.cpp in Sources */,
 				113E769A0E4A6FE3005A8070 /* levelLoader.cpp in Sources */,
 				113E769B0E4A6FE3005A8070 /* mainScreenView.cpp in Sources */,
-				113E76BC0E4BA9A7005A8070 /* flameTankEnemy.cpp in Sources */,
 				11B684EE0E5236D000BB0872 /* minimap.cpp in Sources */,
 				11B6858B0E53B9CA00BB0872 /* enemyLoader.cpp in Sources */,
 				110665810E635A240023ABB1 /* healthMeter.cpp in Sources */,
@@ -484,6 +476,8 @@
 				110666A70E6865A70023ABB1 /* enemyParticleSmoke.cpp in Sources */,
 				110666A80E6865A70023ABB1 /* enemyWeaponMachineGun.cpp in Sources */,
 				110666C20E6F8E450023ABB1 /* enemyWeaponHeatSeaker.cpp in Sources */,
+				119214590E71E1C2001E43AC /* enemyWeaponMineLayer.cpp in Sources */,
+				1192145A0E71E1C2001E43AC /* flipbookLoader.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

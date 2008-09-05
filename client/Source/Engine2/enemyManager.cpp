@@ -661,30 +661,31 @@ void EnemyManager::removeEnemy(Enemy* e)
 	mRemoveEnemies = e;
 }
 
+struct EnemyTemplateCount
+{
+    EnemyTemplateCount()
+    {
+        mEnemyTemplate = NULL;
+        mCount = 0;
+    }
+
+    EnemyTemplateCount(EnemyTemplate* t)
+    {
+        mEnemyTemplate = t;
+        mCount = 0;
+    }
+    uint32_t mCount;
+    EnemyTemplate* mEnemyTemplate;
+};
+
+typedef vector< EnemyTemplateCount > EnemyTemplateCountVector;
+
 uint32_t EnemyManager::createWave(uint32_t pointValue)
 {
     uint32_t pointsAdded = 0;
     dprintf("createWave %u points", pointValue);
 
-    struct EnemyTemplateCount
-    {
-        EnemyTemplateCount()
-        {
-            mEnemyTemplate = NULL;
-            mCount = 0;
-        }
-
-        EnemyTemplateCount(EnemyTemplate* t)
-        {
-            mEnemyTemplate = t;
-            mCount = 0;
-        }
-        uint32_t mCount;
-        EnemyTemplate* mEnemyTemplate;
-    };
-
     // Find all enemy templates that should be unlocked.
-    typedef vector< EnemyTemplateCount > EnemyTemplateCountVector;
     EnemyTemplateCountVector templates;
     for(IntEnemyTemplateMap::iterator i = mEnemyTemplatesByMinScore.begin(); i!=mEnemyTemplatesByMinScore.end(); ++i)
     {

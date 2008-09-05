@@ -237,6 +237,11 @@ struct EnemyTemplate
     float                 mHealth;
     float                 mMass;
     float                 mRadius;
+
+    uint32_t              mPointValue; // How many points is this enemy worth?
+    uint32_t              mMinScore;   // What is the minimum player score to unlock this enemy?
+    uint32_t              mMaxWaveCount; // Maximum number of this type of enemy per wave.
+
     EnemyBehavior         mBehavior;
     EnemyWeaponTemplate   mWeapons[ENEMY_MAX_WEAPON_COUNT];
     uint32_t              mWeaponCount;
@@ -253,6 +258,7 @@ struct Enemy
     Image*               mImages[ENEMY_MAX_IMAGE_COUNT];
     uint32_t             mImageCount;
     uint32_t             mCurrImage;
+    uint32_t             mPointValue;
 
     Body*                mBody;
     VehicleController    mController;
@@ -313,16 +319,13 @@ public:
 
     // Initializes the passed enemy with named template.
     bool initializeEnemy(Enemy* e, char const* enemyName);
+    bool initializeEnemy(Enemy* e, EnemyTemplate* enemyTemplate);
 
 	Enemy* addEnemy();
     void removeEnemy(Enemy* e);
 
-    enum EnemyType
-    {
-        TrebuchetEnemy,
-        FlameTankEnemy,
-        SideShooterEnemy
-    };
+    uint32_t createWave(uint32_t pointValue);
+    uint32_t mNextWaveScore;
 
 protected:
 
@@ -339,6 +342,10 @@ private:
 
     typedef map< string, EnemyTemplate* > StringEnemyTemplateMap;
     StringEnemyTemplateMap mEnemyTemplates;
+
+    typedef multimap< uint32_t, EnemyTemplate* > IntEnemyTemplateMap;
+    IntEnemyTemplateMap mEnemyTemplatesByMinScore;
+
 
 	Enemy* mEnemies;
     Enemy* mAddEnemies;

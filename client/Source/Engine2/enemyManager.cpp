@@ -259,10 +259,15 @@ void enemyDamageCb(Enemy* e, ParticleType type, float amount)
 
 EnemyManager::EnemyManager()
 {
+    mNextWaveScore = 0;
 	mAddEnemies = NULL;
 	mRemoveEnemies = NULL;
 	mEnemies = NULL;
 	mFreed = NULL;
+
+    loadEnemyTemplate("torpedo");
+    loadEnemyTemplate("flameTank");
+    loadEnemyTemplate("bigBoy");
 }
 
 EnemyManager::~EnemyManager()
@@ -297,6 +302,10 @@ void EnemyManager::addSpawnEvent(SpawnEvent& evt)
 bool EnemyManager::loadEnemyTemplate(char const* enemyName)
 {
     EnemyTemplate* enemyTemplate = new EnemyTemplate;
+    
+    enemyTemplate->mMinScore = 0;
+    enemyTemplate->mPointValue = 0;
+
     EnemyLoader loader;
     char path[256];
     snprintf(path, 255, "data/enemies/%s.csv", enemyName);
@@ -357,6 +366,7 @@ bool EnemyManager::loadEnemyTemplate(char const* enemyName)
     }
 
     mEnemyTemplates[std::string(enemyName)] = enemyTemplate;
+    mEnemyTemplatesByMinScore.insert(IntEnemyTemplateMap::value_type(enemyTemplate->mMinScore, enemyTemplate));
     return true;
 }
 
@@ -374,13 +384,18 @@ bool EnemyManager::initializeEnemy(Enemy* e, char const* name)
     }
 
     EnemyTemplate* enemyTemplate = i->second;
+    return initializeEnemy(e, enemyTemplate);
+}
 
+bool EnemyManager::initializeEnemy(Enemy* e, EnemyTemplate* enemyTemplate)
+{
     // Properties.
     e->mBody->mBodyCallback = NULL;
     e->mBody->mMass =   enemyTemplate->mMass;
     e->mBody->mRadius = enemyTemplate->mRadius;
 
     e->mHealth =        enemyTemplate->mHealth;
+    e->mPointValue =    enemyTemplate->mPointValue;
 
     e->mEntity.mAlpha = 1.0f;
     e->mEntity.mCenter = Vector2();
@@ -501,6 +516,7 @@ void EnemyManager::update()
 		mFreed = e;
 	}
 
+    // Spawn event structure
     // Service spawn events.
     uint64_t now = getTime();
     for(SpawnEventVector::iterator i=mSpawnEvents.begin(); i!=mSpawnEvents.end(); ++i)
@@ -545,6 +561,12 @@ void EnemyManager::update()
             ++i;
     }
 
+    if(gWorld->getPlayer()->mScore >= mNextWaveScore)
+    {
+        uint32_t wavePoints = 50 + gWorld->getPlayer()->mScore;
+        mNextWaveScore+= createWave(wavePoints);
+    }
+    
     // Update enemies.
 	Enemy* e = mEnemies;
     Minimap* minimap = gWorld->getMinimap();
@@ -624,10 +646,117 @@ Enemy* EnemyManager::addEnemy()
 
 void EnemyManager::removeEnemy(Enemy* e)
 {
+    gWorld->getPlayer()->mScore += e->mPointValue;
+
     gWorld->getPhysics()->removeBody(e->mBody);
     // Push onto remove stack.
 	e->mRemoveNext = mRemoveEnemies;
 	mRemoveEnemies = e;
 }
+
+uint32_t EnemyManager::createWave(uint32_t pointValue)
+{
+    uint32_t pointsAdded = 0;
+    dprintf("createWave %u points", pointValue);
+
+    struct EnemyTemplateCount
+    {
+        EnemyTemplateCount()
+        {
+            mEnemyTemplate = NULL;
+            mCount = 0;
+        }
+
+        EnemyTemplateCount(EnemyTemplate* t)
+        {
+            mEnemyTemplate = t;
+            mCount = 0;
+        }
+        uint32_t mCount;
+        EnemyTemplate* mEnemyTemplate;
+    };
+
+    typedef vector< EnemyTemplateCount > EnemyTemplateCountVector;
+    EnemyTemplateCountVector templates;
+    for(IntEnemyTemplateMap::iterator i = mEnemyTemplatesByMinScore.begin(); i!=mEnemyTemplatesByMinScore.end(); ++i)
+    {
+        if(i->first > gWorld->getPlayer()->mScore)
+            break;
+
+        templates.push_back(EnemyTemplateCount(i->second));
+    }
+
+    if(templates.size() == 0)
+    {
+        dprintf("createWave failed. No available enemy templates");
+        return 0xffffffff;
+    }
+
+    //Vector2 const* pos = getSpawnPoint(rand() % getSpawnPointCount());
+
+    int noOpPassCount = 0;
+    // While there are points left to distribute.
+    uint32_t pointsRemain = pointValue;
+    while(pointsRemain && noOpPassCount<3)
+    {
+        ++noOpPassCount;
+
+        // Pick a random unlocked enemy.
+        EnemyTemplateCount& enemyTemplateCount = templates[rand()%templates.size()];
+        SpawnEvent spawnEvent;
+        strcpy(spawnEvent.mEnemyName, enemyTemplateCount.mEnemyTemplate->mName);
+        spawnEvent.mDuration = (rand()%10)*1000000;
+        spawnEvent.mStartTime = (rand()%5)*1000000;
+        spawnEvent.mCount = 0;
+        spawnEvent.mSpawnId = rand() % getSpawnPointCount();
+        // Pick a random amount of points to assign to a group of these enemies.
+        uint32_t groupPoints = rand() % pointsRemain;
+        pointsRemain-= groupPoints;
+        while(groupPoints >= enemyTemplateCount.mEnemyTemplate->mPointValue)
+        {
+            spawnEvent.mCount++;
+            noOpPassCount = 0;
+            //Enemy* e = addEnemy();
+            //if(initializeEnemy(e, enemyTemplateCount.mEnemyTemplate) == false)
+            //{
+            //    assert(0);
+            //}
+            //e->mBody->mCenter = *pos;
+    
+            enemyTemplateCount.mCount++;
+
+            groupPoints-= enemyTemplateCount.mEnemyTemplate->mPointValue;
+            pointsAdded+= enemyTemplateCount.mEnemyTemplate->mPointValue;
+
+            if(enemyTemplateCount.mCount >= enemyTemplateCount.mEnemyTemplate->mMaxWaveCount)
+            {
+                dprintf("Reached instance cap");
+                for(EnemyTemplateCountVector::iterator it = templates.begin(); it!=templates.end(); ++it)
+                {
+                    if((*it).mEnemyTemplate == enemyTemplateCount.mEnemyTemplate)
+                    {
+                        dprintf("  removed");
+                        templates.erase(it);
+
+                        break;
+                    }
+                }
+
+                if(templates.size() == 0)
+                {
+                    addSpawnEvent(spawnEvent);
+                    dprintf("addedPoints: %u pointsRemain: %u\tnoOpPassCount: %d\n", pointsAdded, pointsRemain, noOpPassCount);
+                    return pointsAdded;
+                }
+            }
+        }
+
+        addSpawnEvent(spawnEvent);
+    }
+
+    dprintf("addedPoints: %u pointsRemain: %u\tnoOpPassCount: %d\n", pointsAdded, pointsRemain, noOpPassCount);
+    return pointsAdded;
+}
+
 
 } // namespace pammo

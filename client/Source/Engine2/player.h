@@ -57,7 +57,8 @@ class Player :
         
         HealthMeter* mHealthMeter;
         float mHealth;
-        
+        uint32_t mScore;
+
         bool mFiring;
         Vector2 mFireDirection;
 

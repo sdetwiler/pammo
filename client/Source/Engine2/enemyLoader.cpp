@@ -61,6 +61,15 @@ bool EnemyLoader::parseProperties(char* s)
 
         case 5: // Health
             mTemplate->mHealth = (float)atof(s);
+            break;
+        case 6: // Point value.
+            mTemplate->mPointValue = atol(s);
+            break;
+        case 7: // Minimum player score to unlock enemy.
+            mTemplate->mMinScore= atol(s);
+            break;
+        case 8: // Maximum number of instances per wave.
+            mTemplate->mMaxWaveCount = atol(s);
             return true;
         }
 
@@ -703,10 +712,13 @@ void EnemyLoader::dump()
 "\
 Enemy: %s\n\
   Appearance\n\
-    ImageType: %s\n\
-    ImagePath: %s\n\
-    Mass:      %.2f\n\
-    Radius:    %.2f\n\
+    ImageType:   %s\n\
+    ImagePath:   %s\n\
+    Mass:        %.2f\n\
+    Radius:      %.2f\n\
+    Point Value: %u\n\
+    Min Score:   %u\n\
+    Max/wave:    %u\n\
   Behavior\n\
     Type:      %s"
 ,
@@ -716,6 +728,9 @@ Enemy: %s\n\
     mTemplate->mImagePath,
     mTemplate->mMass,
     mTemplate->mRadius,
+    mTemplate->mPointValue,
+    mTemplate->mMinScore,
+    mTemplate->mMaxWaveCount,
     getBehaviorName(mTemplate->mBehavior.mType)
     );
 

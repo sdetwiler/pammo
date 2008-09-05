@@ -1,6 +1,10 @@
 #include "pammo.h"
 #include "game.h"
 
+#include "world.h"
+#include "player.h"
+#include "enemyManager.h"
+
 Timer gTimer;
 
 class InputProcessor
@@ -412,7 +416,12 @@ int main(int argc, char *argv[])
         {
             float delta = now-lastCheck;
             float seconds = (delta)/1000000.0f;
-            dprintf("Runtime: %.2f\tFPS: %.2f", ((float)now-(float)start)/1000000.0f, (float)frames/seconds);
+            dprintf("Runtime: %.2f\tFPS: %.2f\tscore: %u\tnext wave: %u", 
+                ((float)now-(float)start)/1000000.0f, 
+                (float)frames/seconds,
+                gWorld->getPlayer()?gWorld->getPlayer()->mScore:0,
+                gWorld->getEnemyManager()?gWorld->getEnemyManager()->mNextWaveScore:0
+                );
             frames = 0;
             lastCheck = now;
         }

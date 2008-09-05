@@ -1,7 +1,7 @@
 "Enemy","Name",,,,,,,,,,,,
 ,"torpedo",,,,,,,,,,,,
-"Properties","Image Type","Image Path","Mass","Radius","Health",,,,,,,,
-,"Single","data/vehicles/torpedo/00.png",50,10,10,,,,,,,,
+"Properties","Image Type","Image Path","Mass","Radius","Health","Point Value","Minimum Player Score","Max Instance Per Wave",,,,,
+,"Single","data/vehicles/torpedo/00.png",50,10,10,10,0,20,,,,,
 "Behavior","Type","Speed","","","","","","","","","","",""
 ,"Kamikaze",5,,,,,,,,,,,
 "Weapon","Type","Image Path","Damage","","","","","","","","","",""

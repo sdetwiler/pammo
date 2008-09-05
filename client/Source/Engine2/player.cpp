@@ -60,6 +60,7 @@ Player::Player() : View()
     mWeaponSelector->addWeapon(new LightningWeapon);
     mWeaponSelector->addWeapon(new FlamethrowerWeapon);
     
+    mScore = 0;  
     mHealth = 1000.0;
     mHealthMeter = new HealthMeter();
     mHealthMeter->setPercent(mHealth);

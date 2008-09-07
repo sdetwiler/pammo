@@ -43,31 +43,6 @@ World::World()
         assert(0);
     }
     buildFromMap(this, mapName);
-
-    //// SCD TESTING BEGIN
-    //EnemyLoader enemyLoader;
-    //EnemyTemplate enemyTemplate;
-    //if(enemyLoader.load("data/enemies/flametank.csv", &enemyTemplate) == false)
-    //{
-    //    dprintf("Failed to load enemy definition file.");
-    //    assert(0);
-    //}
-    //Enemy* e = mEnemyManager->addEnemy();
-    //if(mEnemyManager->initializeEnemy(e, "flametank") == false)
-    //{
-    //    dprintf("Failed to initialize flametank enemy");
-    //    assert(0);
-    //}
-    //Vector2 const* pos = mEnemyManager->getSpawnPoint(0);
-    //if(!pos)
-    //{
-    //    dprintf("Invalid spawn point id %d", 0);
-    //    assert(0);
-    //}
-    //
-    //e->mBody->mCenter = *pos;
-    //// SCD TESTING END
-
 }
 
 World::~World()

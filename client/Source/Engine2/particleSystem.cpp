@@ -442,6 +442,10 @@ void ParticleSystem::ParticleManager::update()
 		mAddTail = NULL;
 	}
 
+    static const float screenRadius = (320.0f * 320.0f) + (480.0f * 480.0f);
+    
+    uint32_t toDraw=0;
+    uint32_t toSkip=0;
 	// Update in reverse order to preserve draw order based on insertion order.
 	curr = mTail;
 	while(curr)
@@ -450,15 +454,39 @@ void ParticleSystem::ParticleManager::update()
 		if(curr->mCallback)
 		{
 			curr->mCallback(curr, mParticleSystem);
-			// check if should draw.
-	
-			// for now all get drawn.
-			curr->mDrawNext = mDrawHead;
-			mDrawHead = curr;
+
+            // check if should draw.
+            float particleRadius;
+            if(curr->mImage.mSize.x > curr->mImage.mSize.y)
+                particleRadius = curr->mImage.mSize.x;
+            else
+                particleRadius = curr->mImage.mSize.y;
+
+            particleRadius*=particleRadius;
+
+            // Center to center.
+            float x = gWorld->getCamera()->mCenter.x - curr->mImage.mCenter.x;
+            x*=x;
+            float y = gWorld->getCamera()->mCenter.y - curr->mImage.mCenter.y;
+            y*=y;
+            
+            if(((x+y) - particleRadius) - screenRadius <=0)
+            {
+                ++toDraw;
+                curr->mDrawNext = mDrawHead;
+                mDrawHead = curr;
+            }
+            else
+            {
+                ++toSkip;
+            }
+
 		}
 
 		curr = curr->mPrev;
-	}			
+	}
+
+    //dprintf("Particles: Will draw %u. Culled %u", toDraw, toSkip);
 }
 
 

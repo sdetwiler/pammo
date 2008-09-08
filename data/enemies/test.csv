@@ -1,13 +1,13 @@
 "Enemy","Name",,,,,,,,,,,,
 ,"test",,,,,,,,,,,,
-"Properties","Image Type","Image Path","Mass","Radius","Health",,,,,,,,
-,"Single","data/vehicles/test/00.png",50,20,100,,,,,,,,
-"Behavior","Type","Speed","Target Radius","","","","","","","","","",""
-,"Surround",5,200,,,,,,,,,,
-"Weapon","Type","Image Path","Image Position X","Image Position Y","Fire Position X","Fire Position Y","Rotation Min","Rotation Max","Accuracy","Damage","Distance Max","Spread Angle",""
-,"Flamethrower","data/vehicles/test/turret/00.png",9,0,20,0,0,360,80,10,200,15,
-"Weapon","Type","Image Path","Image Position X","Image Position Y","Fire Position X","Fire Position Y","Rotation Min","Rotation Max","Accuracy","Damage","Distance Max","Spread Angle",""
-,"Flamethrower","data/vehicles/test/turret/00.png",9,0,20,0,0,0,80,10,200,15,
+"Properties","Image Type","Image Path","Mass","Radius","Health","Point Value","Minimum Player Score","Max Instance Per Wave",,,,,
+,"Single","data/vehicles/test/00.png",50,10,10,40,0,10,,,,,
+"Behavior","Type","Speed","Target Distance","","","","","","","","","",""
+,"Drive By",5,200,,,,,,,,,,
+"Weapon","Type","","","","","","","","","","","",""
+,"None",,,,,,,,,,,,
+"Weapon","Type","","","","","","","","","","","",""
+,"None",,,,,,,,,,,,
 "Weapon","Type","","","","","","","","","","","",""
 ,"None",,,,,,,,,,,,
 "Weapon","Type","","","","","","","","","","","",""

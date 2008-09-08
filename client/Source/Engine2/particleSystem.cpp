@@ -390,6 +390,7 @@ void ParticleSystem::ParticleManager::addParticle(Particle* p)
 		mAddHead = p;
 	}
 
+    assert(p != mAddTail);
 	p->mPrev = mAddTail;
 	mAddTail = p;
 }
@@ -410,8 +411,11 @@ void ParticleSystem::ParticleManager::update()
 	while(curr)
 	{
 		if(curr->mNext)
+        {
+            assert(curr->mNext != curr->mPrev);
 			curr->mNext->mPrev = curr->mPrev;
-		else
+        }
+        else
 			mTail = curr->mPrev;
 
 		if(curr->mPrev)
@@ -432,6 +436,7 @@ void ParticleSystem::ParticleManager::update()
 		if(mTail)
 		{
 			mTail->mNext = mAddHead;
+            assert(mAddHead != mTail);
 			mAddHead->mPrev = mTail;
 		}
 		else
@@ -482,11 +487,11 @@ void ParticleSystem::ParticleManager::update()
             }
 
 		}
-
+        assert(curr != curr->mPrev);
 		curr = curr->mPrev;
 	}
 
-    //dprintf("Particles: Will draw %u. Culled %u", toDraw, toSkip);
+    dprintf("draw %u. cull %u", toDraw, toSkip);
 }
 
 

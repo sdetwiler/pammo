@@ -18,6 +18,7 @@ class ImageEntity;
 class VehicleController;
 class Weapon;
 class WeaponSelector;
+class ScoreMeter;
 class HealthMeter;
 
 class Player : 
@@ -61,6 +62,8 @@ class Player :
         
         HealthMeter* mHealthMeter;
         float mHealth;
+
+        ScoreMeter* mScoreMeter;
         uint32_t mScore;
 
         bool mFiring;

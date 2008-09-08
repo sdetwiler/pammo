@@ -147,7 +147,8 @@ enum BehaviorType
 	Surround,
 	DriveBy,
 	Camp,
-	Kamikaze
+	Kamikaze,
+    PounceAndStalk
 };
 
 struct EnemyBehavior
@@ -173,6 +174,7 @@ struct DriveByBehaviorData
 {
     float mSpeed;
     float mDistance;
+    Vector2 mTurnPoint;
 };
 
 struct CampBehaviorData
@@ -181,6 +183,11 @@ struct CampBehaviorData
 };
 
 struct KamikazeBehaviorData
+{
+    float mSpeed;
+};
+
+struct PounceAndStalkBehaviorData
 {
     float mSpeed;
 };

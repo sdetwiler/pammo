@@ -13,6 +13,7 @@
 #include "enemyManager.h"
 #include "weaponSelector.h"
 #include "healthMeter.h"
+#include "scoreMeter.h"
 #include "flipbookLoader.h"
 
 namespace pammo
@@ -63,11 +64,15 @@ Player::Player() : View()
     mWeaponSelector->addWeapon(new LightningWeapon);
     mWeaponSelector->addWeapon(new FlamethrowerWeapon);
     
-    mScore = 0;  
     mHealth = 1000.0;
     mHealthMeter = new HealthMeter();
     mHealthMeter->setPercent(mHealth);
-    
+
+    mScore = 0;  
+    mScoreMeter = new ScoreMeter();
+    mScoreMeter->setScore(mScore);
+
+
     mFiring = false;
 
 
@@ -154,6 +159,8 @@ void Player::update()
         mHealth += 2;
         mHealthMeter->setPercent(mHealth);
     }
+
+    mScoreMeter->setScore(mScore);
 }
 
 void Player::draw()

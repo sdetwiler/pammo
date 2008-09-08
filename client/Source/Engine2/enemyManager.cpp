@@ -170,7 +170,29 @@ void behaviorApproachAndFireCb(Enemy* e, EnemyManager* manager)
 }
 
 void behaviorDriveByCb(Enemy* e, EnemyManager* manager)
-{}
+{
+    DriveByBehaviorData* data = (DriveByBehaviorData*)e->mBehavior.mData;
+
+    // See how far vehicle has come.
+    float distanceFromPlayer = magnitude(e->mBody->mCenter - gWorld->getPlayer()->getCenter());
+    if(distanceFromPlayer > data->mDistance)
+    {
+        float distanceFromTurn = magnitude(e->mBody->mCenter - data->mTurnPoint);
+        if(distanceFromTurn < data->mDistance/2.0f)
+            return;
+
+        float r2 = gWorld->getPlayer()->mBody->mRadius * 3.0f;
+        if(rand()%2)
+            r2*=-1.0f;
+
+        Vector2 heading = (gWorld->getPlayer()->getCenter() + Vector2(r2, r2)) - e->mBody->mCenter;
+        data->mTurnPoint = e->mBody->mCenter;
+        float rot = atan2(heading.y, heading.x);
+        e->mController.mRotationTarget = rot;
+        e->mController.mAcceleration = data->mSpeed * e->mBody->mMass;
+        e->mEntity.makeDirty();
+    }
+}
 
 void behaviorCampCb(Enemy* e, EnemyManager* manager)
 {}
@@ -191,6 +213,11 @@ void behaviorKamikazeCb(Enemy* e, EnemyManager* manager)
         rot += (float)M_PI*2;
     e->mController.mRotationTarget = rot;
     e->mController.mAcceleration = data->mSpeed * e->mBody->mMass;
+}
+
+void behaviorPounceAndStalk(Enemy* e, EnemyManager* manager)
+{
+
 }
 
 void enemyUpdateCb(Enemy* e, EnemyManager* manager)
@@ -287,6 +314,7 @@ uint32_t EnemyManager::getDrawPriority() const
 
 void EnemyManager::addSpawnEvent(SpawnEvent& evt)
 {
+//    dprintf("addSpawnEvent");
     if(evt.mCount == 0)
         return;
 
@@ -434,6 +462,9 @@ bool EnemyManager::initializeEnemy(Enemy* e, EnemyTemplate* enemyTemplate)
     case Kamikaze:
         e->mBehavior.mCb = behaviorKamikazeCb;
         break;
+    case PounceAndStalk:
+        e->mBehavior.mCb = behaviorPounceAndStalk;
+        break;
     }
     
     // Weapons.
@@ -572,7 +603,9 @@ void EnemyManager::update()
         uint32_t wavePoints = gWorld->getPlayer()->mScore;
         if(!wavePoints)
             wavePoints = 50;
-        mNextWaveScore+= createWave(wavePoints);
+        wavePoints = createWave(wavePoints);
+        wavePoints -= (wavePoints/4);
+        mNextWaveScore+= wavePoints;
     }
     
     // Update enemies.
@@ -704,9 +737,11 @@ uint32_t EnemyManager::createWave(uint32_t pointValue)
     //Vector2 const* pos = getSpawnPoint(rand() % getSpawnPointCount());
 
     int noOpPassCount = 0;
-    // While there are points left to distribute for this wave.
+    static const int maxNoOps = 3;
+
+    // While there are points left to distribute for this wave and there are available templates.
     uint32_t pointsRemain = pointValue;
-    while(pointsRemain && noOpPassCount<3 && templates.size())
+    while(pointsRemain && (noOpPassCount < maxNoOps) && templates.size())
     {
         ++noOpPassCount;
 
@@ -717,11 +752,17 @@ uint32_t EnemyManager::createWave(uint32_t pointValue)
         spawnEvent.mStartTime = (rand()%2)*1000000;
         spawnEvent.mCount = 0;
         spawnEvent.mSpawnId = rand() % getSpawnPointCount();
+
+//        dprintf("Selected %s worth %u each", spawnEvent.mEnemyName, enemyTemplateCount.mEnemyTemplate->mPointValue);
+
         // Pick a random amount of points to assign to a group of these enemies.
         uint32_t groupPoints = rand() % pointsRemain;
         pointsRemain-= groupPoints;
+
         while(groupPoints >= enemyTemplateCount.mEnemyTemplate->mPointValue)
         {
+//            dprintf("Distributing %u points to current group", groupPoints);
+
             // Add another enemy to this spawn event.
             ++spawnEvent.mCount;
 
@@ -741,7 +782,7 @@ uint32_t EnemyManager::createWave(uint32_t pointValue)
             if(enemyTemplateCount.mCount >= enemyTemplateCount.mEnemyTemplate->mMaxWaveCount)
             {
                 // Remove this enemyTemplate from the possible canidates.
-                dprintf("Reached instance cap");
+//                dprintf("Reached instance cap for this enemy type");
                 for(EnemyTemplateCountVector::iterator it = templates.begin(); it!=templates.end(); ++it)
                 {
                     if((*it).mEnemyTemplate == enemyTemplateCount.mEnemyTemplate)
@@ -759,10 +800,13 @@ uint32_t EnemyManager::createWave(uint32_t pointValue)
 
         if(spawnEvent.mCount)
         {
+//            dprintf("%u points remain to be distributed for this wave", pointsRemain);
+
             // At least 1 a second.
             spawnEvent.mDuration = 1+(rand()%spawnEvent.mCount)*1000000;
             addSpawnEvent(spawnEvent);
         }
+
     }
 
     dprintf("targetPoints: %u addedPoints: %u pointsRemain: %u\tnoOpPassCount: %d\n", pointValue, pointsAdded, pointsRemain, noOpPassCount);

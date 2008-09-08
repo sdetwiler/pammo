@@ -304,6 +304,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\Source\Engine2\scoreMeter.h"
+				>
+			</File>
+			<File
 				RelativePath="..\Source\Engine2\targetRingWidget.h"
 				>
 			</File>
@@ -473,6 +477,10 @@
 			</File>
 			<File
 				RelativePath="..\Source\Engine2\player.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\Source\Engine2\scoreMeter.cpp"
 				>
 			</File>
 			<File

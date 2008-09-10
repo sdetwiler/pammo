@@ -264,6 +264,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\Source\Engine2\interfaceView.h"
+				>
+			</File>
+			<File
 				RelativePath="..\Source\Engine2\levelLoader.h"
 				>
 			</File>
@@ -441,6 +445,10 @@
 			</File>
 			<File
 				RelativePath="..\Source\Engine2\imageLibrary.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\Source\Engine2\interfaceView.cpp"
 				>
 			</File>
 			<File

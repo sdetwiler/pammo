@@ -189,7 +189,26 @@ struct KamikazeBehaviorData
 
 struct PounceAndStalkBehaviorData
 {
+    // Settings.
     float mSpeed;
+
+    // Behavior btate tracking.
+    enum State
+    {
+        RotateToMove=0,
+        PreMoveRotate,
+        CheckCollision,
+        Move,
+        RotateToJump,
+        PreJumpRotate,
+        Jump
+    };
+
+    State mState;
+    uint64_t mJumpStart;
+    float mDistance;  
+    Vector2 mOrigin;
+    bool mInCollision;
 };
 
 

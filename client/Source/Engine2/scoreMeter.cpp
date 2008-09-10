@@ -1,4 +1,4 @@
-#include "ScoreMeter.h"
+#include "scoreMeter.h"
 
 #include "drawImage.h"
 #include "imageLibrary.h"
@@ -12,7 +12,7 @@ ScoreMeter::ScoreMeter()
     for(int i=0; i<10; ++i)
     {
         char filename[256];
-        snprintf(filename, 255, "data/fonts/courier/%d.png", i);
+        snprintf(filename, 255, "data/fonts/caslonAntique/%d.png", i);
         mImages[i] = gImageLibrary->reference(filename);
     }
 }
@@ -34,15 +34,18 @@ void ScoreMeter::setScore(uint32_t score)
 
 void ScoreMeter::draw()
 {
+    int baseX = (480/2) - (4*16);
+    int baseY = 320 - 16;
+
     uint32_t score = mScore;
-    int x = 360 + (6 * 16);
+    int x = baseX + (6 * 16);
 
     for(int i=0; i<6; ++i)
     {
         uint32_t s = score%10;
         Image* image = mImages[s];
 
-        Transform2 trans = Transform2::createTranslation(Vector2(x, 10));
+        Transform2 trans = Transform2::createTranslation(Vector2(x, baseY));
         trans*= Transform2::createScale(image->mSize);
         
         drawImage(image, trans, 1.0f);

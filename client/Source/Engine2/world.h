@@ -12,6 +12,7 @@ class Player;
 class ParticleSystem;
 class Physics;
 class Minimap;
+class InterfaceView;
 
 class EnemyManager;
 
@@ -38,6 +39,8 @@ class World
         Physics* mPhysics;
         Minimap* mMinimap;
         
+        InterfaceView* mInterfaceView;
+
         Player* mPlayer;
         EnemyManager* mEnemyManager;
 };

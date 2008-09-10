@@ -15,16 +15,17 @@ enum ViewPriorities
     kScreenPriority = 102,
     kParticle0Priority = 120,
     kParticle1Priority = 125,
-    kEnemyManagerPriority = 140,
-    kPlayerPriority = 150,
+    kPlayerPriority = 140,
+    kEnemyManagerPriority = 150,
     kParticle2Priority = 155,
     kParticle3Priority = 156,
+    kInterfaceViewPriority = 190,
     kMoveRingPriority = 200,
     kFireRingPriority = 201,
     kMinimapPriority = 230,
     kWeaponSelectorPriority = 250,
     kHealthMeterPriority = 260,
-    kScoreMeterPriority = 261,
+    kScoreMeterPriority = 261
 };
 
 class View

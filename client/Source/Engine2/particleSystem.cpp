@@ -491,7 +491,7 @@ void ParticleSystem::ParticleManager::update()
 		curr = curr->mPrev;
 	}
 
-    dprintf("draw %u. cull %u", toDraw, toSkip);
+    //dprintf("draw %u. cull %u", toDraw, toSkip);
 }
 
 

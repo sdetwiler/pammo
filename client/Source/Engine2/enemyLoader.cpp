@@ -401,6 +401,8 @@ bool EnemyLoader::parseBehavior(char* s)
                 mTemplate->mBehavior.mType = Camp;
             else if(!strcmp(s, "Kamikaze"))
                 mTemplate->mBehavior.mType = Kamikaze;
+            else if(!strcmp(s, "Pounce and Stalk"))
+                mTemplate->mBehavior.mType = PounceAndStalk;
             else
             {
                 dprintf("Unknown behavior type: %s", s);
@@ -421,6 +423,8 @@ bool EnemyLoader::parseBehavior(char* s)
                 return parseBehaviorCamp(s);
             case Kamikaze:
                 return parseBehaviorKamikaze(s);
+            case PounceAndStalk:
+                return parseBehaviorPounceAndStalk(s);
             default:
                 dprintf("Can't parse specific behavior data");
                 return false;
@@ -549,6 +553,27 @@ bool EnemyLoader::parseBehaviorKamikaze(char* s)
 
     return false;
 }
+
+bool EnemyLoader::parseBehaviorPounceAndStalk(char* s)
+{
+    PounceAndStalkBehaviorData* data = (PounceAndStalkBehaviorData*)mTemplate->mBehavior.mData;
+    int column = 2;
+    while(s)
+    {
+        switch(column)
+        {
+        case 2: // Speed
+            data->mSpeed = (float)atof(s);
+            return true;
+        }
+
+        ++column;
+        s=strtok(NULL, ",\"");
+    }
+
+    return false;
+}
+
 
 
 bool EnemyLoader::parseParticle(char* s)
@@ -705,6 +730,7 @@ char const* sSurround        = "Surround";
 char const* sDriveBy         = "Drive By";
 char const* sCamp            = "Camp";
 char const* sKamikaze        = "Kamikaze";
+char const* sPounceAndStalk  = "Pounce and Stalk";
 char const* EnemyLoader::getBehaviorName(BehaviorType type)
 {
     switch(type)
@@ -719,6 +745,8 @@ char const* EnemyLoader::getBehaviorName(BehaviorType type)
         return sCamp;
     case Kamikaze:
         return sKamikaze;
+    case PounceAndStalk:
+        return sPounceAndStalk;
     default:
         return sUnknown;
     }

@@ -110,6 +110,7 @@ void enemyWeaponTurretGetParticleWithBody(Enemy* e, EnemyWeapon* w, EnemyManager
     (*p)->mBody->mProperties = kPlayerBulletCollisionProperties;
     (*p)->mBody->mCollideProperties = kPlayerCollisionProperties | kEnemyBarrierCollisionProperties;
     (*p)->mBody->mCenter = data->mTurretTip;
+    (*p)->mStartPosition = data->mTurretTip;
 }
 
 
@@ -215,9 +216,172 @@ void behaviorKamikazeCb(Enemy* e, EnemyManager* manager)
     e->mController.mAcceleration = data->mSpeed * e->mBody->mMass;
 }
 
+
+void behaviorPounceAndStalkCollisionCb(Body* self, Body* other, Contact* contact, ContactResponse* response)
+{
+    dprintf("Collision");
+    Enemy* e = (Enemy*)self->mUserArg;
+    PounceAndStalkBehaviorData* data = (PounceAndStalkBehaviorData*)e->mBehavior.mData;
+    data->mDistance = 0.0f;
+    e->mController.mAcceleration = 0.0f;
+    data->mInCollision = true;
+    if(data->mState = PounceAndStalkBehaviorData::Move)
+    {
+        response->mBounceMe = true;
+        response->mBounceThem = true;
+    }
+    else
+    {
+        response->mBounceMe = false;
+        response->mBounceThem = false;
+    }
+}
+
+void behaviorPounceAndStalkShapeCollisionCb(Body* self, Shape* other, Contact* contact, bool* response)
+{
+    dprintf("Shape Collision");
+    Enemy* e = (Enemy*)self->mUserArg;
+    PounceAndStalkBehaviorData* data = (PounceAndStalkBehaviorData*)e->mBehavior.mData;
+    data->mDistance = 0.0f;
+    e->mController.mAcceleration = 0.0f;
+    data->mInCollision = true;
+
+    if(data->mState == PounceAndStalkBehaviorData::Move)
+    {
+        *response = true;
+    }
+    else
+    {
+        *response = false;
+    }
+}
+
 void behaviorPounceAndStalk(Enemy* e, EnemyManager* manager)
 {
+    Vector2 direction;
+    float d;
+    PounceAndStalkBehaviorData* data = (PounceAndStalkBehaviorData*)e->mBehavior.mData;
+ 
+    switch(data->mState)
+    {
+    // Turn to another direction.
+    case PounceAndStalkBehaviorData::RotateToMove:
+//        dprintf("RotateToMove");
+        direction = gWorld->getPlayer()->mBody->mCenter - e->mBody->mCenter;
+        e->mController.mAcceleration = 0.0f;
+        e->mController.mRotationTarget = atan2(direction.y, direction.x);
 
+        data->mState = PounceAndStalkBehaviorData::PreMoveRotate;
+        break;
+    // Turn.    
+    case PounceAndStalkBehaviorData::PreMoveRotate:
+//        dprintf("PreMoveRotate");
+        if(fabs(e->mController.mRotation - e->mController.mRotationTarget)<0.001f)
+        {
+            data->mDistance = (float)(rand()%200);
+            data->mOrigin = e->mBody->mCenter;
+
+            e->mBody->mCollideProperties = kEnemyCollisionProperties | kPlayerCollisionProperties | kEnemyBarrierCollisionProperties;
+            e->mBody->mProperties = kEnemyCollisionProperties;
+
+            data->mState = PounceAndStalkBehaviorData::CheckCollision;
+        }
+        break;
+    case PounceAndStalkBehaviorData::CheckCollision:
+//        dprintf("CheckCollision");
+        if(data->mInCollision)
+        {
+            e->mBody->mCollideProperties = 0;
+            e->mBody->mProperties = 0;
+
+            data->mState = PounceAndStalkBehaviorData::RotateToJump;
+        }
+        else
+        {
+            e->mController.mAcceleration = data->mSpeed * e->mBody->mMass;
+
+            e->mBody->mCollideProperties = kEnemyCollisionProperties | kPlayerCollisionProperties | kEnemyBarrierCollisionProperties;
+            e->mBody->mProperties = kEnemyCollisionProperties;
+
+            data->mState = PounceAndStalkBehaviorData::Move;
+        }
+        break;
+    // Head in a direction for a bit.
+    case PounceAndStalkBehaviorData::Move:
+//        dprintf("Move");
+        e->mBody->mCollideProperties = kEnemyCollisionProperties | kPlayerCollisionProperties | kEnemyBarrierCollisionProperties;
+        d = magnitude(data->mOrigin - e->mBody->mCenter);
+        if(d >= data->mDistance)
+        {
+            e->mBody->mCollideProperties = 0;
+            e->mBody->mProperties = 0;
+
+            data->mState = PounceAndStalkBehaviorData::RotateToJump;
+        }
+        break;
+    // Turn to another direction.
+    case PounceAndStalkBehaviorData::RotateToJump:
+//        dprintf("RotateToJump");
+        e->mController.mAcceleration = 0.0f;
+        direction = gWorld->getPlayer()->mBody->mCenter - e->mBody->mCenter;
+        e->mController.mRotationTarget = atan2(direction.y, direction.x);
+
+        data->mState = PounceAndStalkBehaviorData::PreJumpRotate;
+        break;
+    // Rotate.
+    case PounceAndStalkBehaviorData::PreJumpRotate:
+//        dprintf("PreJumpRotate");
+        if(fabs(e->mController.mRotation - e->mController.mRotationTarget)<0.001f)
+        {
+            //data->mDistance = 100+ rand()%70;
+            data->mJumpStart = getTime();
+            data->mOrigin = e->mBody->mCenter;
+            e->mController.mAcceleration = (data->mSpeed * e->mBody->mMass)/2.0f;
+
+            data->mState = PounceAndStalkBehaviorData::Jump;
+        }
+        break;
+    // Jump.
+    case PounceAndStalkBehaviorData::Jump:
+        uint64_t now = getTime();
+        float Di = 32.0f;
+        float Vi = 50.0f;
+        float G = 19.81; // Fantasyland... or Jupiter.
+        float dt = ((float)(now - data->mJumpStart))/1000000.0f;
+        float distance = Di + ((Vi*dt) - ((G*dt*dt)/1.0f));
+
+        if(distance <= Di)
+        {
+            e->mEntity.mSize = e->mImages[0]->mSize;
+            data->mState = PounceAndStalkBehaviorData::RotateToMove;
+		    return;
+        }
+
+        e->mEntity.mSize = distance;
+        
+        
+        
+        
+        //       dprintf("Jump");
+        //float d = magnitude(data->mOrigin - e->mBody->mCenter);
+        //float s = 1.05;
+        //if(d<data->mDistance/2.0f)
+        //    e->mEntity.mSize*=s;
+        //else
+        //{
+        //    e->mEntity.mSize/=s;
+        //}
+
+        //if( d >= data->mDistance)
+        //{
+        //    e->mEntity.mSize = e->mImages[0]->mSize;
+
+        //    data->mState = PounceAndStalkBehaviorData::RotateToMove;
+        //}
+        break;
+    };
+
+    data->mInCollision = false;
 }
 
 void enemyUpdateCb(Enemy* e, EnemyManager* manager)
@@ -241,7 +405,7 @@ void enemyUpdateCb(Enemy* e, EnemyManager* manager)
 
     // Update image entity.
     e->mCurrImage = (e->mCurrImage+1) % e->mImageCount;
-    e->mEntity.setImage(e->mImages[e->mCurrImage]);
+    e->mEntity.setImageWithoutSize(e->mImages[e->mCurrImage]);
     e->mEntity.mRotation = e->mController.mRotation + (float)M_PI/2;
     e->mEntity.mCenter = e->mBody->mCenter;
     e->mEntity.makeDirty();
@@ -351,48 +515,6 @@ bool EnemyManager::loadEnemyTemplate(char const* enemyName)
     else
     {
         loadFlipbook(enemyTemplate->mImagePath, enemyTemplate->mImages, ENEMY_MAX_IMAGE_COUNT, &enemyTemplate->mImageCount);
-
-        //DIR* dir;
-        //dir = opendir(enemyTemplate->mImagePath);
-        //if(!dir)
-        //{
-        //    dprintf("Failed to open flipbook directory: %s", enemyTemplate->mImagePath);
-        //    assert(0);
-        //    return false;
-        //}
-
-        //typedef std::set< std::string > StringSet;
-        //StringSet filenames;
-        //struct dirent* item;
-
-        //while((item = readdir(dir)) != NULL)
-        //{
-        //    int len = strlen(item->d_name);
-        //    if(!strcmp(&(item->d_name[len-3]), "png"))
-        //    {
-        //        filenames.insert(item->d_name);
-        //    }
-        //}
-
-        //closedir(dir);
-
-        //int i=0;
-        //for(StringSet::iterator j = filenames.begin(); j!=filenames.end() && i<ENEMY_MAX_IMAGE_COUNT; ++i, ++j)
-        //{
-        //    char filename[256];
-        //    snprintf(filename, 255, "%s/%s", enemyTemplate->mImagePath, (*j).c_str());
-        //    enemyTemplate->mImages[i] = gImageLibrary->reference(filename);
-        //    if(!enemyTemplate->mImages[i])
-        //    {
-        //        dprintf("Failed to load image %s", filename);
-        //        assert(0);
-        //        return false;
-        //    }
-
-        //    ++enemyTemplate->mImageCount;
-        //}
-
-        //dprintf("Flipbook loaded %u images. ImageCount is %u", i, enemyTemplate->mImageCount);
     }
 
     mEnemyTemplates[std::string(enemyName)] = enemyTemplate;
@@ -438,6 +560,8 @@ bool EnemyManager::initializeEnemy(Enemy* e, EnemyTemplate* enemyTemplate)
         e->mImages[i] = enemyTemplate->mImages[i];
         gImageLibrary->reference(e->mImages[i]);
     }
+    // SCD A dirty hack so I don't have to set size on the flipbook rotations to preserve scaling animations.
+    e->mEntity.mSize = e->mImages[0]->mSize;
 
     e->mUpdateCb = enemyUpdateCb;
     e->mDrawCb   = enemyDrawCb;
@@ -464,6 +588,8 @@ bool EnemyManager::initializeEnemy(Enemy* e, EnemyTemplate* enemyTemplate)
         break;
     case PounceAndStalk:
         e->mBehavior.mCb = behaviorPounceAndStalk;
+        e->mBody->mBodyCallback = behaviorPounceAndStalkCollisionCb;
+        e->mBody->mShapeCallback = behaviorPounceAndStalkShapeCollisionCb;     
         break;
     }
     

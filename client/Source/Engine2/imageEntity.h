@@ -19,6 +19,7 @@ public:
 
     void setImageAndInit(Image* image);
     void setImage(Image* image);
+    void setImageWithoutSize(Image* image);
     Image* getImage();
 
     void makeDirty();

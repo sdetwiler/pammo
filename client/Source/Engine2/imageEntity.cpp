@@ -54,6 +54,14 @@ void ImageEntity::setImage(Image* image)
     mDirty = true;
 }
 
+void ImageEntity::setImageWithoutSize(Image* image)
+{
+    assert(image);
+    mImage = image;
+//    mSize = mImage->mSize;
+    mDirty = true;
+}
+
 void ImageEntity::setImageAndInit(Image* image)
 {
     assert(image);

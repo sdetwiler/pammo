@@ -55,6 +55,7 @@ private:
     bool parseBehaviorDriveBy(char* s);
     bool parseBehaviorCamp(char* s);
     bool parseBehaviorKamikaze(char* s);
+    bool parseBehaviorPounceAndStalk(char* s);
 
     bool parseParticle(char* s);
     bool parseParticleNone(char* s);

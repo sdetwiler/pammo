@@ -11,6 +11,7 @@
 #include "minimap.h"
 #include "enemyManager.h"
 #include "enemyLoader.h"
+#include "interfaceView.h"
 
 namespace pammo
 {
@@ -32,6 +33,7 @@ World::World()
     
     mEnemyManager = new EnemyManager;
 
+    mInterfaceView = new InterfaceView;
 
     mPlayer = new Player();
 

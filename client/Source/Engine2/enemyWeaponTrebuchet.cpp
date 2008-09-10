@@ -7,20 +7,37 @@
 
 namespace pammo
 {
+struct TrebuchetBallParticleData
+{
+    uint64_t mStartTime;
+    TrebuchetWeaponData* mWeaponData;
+};
 
 void enemyWeaponTrebuchetBallParticleCb(Particle* p, ParticleSystem* system)
 {
-    if(magnitude(p->mEndPosition - p->mStartPosition) < magnitude(p->mBody->mCenter - p->mStartPosition))
+    TrebuchetBallParticleData* data = (TrebuchetBallParticleData*)p->mData;
+
+    uint64_t now = getTime();
+    float Di = 8.0f;
+    float Vi = 50.0f;
+    float G = 19.81; // Fantasyland... or Jupiter.
+    float dt = ((float)(now - data->mStartTime))/1000000.0f;
+    float distance = Di + ((Vi*dt) - ((G*dt*dt)/1.0f));
+
+    if(distance <= Di*.667f)
     {
+        p->mBody->mCollideProperties = kPlayerCollisionProperties;
+    }
+
+    if(distance <= Di)
+    {
+        //gWorld->getParticleSystem()->initExplosionParticle(p->mImage.mCenter);
 		system->removeParticle(p);
 		return;
     }
 
     p->mImage.mCenter = p->mBody->mCenter;
-    float distance = magnitude(p->mImage.mCenter - p->mStartPosition)/magnitude(p->mEndPosition - p->mStartPosition);
-    float x = (distance-0.5f)*1.5f;
-    float y = (-(x*x))+1;
-    p->mImage.mSize = 16 * y;
+    p->mImage.mSize = distance;
     p->mImage.makeDirty();
 }
 
@@ -40,6 +57,8 @@ void enemyWeaponTrebuchetCb(Enemy* e, EnemyWeapon* w, EnemyManager* manager)
 {
     TrebuchetWeaponData* data = (TrebuchetWeaponData*)w->mData;
 
+    enemyWeaponTurretUpdate(e, w, manager, &data->mTurret);
+
     uint64_t now = getTime();
 
     uint64_t delta = now-data->mLastFire;
@@ -51,28 +70,33 @@ void enemyWeaponTrebuchetCb(Enemy* e, EnemyWeapon* w, EnemyManager* manager)
 
     Particle* p = NULL;
     enemyWeaponTurretGetParticleWithBody(e, w, manager, &data->mTurret, &p);
+    if(!p)
+        return;
 
     // Set basic particle properties.
     p->mCallback = enemyWeaponTrebuchetBallParticleCb;
     p->mAlpha = 1.0f;
     
-    p->mEndPosition = e->mBody->mCenter + Vector2(data->mMaxDistance, 0) * Transform2::createRotation(e->mController.mRotation);
+    p->mMaxDistance = data->mMaxDistance;
 
-    // Setup image.
-    p->mImage.setImage(gImageLibrary->reference("data/particles/ball.png"));
-    p->mImage.makeDirty();
-        
+    // Properties about trebuchet ball particles.
+    TrebuchetBallParticleData* particleData = (TrebuchetBallParticleData*)p->mData;
+    particleData->mStartTime = now;
+
     // Properties about ball particles.
     p->mBody->mProperties = kPlayerBulletCollisionProperties;
-    p->mBody->mCollideProperties = kPlayerCollisionProperties | kEnemyBarrierCollisionProperties;
+    p->mBody->mCollideProperties = 0;//kPlayerCollisionProperties;
     p->mBody->mBodyCallback = enemyWeaponTrebuchetBallCollisionCb;
     p->mBody->mDamping = 0;
     p->mBody->mRadius = 15;
     p->mBody->mMass = 20;
-    p->mBody->mVelocity = e->mBody->mVelocity + Vector2(300, 0) * Transform2::createRotation(e->mController.mRotation);
-
+    p->mBody->mVelocity = e->mBody->mVelocity + Vector2(50, 0) * Transform2::createRotation(e->mController.mRotation);
     p->mBody->mUserArg = p;
 
+    // Setup image.
+    p->mImage.setImage(gImageLibrary->reference("data/particles/ball.png"));
+    p->mImage.mCenter = p->mBody->mCenter;
+    p->mImage.makeDirty();
 }
 
 } // namespace pammo

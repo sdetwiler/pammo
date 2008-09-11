@@ -12,6 +12,7 @@
 #include "enemyManager.h"
 #include "enemyLoader.h"
 #include "interfaceView.h"
+#include "mainScreenView.h"
 
 namespace pammo
 {
@@ -49,15 +50,27 @@ World::World()
 
 World::~World()
 {
+
+    delete mParticleSystem;
+    delete mCamera;
+//    delete mMap;
+    
+    gWorld = NULL;
+
+    new MainScreenView();
+}
+
+void World::destroy()
+{
+    mParticleSystem->destroy();
+    mMap->destroy();
+    mEnemyManager->destroy();
     mPlayer->destroy();
     mPhysics->destroy();
     mMinimap->destroy();
-    //mParticleSystem->destroy();
-    delete mParticleSystem;
-    delete mCamera;
-    delete mMap;
-    
-    gWorld = NULL;
+    mInterfaceView->destroy();
+
+    View::destroy();
 }
 
 Camera* World::getCamera()

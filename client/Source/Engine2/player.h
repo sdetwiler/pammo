@@ -41,6 +41,8 @@ class Player :
         virtual void onTargetRingUpdated(TargetRingWidget *widget, Vector2 value);
         virtual void onWeaponSelectorUpdated(WeaponSelector* widget, Weapon* weapon);
         
+        virtual void destroy();
+
 		void damage(ParticleType type, float amount);
 
         void setCenter(Vector2 center);
@@ -65,6 +67,8 @@ class Player :
 
         ScoreMeter* mScoreMeter;
         uint32_t mScore;
+
+        uint64_t mDeadTime;
 
         bool mFiring;
         Vector2 mFireDirection;

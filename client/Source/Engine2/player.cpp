@@ -74,12 +74,23 @@ Player::Player() : View()
 
 
     mFiring = false;
+    mDeadTime = 0;
+}
 
+void Player::destroy()
+{
+    mScoreMeter->destroy();
+    mHealthMeter->destroy();
+    mWeaponSelector->destroy();
+    mTargetRing->destroy();
+    mMovementRing->destroy();
 
+    View::destroy();
 }
 
 Player::~Player()
 {
+    delete mController;
 }
 
 uint32_t Player::getTouchPriority() const
@@ -156,15 +167,31 @@ void Player::update()
         
     if(mHealth < 1000)
     {
-        mHealth += 2;
+        //mHealth += 2;
         mHealthMeter->setPercent(mHealth);
     }
 
     mScoreMeter->setScore(mScore);
+
+    if(mHealth <= 0)
+    {
+        uint64_t now = getTime();
+        if(!mDeadTime)
+            mDeadTime = now;
+
+        if((now - mDeadTime) > 3000000)
+        {
+            gWorld->destroy();
+        }
+
+    }
 }
 
 void Player::draw()
 {
+    if(mDeadTime)
+        return;
+
     gWorld->getCamera()->set();
     
     mEntity.draw();
@@ -184,6 +211,9 @@ Vector2 const& Player::getCenter() const
 
 void Player::onTargetRingUpdated(TargetRingWidget *widget, Vector2 value)
 {
+    if(mDeadTime)
+        return;
+
     if(widget == mMovementRing)
     {
         float mag = magnitude(value);

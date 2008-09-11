@@ -177,4 +177,4 @@ void Game::initAndDelete()
     }
 }
 
-}
+} // namespace pammo

@@ -2,6 +2,7 @@
 #define __WORLD_H__
 
 #include "pammo.h"
+#include "view.h"
 
 namespace pammo
 {
@@ -16,7 +17,7 @@ class InterfaceView;
 
 class EnemyManager;
 
-class World
+class World : public View
 {
 	public:
 		World();
@@ -29,6 +30,8 @@ class World
         Minimap* getMinimap();
         Player* getPlayer() const;
         EnemyManager* getEnemyManager() const;
+
+        virtual void destroy();
 
     protected:
     private:

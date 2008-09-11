@@ -57,6 +57,7 @@ public:
 
 	void returnParticle(Particle* p);
 
+    void destroy();
 
 	class ParticleManager : public View
 	{
@@ -97,7 +98,7 @@ public:
 
 
 	Particle* mFree;
-	ParticleManager* mManagers;
+	ParticleManager** mManagers;
 	uint32_t mManagerCount;
 };
 

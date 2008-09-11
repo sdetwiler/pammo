@@ -130,23 +130,25 @@ ParticleSystem::ParticleSystem(uint32_t numParticles)
  //   : View()
 {
 	mManagerCount = 4;
-	mManagers = new ParticleManager[mManagerCount];
+
+	mManagers = new ParticleManager*[mManagerCount];
 	for(uint32_t i=0; i<mManagerCount; ++i)
 	{
-		mManagers[i].setSystem(this);
+        mManagers[i] = new ParticleManager;
+        mManagers[i]->setSystem(this);
 		switch(i)
 		{
 		case 0:
-			mManagers[i].setPriority(kParticle0Priority);
+			mManagers[i]->setPriority(kParticle0Priority);
 			break;
 		case 1:
-			mManagers[i].setPriority(kParticle1Priority);
+			mManagers[i]->setPriority(kParticle1Priority);
 			break;
 		case 2:
-			mManagers[i].setPriority(kParticle2Priority);
+			mManagers[i]->setPriority(kParticle2Priority);
 			break;
 		case 3:
-			mManagers[i].setPriority(kParticle3Priority);
+			mManagers[i]->setPriority(kParticle3Priority);
 			break;
 		}
 	}
@@ -163,8 +165,16 @@ ParticleSystem::ParticleSystem(uint32_t numParticles)
 
 ParticleSystem::~ParticleSystem()
 {
-	delete[] mManagers;
 }
+
+void ParticleSystem::destroy()
+{
+    for(uint32_t i=0; i<mManagerCount; ++i)
+    {
+        mManagers[i]->destroy();
+    }
+}
+
 /*
 uint32_t ParticleSystem::getUpdatePriority() const
 {
@@ -187,7 +197,7 @@ Particle* ParticleSystem::addParticle(uint32_t priority)
 	mFree = mFree->mNext;
     memset(p, 0, sizeof(Particle));
     
-	mManagers[priority].addParticle(p);
+	mManagers[priority]->addParticle(p);
 
     return p;
 }
@@ -219,7 +229,7 @@ Particle* ParticleSystem::addParticleWithBody(uint32_t priority)
     p->mBody = body;
 	body->mUserArg = p;
     
-	mManagers[priority].addParticle(p);
+	mManagers[priority]->addParticle(p);
         
     return p;
 }
@@ -229,19 +239,6 @@ void ParticleSystem::removeParticle(Particle* p)
 	p->mCallback = NULL;
 	p->mManager->removeParticle(p);
 }
-/*
-void ParticleSystem::update()
-{
-	for(uint32_t i=0; i<mManagerCount; ++i)
-	{
-		mManagers[i].update();
-	}
-}
-
-void ParticleSystem::draw()
-{
-}*/
-
 
 void ParticleSystem::initSmokeParticle(Vector2 const& initialPosition, float initialRotation, Vector2 const& initialVelocity)
 {

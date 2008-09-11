@@ -33,7 +33,7 @@ class View
 public:
     View();
     virtual ~View();
-    void destroy();
+    virtual void destroy();
     
     virtual uint32_t getTouchPriority() const;
     virtual uint32_t getUpdatePriority() const;

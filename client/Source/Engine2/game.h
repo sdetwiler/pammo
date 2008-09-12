@@ -40,7 +40,7 @@ private:
     
     ViewVector mInitable;
     ViewVector mDeleteable;
-    
+
     ViewMap mDrawable;
     ViewMap mTouchable;
     ViewMap mUpdateable;

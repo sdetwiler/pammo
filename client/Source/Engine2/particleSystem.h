@@ -24,7 +24,7 @@ class ParticleSystem;
 
 void doDamage(Body* self, Body* other, ParticleType type, float damage);
 
-class ParticleSystem //: public View
+class ParticleSystem
 {
 public:
     ParticleSystem(uint32_t numParticles);
@@ -57,7 +57,13 @@ public:
 
 	void returnParticle(Particle* p);
 
+    void reset();
+    void enable();
+    void disable();
+
     void destroy();
+
+
 
 	class ParticleManager : public View
 	{
@@ -76,6 +82,7 @@ public:
 		void addParticle(Particle* p);
 		void removeParticle(Particle* p);
 
+        void reset();
 
 	private:
 		// Pending draw particles.
@@ -95,7 +102,6 @@ public:
 		ParticleSystem* mParticleSystem;
 		ViewPriorities mPriority;
 	};
-
 
 	Particle* mFree;
 	ParticleManager** mManagers;

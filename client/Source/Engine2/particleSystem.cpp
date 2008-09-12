@@ -165,7 +165,53 @@ ParticleSystem::ParticleSystem(uint32_t numParticles)
 
 ParticleSystem::~ParticleSystem()
 {
+    uint32_t i=0;
+    while(mFree)
+    {
+        Particle* p = mFree->mNext;
+        delete mFree;
+        mFree = p;
+        ++i;
+    }
+
+    delete[] mManagers;
 }
+
+void ParticleSystem::reset()
+{
+    for(uint32_t i=0; i<mManagerCount; ++i)
+    {
+        mManagers[i]->reset();
+    }
+
+    //uint32_t i=0;
+    //Particle* p = mFree;
+    //while(p)
+    //{
+    //    ++i;
+    //    dprintf("%p %u", p, i);     
+    //    p = p->mNext;
+    //}
+
+    //dprintf("ParticleSystem::reset now has %u particles", i);
+}
+
+void ParticleSystem::enable()
+{
+    for(uint32_t i=0; i<mManagerCount; ++i)
+    {
+        mManagers[i]->enableAll();
+    }
+}
+
+void ParticleSystem::disable()
+{
+    for(uint32_t i=0; i<mManagerCount; ++i)
+    {
+        mManagers[i]->disableAll();
+    }
+}
+
 
 void ParticleSystem::destroy()
 {
@@ -174,12 +220,6 @@ void ParticleSystem::destroy()
         mManagers[i]->destroy();
     }
 }
-
-/*
-uint32_t ParticleSystem::getUpdatePriority() const
-{
-    return kParticle0Priority;
-}*/
 
 Particle* ParticleSystem::addParticle(uint32_t priority)
 {
@@ -199,6 +239,7 @@ Particle* ParticleSystem::addParticle(uint32_t priority)
     
 	mManagers[priority]->addParticle(p);
 
+//    dprintf("addParticle %p", p);
     return p;
 }
 
@@ -206,11 +247,12 @@ void ParticleSystem::returnParticle(Particle* p)
 {
 	p->mNext = mFree;
 	mFree = p;
+//    dprintf("returnParticle %p", p);
 }
 
 Particle* ParticleSystem::addParticleWithBody(uint32_t priority)
 {
-	if(priority > (mManagerCount-1))
+    if(priority > (mManagerCount-1))
 		return NULL;
 
     Body* body = gWorld->getPhysics()->addBody();
@@ -350,7 +392,33 @@ ParticleSystem::ParticleManager::ParticleManager()
 
 ParticleSystem::ParticleManager::~ParticleManager()
 {
+}
 
+void ParticleSystem::ParticleManager::reset()
+{
+    Particle* p;
+    Particle* next;
+    // Remove all pending add particles.
+    p = mAddHead;
+    while(p)
+    {
+        next = p->mNext;
+        mParticleSystem->returnParticle(p);
+        p = next;
+    }
+    mAddHead = NULL;
+
+    // Remove all current particles.
+    p = mTail;
+    while(p)
+    {
+        next = p->mPrev;
+        mParticleSystem->returnParticle(p);
+        p = next;
+    }
+    mHead = NULL;
+    mTail = NULL;
+    mRemoveHead = NULL;
 }
 
 void ParticleSystem::ParticleManager::setSystem(ParticleSystem* particleSystem)
@@ -387,9 +455,9 @@ void ParticleSystem::ParticleManager::addParticle(Particle* p)
 		mAddHead = p;
 	}
 
-    assert(p != mAddTail);
 	p->mPrev = mAddTail;
 	mAddTail = p;
+    p->mNext = NULL;
 }
 
 void ParticleSystem::ParticleManager::removeParticle(Particle* p)
@@ -409,7 +477,6 @@ void ParticleSystem::ParticleManager::update()
 	{
 		if(curr->mNext)
         {
-            assert(curr->mNext != curr->mPrev);
 			curr->mNext->mPrev = curr->mPrev;
         }
         else
@@ -433,7 +500,6 @@ void ParticleSystem::ParticleManager::update()
 		if(mTail)
 		{
 			mTail->mNext = mAddHead;
-            assert(mAddHead != mTail);
 			mAddHead->mPrev = mTail;
 		}
 		else
@@ -452,7 +518,7 @@ void ParticleSystem::ParticleManager::update()
 	curr = mTail;
 	while(curr)
 	{
-		// Update if callback exists. Callback will be NULL if particle was removed.
+        // Update if callback exists. Callback will be NULL if particle was removed.
 		if(curr->mCallback)
 		{
 			curr->mCallback(curr, mParticleSystem);
@@ -484,8 +550,8 @@ void ParticleSystem::ParticleManager::update()
             }
 
 		}
-        assert(curr != curr->mPrev);
-		curr = curr->mPrev;
+
+        curr = curr->mPrev;
 	}
 
     //dprintf("draw %u. cull %u", toDraw, toSkip);

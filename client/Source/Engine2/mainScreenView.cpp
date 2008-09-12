@@ -3,14 +3,17 @@
 #include "world.h"
 #include "imageLibrary.h"
 #include "drawImage.h"
+#include "player.h"
 
 namespace pammo
 {
 
+MainScreenView* gMainScreenView = NULL;
+
 MainScreenView::MainScreenView()
     : View()
 {
-    
+    gMainScreenView = this;
     // Load background.
     mBackground = gImageLibrary->reference("data/interface/mainScreenBackground.png");
 }
@@ -30,6 +33,20 @@ uint32_t MainScreenView::getDrawPriority() const
     return kScreenPriority;
 }
 
+uint32_t MainScreenView::getUpdatePriority() const
+{
+    return kScreenPriority;
+}
+
+void MainScreenView::update()
+{
+    if(!gWorld)
+    {
+        new World;
+        gWorld->disable();
+    }
+}
+
 void MainScreenView::draw()
 {
     Transform2 trans = Transform2::createScale(mBackground->mSize);
@@ -47,8 +64,9 @@ bool MainScreenView::touch(uint32_t count, Touch* touches)
     
     Vector2 pos = touches[0].mLocation;
 
-    new World();
-    destroy();
+    disableAll();
+    gWorld->getPlayer()->setCenter(gWorld->getPlayer()->getSpawnPoint());
+    gWorld->enable();
 
     // Figure out if you touched anything.
     //for(VehicleDescVector::iterator i=mVehicles.begin(); i != mVehicles.end(); ++i)

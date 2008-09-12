@@ -36,6 +36,32 @@ uint32_t Physics::getDrawPriority() const
 {
     return kPhysicsPriority;
 }
+
+void Physics::reset()
+{
+    Body* cur;
+    Body* next;
+
+    // Remove all pending add bodies.
+    cur = mAddBodies;
+    while(cur)
+    {
+        next = cur->mNext;
+        removeBody(cur);
+        cur = next;
+    }
+    mAddBodies = NULL;
+
+    // Remove all active bodies.
+    cur = mBodies;
+    while(cur)
+    {
+        next = cur->mNext;
+        removeBody(cur);
+        cur = next;
+    }
+    mBodies = NULL;
+}
     
 void Physics::update()
 {

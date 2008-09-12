@@ -643,6 +643,32 @@ bool EnemyManager::initializeEnemy(Enemy* e, EnemyTemplate* enemyTemplate)
     return true;
 }
 
+void EnemyManager::reset()
+{
+    Enemy* e;
+    Enemy* next;
+    e = mAddEnemies;
+    while(e)
+    {
+        next = e->mNext;
+        removeEnemy(e);
+        e = next;
+    }
+    mAddEnemies = NULL;
+
+    e = mEnemies;
+    while(e)
+    {
+        next = e->mNext;
+        removeEnemy(e);
+        e = next;
+    }
+    mEnemies = NULL;
+
+    mSpawnEvents.clear();
+    mNextWaveScore = 0;
+}
+
 void EnemyManager::update()
 {
 	while(mAddEnemies)

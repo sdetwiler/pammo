@@ -20,9 +20,7 @@ Game::Game()
     // Initialize the image library.
     gImageLibrary = new ImageLibrary();
     
-    //new VehicleSelectView();
-    // Or create the world view with a map.
-    new MainScreenView();
+    new MainScreenView;
 }
 
 Game::~Game()
@@ -35,7 +33,8 @@ void Game::update()
     
     for(ViewMap::iterator i=mUpdateable.begin(); i!=mUpdateable.end(); ++i)
     {
-        i->second->update();
+        if(i->second->mNotifications & View::kUpdate)
+            i->second->update();
     }
 }
 
@@ -75,7 +74,8 @@ void Game::draw()
 	
     for(ViewMap::iterator i = mDrawable.begin(); i!= mDrawable.end(); ++i)
     {
-        i->second->draw();
+        if(i->second->mNotifications & View::kDraw)
+            i->second->draw();
     }
 }
 
@@ -85,8 +85,11 @@ void Game::touches(uint32_t count, Touch* touches)
     
     for(ViewMap::iterator i=mTouchable.begin(); i!=mTouchable.end(); ++i)
     {
-        if(i->second->touch(count, touches))
-            return;
+        if(i->second->mNotifications & View::kTouch)
+        {
+            if(i->second->touch(count, touches))
+                return;
+        }
     }
 }
     

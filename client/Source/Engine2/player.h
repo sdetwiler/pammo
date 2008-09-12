@@ -41,13 +41,18 @@ class Player :
         virtual void onTargetRingUpdated(TargetRingWidget *widget, Vector2 value);
         virtual void onWeaponSelectorUpdated(WeaponSelector* widget, Weapon* weapon);
         
-        virtual void destroy();
-
 		void damage(ParticleType type, float amount);
+
+
+        void reset();
+        void enable();
+        void disable();
 
         void setCenter(Vector2 center);
         Vector2 const& getCenter() const;
 
+        void setSpawnPoint(Vector2 const& p);
+        Vector2 const& getSpawnPoint() const;
     public:
         TargetRingWidget* mMovementRing;
         TargetRingWidget* mTargetRing;
@@ -72,6 +77,7 @@ class Player :
 
         bool mFiring;
         Vector2 mFireDirection;
+        Vector2 mSpawnPoint;
 
 	private:
 		void createDust();

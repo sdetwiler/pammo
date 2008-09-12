@@ -348,6 +348,8 @@ public:
     virtual void update();
     virtual void draw();
 
+    void reset();
+
     void addSpawnPoint(Vector2 point);
     Vector2 const* getSpawnPoint(uint32_t index) const;
     uint32_t getSpawnPointCount() const;

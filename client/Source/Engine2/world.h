@@ -17,7 +17,7 @@ class InterfaceView;
 
 class EnemyManager;
 
-class World : public View
+class World
 {
 	public:
 		World();
@@ -30,8 +30,11 @@ class World : public View
         Minimap* getMinimap();
         Player* getPlayer() const;
         EnemyManager* getEnemyManager() const;
-
-        virtual void destroy();
+        
+        void reset();
+        void disable();
+        void enable();
+//        virtual void destroy();
 
     protected:
     private:

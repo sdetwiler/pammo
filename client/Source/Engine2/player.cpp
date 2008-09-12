@@ -1,5 +1,6 @@
 #include "player.h"
 
+#include "mainScreenView.h"
 #include "world.h"
 #include "camera.h"
 #include "imageLibrary.h"
@@ -34,18 +35,45 @@ void dustParticleCallback(Particle* p, ParticleSystem* system)
 
 Player::Player() : View()
 {
+    mHealthMeter = new HealthMeter();
+    mScoreMeter = new ScoreMeter();
+
     mMovementRing = new TargetRingWidget(kMoveRingPriority);
     mMovementRing->setObserver(this);
-    mMovementRing->setCenter(Vector2(60, 260));
     
     mTargetRing = new TargetRingWidget(kFireRingPriority);
     mTargetRing->setObserver(this);
-    mTargetRing->setCenter(Vector2(420, 260));
 
     //mEntity = new ImageEntity(gImageLibrary->reference("data/vehicles/tank/00.png"));
     loadFlipbook("data/vehicles/tank/", mImages, PLAYER_MAX_IMAGE_COUNT, &mImageCount);
     mCurrImage = 0;
     mEntity.setImage(mImages[mCurrImage]);
+    
+    mController = new VehicleController();
+
+    mWeaponSelector = new WeaponSelector();
+    mWeaponSelector->setObserver(this);
+    mWeaponSelector->addWeapon(new LightningWeapon);
+    mWeaponSelector->addWeapon(new FlamethrowerWeapon);
+    
+    reset();
+}
+
+Player::~Player()
+{
+    mScoreMeter->destroy();
+    mHealthMeter->destroy();
+    mWeaponSelector->destroy();
+    mTargetRing->destroy();
+    mMovementRing->destroy();
+    delete mController;
+}
+
+void Player::reset()
+{
+    mMovementRing->setCenter(Vector2(60, 260));
+    mTargetRing->setCenter(Vector2(420, 260));
+
     mBody = gWorld->getPhysics()->addBody();
     
     mBody->mProperties = kPlayerCollisionProperties;
@@ -54,43 +82,43 @@ Player::Player() : View()
     mBody->mDamping = 0.1;
     mBody->mRadius = 20;
     mBody->mMass = 100;
-    
-    mController = new VehicleController();
+
     mController->mBody = mBody;
     mController->mRotationDamping = 0.4;
 
-    mWeaponSelector = new WeaponSelector();
-    mWeaponSelector->setObserver(this);
-    mWeaponSelector->addWeapon(new LightningWeapon);
-    mWeaponSelector->addWeapon(new FlamethrowerWeapon);
-    
-    mHealth = 1000.0;
-    mHealthMeter = new HealthMeter();
+    // SCD TEMP
+    mHealth = 1000.0f;
     mHealthMeter->setPercent(mHealth);
 
-    mScore = 0;  
-    mScoreMeter = new ScoreMeter();
+    mScore = 0;
     mScoreMeter->setScore(mScore);
-
 
     mFiring = false;
     mDeadTime = 0;
+
+    setCenter(getSpawnPoint());
 }
 
-void Player::destroy()
+void Player::enable()
 {
-    mScoreMeter->destroy();
-    mHealthMeter->destroy();
-    mWeaponSelector->destroy();
-    mTargetRing->destroy();
-    mMovementRing->destroy();
+    mScoreMeter->enableAll();
+    mHealthMeter->enableAll();
+    mWeaponSelector->enableAll();
+    mTargetRing->enableAll();
+    mMovementRing->enableAll();
 
-    View::destroy();
+    enableAll();
 }
 
-Player::~Player()
+void Player::disable()
 {
-    delete mController;
+    mScoreMeter->disableAll();
+    mHealthMeter->disableAll();
+    mWeaponSelector->disableAll();
+    mTargetRing->disableAll();
+    mMovementRing->disableAll();
+
+    disableAll();
 }
 
 uint32_t Player::getTouchPriority() const
@@ -177,11 +205,17 @@ void Player::update()
     {
         uint64_t now = getTime();
         if(!mDeadTime)
+        {
             mDeadTime = now;
+            gWorld->getPhysics()->removeBody(mBody);
+        }
 
         if((now - mDeadTime) > 3000000)
         {
-            gWorld->destroy();
+         //   delete gWorld;
+            gWorld->disable();
+            gWorld->reset();
+            gMainScreenView->enableAll();
         }
 
     }
@@ -251,8 +285,21 @@ void Player::onWeaponSelectorUpdated(WeaponSelector* widget, Weapon* weapon)
 
 void Player::damage(ParticleType type, float amount)
 {
+    dprintf("damage");
 	mHealth -= amount;
     mHealthMeter->setPercent(mHealth);
 }
+
+void Player::setSpawnPoint(Vector2 const& p)
+{
+    mSpawnPoint = p;
+}
+
+Vector2 const& Player::getSpawnPoint() const
+{
+    return mSpawnPoint;
+}
+
+
 
 }

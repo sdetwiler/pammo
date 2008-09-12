@@ -15,12 +15,14 @@ public:
     MainScreenView();
     virtual ~MainScreenView();
     
+    virtual void update();
     virtual void draw();
     virtual bool touch(uint32_t count, Touch* touches);
     
     virtual uint32_t getTouchPriority() const;
     virtual uint32_t getDrawPriority() const;
-    
+    virtual uint32_t getUpdatePriority() const;
+
 private:
     //void selectVehicle(uint32_t type);
     
@@ -37,6 +39,8 @@ private:
     //VehicleDescVector mVehicles;
     //std::string mMapName; // Selected map from map view.
 };
+
+extern MainScreenView* gMainScreenView;
     
 }
 

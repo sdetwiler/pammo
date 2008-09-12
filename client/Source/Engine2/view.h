@@ -33,7 +33,7 @@ class View
 public:
     View();
     virtual ~View();
-    virtual void destroy();
+    void destroy();
     
     virtual uint32_t getTouchPriority() const;
     virtual uint32_t getUpdatePriority() const;
@@ -45,9 +45,27 @@ public:
     virtual void update();
     virtual void draw();
     
+    void disableAll();
+    void enableAll();
+    void disableUpdate();
+    void enableUpdate();
+    void disableTouch();
+    void enableTouch();
+    void disableDraw();
+    void enableDraw();
+
 private:
     friend class Game;
     void init();
+
+    enum Notifications
+    {
+        kDraw = 2,
+        kTouch = 4,
+        kUpdate = 8
+    };
+
+    uint32_t mNotifications;
 };
 
 }

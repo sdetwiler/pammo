@@ -110,6 +110,8 @@ class Physics : public View
         virtual void update();
         virtual void draw();
         
+        void reset();
+
         void setMapSize(Vector2 mapBounds);
         void addShape(uint16_t properties, uint16_t numPoints, Vector2* points);
         

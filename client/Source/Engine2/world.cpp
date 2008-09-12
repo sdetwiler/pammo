@@ -50,27 +50,23 @@ World::World()
 
 World::~World()
 {
-
-    delete mParticleSystem;
-    delete mCamera;
-//    delete mMap;
-    
-    gWorld = NULL;
-
-    new MainScreenView();
-}
-
-void World::destroy()
-{
+    mParticleSystem->reset();
     mParticleSystem->destroy();
+
     mMap->destroy();
     mEnemyManager->destroy();
+    
     mPlayer->destroy();
     mPhysics->destroy();
     mMinimap->destroy();
     mInterfaceView->destroy();
 
-    View::destroy();
+    delete mParticleSystem;
+    delete mCamera;
+    
+    gWorld = NULL;
+
+    new MainScreenView;
 }
 
 Camera* World::getCamera()
@@ -106,6 +102,39 @@ Player* World::getPlayer() const
 EnemyManager* World::getEnemyManager() const
 {
     return mEnemyManager;
+}
+
+void World::reset()
+{
+    mParticleSystem->reset();
+    mPlayer->reset();
+    mEnemyManager->reset();
+ //   mPhysics->reset();
+}
+
+void World::disable()
+{
+    mPlayer->disable();
+    mParticleSystem->disable();
+
+    mMap->disableAll();
+    mPhysics->disableAll();
+    mMinimap->disableAll();
+    mInterfaceView->disableAll();
+    mEnemyManager->disableAll();
+}
+
+void World::enable()
+{
+    mPlayer->enable();
+    mParticleSystem->enable();
+
+    mMap->enableAll();
+    mPhysics->enableAll();
+    mMinimap->enableAll();
+    mInterfaceView->enableAll();
+    mEnemyManager->enableAll();
+
 }
 
 } //namespace pammo

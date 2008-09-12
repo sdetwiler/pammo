@@ -196,7 +196,7 @@ void buildCollisionMap(World* world, char const* mapName)
         
         if(properties == 0)
         {
-            world->getPlayer()->setCenter(Vector2(x, y));
+            world->getPlayer()->setSpawnPoint(Vector2(x, y));
         }
         else if(properties == 1)
         {

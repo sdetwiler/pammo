@@ -15,6 +15,7 @@ namespace pammo
 
 View::View()
 {
+    mNotifications = kDraw | kTouch | kUpdate;
     gGame->queueInit(this);
 }
 
@@ -36,6 +37,7 @@ void View::unregister()
 
 void View::destroy()
 {
+    disableAll();
     gGame->queueDelete(this);
 }
 
@@ -74,5 +76,53 @@ void View::init()
     if(getTouchPriority() != 0)
         gGame->registerTouchable(this);
 }
+
+void View::disableAll()
+{
+    mNotifications = 0;
+}
+
+void View::enableAll()
+{
+    if(getDrawPriority() != 0)
+        enableDraw();
+    
+    if(getUpdatePriority() != 0)
+        enableUpdate();
+    
+    if(getTouchPriority() != 0)
+        enableTouch();
+}
+
+void View::disableUpdate()
+{
+    mNotifications = mNotifications & ~kUpdate;
+}
+
+void View::enableUpdate()
+{
+    mNotifications = mNotifications | kUpdate;
+}
+
+void View::disableTouch()
+{
+    mNotifications = mNotifications & ~kTouch;
+}
+
+void View::enableTouch()
+{
+    mNotifications = mNotifications | kTouch;
+}
+
+void View::disableDraw()
+{
+    mNotifications = mNotifications & ~kDraw;
+}
+
+void View::enableDraw()
+{
+    mNotifications = mNotifications | kDraw;
+}
+
 
 }

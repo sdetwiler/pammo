@@ -63,6 +63,7 @@ public:
 
     void destroy();
 
+    void sanityCheck(char const* msg);
 
 
 	class ParticleManager : public View
@@ -84,7 +85,7 @@ public:
 
         void reset();
 
-	private:
+    private:
 		// Pending draw particles.
 		Particle* mDrawHead;
 		

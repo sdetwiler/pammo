@@ -65,7 +65,7 @@ bool MainScreenView::touch(uint32_t count, Touch* touches)
     Vector2 pos = touches[0].mLocation;
 
     disableAll();
-    gWorld->getPlayer()->setCenter(gWorld->getPlayer()->getSpawnPoint());
+    //gWorld->getPlayer()->setCenter(gWorld->getPlayer()->getSpawnPoint());
     gWorld->enable();
 
     // Figure out if you touched anything.

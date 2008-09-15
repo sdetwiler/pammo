@@ -39,6 +39,8 @@ uint32_t Physics::getDrawPriority() const
 
 void Physics::reset()
 {
+    return;
+
     Body* cur;
     Body* next;
 
@@ -70,7 +72,7 @@ void Physics::update()
     {
         Body* cur = mAddBodies;
         mAddBodies = cur->mNext;
-        
+
         cur->mNext = mBodies;
         if(cur->mNext) cur->mNext->mPrev = cur;
         mBodies = cur;
@@ -88,7 +90,7 @@ void Physics::update()
     {
         Body* cur = mRemoveBodies;
         mRemoveBodies = cur->mRemoveNext;
-        
+
         if(cur->mNext) cur->mNext->mPrev = cur->mPrev;
         if(cur->mPrev) cur->mPrev->mNext = cur->mNext;
         else mBodies = cur->mNext;
@@ -132,7 +134,7 @@ void Physics::draw()
         b = b->mNext;
     }
     
-    glColor4f(0, 1, 0, .25);
+    glColor4f(0, 1, 0, .15);
     Shape* shape = mShapes;
     while(shape)
     {

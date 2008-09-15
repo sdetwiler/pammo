@@ -35,6 +35,7 @@ void dustParticleCallback(Particle* p, ParticleSystem* system)
 
 Player::Player() : View()
 {
+    mBody = NULL;
     mHealthMeter = new HealthMeter();
     mScoreMeter = new ScoreMeter();
 
@@ -74,6 +75,10 @@ void Player::reset()
     mMovementRing->setCenter(Vector2(60, 260));
     mTargetRing->setCenter(Vector2(420, 260));
 
+    if(mBody)
+    {
+        gWorld->getPhysics()->removeBody(mBody);
+    }
     mBody = gWorld->getPhysics()->addBody();
     
     mBody->mProperties = kPlayerCollisionProperties;
@@ -83,11 +88,12 @@ void Player::reset()
     mBody->mRadius = 20;
     mBody->mMass = 100;
 
+    mController->reset();
     mController->mBody = mBody;
-    mController->mRotationDamping = 0.4;
+    mController->mRotationDamping = 0.4f;
 
     // SCD TEMP
-    mHealth = 1000.0f;
+    mHealth = 10.0f;
     mHealthMeter->setPercent(mHealth);
 
     mScore = 0;
@@ -207,7 +213,12 @@ void Player::update()
         if(!mDeadTime)
         {
             mDeadTime = now;
-            gWorld->getPhysics()->removeBody(mBody);
+            mBody->mVelocity = Vector2(0,0);
+            mBody->mCollideProperties = 0;
+            mBody->mProperties = 0;
+            mController->reset();
+            //gWorld->getPhysics()->removeBody(mBody);
+            //mBody = NULL;
         }
 
         if((now - mDeadTime) > 3000000)

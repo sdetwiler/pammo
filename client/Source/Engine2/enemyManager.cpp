@@ -651,7 +651,12 @@ void EnemyManager::reset()
     while(e)
     {
         next = e->mNext;
-        removeEnemy(e);
+
+		// Push onto avail stack.
+		e->mPrev = NULL;
+		e->mNext = mFreed;
+		mFreed = e;
+
         e = next;
     }
     mAddEnemies = NULL;
@@ -819,6 +824,8 @@ Enemy* EnemyManager::addEnemy()
         e = new Enemy();
 		memset(e, 0, sizeof(e));
     }
+    if(mAddEnemies)
+        mAddEnemies->mPrev = e;
 
 	e->mNext = mAddEnemies;
 	e->mPrev = NULL;
@@ -839,7 +846,6 @@ Enemy* EnemyManager::addEnemy()
 
 void EnemyManager::removeEnemy(Enemy* e)
 {
-
     gWorld->getPhysics()->removeBody(e->mBody);
     // Push onto remove stack.
 	e->mRemoveNext = mRemoveEnemies;

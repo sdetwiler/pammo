@@ -26,7 +26,7 @@ World::World()
     mCamera = new Camera();
     mMap = new Map();
     
-    mParticleSystem = new ParticleSystem(500);
+    mParticleSystem = new ParticleSystem(10);
     
     mPhysics = new Physics();
     
@@ -46,6 +46,7 @@ World::World()
         assert(0);
     }
     buildFromMap(this, mapName);
+    mPlayer->setCenter(mPlayer->getSpawnPoint());
 }
 
 World::~World()

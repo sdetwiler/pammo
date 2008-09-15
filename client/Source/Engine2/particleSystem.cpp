@@ -183,17 +183,6 @@ void ParticleSystem::reset()
     {
         mManagers[i]->reset();
     }
-
-    //uint32_t i=0;
-    //Particle* p = mFree;
-    //while(p)
-    //{
-    //    ++i;
-    //    dprintf("%p %u", p, i);     
-    //    p = p->mNext;
-    //}
-
-    //dprintf("ParticleSystem::reset now has %u particles", i);
 }
 
 void ParticleSystem::enable()
@@ -236,10 +225,8 @@ Particle* ParticleSystem::addParticle(uint32_t priority)
 	p = mFree;
 	mFree = mFree->mNext;
     memset(p, 0, sizeof(Particle));
-    
 	mManagers[priority]->addParticle(p);
 
-//    dprintf("addParticle %p", p);
     return p;
 }
 
@@ -247,7 +234,6 @@ void ParticleSystem::returnParticle(Particle* p)
 {
 	p->mNext = mFree;
 	mFree = p;
-//    dprintf("returnParticle %p", p);
 }
 
 Particle* ParticleSystem::addParticleWithBody(uint32_t priority)
@@ -256,23 +242,19 @@ Particle* ParticleSystem::addParticleWithBody(uint32_t priority)
 		return NULL;
 
     Body* body = gWorld->getPhysics()->addBody();
-    if(!body) return NULL;
+    if(!body)
+        return NULL;
 
-	// Grab a particle.
-	Particle* p;
-	if(mFree == NULL)
-	{
-		return NULL;
-	}
-	p = mFree;
-	mFree = mFree->mNext;
+    Particle* p = addParticle(priority);
+    if(!p)
+    {
+        gWorld->getPhysics()->removeBody(body);
+        return NULL;
+    }
 
-    memset(p, 0, sizeof(Particle));
     p->mBody = body;
 	body->mUserArg = p;
     
-	mManagers[priority]->addParticle(p);
-        
     return p;
 }
 
@@ -403,6 +385,10 @@ void ParticleSystem::ParticleManager::reset()
     while(p)
     {
         next = p->mNext;
+	    if(p->mBody)
+        {
+		    gWorld->getPhysics()->removeBody(p->mBody);
+        }
         mParticleSystem->returnParticle(p);
         p = next;
     }
@@ -413,11 +399,17 @@ void ParticleSystem::ParticleManager::reset()
     while(p)
     {
         next = p->mPrev;
+	    if(p->mBody)
+        {
+		    gWorld->getPhysics()->removeBody(p->mBody);
+        }
         mParticleSystem->returnParticle(p);
         p = next;
     }
     mHead = NULL;
     mTail = NULL;
+
+    // Pending removes were still current, so they'be now been removed, too.
     mRemoveHead = NULL;
 }
 
@@ -464,7 +456,9 @@ void ParticleSystem::ParticleManager::removeParticle(Particle* p)
 {
     p->mCallback = NULL;
 	if(p->mBody)
-		gWorld->getPhysics()->removeBody(p->mBody);
+    {
+        gWorld->getPhysics()->removeBody(p->mBody);
+    }
 	p->mRemoveNext = mRemoveHead;
 	mRemoveHead = p;
 }

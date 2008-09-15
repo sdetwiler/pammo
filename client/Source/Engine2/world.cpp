@@ -26,7 +26,7 @@ World::World()
     mCamera = new Camera();
     mMap = new Map();
     
-    mParticleSystem = new ParticleSystem(10);
+    mParticleSystem = new ParticleSystem(500);
     
     mPhysics = new Physics();
     

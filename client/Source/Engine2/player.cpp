@@ -93,7 +93,7 @@ void Player::reset()
     mController->mRotationDamping = 0.4f;
 
     // SCD TEMP
-    mHealth = 10.0f;
+    mHealth = 1000.0f;
     mHealthMeter->setPercent(mHealth);
 
     mScore = 0;

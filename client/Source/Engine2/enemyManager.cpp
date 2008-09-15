@@ -436,8 +436,6 @@ void enemyDamageCb(Enemy* e, ParticleType type, float amount)
             gImageLibrary->unreference(e->mImages[i]);
         }
 
-        //gImageLibrary->unreference(e->mEntity.getImage());
-
         for(uint32_t i=0; i<e->mWeaponCount; ++i)
         {
             gImageLibrary->unreference(e->mWeapon[i].mEntity.getImage());

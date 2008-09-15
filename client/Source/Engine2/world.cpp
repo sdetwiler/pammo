@@ -34,7 +34,7 @@ World::World()
     
     mEnemyManager = new EnemyManager;
 
-    mInterfaceView = new InterfaceView;
+//    mInterfaceView = new InterfaceView;
 
     mPlayer = new Player();
 
@@ -60,7 +60,7 @@ World::~World()
     mPlayer->destroy();
     mPhysics->destroy();
     mMinimap->destroy();
-    mInterfaceView->destroy();
+    //mInterfaceView->destroy();
 
     delete mParticleSystem;
     delete mCamera;
@@ -121,7 +121,7 @@ void World::disable()
     mMap->disableAll();
     mPhysics->disableAll();
     mMinimap->disableAll();
-    mInterfaceView->disableAll();
+ //   mInterfaceView->disableAll();
     mEnemyManager->disableAll();
 }
 
@@ -133,7 +133,7 @@ void World::enable()
     mMap->enableAll();
     mPhysics->enableAll();
     mMinimap->enableAll();
-    mInterfaceView->enableAll();
+    //mInterfaceView->enableAll();
     mEnemyManager->enableAll();
 
 }

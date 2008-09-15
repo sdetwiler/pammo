@@ -216,6 +216,7 @@ void Player::update()
             mBody->mVelocity = Vector2(0,0);
             mBody->mCollideProperties = 0;
             mBody->mProperties = 0;
+            mFiring = false;
             mController->reset();
             //gWorld->getPhysics()->removeBody(mBody);
             //mBody = NULL;

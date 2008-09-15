@@ -426,7 +426,7 @@ void enemyDamageCb(Enemy* e, ParticleType type, float amount)
 
 	if(e->mHealth <=0)
 	{
-		dprintf("dead", e);
+		dprintf("dead 0x%p", e, e);
 		gWorld->getParticleSystem()->initExplosionParticle(e->mBody->mCenter);
 		gWorld->getParticleSystem()->initRubbleParticle(e->mBody->mCenter);
         gWorld->getPlayer()->mScore += e->mPointValue;

@@ -115,7 +115,7 @@ void WeaponSelector::addWeapon(Weapon* weapon)
     // Iterate over each icon and set the position accordingly.
     Vector2 frame = getFrameSize();
     //float y = frame.y/2 - (kIconSize + kIconBorder.y)/2 * (mWeapons.size()-1);
-    float y = frame.y - 180 + (kIconSize + kIconBorder.y)/2;
+    float y = frame.y - 240 + (kIconSize + kIconBorder.y)/2;
     for(WeaponVector::iterator i=mWeapons.begin(); i != mWeapons.end(); ++i)
     {
         entity = (*i)->getIcon();

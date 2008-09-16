@@ -28,6 +28,7 @@
 		112A588D0E303B5800A3C218 /* imageEntity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 112A588A0E303B5800A3C218 /* imageEntity.cpp */; };
 		112A588F0E303B7600A3C218 /* targetRingWidget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 112A588E0E303B7600A3C218 /* targetRingWidget.cpp */; };
 		112A59FB0E3056BC00A3C218 /* particleSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 112A59FA0E3056BC00A3C218 /* particleSystem.cpp */; };
+		113681B80E7F82FA001FFC23 /* fonts in Copy Data */ = {isa = PBXBuildFile; fileRef = 1136819E0E7F82FA001FFC23 /* fonts */; };
 		1138114A0E2FEBDF00E9FF5F /* view.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 113811490E2FEBDF00E9FF5F /* view.cpp */; };
 		113B2C2D0DF65EB20095A737 /* map.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 113B2C2C0DF65EB20095A737 /* map.cpp */; };
 		113E769A0E4A6FE3005A8070 /* levelLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 113E76960E4A6FE3005A8070 /* levelLoader.cpp */; };
@@ -52,6 +53,8 @@
 		11EEB7250DEBC73F009F3B13 /* game.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11EEB7110DEBC73F009F3B13 /* game.cpp */; };
 		11EEB72A0DEBC73F009F3B13 /* world.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11EEB71F0DEBC73F009F3B13 /* world.cpp */; };
 		11F1374A0DF34A7F00651323 /* imageLibrary.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11F137490DF34A7F00651323 /* imageLibrary.cpp */; };
+		11FBD5C20E7AE3C60070BD31 /* interfaceView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11FBD5BE0E7AE3C60070BD31 /* interfaceView.cpp */; };
+		11FBD5C30E7AE3C60070BD31 /* scoreMeter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11FBD5C00E7AE3C60070BD31 /* scoreMeter.cpp */; };
 		1D3623EC0D0F72F000981E51 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D3623EB0D0F72F000981E51 /* CoreGraphics.framework */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
@@ -66,6 +69,7 @@
 			dstPath = data;
 			dstSubfolderSpec = 1;
 			files = (
+				113681B80E7F82FA001FFC23 /* fonts in Copy Data */,
 				110664D40E5B70DF0023ABB1 /* particles in Copy Data */,
 				110664D90E5B70EA0023ABB1 /* enemies in Copy Data */,
 				110665600E5B70FB0023ABB1 /* interface in Copy Data */,
@@ -114,6 +118,7 @@
 		112A58910E303B9500A3C218 /* targetRingWidget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = targetRingWidget.h; sourceTree = "<group>"; };
 		112A59F90E3056BC00A3C218 /* particleSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = particleSystem.h; sourceTree = "<group>"; };
 		112A59FA0E3056BC00A3C218 /* particleSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = particleSystem.cpp; sourceTree = "<group>"; };
+		1136819E0E7F82FA001FFC23 /* fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; name = fonts; path = ../data/fonts; sourceTree = SOURCE_ROOT; };
 		113811480E2FEBDF00E9FF5F /* view.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = view.h; sourceTree = "<group>"; };
 		113811490E2FEBDF00E9FF5F /* view.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = view.cpp; sourceTree = "<group>"; };
 		113B2C2B0DF65EB20095A737 /* map.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = map.h; sourceTree = "<group>"; };
@@ -166,6 +171,10 @@
 		11EEB7380DEBC769009F3B13 /* platform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = platform.h; sourceTree = "<group>"; };
 		11F137480DF34A7F00651323 /* imageLibrary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = imageLibrary.h; sourceTree = "<group>"; };
 		11F137490DF34A7F00651323 /* imageLibrary.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = imageLibrary.cpp; sourceTree = "<group>"; };
+		11FBD5BE0E7AE3C60070BD31 /* interfaceView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = interfaceView.cpp; sourceTree = "<group>"; };
+		11FBD5BF0E7AE3C60070BD31 /* interfaceView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = interfaceView.h; sourceTree = "<group>"; };
+		11FBD5C00E7AE3C60070BD31 /* scoreMeter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = scoreMeter.cpp; sourceTree = "<group>"; };
+		11FBD5C10E7AE3C60070BD31 /* scoreMeter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = scoreMeter.h; sourceTree = "<group>"; };
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1D3623EB0D0F72F000981E51 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		1D6058910D05DD3D006BFB54 /* Irradiated.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Irradiated.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -209,6 +218,7 @@
 		110664090E5B6BA00023ABB1 /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				1136819E0E7F82FA001FFC23 /* fonts */,
 				110664DA0E5B70FB0023ABB1 /* interface */,
 				110664ED0E5B70FB0023ABB1 /* levels */,
 				110664F00E5B70FB0023ABB1 /* props */,
@@ -243,6 +253,8 @@
 				110665800E635A240023ABB1 /* healthMeter.h */,
 				11C3F42D0E2F0F3A00EE8D28 /* player.cpp */,
 				11C3F42F0E2F0F7E00EE8D28 /* player.h */,
+				11FBD5C00E7AE3C60070BD31 /* scoreMeter.cpp */,
+				11FBD5C10E7AE3C60070BD31 /* scoreMeter.h */,
 				112A588E0E303B7600A3C218 /* targetRingWidget.cpp */,
 				112A58910E303B9500A3C218 /* targetRingWidget.h */,
 				11C875090E40E641008B701A /* Weapon Subsystem */,
@@ -314,6 +326,8 @@
 				112A588B0E303B5800A3C218 /* imageEntity.h */,
 				11F137490DF34A7F00651323 /* imageLibrary.cpp */,
 				11F137480DF34A7F00651323 /* imageLibrary.h */,
+				11FBD5BE0E7AE3C60070BD31 /* interfaceView.cpp */,
+				11FBD5BF0E7AE3C60070BD31 /* interfaceView.h */,
 				113E76960E4A6FE3005A8070 /* levelLoader.cpp */,
 				113E76970E4A6FE3005A8070 /* levelLoader.h */,
 				113E76980E4A6FE3005A8070 /* mainScreenView.cpp */,
@@ -478,6 +492,8 @@
 				110666C20E6F8E450023ABB1 /* enemyWeaponHeatSeaker.cpp in Sources */,
 				119214590E71E1C2001E43AC /* enemyWeaponMineLayer.cpp in Sources */,
 				1192145A0E71E1C2001E43AC /* flipbookLoader.cpp in Sources */,
+				11FBD5C20E7AE3C60070BD31 /* interfaceView.cpp in Sources */,
+				11FBD5C30E7AE3C60070BD31 /* scoreMeter.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -499,7 +515,7 @@
 				INFOPLIST_FILE = Source/iPhone/Info.plist;
 				PREBINDING = NO;
 				PRODUCT_NAME = Irradiated;
-				SDKROOT = iphoneos2.0;
+				SDKROOT = iphoneos2.1;
 			};
 			name = Distribution;
 		};
@@ -537,7 +553,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PREBINDING = NO;
 				PRODUCT_NAME = Irradiated;
-				SDKROOT = iphoneos2.0;
+				SDKROOT = iphoneos2.1;
 			};
 			name = Debug;
 		};
@@ -555,7 +571,7 @@
 				INFOPLIST_FILE = Source/iPhone/Info.plist;
 				PREBINDING = NO;
 				PRODUCT_NAME = Irradiated;
-				SDKROOT = iphoneos2.0;
+				SDKROOT = iphoneos2.1;
 			};
 			name = Release;
 		};

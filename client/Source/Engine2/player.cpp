@@ -39,10 +39,14 @@ Player::Player() : View()
     mHealthMeter = new HealthMeter();
     mScoreMeter = new ScoreMeter();
 
-    mMovementRing = new TargetRingWidget(kMoveRingPriority);
+    mMovementRing = new TargetRingWidget(kMoveRingPriority, gImageLibrary->reference("data/interface/movementRing.png"));
+    mMovementRing->setCenter(Vector2(70, 250));
+    mMovementRing->setSize(mMovementRing->getSize()*0.8);
     mMovementRing->setObserver(this);
     
-    mTargetRing = new TargetRingWidget(kFireRingPriority);
+    mTargetRing = new TargetRingWidget(kFireRingPriority, gImageLibrary->reference("data/interface/targetRing.png"));
+    mTargetRing->setCenter(Vector2(410, 250));
+    mTargetRing->setSize(mTargetRing->getSize()*0.8);
     mTargetRing->setObserver(this);
 
     //mEntity = new ImageEntity(gImageLibrary->reference("data/vehicles/tank/00.png"));
@@ -72,9 +76,6 @@ Player::~Player()
 
 void Player::reset()
 {
-    mMovementRing->setCenter(Vector2(60, 260));
-    mTargetRing->setCenter(Vector2(420, 260));
-
     if(mBody)
     {
         gWorld->getPhysics()->removeBody(mBody);
@@ -91,6 +92,9 @@ void Player::reset()
     mController->reset();
     mController->mBody = mBody;
     mController->mRotationDamping = 0.4f;
+    
+    mMovementRing->reset();
+    mTargetRing->reset();
 
     // SCD TEMP
     mHealth = 1000.0f;
@@ -255,44 +259,44 @@ Vector2 const& Player::getCenter() const
     return mEntity.mCenter;
 }
 
-void Player::onTargetRingUpdated(TargetRingWidget *widget, Vector2 value)
+void Player::onTargetRingTouched(TargetRingWidget *widget, float value)
 {
     if(mDeadTime)
         return;
 
     if(widget == mMovementRing)
     {
-        float mag = magnitude(value);
-        float rot = atan2(value.y, value.x);
-        if(mag < 0.1)
-        {
-            mController->mAcceleration = 0;
-        }
-        else
-        {
-            if(rot < 0) rot += M_PI*2;
-            //mController->mAcceleration = mag * mBody->mMass * 7;
-            mController->mAcceleration = mBody->mMass * 7;
-            mController->mRotationTarget = rot;
-        }
+        if(value < 0) value += M_PI*2;
+        
+        mController->mAcceleration = mBody->mMass * 7;
+        mController->mRotationTarget = value;
     }
     else if(widget == mTargetRing)
     {
-        float mag = magnitude(value);
-        if(mag < 0.1)
-            mFiring = false;
-        else
-        {
-            mFiring = true;
-            mFireDirection = value;
-        }
+        mFiring = true;
+        mFireDirection = value;
     }
 }
 
+void Player::onTargetRingUntouched(TargetRingWidget *widget)
+{
+    if(mDeadTime)
+        return;
+
+    if(widget == mMovementRing)
+    {
+        mController->mAcceleration = 0;
+    }
+    else if(widget == mTargetRing)
+    {
+        mFiring = false;
+    }
+}
 
 void Player::onWeaponSelectorUpdated(WeaponSelector* widget, Weapon* weapon)
 {
     mWeapon = weapon;
+    mFiring = false;
 }
 
 void Player::damage(ParticleType type, float amount)

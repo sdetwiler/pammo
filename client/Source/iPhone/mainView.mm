@@ -61,6 +61,9 @@
 		NSLog(@"failed to make complete framebuffer object %x", glCheckFramebufferStatusOES(GL_FRAMEBUFFER_OES));
 		return NO;
 	}
+    
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	glClear(GL_COLOR_BUFFER_BIT);
 	
 	return YES;
 }
@@ -174,22 +177,23 @@
 
 - (void) touchesMoved:(NSSet*)touches withEvent:(UIEvent*)event
 {
-	int cur=0;
-	pammo::Touch output[2];
 	for(UITouch *touch in touches)
 	{
-		if(cur == 2) break;
-		
+        pammo::Touch output;
+        
 		CGPoint touchLocation = [touch locationInView:self];
-		output[cur].mLocation.x = touchLocation.y;
-		output[cur].mLocation.y = 320 - touchLocation.x;
-		if(touch.phase == 0) output[cur].mPhase = pammo::Touch::PhaseBegin;
-		if(touch.phase == 1) output[cur].mPhase = pammo::Touch::PhaseMove;
-		if(touch.phase == 3) output[cur].mPhase = pammo::Touch::PhaseEnd;
-		++cur;
+        output.mLocation.x = touchLocation.y;
+		output.mLocation.y = 320 - touchLocation.x;
+        output.mSerialNumber = touch;
+        
+		if(touch.phase == 0) output.mPhase = pammo::Touch::PhaseBegin;
+		if(touch.phase == 1) output.mPhase = pammo::Touch::PhaseMove;
+		if(touch.phase == 3) output.mPhase = pammo::Touch::PhaseEnd;
+        
+        //dprintf("Touch %s - %f, %f - %p", touch.phase==0?"Begin":touch.phase==1?"Move":"End", output.mLocation.x, output.mLocation.y, output.mSerialNumber);
+        
+        mGame->touches(1, &output);
 	}
-	
-	mGame->touches(cur, output);
 }
 
 - (void) touchesEnded:(NSSet*)touches withEvent:(UIEvent*)event

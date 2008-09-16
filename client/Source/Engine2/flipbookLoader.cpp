@@ -48,6 +48,7 @@ bool loadFlipbook(char const* path, Image** images, uint32_t maxImages, uint32_t
     }
 
     dprintf("Flipbook loaded %u images.", i);
+    return true;
 }
 
 

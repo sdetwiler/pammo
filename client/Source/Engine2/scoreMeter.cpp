@@ -55,7 +55,4 @@ void ScoreMeter::draw()
     }
 }
 
-
-
-
 } // namespace pammo

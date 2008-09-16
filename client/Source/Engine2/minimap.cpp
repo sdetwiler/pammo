@@ -16,7 +16,6 @@ Minimap::Minimap()
     mLifebar = new ImageEntity(gImageLibrary->reference("data/interface/shield-map-lifeBar.png"));
     mLifebar->mCenter = Vector2(240, 32);
     mLifebar->mSize = Vector2(256, 64);
-    mLifebar->mRotation = 0;
 }
 
 Minimap::~Minimap()
@@ -49,7 +48,7 @@ uint32_t Minimap::getDrawPriority() const
 void Minimap::draw()
 {
     Vector2 mapSize(64, 64);
-    Vector2 mapOffset(208, 4);
+    Vector2 mapOffset(208, 0);
     Vector2 mapSlice(mapSize / kMinimapBucketCount);
     
     glLoadIdentity();

@@ -3,30 +3,36 @@
 
 #include "pammo.h"
 #include "view.h"
+#include "imageEntity.h"
 
 namespace pammo
 {
 
 class TargetRingWidget;
-struct Image;
 
 class TargetRingObserver
 {
     public:
-        virtual void onTargetRingUpdated(TargetRingWidget *widget, Vector2 value) = 0;
+        virtual void onTargetRingTouched(TargetRingWidget *widget, float value) = 0;
+        virtual void onTargetRingUntouched(TargetRingWidget* widget) = 0;
 };
 
 class TargetRingWidget : public View
 {
 public:
-    TargetRingWidget(uint32_t priority);
+    TargetRingWidget(uint32_t priority, Image* image);
     virtual ~TargetRingWidget();
     
-    void setObserver(TargetRingObserver* observer);
-    void setCenter(Vector2 center);
-    void setSize(float size);
+    void reset();
     
-    Vector2 getValue();
+    void setObserver(TargetRingObserver* observer);
+    TargetRingObserver* getObserver();
+    
+    void setCenter(Vector2 center);
+    Vector2 getCenter();
+    
+    void setSize(Vector2 size);
+    Vector2 getSize();
 
     virtual uint32_t getTouchPriority() const;
     virtual uint32_t getUpdatePriority() const;
@@ -39,10 +45,10 @@ public:
 private:
     uint32_t mPriority;
     TargetRingObserver* mObserver;
-    Vector2 mCenter, mValue;
-    float mSize;
-    Image* mRingImage;
-    Image* mIndicatorImage;
+    ImageEntity mImage;
+    
+    float mValue;
+    void* mTrackingSerialNumber;
 };
 
 } // namespace pammo

@@ -47,7 +47,7 @@ void FlamethrowerWeapon::fire()
     // Choose some numbers.
     float f = 8.0;
     float r = 1.0/f - ((rand()%100)/(f*50)) ;
-    float initialRotation = atan2(player->mFireDirection.y, player->mFireDirection.x);
+    float initialRotation = player->mFireDirection;
     
     // Setup image.
     p->mImage.setImage(gImageLibrary->reference("data/particles/flame01.png"));

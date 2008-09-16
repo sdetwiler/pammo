@@ -5,41 +5,58 @@
 namespace pammo
 {
 
-TargetRingWidget::TargetRingWidget(uint32_t priority)
+TargetRingWidget::TargetRingWidget(uint32_t priority, Image* image)
     : mPriority(priority),
     View()
 {
     mObserver = 0;
+    mImage.setImage(image);
     
-    mCenter = Vector2(160, 70);
-    mValue = Vector2(0, 0);
-    mSize = 80;
-    
-    mRingImage = gImageLibrary->reference("data/interface/targetRingBackground.png");
-    mIndicatorImage = gImageLibrary->reference("data/interface/targetRingSelection.png");
+    reset();
 }
 
 TargetRingWidget::~TargetRingWidget()
+{}
+
+void TargetRingWidget::reset()
 {
-    if(mRingImage)
-        gImageLibrary->unreference(mRingImage);
-    if(mIndicatorImage)
-        gImageLibrary->unreference(mIndicatorImage);
+    mValue = 0;
+    mImage.mRotation = mValue;
+    mImage.makeDirty();
+    
+    mTrackingSerialNumber = 0;
 }
     
 void TargetRingWidget::setObserver(TargetRingObserver* observer)
 {
     mObserver = observer;
 }
+    
+TargetRingObserver* TargetRingWidget::getObserver()
+{
+    return mObserver;
+}
 
 void TargetRingWidget::setCenter(Vector2 center)
 {
-    mCenter = center;
+    mImage.mCenter = center;
+    mImage.makeDirty();
 }
 
-void TargetRingWidget::setSize(float size)
+Vector2 TargetRingWidget::getCenter()
 {
-    mSize = size;
+    return mImage.mCenter;
+}
+
+void TargetRingWidget::setSize(Vector2 size)
+{
+    mImage.mSize = size;
+    mImage.makeDirty();
+}
+
+Vector2 TargetRingWidget::getSize()
+{
+    return mImage.mSize;
 }
 
 uint32_t TargetRingWidget::getTouchPriority() const
@@ -61,17 +78,42 @@ bool TargetRingWidget::touch(uint32_t count, Touch* touches)
 {
     for(uint32_t i=0; i < count; ++i)
     {
-        Vector2 loc = touches[i].mLocation;
+        // If this is the end of a touch.
+        if(touches[i].mPhase == Touch::PhaseEnd)
+        {
+            // If this is not the touch we are tracking, continue.
+            if(touches[i].mSerialNumber != mTrackingSerialNumber)
+                continue;
+            
+            // Stop tracking.
+            mTrackingSerialNumber = 0;
+            if(mObserver)
+                mObserver->onTargetRingUntouched(this);
+            
+            return true;
+        }
         
-        Vector2 diff = loc - mCenter;
+        // A touch or a move, we don't care about. If we are tracking a different touch, bail.
+        if(mTrackingSerialNumber != 0 && mTrackingSerialNumber != touches[i].mSerialNumber)
+            continue;
+        
+        // Calculate the distance from the touch to the center of this widget.
+        Vector2 diff = touches[i].mLocation - mImage.mCenter;
         float dist = magnitude(diff);
-        if(dist > mSize/2 * 2) continue;
-        else if(dist > mSize/2) diff = diff / dist * mSize / 2;
         
-        mValue = diff / mSize * 2;
-        
+        // If its larger than the widget, bail.
+        if(dist > mImage.mSize.x/2)
+            continue;
+            
+        // Otherwise, this is a valid touch. Remember the serial. Update the image. Call observer.
+        mTrackingSerialNumber = touches[i].mSerialNumber;
+        mValue = atan2(diff.y, diff.x);
+        mImage.mRotation = mValue + M_PI/2;
+        mImage.makeDirty();
         if(mObserver)
-            mObserver->onTargetRingUpdated(this, mValue);
+            mObserver->onTargetRingTouched(this, mValue);
+        
+        return true;
     }
     
     return false;
@@ -83,20 +125,7 @@ void TargetRingWidget::update()
 
 void TargetRingWidget::draw()
 {
-    // Create transform, cribbed from entity.cpp transform setup. Position about center, scale and rotate appropriately.
-    // This probably should just use an imageEntity.
-    float x = mSize;
-    float y = mSize;
-    Transform2 trans;
-    trans = Transform2::createTranslation(mCenter - Vector2(x/2, y/2));
-	trans *= Transform2::createScale(Vector2(x, y));
-    drawImage(mRingImage, trans, 100);
-    
-    float factor = 1/5.;
-    
-    trans = Transform2::createTranslation(mCenter - Vector2(x/2*factor, y/2*factor) + mValue*mSize/2);
-	trans *= Transform2::createScale(Vector2(x*factor, y*factor));
-    drawImage(mIndicatorImage, trans, 100);
+    mImage.draw();
 }
 
 

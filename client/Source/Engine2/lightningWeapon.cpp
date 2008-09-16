@@ -51,7 +51,7 @@ void LightningWeapon::fire()
     // Choose some numbers.
     float f = 10.0;
     float r = 1.0/f - ((rand()%100)/(f*90)) ;
-    float initialRotation = atan2(player->mFireDirection.y, player->mFireDirection.x);
+    float initialRotation = player->mFireDirection;
     
     // Setup image.
 	int i=rand()%3;

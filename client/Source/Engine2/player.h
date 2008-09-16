@@ -38,11 +38,12 @@ class Player :
         virtual void update();
         virtual void draw();
         
-        virtual void onTargetRingUpdated(TargetRingWidget *widget, Vector2 value);
+        virtual void onTargetRingTouched(TargetRingWidget *widget, float value);
+        virtual void onTargetRingUntouched(TargetRingWidget* widget);
+                
         virtual void onWeaponSelectorUpdated(WeaponSelector* widget, Weapon* weapon);
         
 		void damage(ParticleType type, float amount);
-
 
         void reset();
         void enable();
@@ -76,7 +77,8 @@ class Player :
         uint64_t mDeadTime;
 
         bool mFiring;
-        Vector2 mFireDirection;
+        float mFireDirection;
+        
         Vector2 mSpawnPoint;
 
 	private:

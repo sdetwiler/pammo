@@ -48,6 +48,7 @@ struct Touch
 	
 	Phase mPhase;
 	Vector2 mLocation;
+    void* mSerialNumber;
 };
 
 void dprintf(char const* format, ...);

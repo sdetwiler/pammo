@@ -44,6 +44,9 @@ public:
         Touch touch[5];
         float keyRange = 40;
         
+        touch[0].mSerialNumber = 1;
+        touch[1].mSerialNumber = 2;
+        
 
         bool altUp = false;
         bool mouseUp = false;

@@ -132,7 +132,10 @@ struct Particle
 
 	Particle*    mNext;
 	Particle*    mPrev;
-	Particle*    mRemoveNext;
+	bool         mToRemove;
+    Particle*    mRemoveNext;
+    bool         mToAdd;
+    Particle*    mAddNext;
 	Particle*    mDrawNext;
 };
 

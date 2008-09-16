@@ -768,7 +768,7 @@ void EnemyManager::update()
     Minimap* minimap = gWorld->getMinimap();
 	while(e)
 	{
-		e->mUpdateCb(e, this);
+	    e->mUpdateCb(e, this);
         minimap->markEnemy(e->mBody->mCenter);
 		assert(e!=e->mNext);
 		e = e->mNext;

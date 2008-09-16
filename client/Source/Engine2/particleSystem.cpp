@@ -384,33 +384,23 @@ void ParticleSystem::ParticleManager::reset()
     p = mAddHead;
     while(p)
     {
-        next = p->mNext;
-	    if(p->mBody)
-        {
-		    gWorld->getPhysics()->removeBody(p->mBody);
-        }
-        mParticleSystem->returnParticle(p);
+        next = p->mAddNext;
+        removeParticle(p);
         p = next;
     }
     mAddHead = NULL;
+    mAddTail = NULL;
 
     // Remove all current particles.
-    p = mTail;
+    p = mHead;
     while(p)
     {
-        next = p->mPrev;
-	    if(p->mBody)
-        {
-		    gWorld->getPhysics()->removeBody(p->mBody);
-        }
-        mParticleSystem->returnParticle(p);
+        next = p->mNext;
+        removeParticle(p);
         p = next;
     }
-    mHead = NULL;
-    mTail = NULL;
-
-    // Pending removes were still current, so they'be now been removed, too.
-    mRemoveHead = NULL;
+    //mHead = NULL;
+    //mTail = NULL;
 }
 
 void ParticleSystem::ParticleManager::setSystem(ParticleSystem* particleSystem)
@@ -437,23 +427,33 @@ void ParticleSystem::ParticleManager::draw()
 
 void ParticleSystem::ParticleManager::addParticle(Particle* p)
 {
+    // If already in the add list, don't add it again.
+    if(p->mToAdd)
+        return;
+    p->mToAdd = true;
+
 	p->mManager = this;
-	if(mAddTail)
+    if(mAddTail)
 	{
-		mAddTail->mNext = p;
+		mAddTail->mAddNext = p;
 	}
 	else
 	{
 		mAddHead = p;
 	}
 
-	p->mPrev = mAddTail;
 	mAddTail = p;
-    p->mNext = NULL;
+    p->mAddNext = NULL;
 }
 
 void ParticleSystem::ParticleManager::removeParticle(Particle* p)
 {
+    // If already in remove list, don't add it again.
+    if(p->mToRemove)
+        return;
+
+    p->mToRemove = true;
+
     p->mCallback = NULL;
 	if(p->mBody)
     {
@@ -465,7 +465,27 @@ void ParticleSystem::ParticleManager::removeParticle(Particle* p)
 
 void ParticleSystem::ParticleManager::update()
 {
-	// Remove all pending remove items.
+	// Add all new particles to the end of the active list.
+
+    while(mAddHead)
+    {
+        if(mTail)
+        {
+            mTail->mNext = mAddHead;
+        }
+        else
+        {
+            mHead = mAddHead;
+        }
+        mAddHead->mPrev = mTail;
+        mTail = mAddHead;
+
+        mAddHead->mToAdd = false;
+        mAddHead = mAddHead->mAddNext;
+    }
+    mAddTail = NULL;
+
+    // Remove all pending remove items.
 	Particle* curr = mRemoveHead;
 	while(curr)
 	{
@@ -482,27 +502,12 @@ void ParticleSystem::ParticleManager::update()
 			mHead = curr->mNext;
 
 		// Return to free pool.
-		mParticleSystem->returnParticle(curr);
+        curr->mToRemove = false;
+        mParticleSystem->returnParticle(curr);
 
 		curr = curr->mRemoveNext;
 	}
 	mRemoveHead = NULL;
-
-	// Add all new particles to the end of the active list.
-	if(mAddHead)
-	{
-		if(mTail)
-		{
-			mTail->mNext = mAddHead;
-			mAddHead->mPrev = mTail;
-		}
-		else
-			mHead = mAddHead;
-	
-		mTail = mAddTail;
-		mAddHead = NULL;
-		mAddTail = NULL;
-	}
 
     static const float screenRadius = (320.0f * 320.0f) + (480.0f * 480.0f);
     

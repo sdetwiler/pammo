@@ -12,6 +12,8 @@ class InputProcessor
 public:
     InputProcessor()
     {
+        mDirectionKeyDownCount = 0;
+        mFireKeyDownCount = 0;     
         memset(&mDown, 0, sizeof(mDown));
         keyTouch[0].mLocation.x = 60;
         keyTouch[0].mLocation.y = 260;
@@ -27,7 +29,8 @@ public:
     Touch keyTouch[2];
     SDL_keysym mKeySym;
     bool mDown[5];
-
+    int mDirectionKeyDownCount;
+    int mFireKeyDownCount;
 
     void cap(float* val, float min, float max)
     {
@@ -71,6 +74,7 @@ public:
                     keyTouch[0].mPhase = Touch::PhaseBegin;
                     keyTouch[0].mLocation.x += -keyRange;
                     keyTouch[0].mLocation.y += 0;
+                    ++mDirectionKeyDownCount;
                     directionKey = true;
                 }
                 else if(mKeySym.sym == SDLK_d)
@@ -78,6 +82,7 @@ public:
                     keyTouch[0].mPhase = Touch::PhaseBegin;
                     keyTouch[0].mLocation.x += keyRange;
                     keyTouch[0].mLocation.y += 0;
+                    ++mDirectionKeyDownCount;
                     directionKey = true;
                 }
 
@@ -86,6 +91,7 @@ public:
                     keyTouch[0].mPhase = Touch::PhaseBegin;
                     keyTouch[0].mLocation.x += 0;
                     keyTouch[0].mLocation.y += -keyRange;
+                    ++mDirectionKeyDownCount;
                     directionKey = true;
                 }
                 else if(mKeySym.sym == SDLK_s)
@@ -93,6 +99,7 @@ public:
                     keyTouch[0].mPhase = Touch::PhaseBegin;
                     keyTouch[0].mLocation.x += 0;
                     keyTouch[0].mLocation.y += keyRange;
+                    ++mDirectionKeyDownCount;
                     directionKey = true;
                 }
 
@@ -107,6 +114,7 @@ public:
                     keyTouch[1].mPhase = Touch::PhaseBegin;
                     keyTouch[1].mLocation.x += -keyRange;
                     keyTouch[1].mLocation.y += 0;
+                    ++mFireKeyDownCount;
                     fireKey = true;
                 }
                 else if(mKeySym.sym == SDLK_RIGHT)
@@ -114,6 +122,7 @@ public:
                     keyTouch[1].mPhase = Touch::PhaseBegin;
                     keyTouch[1].mLocation.x += keyRange;
                     keyTouch[1].mLocation.y += 0;
+                    ++mFireKeyDownCount;
                     fireKey = true;
                 }
 
@@ -122,6 +131,7 @@ public:
                     keyTouch[1].mPhase = Touch::PhaseBegin;
                     keyTouch[1].mLocation.x += 0;
                     keyTouch[1].mLocation.y += -keyRange;
+                    ++mFireKeyDownCount;
                     fireKey = true;
                 }
                 else if(mKeySym.sym == SDLK_DOWN)
@@ -129,6 +139,7 @@ public:
                     keyTouch[1].mPhase = Touch::PhaseBegin;
                     keyTouch[1].mLocation.x += 0;
                     keyTouch[1].mLocation.y += keyRange;
+                    ++mFireKeyDownCount;
                     fireKey = true;
                 }
 
@@ -151,6 +162,7 @@ public:
                     keyTouch[0].mPhase = Touch::PhaseEnd;
                     keyTouch[0].mLocation.x += keyRange;
                     keyTouch[0].mLocation.y += 0;
+                    --mDirectionKeyDownCount;
                     directionKey = true;
                 }
                 else if(mKeySym.sym == SDLK_d)
@@ -158,6 +170,7 @@ public:
                     keyTouch[0].mPhase = Touch::PhaseEnd;
                     keyTouch[0].mLocation.x += -keyRange;
                     keyTouch[0].mLocation.y += 0;
+                    --mDirectionKeyDownCount;
                     directionKey = true;
                 }
 
@@ -166,6 +179,7 @@ public:
                     keyTouch[0].mPhase = Touch::PhaseEnd;
                     keyTouch[0].mLocation.x += 0;
                     keyTouch[0].mLocation.y += keyRange;
+                    --mDirectionKeyDownCount;
                     directionKey = true;
                 }
                 else if(mKeySym.sym == SDLK_s)
@@ -173,6 +187,7 @@ public:
                     keyTouch[0].mPhase = Touch::PhaseEnd;
                     keyTouch[0].mLocation.x += 0;
                     keyTouch[0].mLocation.y += -keyRange;
+                    --mDirectionKeyDownCount;
                     directionKey = true;
                 }
 
@@ -183,6 +198,7 @@ public:
                     keyTouch[1].mPhase = Touch::PhaseEnd;
                     keyTouch[1].mLocation.x += keyRange;
                     keyTouch[1].mLocation.y += 0;
+                    --mFireKeyDownCount;
                     fireKey = true;
                 }
                 else if(mKeySym.sym == SDLK_RIGHT)
@@ -190,6 +206,7 @@ public:
                     keyTouch[1].mPhase = Touch::PhaseEnd;
                     keyTouch[1].mLocation.x += -keyRange;
                     keyTouch[1].mLocation.y += 0;
+                    --mFireKeyDownCount;
                     fireKey = true;
                 }
 
@@ -198,6 +215,7 @@ public:
                     keyTouch[1].mPhase = Touch::PhaseEnd;
                     keyTouch[1].mLocation.x += 0;
                     keyTouch[1].mLocation.y += keyRange;
+                    --mFireKeyDownCount;
                     fireKey = true;
                 }
                 else if(mKeySym.sym == SDLK_DOWN)
@@ -205,6 +223,7 @@ public:
                     keyTouch[1].mPhase = Touch::PhaseEnd;
                     keyTouch[1].mLocation.x += 0;
                     keyTouch[1].mLocation.y += -keyRange;
+                    --mFireKeyDownCount;
                     fireKey = true;
                 }
 
@@ -294,14 +313,34 @@ public:
 				cap(&keyTouch[0].mLocation.x, 20, 100);
 				cap(&keyTouch[0].mLocation.y, 220, 300);
 //				dprintf("### %.2f %.2f", keyTouch[0].mLocation.x, keyTouch[0].mLocation.y);
-				game->touches(1, keyTouch);
+                if(mDirectionKeyDownCount == 0)
+                {
+                    keyTouch[0].mPhase = Touch::PhaseEnd;
+                }
+                else
+                {
+                    keyTouch[0].mPhase = Touch::PhaseMove;
+                }
+
+                game->touches(1, keyTouch);
             }
             if(fireKey)
             {
 				cap(&keyTouch[1].mLocation.x, 380, 460);
 				cap(&keyTouch[1].mLocation.y, 220, 300);
 //				dprintf("### %.2f %.2f", keyTouch[1].mLocation.x, keyTouch[1].mLocation.y);
-				game->touches(1, keyTouch+1);
+                if(mFireKeyDownCount == 0)
+                {
+                    keyTouch[1].mPhase = Touch::PhaseEnd;
+                }
+                else
+                {
+                    keyTouch[1].mPhase = Touch::PhaseMove;
+                }
+
+
+                
+                game->touches(1, keyTouch+1);
             }
 
             if(mDown[0] && mDown[1])

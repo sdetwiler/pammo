@@ -15,7 +15,8 @@ enum ParticleType
     Vehicle,
     Bullet,
     HeatSeakerMissle,
-    Mine
+    Mine,
+    Goo
 };
 
 struct Body;

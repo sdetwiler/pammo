@@ -9,10 +9,13 @@
 #include "particleSystem.h"
 #include "vehicleController.h"
 #include "physics.h"
+
 #include "flamethrowerWeapon.h"
 #include "lightningWeapon.h"
-#include "enemyManager.h"
+#include "gooWeapon.h"
 #include "weaponSelector.h"
+
+#include "enemyManager.h"
 #include "healthMeter.h"
 #include "scoreMeter.h"
 #include "flipbookLoader.h"
@@ -60,6 +63,7 @@ Player::Player() : View()
     mWeaponSelector->setObserver(this);
     mWeaponSelector->addWeapon(new LightningWeapon);
     mWeaponSelector->addWeapon(new FlamethrowerWeapon);
+    mWeaponSelector->addWeapon(new GooWeapon);
     
     reset();
 }

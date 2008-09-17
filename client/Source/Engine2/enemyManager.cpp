@@ -684,6 +684,7 @@ void EnemyManager::update()
         e->mNext = mEnemies;
         if(e->mNext)
 			e->mNext->mPrev = e;
+        e->mPrev = NULL;
         mEnemies = e;
 	}
 
@@ -692,8 +693,8 @@ void EnemyManager::update()
 		// Pop from remove stack.
 		Enemy* e = mRemoveEnemies;
 		mRemoveEnemies = e->mRemoveNext;
-
-		// Remove from active list.
+        
+        // Remove from active list.
 		if(e->mNext)
 			e->mNext->mPrev = e->mPrev;
 		if(e->mPrev)
@@ -766,7 +767,7 @@ void EnemyManager::update()
     // Update enemies.
 	Enemy* e = mEnemies;
     Minimap* minimap = gWorld->getMinimap();
-	while(e)
+    while(e)
 	{
 	    e->mUpdateCb(e, this);
         minimap->markEnemy(e->mBody->mCenter);

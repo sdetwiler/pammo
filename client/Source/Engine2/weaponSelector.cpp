@@ -10,7 +10,7 @@ namespace pammo
 {
 
 const float kIconSize = 32;
-const Vector2 kIconBorder = Vector2(0, 24);
+//const Vector2 kIconBorder = Vector2(0, 8);
 
 WeaponSelector::WeaponSelector()
 {
@@ -105,6 +105,8 @@ void WeaponSelector::setSelected(Weapon* weapon)
 
 void WeaponSelector::addWeapon(Weapon* weapon)
 {
+    const Vector2 kIconBorder = Vector2(0, 8);
+
     mWeapons.push_back(weapon);
     
     // Update the icon size.
@@ -114,15 +116,14 @@ void WeaponSelector::addWeapon(Weapon* weapon)
     
     // Iterate over each icon and set the position accordingly.
     Vector2 frame = getFrameSize();
-    //float y = frame.y/2 - (kIconSize + kIconBorder.y)/2 * (mWeapons.size()-1);
-    float y = frame.y - 240 + (kIconSize + kIconBorder.y)/2;
+    float y = frame.y - 240.0f + ((kIconSize + kIconBorder.y)/2.0f);
     for(WeaponVector::iterator i=mWeapons.begin(); i != mWeapons.end(); ++i)
     {
         entity = (*i)->getIcon();
-        entity->mCenter = Vector2(frame.x - kIconSize/2 - kIconBorder.x, y);
+        entity->mCenter = Vector2(frame.x - (kIconSize/2.0f) - kIconBorder.x, y);
         entity->makeDirty();
         
-        y -= kIconSize + kIconBorder.y;
+        y -= (kIconSize + kIconBorder.y);
     }
     
     // If this is the first weapon, set it on the player.

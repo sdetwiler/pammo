@@ -252,6 +252,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\Source\Engine2\gooWeapon.h"
+				>
+			</File>
+			<File
 				RelativePath="..\Source\Engine2\healthMeter.h"
 				>
 			</File>
@@ -429,6 +433,10 @@
 			</File>
 			<File
 				RelativePath="..\Source\Engine2\game.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\Source\Engine2\gooWeapon.cpp"
 				>
 			</File>
 			<File

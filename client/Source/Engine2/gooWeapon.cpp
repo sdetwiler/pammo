@@ -112,10 +112,6 @@ void gooBulletCollisionCallback(Body* self, Body* other, Contact* contact, Conta
 	response->mBounceThem = false;
 	
 	doDamage(self, other, Goo, 1.0f);
-	
-	Enemy* e = (Enemy*)other->mUserArg;
-	if(e->mDamageCb)
-		e->mDamageCb(e, Goo, 1);
 }
 	
 void gooBulletShapeCollisionCallback(Body* self, Shape* other, Contact* contact, bool* response)
@@ -141,9 +137,10 @@ void gooBulletParticleCallback(Particle* p, ParticleSystem* system)
     
     float s;
     uint64_t now = getTime();
+    p->mAlpha-=0.01f;
     if(now >= particleData->mExpireTime)
     {
-        p->mAlpha-=0.08f;
+        p->mAlpha-=0.02f;
         s = 0.95;     
         if(p->mAlpha <= 0.2)
 	    {

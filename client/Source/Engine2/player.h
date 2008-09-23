@@ -66,6 +66,9 @@ class Player :
         Image*       mImages[PLAYER_MAX_IMAGE_COUNT];
         uint32_t     mImageCount;
         uint32_t     mCurrImage;
+
+        ImageEntity  mTurret;
+
         Weapon* mWeapon;
         
         HealthMeter* mHealthMeter;

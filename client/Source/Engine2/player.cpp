@@ -10,9 +10,10 @@
 #include "vehicleController.h"
 #include "physics.h"
 
-#include "flamethrowerWeapon.h"
+//#include "flamethrowerWeapon.h"
 #include "lightningWeapon.h"
 #include "gooWeapon.h"
+#include "grenadeLauncherWeapon.h"
 #include "weaponSelector.h"
 
 #include "enemyManager.h"
@@ -56,14 +57,17 @@ Player::Player() : View()
     loadFlipbook("data/vehicles/tank/", mImages, PLAYER_MAX_IMAGE_COUNT, &mImageCount);
     mCurrImage = 0;
     mEntity.setImage(mImages[mCurrImage]);
-    
+
+    mTurret.setImage(gImageLibrary->reference("data/vehicles/tank/turret/00.png"));
+
     mController = new VehicleController();
 
     mWeaponSelector = new WeaponSelector();
     mWeaponSelector->setObserver(this);
-    mWeaponSelector->addWeapon(new LightningWeapon);
-    mWeaponSelector->addWeapon(new FlamethrowerWeapon);
     mWeaponSelector->addWeapon(new GooWeapon);
+    mWeaponSelector->addWeapon(new LightningWeapon);
+    mWeaponSelector->addWeapon(new GrenadeLauncherWeapon);
+//    mWeaponSelector->addWeapon(new FlamethrowerWeapon);
     
     reset();
 }
@@ -195,6 +199,10 @@ void Player::update()
     mEntity.mCenter = mBody->mCenter;
     mEntity.makeDirty();
     
+    mTurret.mCenter = Vector2(mBody->mCenter.x-8, mBody->mCenter.y);
+    mTurret.mRotation = mFireDirection + M_PI/2;
+    mTurret.makeDirty();
+    
     gWorld->getCamera()->mCenter = mBody->mCenter;
     gWorld->getCamera()->makeDirty();
  
@@ -249,7 +257,7 @@ void Player::draw()
     gWorld->getCamera()->set();
     
     mEntity.draw();
-    
+    mTurret.draw();   
     gWorld->getCamera()->unset();
 }
 

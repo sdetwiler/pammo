@@ -200,8 +200,15 @@ void behaviorCampCb(Enemy* e, EnemyManager* manager)
 
 void behaviorKamikazeCb(Enemy* e, EnemyManager* manager)
 {
-    ApproachAndFireBehaviorData* data = (ApproachAndFireBehaviorData*)e->mBehavior.mData;
+    KamikazeBehaviorData* data = (KamikazeBehaviorData*)e->mBehavior.mData;
 
+    // Every 60 frames, adjust the bias.
+    if(!data->mBiasUpdate)
+    {
+        data->mBias = (((float)(rand()%100))- 50.0f)/100.0f;
+        data->mBiasUpdate = 30 * 2;
+    }
+    --data->mBiasUpdate;
     e->mController.update();
 
     e->mEntity.mRotation = e->mController.mRotation + (float)M_PI/2;
@@ -210,6 +217,7 @@ void behaviorKamikazeCb(Enemy* e, EnemyManager* manager)
 
     Vector2 heading = gWorld->getPlayer()->getCenter() - e->mBody->mCenter;
     float rot = atan2(heading.y, heading.x);
+    rot += data->mBias;
     if(rot < 0) 
         rot += (float)M_PI*2;
     e->mController.mRotationTarget = rot;

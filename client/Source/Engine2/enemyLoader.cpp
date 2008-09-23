@@ -537,6 +537,8 @@ bool EnemyLoader::parseBehaviorCamp(char* s)
 bool EnemyLoader::parseBehaviorKamikaze(char* s)
 {
     KamikazeBehaviorData* data = (KamikazeBehaviorData*)mTemplate->mBehavior.mData;
+    data->mBiasUpdate = 0;
+    data->mBias = 0.0f;
     int column = 2;
     while(s)
     {

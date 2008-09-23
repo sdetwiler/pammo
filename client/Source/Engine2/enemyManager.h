@@ -185,6 +185,8 @@ struct CampBehaviorData
 struct KamikazeBehaviorData
 {
     float mSpeed;
+    uint32_t mBiasUpdate;
+    float mBias;
 };
 
 struct PounceAndStalkBehaviorData

@@ -83,6 +83,7 @@ void buildTileMap(World* world, char const* name)
     RawImage backdrop;
     openRawImage(backdropPath.c_str(), &backdrop);
     map->setBackdrop(&backdrop);
+	delete[] backdrop.mPixels;
     
 	// Read num props.
 	uint16_t numProps = readUInt16(&cur, &remain);

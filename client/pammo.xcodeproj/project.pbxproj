@@ -39,12 +39,13 @@
 		118320AC0E31545F0037B9B4 /* vehicleController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 118320AB0E31545F0037B9B4 /* vehicleController.cpp */; };
 		118321130E328D710037B9B4 /* physics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 118321120E328D710037B9B4 /* physics.cpp */; };
 		118F3E620E35A01E00ECCDFE /* enemyManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 118F3E5B0E35A01E00ECCDFE /* enemyManager.cpp */; };
-		118F3FFF0E36B87C00ECCDFE /* flamethrowerWeapon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 118F3FFE0E36B87C00ECCDFE /* flamethrowerWeapon.cpp */; };
 		119214590E71E1C2001E43AC /* enemyWeaponMineLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 119214550E71E1C2001E43AC /* enemyWeaponMineLayer.cpp */; };
 		1192145A0E71E1C2001E43AC /* flipbookLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 119214570E71E1C2001E43AC /* flipbookLoader.cpp */; };
 		11B684EE0E5236D000BB0872 /* minimap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11B684ED0E5236D000BB0872 /* minimap.cpp */; };
 		11B6858B0E53B9CA00BB0872 /* enemyLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11B685890E53B9CA00BB0872 /* enemyLoader.cpp */; };
 		11C3F42E0E2F0F3A00EE8D28 /* player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11C3F42D0E2F0F3A00EE8D28 /* player.cpp */; };
+		11C819540E8C2E68003BA0A2 /* gooWeapon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11C819500E8C2E68003BA0A2 /* gooWeapon.cpp */; };
+		11C819550E8C2E68003BA0A2 /* grenadeLauncherWeapon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11C819520E8C2E68003BA0A2 /* grenadeLauncherWeapon.cpp */; };
 		11C874530E4028B9008B701A /* weapon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11C874520E4028B9008B701A /* weapon.cpp */; };
 		11C8750E0E40E6B4008B701A /* lightningWeapon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11C8750D0E40E6B4008B701A /* lightningWeapon.cpp */; };
 		11C875140E40E7B2008B701A /* weaponSelector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11C875130E40E7B2008B701A /* weaponSelector.cpp */; };
@@ -138,8 +139,6 @@
 		118321120E328D710037B9B4 /* physics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = physics.cpp; sourceTree = "<group>"; };
 		118F3E5B0E35A01E00ECCDFE /* enemyManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = enemyManager.cpp; sourceTree = "<group>"; };
 		118F3E5C0E35A01E00ECCDFE /* enemyManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = enemyManager.h; sourceTree = "<group>"; };
-		118F3FFD0E36B87C00ECCDFE /* flamethrowerWeapon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = flamethrowerWeapon.h; sourceTree = "<group>"; };
-		118F3FFE0E36B87C00ECCDFE /* flamethrowerWeapon.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = flamethrowerWeapon.cpp; sourceTree = "<group>"; };
 		119214550E71E1C2001E43AC /* enemyWeaponMineLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = enemyWeaponMineLayer.cpp; sourceTree = "<group>"; };
 		119214560E71E1C2001E43AC /* enemyWeaponMineLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = enemyWeaponMineLayer.h; sourceTree = "<group>"; };
 		119214570E71E1C2001E43AC /* flipbookLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = flipbookLoader.cpp; sourceTree = "<group>"; };
@@ -150,6 +149,10 @@
 		11B6858A0E53B9CA00BB0872 /* enemyLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = enemyLoader.h; sourceTree = "<group>"; };
 		11C3F42D0E2F0F3A00EE8D28 /* player.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = player.cpp; sourceTree = "<group>"; };
 		11C3F42F0E2F0F7E00EE8D28 /* player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = player.h; sourceTree = "<group>"; };
+		11C819500E8C2E68003BA0A2 /* gooWeapon.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gooWeapon.cpp; sourceTree = "<group>"; };
+		11C819510E8C2E68003BA0A2 /* gooWeapon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gooWeapon.h; sourceTree = "<group>"; };
+		11C819520E8C2E68003BA0A2 /* grenadeLauncherWeapon.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = grenadeLauncherWeapon.cpp; sourceTree = "<group>"; };
+		11C819530E8C2E68003BA0A2 /* grenadeLauncherWeapon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = grenadeLauncherWeapon.h; sourceTree = "<group>"; };
 		11C874510E4028B9008B701A /* weapon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = weapon.h; sourceTree = "<group>"; };
 		11C874520E4028B9008B701A /* weapon.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = weapon.cpp; sourceTree = "<group>"; };
 		11C8750C0E40E6B4008B701A /* lightningWeapon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lightningWeapon.h; sourceTree = "<group>"; };
@@ -177,7 +180,7 @@
 		11FBD5C10E7AE3C60070BD31 /* scoreMeter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = scoreMeter.h; sourceTree = "<group>"; };
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1D3623EB0D0F72F000981E51 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		1D6058910D05DD3D006BFB54 /* Irradiated.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Irradiated.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1D6058910D05DD3D006BFB54 /* Paradise.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Paradise.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		28FD14FF0DC6FC520079059D /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		28FD15070DC6FC5B0079059D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -234,8 +237,10 @@
 		11C875090E40E641008B701A /* Weapon Subsystem */ = {
 			isa = PBXGroup;
 			children = (
-				118F3FFE0E36B87C00ECCDFE /* flamethrowerWeapon.cpp */,
-				118F3FFD0E36B87C00ECCDFE /* flamethrowerWeapon.h */,
+				11C819500E8C2E68003BA0A2 /* gooWeapon.cpp */,
+				11C819510E8C2E68003BA0A2 /* gooWeapon.h */,
+				11C819520E8C2E68003BA0A2 /* grenadeLauncherWeapon.cpp */,
+				11C819530E8C2E68003BA0A2 /* grenadeLauncherWeapon.h */,
 				11C8750D0E40E6B4008B701A /* lightningWeapon.cpp */,
 				11C8750C0E40E6B4008B701A /* lightningWeapon.h */,
 				11C874520E4028B9008B701A /* weapon.cpp */,
@@ -363,7 +368,7 @@
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				1D6058910D05DD3D006BFB54 /* Irradiated.app */,
+				1D6058910D05DD3D006BFB54 /* Paradise.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -405,9 +410,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		1D6058900D05DD3D006BFB54 /* Irradiated */ = {
+		1D6058900D05DD3D006BFB54 /* Paradise */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "Irradiated" */;
+			buildConfigurationList = 1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "Paradise" */;
 			buildPhases = (
 				110664BA0E5B700A0023ABB1 /* Copy Data */,
 				1D60588D0D05DD3D006BFB54 /* Resources */,
@@ -418,9 +423,9 @@
 			);
 			dependencies = (
 			);
-			name = Irradiated;
+			name = Paradise;
 			productName = pammo;
-			productReference = 1D6058910D05DD3D006BFB54 /* Irradiated.app */;
+			productReference = 1D6058910D05DD3D006BFB54 /* Paradise.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -435,7 +440,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				1D6058900D05DD3D006BFB54 /* Irradiated */,
+				1D6058900D05DD3D006BFB54 /* Paradise */,
 			);
 		};
 /* End PBXProject section */
@@ -474,7 +479,6 @@
 				118320AC0E31545F0037B9B4 /* vehicleController.cpp in Sources */,
 				118321130E328D710037B9B4 /* physics.cpp in Sources */,
 				118F3E620E35A01E00ECCDFE /* enemyManager.cpp in Sources */,
-				118F3FFF0E36B87C00ECCDFE /* flamethrowerWeapon.cpp in Sources */,
 				11C874530E4028B9008B701A /* weapon.cpp in Sources */,
 				11C8750E0E40E6B4008B701A /* lightningWeapon.cpp in Sources */,
 				11C875140E40E7B2008B701A /* weaponSelector.cpp in Sources */,
@@ -494,6 +498,8 @@
 				1192145A0E71E1C2001E43AC /* flipbookLoader.cpp in Sources */,
 				11FBD5C20E7AE3C60070BD31 /* interfaceView.cpp in Sources */,
 				11FBD5C30E7AE3C60070BD31 /* scoreMeter.cpp in Sources */,
+				11C819540E8C2E68003BA0A2 /* gooWeapon.cpp in Sources */,
+				11C819550E8C2E68003BA0A2 /* grenadeLauncherWeapon.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -514,7 +520,7 @@
 				HEADER_SEARCH_PATHS = Source/Engine2/iPhone;
 				INFOPLIST_FILE = Source/iPhone/Info.plist;
 				PREBINDING = NO;
-				PRODUCT_NAME = Irradiated;
+				PRODUCT_NAME = Paradise;
 				SDKROOT = iphoneos2.1;
 			};
 			name = Distribution;
@@ -550,9 +556,8 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = Source/Engine2/iPhone;
 				INFOPLIST_FILE = Source/iPhone/Info.plist;
-				ONLY_ACTIVE_ARCH = YES;
 				PREBINDING = NO;
-				PRODUCT_NAME = Irradiated;
+				PRODUCT_NAME = Paradise;
 				SDKROOT = iphoneos2.1;
 			};
 			name = Debug;
@@ -570,7 +575,8 @@
 				HEADER_SEARCH_PATHS = Source/Engine2/iPhone;
 				INFOPLIST_FILE = Source/iPhone/Info.plist;
 				PREBINDING = NO;
-				PRODUCT_NAME = Irradiated;
+				PRODUCT_NAME = Paradise;
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = DefaultProfileUuid;
 				SDKROOT = iphoneos2.1;
 			};
 			name = Release;
@@ -578,7 +584,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "Irradiated" */ = {
+		1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "Paradise" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1D6058940D05DD3E006BFB54 /* Debug */,

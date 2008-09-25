@@ -199,12 +199,27 @@ void Player::update()
     mEntity.mCenter = mBody->mCenter;
     mEntity.makeDirty();
     
-    mTurret.mCenter = mEntity.mCenter
-                     + Vector2(0.0f, 8.0f)
-                     * Transform2::createRotation(mEntity.mRotation);
-    
-    
-    
+
+
+
+
+
+
+
+
+
+
+    Vector2 turretCenter = mBody->mCenter
+                     + Vector2(-8.0f, 0.0f)
+                     * Transform2::createRotation(mController->mRotation);
+
+
+    mTurretTip = turretCenter
+                     + Vector2(8.0f, 0.0f)
+                     * Transform2::createRotation(mFireDirection);
+
+
+    mTurret.mCenter = turretCenter;
     mTurret.mRotation = mFireDirection + M_PI/2;
     mTurret.makeDirty();
     

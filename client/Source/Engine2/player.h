@@ -68,6 +68,7 @@ class Player :
         uint32_t     mCurrImage;
 
         ImageEntity  mTurret;
+        Vector2 mTurretTip;
 
         Weapon* mWeapon;
         

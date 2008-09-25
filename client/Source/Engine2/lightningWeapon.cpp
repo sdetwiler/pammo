@@ -65,7 +65,7 @@ void LightningWeapon::fire()
 	}
 	
 	p->mImage.setImage(gImageLibrary->reference(filename));
-    p->mImage.mCenter = player->mBody->mCenter + Vector2(10, 0) * Transform2::createRotation(initialRotation+r);
+    p->mImage.mCenter = player->mTurretTip;
     p->mImage.mRotation = initialRotation + r;
     p->mImage.makeDirty();
         
@@ -91,7 +91,7 @@ void LightningWeapon::fire()
     
     // Setup image.
     p->mImage.setImage(gImageLibrary->reference("data/particles/lightningGlow00.png"));
-    p->mImage.mCenter = player->mBody->mCenter;
+    p->mImage.mCenter = player->mTurretTip;
     p->mImage.mRotation = initialRotation + (r*4);
     p->mImage.makeDirty();
         

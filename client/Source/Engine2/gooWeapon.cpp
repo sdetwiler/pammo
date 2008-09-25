@@ -74,7 +74,7 @@ void GooWeapon::fire()
 	velocity+=((rand()%10)/10.0f);
 	
 	p->mImage.setImage(gImageLibrary->reference(filename));
-    p->mImage.mCenter = player->mTurret.mCenter + Vector2(50, 0) * Transform2::createRotation(initialRotation+r);
+    p->mImage.mCenter = player->mTurretTip + Vector2(40, 0) * Transform2::createRotation(initialRotation+r);
     p->mImage.mRotation = initialRotation+r;
     p->mImage.makeDirty();
         
@@ -91,13 +91,13 @@ void GooWeapon::fire()
     p->mBody->mVelocity = v;
 
 
-
+    // Nozzle spray.
     p = gWorld->getParticleSystem()->addParticle(2);
     if(!p) 
         return;
 	p->mImage.setImage(gImageLibrary->reference(filename));
     p->mImage.mSize *= 0.5f;
-    p->mImage.mCenter = player->mBody->mCenter + Vector2(4, 0) * Transform2::createRotation(initialRotation+r);
+    p->mImage.mCenter = player->mTurretTip + Vector2(4, 0) * Transform2::createRotation(initialRotation+r);
     p->mImage.mRotation = initialRotation + r;
     p->mAlpha = 1.0f;
     p->mImage.makeDirty();

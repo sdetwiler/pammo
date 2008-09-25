@@ -71,7 +71,7 @@ void GrenadeLauncherWeapon::fire()
     // Choose some numbers.
     float f = 10.0f;
     float r = 0.0f;//1.0f/f - ((rand()%100)/(f*90)) ;
-    float initialRotation = player->mController->mRotation + player->mFireDirection;
+    float initialRotation = player->mTurret.mRotation - M_PI/2.0f;
     
     // Setup image.
 //	int i=rand()%3;
@@ -81,7 +81,7 @@ void GrenadeLauncherWeapon::fire()
 	velocity+=((rand()%10)/10.0f);
 	
 	p->mImage.setImage(gImageLibrary->reference(filename));
-    p->mImage.mCenter = player->mBody->mCenter + Vector2(0, 0) * Transform2::createRotation(initialRotation+r);
+    p->mImage.mCenter = player->mTurretTip;
     p->mImage.mRotation = initialRotation + r;
     p->mImage.makeDirty();
         

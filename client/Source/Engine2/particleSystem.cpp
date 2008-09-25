@@ -95,13 +95,19 @@ void smokeParticleCb(Particle* p, ParticleSystem* system)
 	}
 }
 
+struct ExplosionParticleData
+{
+    float mRotation;
+};
+
 void explosionParticleCb(Particle* p, ParticleSystem* system)
 {
-    p->mImage.mSize*=1.07f;
-    p->mImage.mRotation+= ((float)(rand()%10)-5.0f)/100.0f;
+    ExplosionParticleData* data = (ExplosionParticleData*)p->mData;
+    p->mImage.mSize*=1.09f;
+    p->mImage.mRotation+= data->mRotation;
     p->mImage.makeDirty();
 
-    p->mAlpha-=0.05f;
+    p->mAlpha-=0.07f;
     if(p->mAlpha<=0)
 	{
 		system->removeParticle(p);
@@ -292,12 +298,22 @@ void ParticleSystem::initExplosionParticle(Vector2 const& initialPosition)
     Particle* p = addParticle(3);
     if(!p) return;
 
+    ExplosionParticleData* data = (ExplosionParticleData*)p->mData;
+
+    data->mRotation = .05f;
+    if(rand()%2)
+        data->mRotation*= -1.0f;
+
     // Set basic particle properties.
     p->mCallback = explosionParticleCb;
     p->mAlpha = 1.0f;
 
     // Setup image.
-    p->mImage.setImage(gImageLibrary->reference("data/particles/explosion00.png"));
+    int i= rand()%2;
+    char filename[256];
+    sprintf(filename, "data/particles/explosion/0%d.png", i);
+
+    p->mImage.setImage(gImageLibrary->reference(filename));
     p->mImage.mCenter = initialPosition + Vector2((float)(rand()%20), (float)(rand()%20));
     p->mImage.makeDirty();
 }

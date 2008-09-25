@@ -64,7 +64,7 @@ void GooWeapon::fire()
     // Choose some numbers.
     float f = 10.0f;
     float r = 1.0f/f - ((rand()%100)/(f*90)) ;
-    float initialRotation = player->mController->mRotation;// + (M_PI);//player->mFireDirection;
+    float initialRotation = player->mTurret.mRotation - M_PI/2.0f;
     
     // Setup image.
 	int i=rand()%3;
@@ -74,8 +74,8 @@ void GooWeapon::fire()
 	velocity+=((rand()%10)/10.0f);
 	
 	p->mImage.setImage(gImageLibrary->reference(filename));
-    p->mImage.mCenter = player->mBody->mCenter + Vector2(50, 0) * Transform2::createRotation(initialRotation+r);
-    p->mImage.mRotation = initialRotation + r;
+    p->mImage.mCenter = player->mTurret.mCenter + Vector2(50, 0) * Transform2::createRotation(initialRotation+r);
+    p->mImage.mRotation = initialRotation+r;
     p->mImage.makeDirty();
         
     // Properties about goo bullet particles.
@@ -87,7 +87,7 @@ void GooWeapon::fire()
     p->mBody->mRadius = 16;
     p->mBody->mMass = 10;
     p->mBody->mCenter = p->mImage.mCenter;
-    Vector2 v = Vector2(velocity, 0) * Transform2::createRotation(initialRotation+r);
+    Vector2 v = Vector2(velocity, 0) * Transform2::createRotation(p->mImage.mRotation);
     p->mBody->mVelocity = v;
 
 

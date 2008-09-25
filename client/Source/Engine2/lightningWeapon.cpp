@@ -51,7 +51,8 @@ void LightningWeapon::fire()
     // Choose some numbers.
     float f = 10.0;
     float r = 1.0/f - ((rand()%100)/(f*90)) ;
-    float initialRotation = player->mFireDirection;
+//    float initialRotation = player->mFireDirection;
+    float initialRotation = player->mTurret.mRotation - M_PI/2.0f;
     
     // Setup image.
 	int i=rand()%3;
@@ -76,7 +77,7 @@ void LightningWeapon::fire()
     p->mBody->mDamping = 0;
     p->mBody->mRadius = 8;
     p->mBody->mMass = 10;
-    p->mBody->mCenter = p->mImage.mCenter + Vector2(20, 0) * Transform2::createRotation(initialRotation+r);
+    p->mBody->mCenter = p->mImage.mCenter + Vector2(8, 0) * Transform2::createRotation(initialRotation+r);
     p->mBody->mVelocity = player->mBody->mVelocity + Vector2(velocity, 0) * Transform2::createRotation(initialRotation+r);
 
     // Get a particle.

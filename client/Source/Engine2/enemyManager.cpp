@@ -434,7 +434,8 @@ void enemyDamageCb(Enemy* e, ParticleType type, float amount)
 
 	if(e->mHealth <=0)
 	{
-		dprintf("dead 0x%p", e, e);
+		//dprintf("dead 0x%p", e, e);
+		gWorld->getParticleSystem()->initExplosionParticle(e->mBody->mCenter+Vector2(5,5));
 		gWorld->getParticleSystem()->initExplosionParticle(e->mBody->mCenter);
 		gWorld->getParticleSystem()->initRubbleParticle(e->mBody->mCenter);
         gWorld->getPlayer()->mScore += e->mPointValue;
@@ -921,7 +922,7 @@ uint32_t EnemyManager::createWave(uint32_t pointValue)
 //        dprintf("Selected %s worth %u each", spawnEvent.mEnemyName, enemyTemplateCount.mEnemyTemplate->mPointValue);
 
         // Pick a random amount of points to assign to a group of these enemies.
-        uint32_t groupPoints = rand() % pointsRemain;
+        uint32_t groupPoints = (rand() % pointsRemain) + 1;
         pointsRemain-= groupPoints;
 
         while(groupPoints >= enemyTemplateCount.mEnemyTemplate->mPointValue)

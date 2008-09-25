@@ -117,7 +117,7 @@ void grenadeLauncherBulletParticleCallback(Particle* p, ParticleSystem* system)
     
     uint64_t now = getTime();
     float Di = 1.0f;
-    float Vi = 10.0f;
+    float Vi = 6.0f;
     float G = 9.81; 
     float dt = ((float)(now - particleData->mStartTime))/1000000.0f;
     float distance = Di + ((Vi*dt) - (.5*G*(dt*dt)));

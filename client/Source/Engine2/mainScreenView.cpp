@@ -1,5 +1,8 @@
 
 #include "mainScreenView.h"
+#include "TutorialScreenView.h"
+#include "CreditsScreenView.h"
+
 #include "world.h"
 #include "imageLibrary.h"
 #include "drawImage.h"
@@ -8,12 +11,12 @@
 namespace pammo
 {
 
-MainScreenView* gMainScreenView = NULL;
+//MainScreenView* gMainScreenView = NULL;
 
 MainScreenView::MainScreenView()
     : View()
 {
-    gMainScreenView = this;
+    //gMainScreenView = this;
     // Load background.
     mBackground = gImageLibrary->reference("data/interface/mainScreenBackground.png");
 }
@@ -25,17 +28,17 @@ MainScreenView::~MainScreenView()
     
 uint32_t MainScreenView::getTouchPriority() const
 {
-    return kScreenPriority;
+    return kMainScreenPriority;
 }
 
 uint32_t MainScreenView::getDrawPriority() const
 {
-    return kScreenPriority;
+    return kMainScreenPriority;
 }
 
 uint32_t MainScreenView::getUpdatePriority() const
 {
-    return kScreenPriority;
+    return kMainScreenPriority;
 }
 
 void MainScreenView::update()
@@ -64,25 +67,51 @@ bool MainScreenView::touch(uint32_t count, Touch* touches)
     
     Vector2 pos = touches[0].mLocation;
 
-    disableAll();
-    //gWorld->getPlayer()->setCenter(gWorld->getPlayer()->getSpawnPoint());
-    gWorld->enable();
 
-    // Figure out if you touched anything.
-    //for(VehicleDescVector::iterator i=mVehicles.begin(); i != mVehicles.end(); ++i)
-    //{
-    //    VehicleDesc* vehicleDesc = *i;
-    //    Vector2 ul = vehicleDesc->mCenter - vehicleDesc->mSize/2;
-    //    Vector2 lr = vehicleDesc->mCenter + vehicleDesc->mSize/2;
-    //    
-    //    // Is this touch inside of this vehicledesc?
-    //    if(pos.x < ul.x || pos.y < ul.y || pos.x > lr.x || pos.y > lr.y) 
-    //        continue;
-    //        
-    //    dprintf("Selected %d", vehicleDesc->mType);
-    //    selectVehicle(vehicleDesc->mType);
-    //    return true;
-    //}
+
+    struct Box
+    {
+        Vector2 ul;
+        Vector2 lr;
+    };
+
+
+    Box options[3];
+
+    // credits
+    options[0].ul = Vector2(0.0f, 0.0f);
+    options[0].lr = Vector2(160.0f, 320.0f);
+
+    //  learn
+    options[1].ul = Vector2(160.0f, 0.0f);
+    options[1].lr = Vector2(320.0f, 320.0f);
+
+    // play
+    options[2].ul = Vector2(320.0f, 0.0f);
+    options[2].lr = Vector2(480.0f, 320.0f);
+
+
+    for(uint32_t i=0; i<3; ++i)
+    {
+
+        if(pos.x < options[i].ul.x || pos.y < options[i].ul.y || pos.x > options[i].lr.x || pos.y > options[i].lr.y) 
+            continue;
+    
+        destroy();
+    
+        switch(i)
+        {
+        case 0:
+            new CreditsScreenView;
+            return true;
+        case 1:
+            new TutorialScreenView;
+            return true;
+        case 2:
+            gWorld->enable();
+            return true;
+        }
+    }
     return true;
 }
 

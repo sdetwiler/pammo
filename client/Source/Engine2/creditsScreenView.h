@@ -1,5 +1,5 @@
-#ifndef __MAINSCREEN_VIEW_H__
-#define __MAINSCREEN_VIEW_H__
+#ifndef __CREDITSSCREEN_VIEW_H__
+#define __CREDITSSCREEN_VIEW_H__
 
 #include "pammo.h"
 #include "view.h"
@@ -9,11 +9,11 @@ namespace pammo
 
 struct Image;
 
-class MainScreenView : public View
+class CreditsScreenView : public View
 {
 public:
-    MainScreenView();
-    virtual ~MainScreenView();
+    CreditsScreenView();
+    virtual ~CreditsScreenView();
     
     virtual void update();
     virtual void draw();
@@ -24,7 +24,6 @@ public:
     virtual uint32_t getUpdatePriority() const;
 
 private:
-    //void selectVehicle(uint32_t type);
     
     Image* mBackground;
     
@@ -39,9 +38,7 @@ private:
     //VehicleDescVector mVehicles;
     //std::string mMapName; // Selected map from map view.
 };
-
-//extern MainScreenView* gMainScreenView;
-    
+  
 }
 
 #endif

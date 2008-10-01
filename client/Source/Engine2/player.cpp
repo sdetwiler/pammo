@@ -1,6 +1,8 @@
 #include "player.h"
 
 #include "mainScreenView.h"
+#include "deathCardView.h"
+
 #include "world.h"
 #include "camera.h"
 #include "imageLibrary.h"
@@ -39,6 +41,7 @@ void dustParticleCallback(Particle* p, ParticleSystem* system)
 
 Player::Player() : View()
 {
+    mDeathCard = NULL;
     mBody = NULL;
     mHealthMeter = new HealthMeter();
     mScoreMeter = new ScoreMeter();
@@ -105,7 +108,7 @@ void Player::reset()
     mTargetRing->reset();
 
     // SCD TEMP
-    mHealth = 1000.0f;
+    mHealth = 10.0f;
     mHealthMeter->setPercent(mHealth);
 
     mScore = 0;
@@ -254,16 +257,22 @@ void Player::update()
             mBody->mProperties = 0;
             mFiring = false;
             mController->reset();
-            //gWorld->getPhysics()->removeBody(mBody);
-            //mBody = NULL;
+
+
         }
 
-        if((now - mDeadTime) > 3000000)
+        if((now - mDeadTime) > 2000000)
         {
-         //   delete gWorld;
+            if(!mDeathCard)
+                mDeathCard = new DeathCardView;
+        }
+
+        if((now - mDeadTime) > 4000000)
+        {
             gWorld->disable();
             gWorld->reset();
-            gMainScreenView->enableAll();
+            mDeathCard->destroy();
+            new MainScreenView;
         }
 
     }

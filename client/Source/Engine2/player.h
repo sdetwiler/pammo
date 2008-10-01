@@ -20,6 +20,7 @@ class Weapon;
 class WeaponSelector;
 class ScoreMeter;
 class HealthMeter;
+class DeathCardView;
 
 class Player : 
     public View,
@@ -84,6 +85,9 @@ class Player :
         float mFireDirection;
         
         Vector2 mSpawnPoint;
+
+
+        DeathCardView* mDeathCard;
 
 	private:
 		void createDust();

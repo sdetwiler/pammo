@@ -12,7 +12,9 @@ enum ViewPriorities
 {
     kMapPriority = 100,
     kPhysicsPriority = 101,
-    kScreenPriority = 102,
+    kMainScreenPriority = 102,
+    kCreditsScreenPriority = 103,
+    kTutorialScreenPriority = 104,
     kParticle0Priority = 120,
     kParticle1Priority = 125,
     kPlayerPriority = 140,
@@ -25,7 +27,9 @@ enum ViewPriorities
     kMinimapPriority = 230,
     kWeaponSelectorPriority = 250,
     kHealthMeterPriority = 260,
-    kScoreMeterPriority = 261
+    kScoreMeterPriority = 261,
+    kDeathCardPriority = 300
+
 };
 
 class View

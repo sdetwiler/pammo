@@ -192,6 +192,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\Source\Engine2\creditsScreenView.h"
+				>
+			</File>
+			<File
+				RelativePath="..\Source\Engine2\deathCardView.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\external-libs\dirent\dirent.h"
 				>
 			</File>
@@ -332,6 +340,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\Source\Engine2\tutorialScreenView.h"
+				>
+			</File>
+			<File
 				RelativePath="..\Source\Engine2\vector2.h"
 				>
 			</File>
@@ -373,6 +385,14 @@
 			</File>
 			<File
 				RelativePath="..\Source\Engine2\camera.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\Source\Engine2\creditsScreenView.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\Source\Engine2\deathCardView.cpp"
 				>
 			</File>
 			<File
@@ -513,6 +533,10 @@
 			</File>
 			<File
 				RelativePath="..\Source\win32\timer_platform.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\Source\Engine2\tutorialScreenView.cpp"
 				>
 			</File>
 			<File

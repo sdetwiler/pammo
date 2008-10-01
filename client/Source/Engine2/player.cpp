@@ -108,7 +108,7 @@ void Player::reset()
     mTargetRing->reset();
 
     // SCD TEMP
-    mHealth = 10.0f;
+    mHealth = 1000.0f;
     mHealthMeter->setPercent(mHealth);
 
     mScore = 0;

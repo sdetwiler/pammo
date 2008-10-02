@@ -5,9 +5,11 @@
 #include "view.h"
 #include "targetRingWidget.h"
 #include "weaponSelector.h"
+#include "shieldToggle.h"
 #include "particleSystem.h" // For particle types.
 
 #define PLAYER_MAX_IMAGE_COUNT 3
+#define SHIELD_MAX_IMAGE_COUNT 3
 
 namespace pammo
 {
@@ -17,15 +19,18 @@ class Camera;
 class ImageEntity;
 class VehicleController;
 class Weapon;
-class WeaponSelector;
 class ScoreMeter;
 class HealthMeter;
 class DeathCardView;
+class GooWeapon;
+class LightningWeapon;
+class GrenadeLauncherWeapon;
 
 class Player : 
     public View,
     public TargetRingObserver,
-    public WeaponSelectorObserver
+    public WeaponSelectorObserver,
+    public ShieldToggleObserver
 {
     public:
         Player();
@@ -43,6 +48,7 @@ class Player :
         virtual void onTargetRingUntouched(TargetRingWidget* widget);
                 
         virtual void onWeaponSelectorUpdated(WeaponSelector* widget, Weapon* weapon);
+        virtual void onShieldToggleUpdated(ShieldToggle* widget, bool toggle);
         
 		void damage(ParticleType type, float amount);
 
@@ -56,10 +62,6 @@ class Player :
         void setSpawnPoint(Vector2 const& p);
         Vector2 const& getSpawnPoint() const;
     public:
-        TargetRingWidget* mMovementRing;
-        TargetRingWidget* mTargetRing;
-        
-        WeaponSelector* mWeaponSelector;
         
         Body* mBody;
         VehicleController* mController;
@@ -70,23 +72,44 @@ class Player :
 
         ImageEntity  mTurret;
         Vector2 mTurretTip;
-
-        Weapon* mWeapon;
         
-        HealthMeter* mHealthMeter;
-        float mHealth;
+        // Move / fire.
+        TargetRingWidget* mMovementRing;
+        TargetRingWidget* mTargetRing;
+        float mFireDirection;
+        bool mFiring;
 
+        // Weapons.
+        Weapon* mWeapon;
+        WeaponSelector* mWeaponSelector;
+        GooWeapon* mGooWeapon;
+        LightningWeapon* mLightningWeapon;
+        GrenadeLauncherWeapon* mGrenadeLauncherWeapon;
+        
+        // Health.
+        HealthMeter* mHealthMeter;
+        float mHealth, mMaxHealth;
+        uint64_t mDeadTime;
+	
+        // Energy.
+		HealthMeter* mEnergyMeter;
+        float mEnergy, mMaxEnergy;
+        
+        // Shield.
+        ShieldToggle* mShieldToggle;
+        bool mShielding;
+        ImageEntity mShieldEntity;
+        Image*      mShieldImages[SHIELD_MAX_IMAGE_COUNT];
+        uint32_t    mShieldImageCount;
+        uint32_t    mShieldCurrImage;
+        uint32_t    mShieldFlipCount;
+        
+        // Score.
         ScoreMeter* mScoreMeter;
         uint32_t mScore;
-
-        uint64_t mDeadTime;
-
-        bool mFiring;
-        float mFireDirection;
         
+        // Misc.
         Vector2 mSpawnPoint;
-
-
         DeathCardView* mDeathCard;
 
 	private:

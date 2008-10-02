@@ -43,8 +43,14 @@ Player::Player() : View()
 {
     mDeathCard = NULL;
     mBody = NULL;
-    mHealthMeter = new HealthMeter();
     mScoreMeter = new ScoreMeter();
+    
+    mHealthMeter = new HealthMeter(kHealthMeterPriority);
+    mHealthMeter->setBaseLocation(Vector2(280, 16));
+    
+    mEnergyMeter = new HealthMeter(kEnergyMeterPriority);
+    mEnergyMeter->setGrowDirection(-1);
+    mEnergyMeter->setBaseLocation(Vector2(200, 16));
 
     mMovementRing = new TargetRingWidget(kMoveRingPriority, gImageLibrary->reference("data/interface/movementRing.png"));
     mMovementRing->setCenter(Vector2(70, 250));
@@ -56,10 +62,14 @@ Player::Player() : View()
     mTargetRing->setSize(mTargetRing->getSize()*0.8);
     mTargetRing->setObserver(this);
 
-    //mEntity = new ImageEntity(gImageLibrary->reference("data/vehicles/tank/00.png"));
     loadFlipbook("data/vehicles/tank/", mImages, PLAYER_MAX_IMAGE_COUNT, &mImageCount);
     mCurrImage = 0;
     mEntity.setImage(mImages[mCurrImage]);
+
+    loadFlipbook("data/particles/shield/", mShieldImages, SHIELD_MAX_IMAGE_COUNT, &mShieldImageCount);
+    mShieldCurrImage = 0;
+    mShieldFlipCount = 0;
+    mShieldEntity.setImage(mShieldImages[mShieldCurrImage]);
 
     mTurret.setImage(gImageLibrary->reference("data/vehicles/tank/turret/00.png"));
 
@@ -67,10 +77,12 @@ Player::Player() : View()
 
     mWeaponSelector = new WeaponSelector();
     mWeaponSelector->setObserver(this);
-    mWeaponSelector->addWeapon(new GooWeapon);
-    mWeaponSelector->addWeapon(new LightningWeapon);
-    mWeaponSelector->addWeapon(new GrenadeLauncherWeapon);
-//    mWeaponSelector->addWeapon(new FlamethrowerWeapon);
+    mGooWeapon = new GooWeapon();
+    mLightningWeapon = new LightningWeapon();
+    mGrenadeLauncherWeapon = new GrenadeLauncherWeapon();
+
+    mShieldToggle = new ShieldToggle();
+    mShieldToggle->setObserver(this);
     
     reset();
 }
@@ -79,7 +91,9 @@ Player::~Player()
 {
     mScoreMeter->destroy();
     mHealthMeter->destroy();
+    mEnergyMeter->destroy();
     mWeaponSelector->destroy();
+    mShieldToggle->destroy();
     mTargetRing->destroy();
     mMovementRing->destroy();
     delete mController;
@@ -106,16 +120,30 @@ void Player::reset()
     
     mMovementRing->reset();
     mTargetRing->reset();
+    mFiring = false;
+    
+    // Reset weapons.
+    mWeaponSelector->reset();
+    mWeaponSelector->addWeapon(new GooWeapon);
+    mWeaponSelector->addWeapon(new LightningWeapon);
+    mWeaponSelector->addWeapon(new GrenadeLauncherWeapon);
 
-    // SCD TEMP
+    // Reset life.
     mHealth = 1000.0f;
+    mMaxHealth = 1000.0f;
+    mDeadTime = 0;
     mHealthMeter->setPercent(mHealth);
+    
+    // Reset shield.
+    mEnergy = 1000.0f;
+    mMaxEnergy = 1000.0f;
+    mEnergyMeter->setPercent(mEnergy);
+    mShieldToggle->reset();
 
+    // Reset misc.
     mScore = 0;
     mScoreMeter->setScore(mScore);
 
-    mFiring = false;
-    mDeadTime = 0;
 
     setCenter(getSpawnPoint());
 }
@@ -124,7 +152,9 @@ void Player::enable()
 {
     mScoreMeter->enableAll();
     mHealthMeter->enableAll();
+    mEnergyMeter->enableAll();
     mWeaponSelector->enableAll();
+    mShieldToggle->enableAll();
     mTargetRing->enableAll();
     mMovementRing->enableAll();
 
@@ -135,7 +165,9 @@ void Player::disable()
 {
     mScoreMeter->disableAll();
     mHealthMeter->disableAll();
+    mEnergyMeter->disableAll();
     mWeaponSelector->disableAll();
+    mShieldToggle->disableAll();
     mTargetRing->disableAll();
     mMovementRing->disableAll();
 
@@ -164,7 +196,7 @@ bool Player::touch(uint32_t count, Touch* touches)
 
 void Player::createDust()
 {
-	    // Get a particle.
+    // Get a particle.
 	Particle* p = gWorld->getParticleSystem()->addParticle(1);
     if(!p) return;
     
@@ -190,28 +222,11 @@ void Player::createDust()
 void Player::update()
 {
     mController->update();
-    float vmag = magnitude(mBody->mVelocity); 
-
-    if(vmag > 7.0f)
-    {
-        mCurrImage = (mCurrImage+1) % mImageCount;
-        mEntity.setImage(mImages[mCurrImage]);
-    }
 
     mEntity.mRotation = mController->mRotation + M_PI/2;
     mEntity.mCenter = mBody->mCenter;
     mEntity.makeDirty();
     
-
-
-
-
-
-
-
-
-
-
     Vector2 turretCenter = mBody->mCenter
                      + Vector2(-8.0f, 0.0f)
                      * Transform2::createRotation(mController->mRotation);
@@ -235,6 +250,12 @@ void Player::update()
 		mWeapon->fire();
     }
 
+    float vmag = magnitude(mBody->mVelocity); 
+    if(vmag > 7.0f)
+    {
+        mCurrImage = (mCurrImage+1) % mImageCount;
+        mEntity.setImage(mImages[mCurrImage]);
+    }
 	if(vmag > 45.0f)
 		createDust();
         
@@ -242,6 +263,31 @@ void Player::update()
     {
         //mHealth += 2;
         mHealthMeter->setPercent(mHealth);
+    }
+    
+    // Shield.
+    if(mShielding)
+    {
+        // Rate limit how often we flip.
+        if(++mShieldFlipCount > 2)
+        {
+            mShieldCurrImage = (mShieldCurrImage+1) % mShieldImageCount;
+            mShieldEntity.setImage(mShieldImages[mShieldCurrImage]);
+            mShieldFlipCount = 0;
+        }
+        
+        // Center the shield on the player.
+        mShieldEntity.mCenter = mEntity.mCenter;
+        mShieldEntity.makeDirty();
+        
+        // Subtract energy.
+        mEnergy -= 1;
+        if(mEnergy <= 0)
+        {
+            mEnergy = 0;
+            mShieldToggle->setToggle(false);
+        }
+        mEnergyMeter->setPercent(mEnergy);
     }
 
     mScoreMeter->setScore(mScore);
@@ -286,7 +332,11 @@ void Player::draw()
     gWorld->getCamera()->set();
     
     mEntity.draw();
-    mTurret.draw();   
+    mTurret.draw();
+    
+    if(mShielding)
+        mShieldEntity.draw();
+    
     gWorld->getCamera()->unset();
 }
 
@@ -342,9 +392,21 @@ void Player::onWeaponSelectorUpdated(WeaponSelector* widget, Weapon* weapon)
 
 void Player::damage(ParticleType type, float amount)
 {
+    if(mShielding)
+    {
+        dprintf("Shielding, no damage");
+        return;
+    }
+    
     dprintf("damage");
 	mHealth -= amount;
     mHealthMeter->setPercent(mHealth);
+}
+
+void Player::onShieldToggleUpdated(ShieldToggle* widget, bool toggle)
+{
+    dprintf("Shield toggle callback");
+    mShielding = toggle;
 }
 
 void Player::setSpawnPoint(Vector2 const& p)

@@ -26,8 +26,10 @@ enum ViewPriorities
     kFireRingPriority = 201,
     kMinimapPriority = 230,
     kWeaponSelectorPriority = 250,
+    kShieldTogglePriority = 251,
     kHealthMeterPriority = 260,
-    kScoreMeterPriority = 261,
+    kEnergyMeterPriority = 261,
+    kScoreMeterPriority = 262,
     kDeathCardPriority = 300
 
 };

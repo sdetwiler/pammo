@@ -27,6 +27,7 @@ class WeaponSelector : public View
         virtual uint32_t getTouchPriority() const;
         virtual uint32_t getDrawPriority() const;
     
+        void reset();
         virtual bool touch(uint32_t count, Touch* touches);
         virtual void draw();
         

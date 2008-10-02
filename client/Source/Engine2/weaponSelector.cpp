@@ -38,6 +38,13 @@ uint32_t WeaponSelector::getDrawPriority() const
     return kWeaponSelectorPriority;
 }
 
+void WeaponSelector::reset()
+{
+    setSelected(0);
+    
+    mWeapons.clear();
+}
+
 bool WeaponSelector::touch(uint32_t count, Touch* touches)
 {
     for(uint32_t i=0; i < count; ++i)
@@ -82,11 +89,6 @@ void WeaponSelector::draw()
 void WeaponSelector::setObserver(WeaponSelectorObserver* observer)
 {
     mObserver = observer;
-    
-    if(mSelected)
-    {
-        mObserver->onWeaponSelectorUpdated(this, mSelected);
-    }
 }
 
 void WeaponSelector::setSelected(Weapon* weapon)

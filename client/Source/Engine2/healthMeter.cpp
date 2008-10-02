@@ -6,11 +6,15 @@
 namespace pammo
 {
 
-HealthMeter::HealthMeter()
+HealthMeter::HealthMeter(uint32_t priority)
 {
+    mPriority = priority;
     mPercent = 0;
     mMaxDots = 10;
     mHealthDot = gImageLibrary->reference("data/interface/healthDot.png");
+    
+    mGrowDirection = 1;
+    mBaseLocation = Vector2(0, 0);
 }
 
 HealthMeter::~HealthMeter()
@@ -20,12 +24,22 @@ HealthMeter::~HealthMeter()
 
 uint32_t HealthMeter::getDrawPriority() const
 {
-    return kHealthMeterPriority;
+    return mPriority;
 }
 
 void HealthMeter::setPercent(float percent)
 {
     mPercent = percent;
+}
+
+void HealthMeter::setGrowDirection(int growDirection)
+{
+    mGrowDirection = growDirection;
+}
+
+void HealthMeter::setBaseLocation(Vector2 baseLocation)
+{
+    mBaseLocation = baseLocation;
 }
 
 void HealthMeter::draw()
@@ -34,7 +48,7 @@ void HealthMeter::draw()
     float numDots = mPercent/1000*mMaxDots;
     while(numDots>=1.0f)
     {
-        Transform2 trans = Transform2::createTranslation(Vector2((480/2) + 32 + (i*8), 16));
+        Transform2 trans = Transform2::createTranslation(mBaseLocation + Vector2(mGrowDirection*(i*8), 0));
         trans*= Transform2::createScale(mHealthDot->mSize/2.0f);
         
         drawImage(mHealthDot, trans, 1.0f);
@@ -44,13 +58,10 @@ void HealthMeter::draw()
     }
     if(numDots > 0.0f)
     {
-        Transform2 trans = Transform2::createTranslation(Vector2((480/2) + 32 + (i*8), 16));
+        Transform2 trans = Transform2::createTranslation(mBaseLocation + Vector2(mGrowDirection*(i*8), 0));
         trans*= Transform2::createScale(mHealthDot->mSize/2.0f);
-        drawImage(mHealthDot, trans, 0.5f);
+        drawImage(mHealthDot, trans, numDots);
     }
 }
-
-
-
 
 } // namespace pammo

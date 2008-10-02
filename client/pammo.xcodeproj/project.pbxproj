@@ -13,7 +13,6 @@
 		110664D90E5B70EA0023ABB1 /* enemies in Copy Data */ = {isa = PBXBuildFile; fileRef = 110664D50E5B70EA0023ABB1 /* enemies */; };
 		110665600E5B70FB0023ABB1 /* interface in Copy Data */ = {isa = PBXBuildFile; fileRef = 110664DA0E5B70FB0023ABB1 /* interface */; };
 		110665610E5B70FB0023ABB1 /* levels in Copy Data */ = {isa = PBXBuildFile; fileRef = 110664ED0E5B70FB0023ABB1 /* levels */; };
-		110665620E5B70FB0023ABB1 /* props in Copy Data */ = {isa = PBXBuildFile; fileRef = 110664F00E5B70FB0023ABB1 /* props */; };
 		110665630E5B70FB0023ABB1 /* vehicles in Copy Data */ = {isa = PBXBuildFile; fileRef = 110665160E5B70FB0023ABB1 /* vehicles */; };
 		110665810E635A240023ABB1 /* healthMeter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1106657F0E635A240023ABB1 /* healthMeter.cpp */; };
 		110665A90E6372AE0023ABB1 /* enemyWeaponFlamethrower.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 110665A50E6372AE0023ABB1 /* enemyWeaponFlamethrower.cpp */; };
@@ -33,6 +32,9 @@
 		113B2C2D0DF65EB20095A737 /* map.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 113B2C2C0DF65EB20095A737 /* map.cpp */; };
 		113E769A0E4A6FE3005A8070 /* levelLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 113E76960E4A6FE3005A8070 /* levelLoader.cpp */; };
 		113E769B0E4A6FE3005A8070 /* mainScreenView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 113E76980E4A6FE3005A8070 /* mainScreenView.cpp */; };
+		115577B90E9454FD00171852 /* creditsScreenView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 115577B20E9454FD00171852 /* creditsScreenView.cpp */; };
+		115577BA0E9454FD00171852 /* deathCardView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 115577B40E9454FD00171852 /* deathCardView.cpp */; };
+		115577BC0E9454FD00171852 /* tutorialScreenView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 115577B70E9454FD00171852 /* tutorialScreenView.cpp */; };
 		115E19870DEBA14E00BD1F3A /* appDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 115E19860DEBA14E00BD1F3A /* appDelegate.mm */; };
 		115E199E0DEBA2A100BD1F3A /* mainView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 115E199A0DEBA2A100BD1F3A /* mainView.mm */; };
 		115E1A3A0DEBAE8D00BD1F3A /* iPhone.mm in Sources */ = {isa = PBXBuildFile; fileRef = 115E1A390DEBAE8D00BD1F3A /* iPhone.mm */; };
@@ -43,6 +45,7 @@
 		1192145A0E71E1C2001E43AC /* flipbookLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 119214570E71E1C2001E43AC /* flipbookLoader.cpp */; };
 		11B684EE0E5236D000BB0872 /* minimap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11B684ED0E5236D000BB0872 /* minimap.cpp */; };
 		11B6858B0E53B9CA00BB0872 /* enemyLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11B685890E53B9CA00BB0872 /* enemyLoader.cpp */; };
+		11B9F66A0E949106002236D1 /* shieldToggle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11B9F6690E949106002236D1 /* shieldToggle.cpp */; };
 		11C3F42E0E2F0F3A00EE8D28 /* player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11C3F42D0E2F0F3A00EE8D28 /* player.cpp */; };
 		11C819540E8C2E68003BA0A2 /* gooWeapon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11C819500E8C2E68003BA0A2 /* gooWeapon.cpp */; };
 		11C819550E8C2E68003BA0A2 /* grenadeLauncherWeapon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11C819520E8C2E68003BA0A2 /* grenadeLauncherWeapon.cpp */; };
@@ -75,7 +78,6 @@
 				110664D90E5B70EA0023ABB1 /* enemies in Copy Data */,
 				110665600E5B70FB0023ABB1 /* interface in Copy Data */,
 				110665610E5B70FB0023ABB1 /* levels in Copy Data */,
-				110665620E5B70FB0023ABB1 /* props in Copy Data */,
 				110665630E5B70FB0023ABB1 /* vehicles in Copy Data */,
 				110664170E5B6D280023ABB1 /* maps in Copy Data */,
 				1106640E0E5B6BC60023ABB1 /* backdrops in Copy Data */,
@@ -92,7 +94,6 @@
 		110664D50E5B70EA0023ABB1 /* enemies */ = {isa = PBXFileReference; lastKnownFileType = folder; name = enemies; path = ../data/enemies; sourceTree = SOURCE_ROOT; };
 		110664DA0E5B70FB0023ABB1 /* interface */ = {isa = PBXFileReference; lastKnownFileType = folder; name = interface; path = ../data/interface; sourceTree = SOURCE_ROOT; };
 		110664ED0E5B70FB0023ABB1 /* levels */ = {isa = PBXFileReference; lastKnownFileType = folder; name = levels; path = ../data/levels; sourceTree = SOURCE_ROOT; };
-		110664F00E5B70FB0023ABB1 /* props */ = {isa = PBXFileReference; lastKnownFileType = folder; name = props; path = ../data/props; sourceTree = SOURCE_ROOT; };
 		110665160E5B70FB0023ABB1 /* vehicles */ = {isa = PBXFileReference; lastKnownFileType = folder; name = vehicles; path = ../data/vehicles; sourceTree = SOURCE_ROOT; };
 		1106657F0E635A240023ABB1 /* healthMeter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = healthMeter.cpp; sourceTree = "<group>"; };
 		110665800E635A240023ABB1 /* healthMeter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = healthMeter.h; sourceTree = "<group>"; };
@@ -128,6 +129,12 @@
 		113E76970E4A6FE3005A8070 /* levelLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = levelLoader.h; sourceTree = "<group>"; };
 		113E76980E4A6FE3005A8070 /* mainScreenView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mainScreenView.cpp; sourceTree = "<group>"; };
 		113E76990E4A6FE3005A8070 /* mainScreenView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mainScreenView.h; sourceTree = "<group>"; };
+		115577B20E9454FD00171852 /* creditsScreenView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = creditsScreenView.cpp; sourceTree = "<group>"; };
+		115577B30E9454FD00171852 /* creditsScreenView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = creditsScreenView.h; sourceTree = "<group>"; };
+		115577B40E9454FD00171852 /* deathCardView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = deathCardView.cpp; sourceTree = "<group>"; };
+		115577B50E9454FD00171852 /* deathCardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = deathCardView.h; sourceTree = "<group>"; };
+		115577B70E9454FD00171852 /* tutorialScreenView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tutorialScreenView.cpp; sourceTree = "<group>"; };
+		115577B80E9454FD00171852 /* tutorialScreenView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tutorialScreenView.h; sourceTree = "<group>"; };
 		115E19850DEBA14E00BD1F3A /* appDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = appDelegate.h; sourceTree = "<group>"; };
 		115E19860DEBA14E00BD1F3A /* appDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = appDelegate.mm; sourceTree = "<group>"; };
 		115E19990DEBA2A100BD1F3A /* mainView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mainView.h; sourceTree = "<group>"; };
@@ -147,6 +154,8 @@
 		11B684ED0E5236D000BB0872 /* minimap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = minimap.cpp; sourceTree = "<group>"; };
 		11B685890E53B9CA00BB0872 /* enemyLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = enemyLoader.cpp; sourceTree = "<group>"; };
 		11B6858A0E53B9CA00BB0872 /* enemyLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = enemyLoader.h; sourceTree = "<group>"; };
+		11B9F6680E949106002236D1 /* shieldToggle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = shieldToggle.h; sourceTree = "<group>"; };
+		11B9F6690E949106002236D1 /* shieldToggle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = shieldToggle.cpp; sourceTree = "<group>"; };
 		11C3F42D0E2F0F3A00EE8D28 /* player.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = player.cpp; sourceTree = "<group>"; };
 		11C3F42F0E2F0F7E00EE8D28 /* player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = player.h; sourceTree = "<group>"; };
 		11C819500E8C2E68003BA0A2 /* gooWeapon.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gooWeapon.cpp; sourceTree = "<group>"; };
@@ -224,7 +233,6 @@
 				1136819E0E7F82FA001FFC23 /* fonts */,
 				110664DA0E5B70FB0023ABB1 /* interface */,
 				110664ED0E5B70FB0023ABB1 /* levels */,
-				110664F00E5B70FB0023ABB1 /* props */,
 				110665160E5B70FB0023ABB1 /* vehicles */,
 				110664D50E5B70EA0023ABB1 /* enemies */,
 				110664C70E5B70DF0023ABB1 /* particles */,
@@ -260,6 +268,8 @@
 				11C3F42F0E2F0F7E00EE8D28 /* player.h */,
 				11FBD5C00E7AE3C60070BD31 /* scoreMeter.cpp */,
 				11FBD5C10E7AE3C60070BD31 /* scoreMeter.h */,
+				11B9F6690E949106002236D1 /* shieldToggle.cpp */,
+				11B9F6680E949106002236D1 /* shieldToggle.h */,
 				112A588E0E303B7600A3C218 /* targetRingWidget.cpp */,
 				112A58910E303B9500A3C218 /* targetRingWidget.h */,
 				11C875090E40E641008B701A /* Weapon Subsystem */,
@@ -323,6 +333,10 @@
 				1121D1360E2F0BA2008C8598 /* builder.h */,
 				11EEB70B0DEBC73F009F3B13 /* camera.cpp */,
 				11EEB70C0DEBC73F009F3B13 /* camera.h */,
+				115577B20E9454FD00171852 /* creditsScreenView.cpp */,
+				115577B30E9454FD00171852 /* creditsScreenView.h */,
+				115577B40E9454FD00171852 /* deathCardView.cpp */,
+				115577B50E9454FD00171852 /* deathCardView.h */,
 				119214570E71E1C2001E43AC /* flipbookLoader.cpp */,
 				119214580E71E1C2001E43AC /* flipbookLoader.h */,
 				11EEB7110DEBC73F009F3B13 /* game.cpp */,
@@ -341,6 +355,8 @@
 				113B2C2B0DF65EB20095A737 /* map.h */,
 				11EEB7160DEBC73F009F3B13 /* pammo.h */,
 				11EEB7190DEBC73F009F3B13 /* transform2.h */,
+				115577B70E9454FD00171852 /* tutorialScreenView.cpp */,
+				115577B80E9454FD00171852 /* tutorialScreenView.h */,
 				11EEB71A0DEBC73F009F3B13 /* vector2.h */,
 				113811490E2FEBDF00E9FF5F /* view.cpp */,
 				113811480E2FEBDF00E9FF5F /* view.h */,
@@ -500,6 +516,10 @@
 				11FBD5C30E7AE3C60070BD31 /* scoreMeter.cpp in Sources */,
 				11C819540E8C2E68003BA0A2 /* gooWeapon.cpp in Sources */,
 				11C819550E8C2E68003BA0A2 /* grenadeLauncherWeapon.cpp in Sources */,
+				115577B90E9454FD00171852 /* creditsScreenView.cpp in Sources */,
+				115577BA0E9454FD00171852 /* deathCardView.cpp in Sources */,
+				115577BC0E9454FD00171852 /* tutorialScreenView.cpp in Sources */,
+				11B9F66A0E949106002236D1 /* shieldToggle.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

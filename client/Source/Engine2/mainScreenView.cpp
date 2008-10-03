@@ -78,17 +78,17 @@ bool MainScreenView::touch(uint32_t count, Touch* touches)
 
     Box options[3];
 
+    // tutorial
+    options[0].ul = Vector2(20.0f, 200.0f);
+    options[0].lr = Vector2(120.0f, 305.0f);
+
+    //  play
+    options[1].ul = Vector2(190.0f, 205.0f);
+    options[1].lr = Vector2(280.0f, 280.0f);
+
     // credits
-    options[0].ul = Vector2(0.0f, 0.0f);
-    options[0].lr = Vector2(160.0f, 320.0f);
-
-    //  learn
-    options[1].ul = Vector2(160.0f, 0.0f);
-    options[1].lr = Vector2(320.0f, 320.0f);
-
-    // play
-    options[2].ul = Vector2(320.0f, 0.0f);
-    options[2].lr = Vector2(480.0f, 320.0f);
+    options[2].ul = Vector2(355.0f, 200.0f);
+    options[2].lr = Vector2(455.0f, 305.0f);
 
 
     for(uint32_t i=0; i<3; ++i)
@@ -102,13 +102,13 @@ bool MainScreenView::touch(uint32_t count, Touch* touches)
         switch(i)
         {
         case 0:
-            new CreditsScreenView;
-            return true;
-        case 1:
             new TutorialScreenView;
             return true;
-        case 2:
+        case 1:
             gWorld->enable();
+            return true;
+        case 2:
+            new CreditsScreenView;
             return true;
         }
     }

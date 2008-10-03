@@ -2,6 +2,11 @@
 #include "deathCardView.h"
 #include "imageLibrary.h"
 #include "drawImage.h"
+#include "player.h"
+#include "world.h"
+
+#define NUM_CARDS 11
+#define MAX_SCORE 3000.0f
 
 namespace pammo
 {
@@ -9,8 +14,19 @@ namespace pammo
 DeathCardView::DeathCardView()
     : View()
 {
+    // Get player.
+    Player* player = gWorld->getPlayer();
+
+
+    int card = ((float)player->mScore/MAX_SCORE) * NUM_CARDS;
+    
+    if(card>NUM_CARDS)
+        card = NUM_CARDS;
+
     // Load background.
-    mBackground = gImageLibrary->reference("data/interface/deathCards/00.png");
+    char filename[256];
+    sprintf(filename, "data/interface/deathCards/0%d.png", card);
+    mBackground = gImageLibrary->reference(filename);
     mAlpha = 0;
 }
 
@@ -40,7 +56,7 @@ void DeathCardView::update()
 void DeathCardView::draw()
 {
     Transform2 trans = Transform2::createScale(mBackground->mSize);
-    trans *= Transform2::createTranslation(Vector2(0.10f, 0.065f));
+    trans *= Transform2::createTranslation(Vector2(0.10f, 0.030f));
     drawImage(mBackground, trans, mAlpha);
 }
 

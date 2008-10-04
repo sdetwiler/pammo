@@ -56,7 +56,7 @@ void DeathCardView::update()
 void DeathCardView::draw()
 {
     Transform2 trans = Transform2::createScale(mBackground->mSize);
-    trans *= Transform2::createTranslation(Vector2(0.10f, 0.030f));
+    trans *= Transform2::createTranslation(Vector2(0.08f, 0.020f));
     drawImage(mBackground, trans, mAlpha);
 }
 

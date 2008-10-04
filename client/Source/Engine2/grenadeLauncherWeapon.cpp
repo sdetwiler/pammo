@@ -14,6 +14,7 @@ namespace pammo
 void grenadeLauncherBulletCollisionCallback(Body* self, Body* other, Contact* contact, ContactResponse* response);
 void grenadeLauncherBulletShapeCollisionCallback(Body* self, Shape* other, Contact* contact, bool* response);
 void grenadeLauncherBulletParticleCallback(Particle* p, ParticleSystem* system);
+void grenadeLauncherBulletShadowParticleCallback(Particle* p, ParticleSystem* system);
 
 GrenadeLauncherWeapon::GrenadeLauncherWeapon()
     : Weapon()
@@ -37,8 +38,10 @@ void GrenadeLauncherWeapon::deselect()
 
 struct GrenadeLauncherParticleData
 {
-    int mDirection;
-    uint64_t mStartTime;
+    int       mDirection;
+    uint64_t  mStartTime;
+    float     mRotation;
+    Particle* mShadow;
 };
 
 void GrenadeLauncherWeapon::fire()
@@ -67,6 +70,7 @@ void GrenadeLauncherWeapon::fire()
         particleData->mDirection = 1;
 
     particleData->mStartTime = getTime();
+    particleData->mRotation = 0;
 
     // Choose some numbers.
     float f = 10.0f;
@@ -74,17 +78,24 @@ void GrenadeLauncherWeapon::fire()
     float initialRotation = player->mTurret.mRotation - M_PI/2.0f;
     
     // Setup image.
-//	int i=rand()%3;
 	char filename[256];
 	float velocity = 130;
 	sprintf(filename, "data/particles/grenade/00.png");
-	velocity+=((rand()%10)/10.0f);
+	//velocity+=((rand()%10)/10.0f);
 	
 	p->mImage.setImage(gImageLibrary->reference(filename));
     p->mImage.mCenter = player->mTurretTip;
     p->mImage.mRotation = initialRotation + r;
     p->mImage.makeDirty();
         
+    particleData->mShadow = gWorld->getParticleSystem()->addParticle(0);
+    particleData->mShadow->mAlpha = 0.5f;
+    particleData->mShadow->mCallback = grenadeLauncherBulletShadowParticleCallback;
+    particleData->mShadow->mImage.setImage(gImageLibrary->reference("data/particles/shadow00.png"));
+    particleData->mShadow->mImage.mCenter = p->mImage.mCenter;
+    particleData->mShadow->mImage.mRotation= p->mImage.mRotation;
+    particleData->mShadow->mImage.makeDirty();
+
     // Properties about grenade bullet particles.
     p->mBody->mProperties = kPlayerBulletCollisionProperties;
     p->mBody->mCollideProperties = kEnemyCollisionProperties;// | kPlayerBarrierCollisionProperties;
@@ -110,15 +121,22 @@ void grenadeLaucherBulletShapeCollisionCallback(Body* self, Shape* other, Contac
 {
     *response = true;
 }
+void grenadeLauncherBulletShadowParticleCallback(Particle* p, ParticleSystem* system)
+{
+}
 
 void grenadeLauncherBulletParticleCallback(Particle* p, ParticleSystem* system)
 {
     GrenadeLauncherParticleData* particleData = (GrenadeLauncherParticleData*)p->mData;
     
+    particleData->mRotation+=.7f;
+    if(particleData->mRotation > M_PI*2.0f)
+        particleData->mRotation-= M_PI*2.0f;
+
     uint64_t now = getTime();
     float Di = 1.0f;
     float Vi = 6.0f;
-    float G = 9.81; 
+    float G = 9.81f; 
     float dt = ((float)(now - particleData->mStartTime))/1000000.0f;
     float distance = Di + ((Vi*dt) - (.5*G*(dt*dt)));
    
@@ -130,13 +148,20 @@ void grenadeLauncherBulletParticleCallback(Particle* p, ParticleSystem* system)
     if(distance <= Di)
     {
         gWorld->getParticleSystem()->initExplosionParticle(p->mImage.mCenter);
+        system->removeParticle(particleData->mShadow);
 		system->removeParticle(p);
 		return;
     }
 
+    p->mImage.mRotation = particleData->mRotation;
     p->mImage.mCenter = p->mBody->mCenter;
     p->mImage.mSize = 8.0f * distance;
     p->mImage.makeDirty();
+
+    particleData->mShadow->mImage.mRotation = p->mImage.mRotation;
+    particleData->mShadow->mImage.mCenter = p->mImage.mCenter - (Vector2(2.0f, -3.5f)*distance);
+    particleData->mShadow->mImage.mSize = 12.0f * distance;
+    particleData->mShadow->mImage.makeDirty();
 }
 	
 

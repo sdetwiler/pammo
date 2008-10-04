@@ -218,6 +218,7 @@ struct PounceAndStalkBehaviorData
     float mDistance;  
     Vector2 mOrigin;
     bool mInCollision;
+    Particle* mShadow;
 };
 
 

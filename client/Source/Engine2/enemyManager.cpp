@@ -297,7 +297,11 @@ void behaviorPounceAndStalk(Enemy* e, EnemyManager* manager)
     Vector2 direction;
     float d;
     PounceAndStalkBehaviorData* data = (PounceAndStalkBehaviorData*)e->mBehavior.mData;
- 
+
+    // Assume shadow will not be used.
+    data->mShadow->mImage.mSize = 0.0f;
+    data->mShadow->mImage.makeDirty();
+
     switch(data->mState)
     {
     // Turn to another direction.
@@ -379,41 +383,30 @@ void behaviorPounceAndStalk(Enemy* e, EnemyManager* manager)
         break;
     // Jump.
     case PounceAndStalkBehaviorData::Jump:
-        uint64_t now = getTime();
-        float Di = 32.0f;
-        float Vi = 50.0f;
-        float G = 19.81; // Fantasyland... or Jupiter.
-        float dt = ((float)(now - data->mJumpStart))/1000000.0f;
-        float distance = Di + ((Vi*dt) - ((G*dt*dt)/1.0f));
+        e->mController.mAcceleration = data->mSpeed * e->mBody->mMass;
 
-        if(distance <= Di)
+        uint64_t now = getTime();
+        float Di = 1.0f;
+        float Vi = 6.0f;
+        float G = 9.81; // Fantasyland... or Jupiter.
+        float dt = ((float)(now - data->mJumpStart))/1000000.0f;
+        float distance = Di + ((Vi*dt) - (.5*G*(dt*dt)));
+
+        if(distance <= Di*.6667f)
         {
             e->mEntity.mSize = e->mImages[0]->mSize;
             data->mState = PounceAndStalkBehaviorData::RotateToMove;
 		    return;
         }
 
-        e->mEntity.mSize = distance;
-        
-        
-        
-        
-        //       dprintf("Jump");
-        //float d = magnitude(data->mOrigin - e->mBody->mCenter);
-        //float s = 1.05;
-        //if(d<data->mDistance/2.0f)
-        //    e->mEntity.mSize*=s;
-        //else
-        //{
-        //    e->mEntity.mSize/=s;
-        //}
+        e->mEntity.mSize = 32.0f * distance;
 
-        //if( d >= data->mDistance)
-        //{
-        //    e->mEntity.mSize = e->mImages[0]->mSize;
 
-        //    data->mState = PounceAndStalkBehaviorData::RotateToMove;
-        //}
+        data->mShadow->mImage.mRotation = e->mEntity.mRotation;
+        data->mShadow->mImage.mCenter = e->mEntity.mCenter - (Vector2(5.0f, -8.0f)*distance);
+        data->mShadow->mImage.mSize = 32.0f * distance;
+        data->mShadow->mImage.makeDirty();
+
         break;
     };
 
@@ -485,6 +478,22 @@ void enemyDamageCb(Enemy* e, ParticleType type, float amount)
         gWorld->getEnemyManager()->removeEnemy(e);
 		e->mDamageCb = NULL;
         e->mUpdateCb = NULL;
+	}
+}
+
+void pounceAndStalkShadowParticleCallback(Particle* p, ParticleSystem* system)
+{
+}
+
+void enemyPounceAndStalkDamageCb(Enemy* e, ParticleType type, float amount)
+{
+    PounceAndStalkBehaviorData* data = (PounceAndStalkBehaviorData*)&e->mBehavior.mData;
+
+    enemyDamageCb(e, type, amount);
+
+	if(e->mHealth <=0)
+	{
+        gWorld->getParticleSystem()->removeParticle(data->mShadow);
 	}
 }
 
@@ -630,8 +639,15 @@ bool EnemyManager::initializeEnemy(Enemy* e, EnemyTemplate* enemyTemplate)
         break;
     case PounceAndStalk:
         e->mBehavior.mCb = behaviorPounceAndStalk;
+        e->mDamageCb = enemyPounceAndStalkDamageCb;
         e->mBody->mBodyCallback = behaviorPounceAndStalkCollisionCb;
         e->mBody->mShapeCallback = behaviorPounceAndStalkShapeCollisionCb;     
+
+        ((PounceAndStalkBehaviorData*)&e->mBehavior.mData)->mShadow = gWorld->getParticleSystem()->addParticle(0);
+        ((PounceAndStalkBehaviorData*)&e->mBehavior.mData)->mShadow->mAlpha = 0.5f;
+        ((PounceAndStalkBehaviorData*)&e->mBehavior.mData)->mShadow->mCallback = pounceAndStalkShadowParticleCallback;
+        ((PounceAndStalkBehaviorData*)&e->mBehavior.mData)->mShadow->mImage.setImage(gImageLibrary->reference("data/particles/shadow00.png"));
+
         break;
     }
     

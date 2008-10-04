@@ -137,6 +137,9 @@ void behaviorSurroundCb(Enemy* e, EnemyManager* manager)
 
     e->mController.mAcceleration = data->mSpeed * e->mBody->mMass;
     e->mController.mRotationTarget = rot;
+   
+    e->mEntity.mRotation = e->mController.mRotation + (float)M_PI/2;
+    e->mEntity.mCenter = e->mBody->mCenter;
     e->mEntity.makeDirty();
 }
 
@@ -191,6 +194,9 @@ void behaviorDriveByCb(Enemy* e, EnemyManager* manager)
         float rot = atan2(heading.y, heading.x);
         e->mController.mRotationTarget = rot;
         e->mController.mAcceleration = data->mSpeed * e->mBody->mMass;
+
+        e->mEntity.mRotation = e->mController.mRotation + (float)M_PI/2;
+        e->mEntity.mCenter = e->mBody->mCenter;
         e->mEntity.makeDirty();
     }
 }
@@ -224,6 +230,28 @@ void behaviorKamikazeCb(Enemy* e, EnemyManager* manager)
     e->mController.mAcceleration = data->mSpeed * e->mBody->mMass;
 }
 
+void behaviorSpinningTopCb(Enemy* e, EnemyManager* manager)
+{
+    SpinningTopBehaviorData* data = (SpinningTopBehaviorData*)e->mBehavior.mData;
+
+    data->mRotation+=.7f;
+    if(data->mRotation > M_PI*2.0f)
+        data->mRotation-= M_PI*2.0f;
+
+    e->mController.update();
+
+    e->mEntity.mRotation = data->mRotation + e->mController.mRotation + ((float)M_PI/2.0f);
+    if(e->mEntity.mRotation > M_PI*2.0f)
+        e->mEntity.mRotation -= M_PI*2.0f;
+
+    e->mEntity.mCenter = e->mBody->mCenter;
+    e->mEntity.makeDirty();
+
+    Vector2 heading = gWorld->getPlayer()->getCenter() - e->mBody->mCenter;
+    float rot = atan2(heading.y, heading.x);
+    e->mController.mRotationTarget = rot;
+    e->mController.mAcceleration = data->mSpeed * e->mBody->mMass;
+}
 
 void behaviorPounceAndStalkCollisionCb(Body* self, Body* other, Contact* contact, ContactResponse* response)
 {
@@ -390,6 +418,10 @@ void behaviorPounceAndStalk(Enemy* e, EnemyManager* manager)
     };
 
     data->mInCollision = false;
+
+    e->mEntity.mRotation = e->mController.mRotation + (float)M_PI/2;
+    e->mEntity.mCenter = e->mBody->mCenter;
+    e->mEntity.makeDirty();
 }
 
 void enemyUpdateCb(Enemy* e, EnemyManager* manager)
@@ -414,7 +446,7 @@ void enemyUpdateCb(Enemy* e, EnemyManager* manager)
     // Update image entity.
     e->mCurrImage = (e->mCurrImage+1) % e->mImageCount;
     e->mEntity.setImageWithoutSize(e->mImages[e->mCurrImage]);
-    e->mEntity.mRotation = e->mController.mRotation + (float)M_PI/2;
+   // e->mEntity.mRotation = e->mController.mRotation + (float)M_PI/2;
     e->mEntity.mCenter = e->mBody->mCenter;
     e->mEntity.makeDirty();
 }
@@ -592,6 +624,9 @@ bool EnemyManager::initializeEnemy(Enemy* e, EnemyTemplate* enemyTemplate)
         break;
     case Kamikaze:
         e->mBehavior.mCb = behaviorKamikazeCb;
+        break;
+    case SpinningTop:
+        e->mBehavior.mCb = behaviorSpinningTopCb;
         break;
     case PounceAndStalk:
         e->mBehavior.mCb = behaviorPounceAndStalk;

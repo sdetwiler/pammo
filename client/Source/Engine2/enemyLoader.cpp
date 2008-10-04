@@ -401,6 +401,8 @@ bool EnemyLoader::parseBehavior(char* s)
                 mTemplate->mBehavior.mType = Camp;
             else if(!strcmp(s, "Kamikaze"))
                 mTemplate->mBehavior.mType = Kamikaze;
+            else if(!strcmp(s, "Spinning Top"))
+                mTemplate->mBehavior.mType = SpinningTop;
             else if(!strcmp(s, "Pounce and Stalk"))
                 mTemplate->mBehavior.mType = PounceAndStalk;
             else
@@ -423,6 +425,8 @@ bool EnemyLoader::parseBehavior(char* s)
                 return parseBehaviorCamp(s);
             case Kamikaze:
                 return parseBehaviorKamikaze(s);
+            case SpinningTop:
+                return parseBehaviorSpinningTop(s);
             case PounceAndStalk:
                 return parseBehaviorPounceAndStalk(s);
             default:
@@ -555,6 +559,29 @@ bool EnemyLoader::parseBehaviorKamikaze(char* s)
 
     return false;
 }
+
+bool EnemyLoader::parseBehaviorSpinningTop(char* s)
+{
+    SpinningTopBehaviorData* data = (SpinningTopBehaviorData*)mTemplate->mBehavior.mData;
+    data->mRotation = 0;
+    //data->mBias = 0.0f;
+    int column = 2;
+    while(s)
+    {
+        switch(column)
+        {
+        case 2: // Speed
+            data->mSpeed = (float)atof(s);
+            return true;
+        }
+
+        ++column;
+        s=strtok(NULL, ",\"");
+    }
+
+    return false;
+}
+
 
 bool EnemyLoader::parseBehaviorPounceAndStalk(char* s)
 {
@@ -732,6 +759,7 @@ char const* sSurround        = "Surround";
 char const* sDriveBy         = "Drive By";
 char const* sCamp            = "Camp";
 char const* sKamikaze        = "Kamikaze";
+char const* sSpinningTop     = "Spinning Top";
 char const* sPounceAndStalk  = "Pounce and Stalk";
 char const* EnemyLoader::getBehaviorName(BehaviorType type)
 {
@@ -747,6 +775,8 @@ char const* EnemyLoader::getBehaviorName(BehaviorType type)
         return sCamp;
     case Kamikaze:
         return sKamikaze;
+    case SpinningTop:
+        return sSpinningTop;
     case PounceAndStalk:
         return sPounceAndStalk;
     default:

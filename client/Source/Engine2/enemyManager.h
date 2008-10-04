@@ -148,6 +148,7 @@ enum BehaviorType
 	DriveBy,
 	Camp,
 	Kamikaze,
+    SpinningTop,
     PounceAndStalk
 };
 
@@ -187,6 +188,12 @@ struct KamikazeBehaviorData
     float mSpeed;
     uint32_t mBiasUpdate;
     float mBias;
+};
+
+struct SpinningTopBehaviorData
+{
+    float mSpeed;
+    float mRotation;
 };
 
 struct PounceAndStalkBehaviorData

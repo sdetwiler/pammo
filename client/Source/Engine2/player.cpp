@@ -23,6 +23,8 @@
 #include "scoreMeter.h"
 #include "flipbookLoader.h"
 
+#define MAX_CAMERA_SHAKE 15
+
 namespace pammo
 {
 
@@ -101,6 +103,8 @@ Player::~Player()
 
 void Player::reset()
 {
+    mCameraShake = 0;
+
     if(mBody)
     {
         gWorld->getPhysics()->removeBody(mBody);
@@ -241,7 +245,14 @@ void Player::update()
     mTurret.mRotation = mFireDirection + M_PI/2;
     mTurret.makeDirty();
     
-    gWorld->getCamera()->mCenter = mBody->mCenter;
+    int32_t shake = 0;
+    if(mCameraShake)
+    {
+        shake = mCameraShake * rand()%2?-1:1;
+        --mCameraShake;
+    }
+
+    gWorld->getCamera()->mCenter = mBody->mCenter + shake;
     gWorld->getCamera()->makeDirty();
  
     // Fire if we should be.
@@ -400,6 +411,7 @@ void Player::damage(ParticleType type, float amount)
     
     dprintf("damage");
 	mHealth -= amount;
+    mCameraShake = MAX_CAMERA_SHAKE;
     mHealthMeter->setPercent(mHealth);
 }
 

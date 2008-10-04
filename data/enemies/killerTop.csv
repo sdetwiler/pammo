@@ -1,11 +1,11 @@
 "Enemy","Name",,,,,,,,,,,,
-,"trebuchet",,,,,,,,,,,,
+,"killerTop",,,,,,,,,,,,
 "Properties","Image Type","Image Path","Mass","Radius","Health","Point Value","Minimum Player Score","Max Instance Per Wave",,,,,
-,"Single","data/vehicles/trebuchet/00.png",50,30,100,60,50,3,,,,,
+,"Single","data/vehicles/killerTop/00.png",50,9,10,10,0,20,,,,,
 "Behavior","Type","Speed","","","","","","","","","","",""
-,"Pounce and Stalk",10,,,,,,,,,,,
-"Weapon","Type","Image Path","Accuracy","Damage","Distance Max","Firing Rate","","","","","","",""
-,"Trebuchet","data/vehicles/trebuchet/arm/00.png",80,100,300,2.5,,,,,,,
+,"Spinning Top",7,,,,,,,,,,,
+"Weapon","Type","Image Path","Damage","","","","","","","","","",""
+,"SelfDestruct","data/vehicles/torpedo/fakeWeapon/00.png",100,,,,,,,,,,
 "Weapon","Type","","","","","","","","","","","",""
 ,"None",,,,,,,,,,,,
 "Weapon","Type","","","","","","","","","","","",""

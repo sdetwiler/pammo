@@ -90,6 +90,8 @@ class Player :
         HealthMeter* mHealthMeter;
         float mHealth, mMaxHealth;
         uint64_t mDeadTime;
+
+        int32_t mCameraShake;
 	
         // Energy.
 		HealthMeter* mEnergyMeter;
@@ -107,6 +109,7 @@ class Player :
         // Score.
         ScoreMeter* mScoreMeter;
         uint32_t mScore;
+
         
         // Misc.
         Vector2 mSpawnPoint;

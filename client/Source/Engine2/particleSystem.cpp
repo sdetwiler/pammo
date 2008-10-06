@@ -283,7 +283,7 @@ void ParticleSystem::initSmokeParticle(Vector2 const& initialPosition, float ini
     p->mAlpha = 1.0f;
 
     // Setup image.
-    p->mImage.setImage(gImageLibrary->reference("data/particles/smoke00.png"));
+    p->mImage.setImage(gImageLibrary->reference(PARTICLE_SMOKE_00));
     p->mImage.mCenter = initialPosition;
     p->mImage.mRotation = initialRotation;
     p->mImage.makeDirty();
@@ -309,11 +309,7 @@ void ParticleSystem::initExplosionParticle(Vector2 const& initialPosition)
     p->mAlpha = 1.0f;
 
     // Setup image.
-    int i= rand()%2;
-    char filename[256];
-    sprintf(filename, "data/particles/explosion/0%d.png", i);
-
-    p->mImage.setImage(gImageLibrary->reference(filename));
+    p->mImage.setImage(gImageLibrary->reference(PARTICLE_EXPLOSION_00 + rand()%PARTICLE_EXPLOSION_COUNT));
     p->mImage.mCenter = initialPosition + Vector2((float)(rand()%20), (float)(rand()%20));
     p->mImage.makeDirty();
 }
@@ -329,7 +325,7 @@ void ParticleSystem::initRubbleParticle(Vector2 const& initialPosition)
     p->mAlpha = 0.8f;
 
     // Setup image.
-    p->mImage.setImage(gImageLibrary->reference("data/particles/rubble00.png"));
+    p->mImage.setImage(gImageLibrary->reference(PARTICLE_RUBBLE_00));
     //p->mImage.mSize = Vector2(2.0f, 2.0f);
     p->mImage.mCenter = initialPosition;// + Vector2((float)(rand()%20), (float)(rand()%20));
     p->mImage.makeDirty();
@@ -351,7 +347,7 @@ void ParticleSystem::initBallParticle(InitBallParticleArgs const& args)
     p->mStartPosition = args.initialPosition;
     
     // Setup image.
-    p->mImage.setImage(gImageLibrary->reference("data/particles/ball.png"));
+    p->mImage.setImage(gImageLibrary->reference(PARTICLE_BALL_00));
     p->mImage.mCenter = args.initialPosition;
     p->mImage.mRotation = args.initialRotation;
     p->mImage.makeDirty();

@@ -1,11 +1,11 @@
 "Enemy","Name",,,,,,,,,,,,
 ,"killerTop",,,,,,,,,,,,
 "Properties","Image Type","Image Path","Mass","Radius","Health","Point Value","Minimum Player Score","Max Instance Per Wave",,,,,
-,"Single","data/vehicles/killerTop/00.png",50,9,10,10,0,20,,,,,
+,"Single","71",50,9,10,10,0,20,,,,,
 "Behavior","Type","Speed","","","","","","","","","","",""
 ,"Spinning Top",7,,,,,,,,,,,
 "Weapon","Type","Image Path","Damage","","","","","","","","","",""
-,"SelfDestruct","data/vehicles/torpedo/fakeWeapon/00.png",100,,,,,,,,,,
+,"SelfDestruct","63",100,,,,,,,,,,
 "Weapon","Type","","","","","","","","","","","",""
 ,"None",,,,,,,,,,,,
 "Weapon","Type","","","","","","","","","","","",""

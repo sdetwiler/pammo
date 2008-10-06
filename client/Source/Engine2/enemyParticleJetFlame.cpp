@@ -42,7 +42,7 @@ void enemyParticleJetFlameCb(Enemy* e, EnemyParticle* ep, EnemyManager* manager)
     // Setup image properties.
     p->mImage.mCenter = center;
     p->mImage.mRotation = e->mController.mRotation+(M_PI/2.0f);
-    p->mImage.setImage(gImageLibrary->reference(ep->mImagePath));
+    p->mImage.setImage(gImageLibrary->reference(atol(ep->mImagePath)));
     p->mImage.makeDirty();
 
     // Set jet flame specific particle properties.

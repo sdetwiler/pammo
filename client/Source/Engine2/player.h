@@ -3,12 +3,13 @@
 
 #include "pammo.h"
 #include "view.h"
+#include "imageLibrary.h"
 #include "targetRingWidget.h"
 #include "weaponSelector.h"
 #include "shieldToggle.h"
 #include "particleSystem.h" // For particle types.
 
-#define PLAYER_MAX_IMAGE_COUNT 3
+#define PLAYER_MAX_IMAGE_COUNT    VEHICLE_TANK_COUNT
 #define SHIELD_MAX_IMAGE_COUNT 3
 
 namespace pammo

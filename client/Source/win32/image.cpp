@@ -8,7 +8,6 @@ namespace pammo
 
 Vector2 getFrameSize()
 {
-//   return Vector2(320, 480);
    return Vector2(480, 320);
 }
 

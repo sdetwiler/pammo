@@ -54,26 +54,30 @@ Player::Player() : View()
     mEnergyMeter->setGrowDirection(-1);
     mEnergyMeter->setBaseLocation(Vector2(200, 16));
 
-    mMovementRing = new TargetRingWidget(kMoveRingPriority, gImageLibrary->reference("data/interface/movementRing.png"));
+    mMovementRing = new TargetRingWidget(kMoveRingPriority, gImageLibrary->reference(INTERFACE_RING_MOVEMENT));
     mMovementRing->setCenter(Vector2(70, 250));
     mMovementRing->setSize(mMovementRing->getSize()*0.8);
     mMovementRing->setObserver(this);
     
-    mTargetRing = new TargetRingWidget(kFireRingPriority, gImageLibrary->reference("data/interface/targetRing.png"));
+    mTargetRing = new TargetRingWidget(kFireRingPriority, gImageLibrary->reference(INTERFACE_RING_TARGET));
     mTargetRing->setCenter(Vector2(410, 250));
     mTargetRing->setSize(mTargetRing->getSize()*0.8);
     mTargetRing->setObserver(this);
 
-    loadFlipbook("data/vehicles/tank/", mImages, PLAYER_MAX_IMAGE_COUNT, &mImageCount);
+    //loadFlipbook("data/vehicles/tank/", mImages, PLAYER_MAX_IMAGE_COUNT, &mImageCount);
+    mImageCount = VEHICLE_TANK_COUNT;
+    loadFlipbook(VEHICLE_TANK_00, VEHICLE_TANK_COUNT, mImages);
     mCurrImage = 0;
     mEntity.setImage(mImages[mCurrImage]);
 
-    loadFlipbook("data/particles/shield/", mShieldImages, SHIELD_MAX_IMAGE_COUNT, &mShieldImageCount);
+    //loadFlipbook("data/particles/shield/", mShieldImages, SHIELD_MAX_IMAGE_COUNT, &mShieldImageCount);
+    mShieldImageCount = PARTICLE_SHIELD_COUNT;
+    loadFlipbook(PARTICLE_SHIELD_00, PARTICLE_SHIELD_COUNT, mShieldImages);
     mShieldCurrImage = 0;
     mShieldFlipCount = 0;
     mShieldEntity.setImage(mShieldImages[mShieldCurrImage]);
 
-    mTurret.setImage(gImageLibrary->reference("data/vehicles/tank/turret/00.png"));
+    mTurret.setImage(gImageLibrary->reference(VEHICLE_TANK_TURRET_00));
 
     mController = new VehicleController();
 
@@ -217,7 +221,7 @@ void Player::createDust()
     float initialRotation = atan2(mBody->mVelocity.y, mBody->mVelocity.x );
     
     // Setup image.
-    p->mImage.setImage(gImageLibrary->reference("data/particles/dust00.png"));
+    p->mImage.setImage(gImageLibrary->reference(PARTICLE_DUST_00));
     p->mImage.mCenter = player->mBody->mCenter;
     p->mImage.mRotation = initialRotation + r;
 	p->mImage.makeDirty();

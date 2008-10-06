@@ -557,12 +557,16 @@ bool EnemyManager::loadEnemyTemplate(char const* enemyName)
 
     if(enemyTemplate->mImageType == Single)
     {
-        enemyTemplate->mImages[0] = gImageLibrary->reference(enemyTemplate->mImagePath);
+        enemyTemplate->mImages[0] = gImageLibrary->reference(atol(enemyTemplate->mImagePath));
+        //        enemyTemplate->mImages[0] = gImageLibrary->reference(enemyTemplate->mImagePath);
         enemyTemplate->mImageCount = 1;
     }    
     else
     {
-        loadFlipbook(enemyTemplate->mImagePath, enemyTemplate->mImages, ENEMY_MAX_IMAGE_COUNT, &enemyTemplate->mImageCount);
+        dprintf("TODO: Restore enemy template flipbook support. Path will be startIndex:count");
+        enemyTemplate->mImageCount = 1;
+        loadFlipbook(atol(enemyTemplate->mImagePath), enemyTemplate->mImageCount, enemyTemplate->mImages);
+        //        loadFlipbook(enemyTemplate->mImagePath, enemyTemplate->mImages, ENEMY_MAX_IMAGE_COUNT, &enemyTemplate->mImageCount);
     }
 
     mEnemyTemplates[std::string(enemyName)] = enemyTemplate;
@@ -646,7 +650,7 @@ bool EnemyManager::initializeEnemy(Enemy* e, EnemyTemplate* enemyTemplate)
         ((PounceAndStalkBehaviorData*)&e->mBehavior.mData)->mShadow = gWorld->getParticleSystem()->addParticle(0);
         ((PounceAndStalkBehaviorData*)&e->mBehavior.mData)->mShadow->mAlpha = 0.5f;
         ((PounceAndStalkBehaviorData*)&e->mBehavior.mData)->mShadow->mCallback = pounceAndStalkShadowParticleCallback;
-        ((PounceAndStalkBehaviorData*)&e->mBehavior.mData)->mShadow->mImage.setImage(gImageLibrary->reference("data/particles/shadow00.png"));
+        ((PounceAndStalkBehaviorData*)&e->mBehavior.mData)->mShadow->mImage.setImage(gImageLibrary->reference(PARTICLE_SHADOW_00));
 
         break;
     }
@@ -656,7 +660,7 @@ bool EnemyManager::initializeEnemy(Enemy* e, EnemyTemplate* enemyTemplate)
     for(uint32_t i=0; i<e->mWeaponCount; ++i)
     {
         memcpy(&e->mWeapon[i], &enemyTemplate->mWeapons[i].mWeapon, sizeof(EnemyWeapon));
-        e->mWeapon[i].mEntity.setImageAndInit(gImageLibrary->reference(enemyTemplate->mWeapons[i].mImagePath));
+        e->mWeapon[i].mEntity.setImageAndInit(gImageLibrary->reference(atol(enemyTemplate->mWeapons[i].mImagePath)));
         switch(e->mWeapon[i].mType)
         {
         case Flamethrower:

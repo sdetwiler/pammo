@@ -95,8 +95,9 @@ void buildTileMap(World* world, char const* name)
 	{
         char* propName = readString(&cur, &remain);
         string propPath = string("data/props/") + propName + ".png";
-        propLookup[i] = gImageLibrary->reference(propPath.c_str());
-        dprintf("%d - %s", i, propPath.c_str());
+        dprintf("TODO: Skipping prop loading for %s", propPath.c_str());    
+//        propLookup[i] = gImageLibrary->reference(propPath.c_str());
+//        dprintf("%d - %s", i, propPath.c_str());
 	}
     
     // Load each entity.

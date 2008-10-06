@@ -10,6 +10,7 @@ class Game;
 
 enum ViewPriorities
 {
+    kImageLibraryPriority = 50,
     kMapPriority = 100,
     kPhysicsPriority = 101,
     kMainScreenPriority = 102,

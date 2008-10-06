@@ -68,7 +68,7 @@ void enemyWeaponFlamethrowerCb(Enemy* e, EnemyWeapon* w, EnemyManager* manager)
     
     // Setup image.
     p->mImage.mRotation += (0.5f - ((float)(rand()%100)/100.0f));
-    p->mImage.setImage(gImageLibrary->reference("data/particles/flame01.png"));
+    p->mImage.setImage(gImageLibrary->reference(PARTICLE_FLAME_00));
     p->mImage.makeDirty();
         
     // Properties about fire particle bodies.

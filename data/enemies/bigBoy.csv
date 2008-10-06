@@ -1,15 +1,15 @@
 "Enemy","Name",,,,,,,,,,,,
 ,"bigBoy",,,,,,,,,,,,
 "Properties","Image Type","Image Path","Mass","Radius","Health","Point Value","Minimum Player Score","Max Instance Per Wave",,,,,
-,"Single","data/vehicles/bigBoy/00.png",100,32,500,200,1000,1,,,,,
+,"Single","64",100,32,500,200,1000,1,,,,,
 "Behavior","Type","Speed","Target Radius","","","","","","","","","",""
 ,"Surround",5,200,,,,,,,,,,
 "Weapon","Type","Image Path","Image Position X","Image Position Y","Fire Position X","Fire Position Y","Rotation Min","Rotation Max","Accuracy","Damage","Distance Max","Firing Rate",""
-,"MachineGun","data/particles/machineGun/00.png",0,0,32,0,90,90,80,5,250,0.4,
+,"MachineGun","63",0,0,32,0,90,90,80,5,250,0.4,
 "Weapon","Type","Image Path","Image Position X","Image Position Y","Fire Position X","Fire Position Y","Rotation Min","Rotation Max","Accuracy","Damage","Distance Max","Firing Rate",""
-,"MachineGun","data/particles/machineGun/00.png",0,0,-32,0,-90,-90,80,5,250,0.4,
+,"MachineGun","63",0,0,-32,0,-90,-90,80,5,250,0.4,
 "Weapon","Type","Image Path","Image Position X","Image Position Y","Fire Position X","Fire Position Y","Rotation Min","Rotation Max","Accuracy","Damage","Distance Max","Firing Rate",""
-,"HeatSeaker","data/particles/heatSeaker/00.png",0,0,0,0,0,360,.5,40,500,2,
+,"HeatSeaker","63",0,0,0,0,0,360,.5,40,500,2,
 "Weapon","Type","","","","","","","","","","","",""
 ,"None",,,,,,,,,,,,
 "Particle","Type","","","","","","","","","","","",""

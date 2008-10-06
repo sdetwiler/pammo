@@ -1,11 +1,11 @@
 "Enemy","Name",,,,,,,,,,,,
 ,"trebuchet",,,,,,,,,,,,
 "Properties","Image Type","Image Path","Mass","Radius","Health","Point Value","Minimum Player Score","Max Instance Per Wave",,,,,
-,"Single","data/vehicles/trebuchet/00.png",50,20,100,100,500,2,,,,,
+,"Single","74",50,20,100,100,500,2,,,,,
 "Behavior","Type","Speed","","","","","","","","","","",""
 ,"Pounce and Stalk",10,,,,,,,,,,,
 "Weapon","Type","Image Path","Accuracy","Damage","Distance Max","Firing Rate","","","","","","",""
-,"Trebuchet","data/vehicles/trebuchet/arm/00.png",80,100,300,2.5,,,,,,,
+,"Trebuchet","63",80,100,300,2.5,,,,,,,
 "Weapon","Type","","","","","","","","","","","",""
 ,"None",,,,,,,,,,,,
 "Weapon","Type","","","","","","","","","","","",""

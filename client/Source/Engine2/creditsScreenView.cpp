@@ -12,7 +12,7 @@ CreditsScreenView::CreditsScreenView()
 {
 //    gCreditsScreenView = this;
     // Load background.
-    mBackground = gImageLibrary->reference("data/interface/creditsScreenBackground.png");
+    mBackground = gImageLibrary->reference(INTERFACE_BACKGROUND_CREDITS);
 }
 
 CreditsScreenView::~CreditsScreenView()

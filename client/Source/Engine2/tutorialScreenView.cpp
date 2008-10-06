@@ -12,7 +12,7 @@ TutorialScreenView::TutorialScreenView()
 {
 //    gTutorialScreenView = this;
     // Load background.
-    mBackground = gImageLibrary->reference("data/interface/tutorialScreenBackground.png");
+    mBackground = gImageLibrary->reference(INTERFACE_BACKGROUND_TUTORIAL);
 }
 
 TutorialScreenView::~TutorialScreenView()

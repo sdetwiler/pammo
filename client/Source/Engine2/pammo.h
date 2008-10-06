@@ -35,6 +35,7 @@ struct Image
 {
     Vector2 mSize;
     uint32_t mTexture;
+    uint32_t mTableIndex; // To support reference/dereference images from Image*
 };
 
 struct Touch

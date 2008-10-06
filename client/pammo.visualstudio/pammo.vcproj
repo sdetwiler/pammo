@@ -248,10 +248,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\Source\Engine2\flamethrowerWeapon.h"
-				>
-			</File>
-			<File
 				RelativePath="..\Source\Engine2\flipbookLoader.h"
 				>
 			</File>
@@ -449,10 +445,6 @@
 			</File>
 			<File
 				RelativePath="..\Source\Engine2\enemyWeaponTrebuchet.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\Source\Engine2\flamethrowerWeapon.cpp"
 				>
 			</File>
 			<File

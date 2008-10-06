@@ -422,7 +422,7 @@ int main(int argc, char *argv[])
     SDL_Surface* screen;
     SDL_Init(SDL_INIT_VIDEO);
     screen = SDL_SetVideoMode((int)getFrameSize().x, (int)getFrameSize().y, 0, SDL_OPENGL);
-    SDL_WM_SetCaption("Irradiated", NULL);
+    SDL_WM_SetCaption("Paridise", NULL);
 
     Game* game = new Game;
 

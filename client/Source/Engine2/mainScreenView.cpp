@@ -18,11 +18,14 @@ MainScreenView::MainScreenView()
 {
     //gMainScreenView = this;
     // Load background.
-    mBackground = gImageLibrary->reference("data/interface/mainScreenBackground.png");
+    gImageLibrary->setObserver(this);
+    mBackground = gImageLibrary->reference(INTERFACE_BACKGROUND_MAIN);
+    mButtonMask = gImageLibrary->reference(INTERFACE_BUTTONMASK);
 }
 
 MainScreenView::~MainScreenView()
 {
+    gImageLibrary->setObserver(NULL);
     gImageLibrary->unreference(mBackground);
 }
     
@@ -50,10 +53,29 @@ void MainScreenView::update()
     }
 }
 
+void MainScreenView::onPercentLoaded(float pct)
+{
+    mPreloadPercent = pct;
+    if(pct >= 1.0f)
+    {
+        dprintf("Done preloading.");
+        mPreloadComplete = true;
+    }
+    else
+        mPreloadComplete = false;
+}
+
 void MainScreenView::draw()
 {
     Transform2 trans = Transform2::createScale(mBackground->mSize);
     drawImage(mBackground, trans, 1);
+
+    if(!mPreloadComplete)
+    {
+        trans = Transform2::createTranslation(Vector2(230.0f - 28.0f, 245.0f - 32.0f)) * Transform2::createScale(mButtonMask->mSize);
+        drawImage(mButtonMask, trans, 1.0-mPreloadPercent);
+    }
+
 }
 
 bool MainScreenView::touch(uint32_t count, Touch* touches)
@@ -97,17 +119,22 @@ bool MainScreenView::touch(uint32_t count, Touch* touches)
         if(pos.x < options[i].ul.x || pos.y < options[i].ul.y || pos.x > options[i].lr.x || pos.y > options[i].lr.y) 
             continue;
     
-        destroy();
     
         switch(i)
         {
         case 0:
+            destroy();
             new TutorialScreenView;
             return true;
         case 1:
-            gWorld->enable();
+            if(mPreloadComplete)
+            {
+                destroy();
+                gWorld->enable();
+            }
             return true;
         case 2:
+            destroy();
             new CreditsScreenView;
             return true;
         }

@@ -8,7 +8,8 @@ namespace pammo
 
 InterfaceView::InterfaceView()
 {
-    mImage = gImageLibrary->reference("data/interface/vignette.png");
+// SCD: THIS IS INCORRECT BUT NOT IN USE. CHANGE WHEN WE HAVE A REAL IMAGE.
+    mImage = gImageLibrary->reference(INTERFACE_BACKGROUND_MAIN);
 }
 
 InterfaceView::~InterfaceView()

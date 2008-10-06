@@ -7,7 +7,8 @@ struct Image;
 namespace pammo
 {
 
-bool loadFlipbook(char const* path, Image** images, uint32_t maxImages, uint32_t* numImages);
+bool loadFlipbook(uint32_t baseId, uint32_t count, Image** images);
+//bool loadFlipbook(char const* path, Image** images, uint32_t maxImages, uint32_t* numImages);
 
 }
 

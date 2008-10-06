@@ -4,6 +4,17 @@
 namespace pammo
 {
 
+bool loadFlipbook(uint32_t baseId, uint32_t count, Image** images)
+{
+    for(uint32_t i=0; i<count; ++i)
+    {
+        images[i] = gImageLibrary->reference(baseId+i);
+    }
+
+    return true;
+}
+
+/****
 bool loadFlipbook(char const* path, Image** images, uint32_t maxImages, uint32_t* numImages)
 {
     *numImages = 0;
@@ -50,6 +61,7 @@ bool loadFlipbook(char const* path, Image** images, uint32_t maxImages, uint32_t
     dprintf("Flipbook loaded %u images.", i);
     return true;
 }
+*****/
 
 
 } // namespace pammo

@@ -110,14 +110,14 @@ void enemyWeaponTrebuchetCb(Enemy* e, EnemyWeapon* w, EnemyManager* manager)
     p->mBody->mUserArg = p;
 
     // Setup image.
-    p->mImage.setImage(gImageLibrary->reference("data/particles/ball.png"));
+    p->mImage.setImage(gImageLibrary->reference(PARTICLE_BALL_00));
     p->mImage.mCenter = p->mBody->mCenter;
     p->mImage.makeDirty();
 
     particleData->mShadow = gWorld->getParticleSystem()->addParticle(0);
     particleData->mShadow->mAlpha = 0.5f;
     particleData->mShadow->mCallback = enemyWeaponTrebuchetBallShadowParticleCb;
-    particleData->mShadow->mImage.setImage(gImageLibrary->reference("data/particles/shadow00.png"));
+    particleData->mShadow->mImage.setImage(gImageLibrary->reference(PARTICLE_SHADOW_00));
     particleData->mShadow->mImage.mCenter = p->mImage.mCenter;
     particleData->mShadow->mImage.mRotation= p->mImage.mRotation;
     particleData->mShadow->mImage.makeDirty();

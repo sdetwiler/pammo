@@ -75,9 +75,7 @@ void enemyWeaponMachineGunCb(Enemy* e, EnemyWeapon* w, EnemyManager* manager)
     p->mAlpha = 1.0f;
     
     // Setup image.
-    char filename[256];
-    sprintf(filename, "data/particles/machineGun/%02d.png", rand()%3);
-    p->mImage.setImage(gImageLibrary->reference(filename));
+    p->mImage.setImage(gImageLibrary->reference(PARTICLE_MACHINEGUN_00 + rand()%PARTICLE_MACHINEGUN_COUNT));
     p->mImage.makeDirty();
         
     // Properties about machine gun particle bodies.

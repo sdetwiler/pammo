@@ -19,7 +19,7 @@ void gooSprayParticleCallback(Particle* p, ParticleSystem* system);
 GooWeapon::GooWeapon()
     : Weapon()
 {
-    mIcon.setImage(gImageLibrary->reference("data/interface/gooWeaponIcon.png"));
+    mIcon.setImage(gImageLibrary->reference(INTERFACE_ICON_WEAPON_GOO));
 }
 
 GooWeapon::~GooWeapon()
@@ -67,13 +67,12 @@ void GooWeapon::fire()
     float initialRotation = player->mTurret.mRotation - M_PI/2.0f;
     
     // Setup image.
-	int i=rand()%3;
+	//int i=rand()%3;
 	char filename[256];
 	float velocity = 0;//130;
-	sprintf(filename, "data/particles/goo/0%d.png", i);
 	velocity+=((rand()%10)/10.0f);
 	
-	p->mImage.setImage(gImageLibrary->reference(filename));
+	p->mImage.setImage(gImageLibrary->reference(PARTICLE_GOO_00 + rand()%PARTICLE_GOO_COUNT));
     p->mImage.mCenter = player->mTurretTip + Vector2(40, 0) * Transform2::createRotation(initialRotation+r);
     p->mImage.mRotation = initialRotation+r;
     p->mImage.makeDirty();
@@ -95,7 +94,7 @@ void GooWeapon::fire()
     p = gWorld->getParticleSystem()->addParticle(2);
     if(!p) 
         return;
-	p->mImage.setImage(gImageLibrary->reference(filename));
+	p->mImage.setImage(gImageLibrary->reference(PARTICLE_GOO_00 + rand()%PARTICLE_GOO_COUNT));
     p->mImage.mSize *= 0.5f;
     p->mImage.mCenter = player->mTurretTip + Vector2(4, 0) * Transform2::createRotation(initialRotation+r);
     p->mImage.mRotation = initialRotation + r;

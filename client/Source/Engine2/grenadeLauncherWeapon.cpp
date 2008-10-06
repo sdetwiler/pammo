@@ -21,7 +21,7 @@ GrenadeLauncherWeapon::GrenadeLauncherWeapon()
 {
     mLastFire = 0;
     mFireFrequency = 800000;
-    mIcon.setImage(gImageLibrary->reference("data/interface/grenadeLauncherWeaponIcon.png"));
+    mIcon.setImage(gImageLibrary->reference(INTERFACE_ICON_WEAPON_GRENADELAUNCHER));
 }
 
 GrenadeLauncherWeapon::~GrenadeLauncherWeapon()
@@ -78,12 +78,10 @@ void GrenadeLauncherWeapon::fire()
     float initialRotation = player->mTurret.mRotation - M_PI/2.0f;
     
     // Setup image.
-	char filename[256];
 	float velocity = 130;
-	sprintf(filename, "data/particles/grenade/00.png");
 	//velocity+=((rand()%10)/10.0f);
 	
-	p->mImage.setImage(gImageLibrary->reference(filename));
+	p->mImage.setImage(gImageLibrary->reference(PARTICLE_GRENADE_00));
     p->mImage.mCenter = player->mTurretTip;
     p->mImage.mRotation = initialRotation + r;
     p->mImage.makeDirty();
@@ -91,7 +89,7 @@ void GrenadeLauncherWeapon::fire()
     particleData->mShadow = gWorld->getParticleSystem()->addParticle(0);
     particleData->mShadow->mAlpha = 0.5f;
     particleData->mShadow->mCallback = grenadeLauncherBulletShadowParticleCallback;
-    particleData->mShadow->mImage.setImage(gImageLibrary->reference("data/particles/shadow00.png"));
+    particleData->mShadow->mImage.setImage(gImageLibrary->reference(PARTICLE_SHADOW_00));
     particleData->mShadow->mImage.mCenter = p->mImage.mCenter;
     particleData->mShadow->mImage.mRotation= p->mImage.mRotation;
     particleData->mShadow->mImage.makeDirty();

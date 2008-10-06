@@ -5,7 +5,6 @@
 #include "player.h"
 #include "world.h"
 
-#define NUM_CARDS 11
 #define MAX_SCORE 3000.0f
 
 namespace pammo
@@ -18,15 +17,13 @@ DeathCardView::DeathCardView()
     Player* player = gWorld->getPlayer();
 
 
-    int card = ((float)player->mScore/MAX_SCORE) * NUM_CARDS;
+    int card = ((float)player->mScore/MAX_SCORE) * INTERFACE_DEATH_CARD_COUNT;
     
-    if(card>NUM_CARDS)
-        card = NUM_CARDS;
+    if(card>INTERFACE_DEATH_CARD_COUNT)
+        card = INTERFACE_DEATH_CARD_COUNT;
 
     // Load background.
-    char filename[256];
-    sprintf(filename, "data/interface/deathCards/0%d.png", card);
-    mBackground = gImageLibrary->reference(filename);
+    mBackground = gImageLibrary->reference(INTERFACE_DEATH_CARD_00 + card);
     mAlpha = 0;
 }
 

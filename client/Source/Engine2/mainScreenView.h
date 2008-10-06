@@ -3,13 +3,14 @@
 
 #include "pammo.h"
 #include "view.h"
+#include "imageLibrary.h"
 
 namespace pammo
 {
 
 struct Image;
 
-class MainScreenView : public View
+class MainScreenView : public View, public ImageLibraryObserver
 {
 public:
     MainScreenView();
@@ -23,10 +24,16 @@ public:
     virtual uint32_t getDrawPriority() const;
     virtual uint32_t getUpdatePriority() const;
 
+    virtual void onPercentLoaded(float pct);
+
 private:
     //void selectVehicle(uint32_t type);
     
     Image* mBackground;
+    Image* mButtonMask;
+
+    float mPreloadPercent;
+    bool mPreloadComplete;
     
     //struct VehicleDesc
     //{

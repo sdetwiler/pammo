@@ -20,7 +20,7 @@ void lightningGlowParticleCallback(Particle* p, ParticleSystem* system);
 LightningWeapon::LightningWeapon()
     : Weapon()
 {
-    mIcon.setImage(gImageLibrary->reference("data/interface/lightningWeaponIcon.png"));
+    mIcon.setImage(gImageLibrary->reference(INTERFACE_ICON_WEAPON_LIGHTNINGGUN));
 }
 
 LightningWeapon::~LightningWeapon()
@@ -55,16 +55,15 @@ void LightningWeapon::fire()
     float initialRotation = player->mTurret.mRotation - M_PI/2.0f;
     
     // Setup image.
-	int i=rand()%3;
+	int i=rand()%PARTICLE_LIGHTNING_COUNT;
 	char filename[256];
 	float velocity = 130;
-	sprintf(filename, "data/particles/lightning0%d.png", i);
     if(i)
 	{
 		velocity+=100+(rand()%100);
 	}
 	
-	p->mImage.setImage(gImageLibrary->reference(filename));
+	p->mImage.setImage(gImageLibrary->reference(PARTICLE_LIGHTNING_00 + i));
     p->mImage.mCenter = player->mTurretTip;
     p->mImage.mRotation = initialRotation + r;
     p->mImage.makeDirty();
@@ -90,7 +89,7 @@ void LightningWeapon::fire()
     p->mAlpha = 0.6f;
     
     // Setup image.
-    p->mImage.setImage(gImageLibrary->reference("data/particles/lightningGlow00.png"));
+    p->mImage.setImage(gImageLibrary->reference(PARTICLE_LIGHTNING_GLOW_00));
     p->mImage.mCenter = player->mTurretTip;
     p->mImage.mRotation = initialRotation + (r*4);
     p->mImage.makeDirty();

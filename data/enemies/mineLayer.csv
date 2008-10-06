@@ -1,11 +1,11 @@
 "Enemy","Name",,,,,,,,,,,,
 ,"mineLayer",,,,,,,,,,,,
 "Properties","Image Type","Image Path","Mass","Radius","Health","Point Value","Minimum Player Score","Max Instance Per Wave",,,,,
-,"Single","data/vehicles/mineLayer/00.png",200,30,500,50,100,1,,,,,
+,"Single","72",200,30,500,50,100,1,,,,,
 "Behavior","Type","Speed","Target Distance","","","","","","","","","",""
 ,"Drive By",1,200,,,,,,,,,,
 "Weapon","Type","Image Path","Damage","Max Lifetime","Firing Rate","","","","","","","",""
-,"MineLayer","data/vehicles/mineLayer/fakeWeapon/00.png",200,10,3,,,,,,,,
+,"MineLayer","63",200,10,3,,,,,,,,
 "Weapon","Type","","","","","","","","","","","",""
 ,"None",,,,,,,,,,,,
 "Weapon","Type","","","","","","","","","","","",""

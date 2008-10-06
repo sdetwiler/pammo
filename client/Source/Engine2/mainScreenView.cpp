@@ -46,11 +46,11 @@ uint32_t MainScreenView::getUpdatePriority() const
 
 void MainScreenView::update()
 {
-    if(!gWorld)
-    {
-        new World;
-        gWorld->disable();
-    }
+    //if(!gWorld)
+    //{
+    //    new World;
+    //    gWorld->disable();
+    //}
 }
 
 void MainScreenView::onPercentLoaded(float pct)
@@ -130,6 +130,8 @@ bool MainScreenView::touch(uint32_t count, Touch* touches)
             if(mPreloadComplete)
             {
                 destroy();
+                if(!gWorld)
+                    new World;
                 gWorld->enable();
             }
             return true;

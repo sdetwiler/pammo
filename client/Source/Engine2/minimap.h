@@ -10,6 +10,7 @@ namespace pammo
 
 class ImageEntity;
 const uint32_t kMinimapBucketCount = 15;
+const uint32_t kMaxEnemies = 200;
 
 class Minimap : public View
 {
@@ -24,9 +25,12 @@ class Minimap : public View
         virtual void draw();
     
     private:
-        Vector2 mBucketSize;
-        bool mBuckets[kMinimapBucketCount][kMinimapBucketCount];
-        ImageEntity* mLifebar;
+        //Vector2 mBucketSize;
+        //bool mBuckets[kMinimapBucketCount][kMinimapBucketCount];
+        Vector2 mMapSize;
+        uint32_t mEnemyCount;
+        Vector2 mLocations[kMaxEnemies];
+        ImageEntity* mBackground;
 };
 
 }

@@ -39,6 +39,10 @@
 	}
 	
 	mGame = new Game();
+    
+	mGame->update();
+	mGame->draw();
+    [mContext presentRenderbuffer:GL_RENDERBUFFER_OES];
 	
 	return self;
 }
@@ -61,9 +65,6 @@
 		NSLog(@"failed to make complete framebuffer object %x", glCheckFramebufferStatusOES(GL_FRAMEBUFFER_OES));
 		return NO;
 	}
-    
-	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-	glClear(GL_COLOR_BUFFER_BIT);
 	
 	return YES;
 }
@@ -78,10 +79,12 @@
 
 - (void)layoutSubviews
 {
-	[EAGLContext setCurrentContext:mContext];
 	[self destroyFramebuffer];
 	[self createFramebuffer];
-	[self drawView];
+    
+	mGame->update();
+	mGame->draw();
+    [mContext presentRenderbuffer:GL_RENDERBUFFER_OES];
 }
 
 - (void)dealloc
@@ -124,7 +127,7 @@
         return;
     }
     
-    #if 1
+    #if 0
     static uint32_t slots[50];
     static uint32_t cur = 0;
     
@@ -142,9 +145,8 @@
         cur = 0;
     }
     #endif
-	
-	[EAGLContext setCurrentContext:mContext];
-	[mContext presentRenderbuffer:GL_RENDERBUFFER_OES];
+    
+    [mContext presentRenderbuffer:GL_RENDERBUFFER_OES];
 	
     //uint64_t updateStart = getTime();
 	mGame->update();

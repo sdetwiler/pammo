@@ -14,6 +14,7 @@ class TargetRingObserver
 {
     public:
         virtual void onTargetRingTouched(TargetRingWidget *widget, float value) = 0;
+        virtual void onTargetRingDoubleTouched(TargetRingWidget *widget) = 0;
         virtual void onTargetRingUntouched(TargetRingWidget* widget) = 0;
 };
 
@@ -49,6 +50,7 @@ private:
     
     float mValue;
     void* mTrackingSerialNumber;
+    uint64_t mLastTouch;
 };
 
 } // namespace pammo

@@ -134,6 +134,28 @@ struct Image;
 
 #define INTERFACE_BUTTONMASK                        76
 
+#define POWERUP_LIFE_UPGRADE                        77
+
+#define POWERUP_LIFE_RESTORE                        78
+
+#define POWERUP_ENERGY_UPGRADE                      79
+
+#define POWERUP_ENERGY_RESTORE                      80
+
+#define POWERUP_SHIELD                              81
+
+#define POWERUP_GOO_WEAPON                          82
+
+#define POWERUP_GRENADE_LAUNCHER_WEAPON             83
+
+#define MAP_PREVIEW              84
+
+#define MAP_TILES_X              11
+#define MAP_TILES_Y              8
+#define MAP_TILES_BASE           85
+
+
+
 struct ImageTexture
 {
     char const* mPath;

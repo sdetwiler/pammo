@@ -17,32 +17,39 @@ public:
     Map();
     virtual ~Map();
     
-    void setBackdrop(RawImage* raw);
-    void addProp(ImageEntity* entity);
+    void loadBackdrop(char const* backdropName);
+    
+    //void addProp(ImageEntity* entity);
     
     virtual uint32_t getDrawPriority() const;
     void draw();
+    void lowMemory();
     
+    void setSize(Vector2 const& size);
     Vector2 getSize() const;
 
 protected:
-    void addSubProp(Image* image, Vector2 ul, Vector2 br, uint16_t x, uint16_t y);
+    //void addSubProp(Image* image, Vector2 ul, Vector2 br, uint16_t x, uint16_t y);
     
     struct Prop
     {
         Image* mImage;
+        uint32_t mId;
         Vector2 mVertecies[4];
         Vector2 mTexCoords[4];
-        Prop* mNext;
+        Vector2 mPreviewTexCoords[4];
+        //Prop* mNext;
     };
+    
+    Image* mPreview;
     
     uint32_t mSizeX, mSizeY;
     uint32_t mBucketSizeX, mBucketSizeY;
     uint32_t mBucketCountX, mBucketCountY;
     Prop** mBuckets;
     
-    typedef vector< ImageEntity* > ImageEntityVector;
-    ImageEntityVector mEntities;
+    //typedef vector< ImageEntity* > ImageEntityVector;
+    //ImageEntityVector mEntities;
 };
 
 }

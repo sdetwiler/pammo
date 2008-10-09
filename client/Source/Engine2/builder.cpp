@@ -73,18 +73,20 @@ void buildTileMap(World* world, char const* name)
     Map* map = world->getMap();
     
     // Verify the map header.
-    assert(cur[0] == 'P' && cur[1] == 'I' && cur[2] == 'V' && cur[3] == 2);
+    assert(cur[0] == 'P' && cur[1] == 'I' && cur[2] == 'V' && cur[3] == 3);
     cur += 4;
     remain -= 4;
     
+    // Read map size.
+    uint16_t mapSizeX = readUInt16(&cur, &remain);
+    uint16_t mapSizeY = readUInt16(&cur, &remain);
+    map->setSize(Vector2(mapSizeX, mapSizeY));
+    
     // Read backdrop.
     char* backdropName = readString(&cur, &remain);
-    string backdropPath = string("data/backdrops/") + backdropName + ".png";
-    RawImage backdrop;
-    openRawImage(backdropPath.c_str(), &backdrop);
-    map->setBackdrop(&backdrop);
-	delete[] backdrop.mPixels;
+    map->loadBackdrop(backdropName);
     
+    #if 0
 	// Read num props.
 	uint16_t numProps = readUInt16(&cur, &remain);
 	dprintf("Props: %d", numProps);
@@ -125,6 +127,7 @@ void buildTileMap(World* world, char const* name)
             map->addProp(e);
         }
     }
+    #endif
     
     // Cleanup.
     delete[] buffer;

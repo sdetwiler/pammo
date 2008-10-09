@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1106640E0E5B6BC60023ABB1 /* backdrops in Copy Data */ = {isa = PBXBuildFile; fileRef = 1106640B0E5B6BC60023ABB1 /* backdrops */; };
 		110664170E5B6D280023ABB1 /* maps in Copy Data */ = {isa = PBXBuildFile; fileRef = 110664120E5B6D280023ABB1 /* maps */; };
 		110664D40E5B70DF0023ABB1 /* particles in Copy Data */ = {isa = PBXBuildFile; fileRef = 110664C70E5B70DF0023ABB1 /* particles */; };
 		110664D90E5B70EA0023ABB1 /* enemies in Copy Data */ = {isa = PBXBuildFile; fileRef = 110664D50E5B70EA0023ABB1 /* enemies */; };
@@ -32,12 +31,16 @@
 		113B2C2D0DF65EB20095A737 /* map.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 113B2C2C0DF65EB20095A737 /* map.cpp */; };
 		113E769A0E4A6FE3005A8070 /* levelLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 113E76960E4A6FE3005A8070 /* levelLoader.cpp */; };
 		113E769B0E4A6FE3005A8070 /* mainScreenView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 113E76980E4A6FE3005A8070 /* mainScreenView.cpp */; };
+		11499E170E99CE0C00FBA3D0 /* powerup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11499E160E99CE0C00FBA3D0 /* powerup.cpp */; };
 		115577B90E9454FD00171852 /* creditsScreenView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 115577B20E9454FD00171852 /* creditsScreenView.cpp */; };
 		115577BA0E9454FD00171852 /* deathCardView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 115577B40E9454FD00171852 /* deathCardView.cpp */; };
 		115577BC0E9454FD00171852 /* tutorialScreenView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 115577B70E9454FD00171852 /* tutorialScreenView.cpp */; };
 		115E19870DEBA14E00BD1F3A /* appDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 115E19860DEBA14E00BD1F3A /* appDelegate.mm */; };
 		115E199E0DEBA2A100BD1F3A /* mainView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 115E199A0DEBA2A100BD1F3A /* mainView.mm */; };
 		115E1A3A0DEBAE8D00BD1F3A /* iPhone.mm in Sources */ = {isa = PBXBuildFile; fileRef = 115E1A390DEBAE8D00BD1F3A /* iPhone.mm */; };
+		11701C640E9C44EA0058C93E /* backdroptiles in Copy Data */ = {isa = PBXBuildFile; fileRef = 11701C480E9C44EA0058C93E /* backdroptiles */; };
+		11701D770E9C87450058C93E /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 11701D750E9C87450058C93E /* Default.png */; };
+		11701D780E9C87450058C93E /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 11701D760E9C87450058C93E /* Icon.png */; };
 		118320AC0E31545F0037B9B4 /* vehicleController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 118320AB0E31545F0037B9B4 /* vehicleController.cpp */; };
 		118321130E328D710037B9B4 /* physics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 118321120E328D710037B9B4 /* physics.cpp */; };
 		118F3E620E35A01E00ECCDFE /* enemyManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 118F3E5B0E35A01E00ECCDFE /* enemyManager.cpp */; };
@@ -73,6 +76,7 @@
 			dstPath = data;
 			dstSubfolderSpec = 1;
 			files = (
+				11701C640E9C44EA0058C93E /* backdroptiles in Copy Data */,
 				113681B80E7F82FA001FFC23 /* fonts in Copy Data */,
 				110664D40E5B70DF0023ABB1 /* particles in Copy Data */,
 				110664D90E5B70EA0023ABB1 /* enemies in Copy Data */,
@@ -80,7 +84,6 @@
 				110665610E5B70FB0023ABB1 /* levels in Copy Data */,
 				110665630E5B70FB0023ABB1 /* vehicles in Copy Data */,
 				110664170E5B6D280023ABB1 /* maps in Copy Data */,
-				1106640E0E5B6BC60023ABB1 /* backdrops in Copy Data */,
 			);
 			name = "Copy Data";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -88,7 +91,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		1106640B0E5B6BC60023ABB1 /* backdrops */ = {isa = PBXFileReference; lastKnownFileType = folder; name = backdrops; path = ../data/backdrops; sourceTree = SOURCE_ROOT; };
 		110664120E5B6D280023ABB1 /* maps */ = {isa = PBXFileReference; lastKnownFileType = folder; name = maps; path = ../data/maps; sourceTree = SOURCE_ROOT; };
 		110664C70E5B70DF0023ABB1 /* particles */ = {isa = PBXFileReference; lastKnownFileType = folder; name = particles; path = ../data/particles; sourceTree = SOURCE_ROOT; };
 		110664D50E5B70EA0023ABB1 /* enemies */ = {isa = PBXFileReference; lastKnownFileType = folder; name = enemies; path = ../data/enemies; sourceTree = SOURCE_ROOT; };
@@ -129,6 +131,8 @@
 		113E76970E4A6FE3005A8070 /* levelLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = levelLoader.h; sourceTree = "<group>"; };
 		113E76980E4A6FE3005A8070 /* mainScreenView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mainScreenView.cpp; sourceTree = "<group>"; };
 		113E76990E4A6FE3005A8070 /* mainScreenView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mainScreenView.h; sourceTree = "<group>"; };
+		11499E150E99CE0C00FBA3D0 /* powerup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = powerup.h; sourceTree = "<group>"; };
+		11499E160E99CE0C00FBA3D0 /* powerup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = powerup.cpp; sourceTree = "<group>"; };
 		115577B20E9454FD00171852 /* creditsScreenView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = creditsScreenView.cpp; sourceTree = "<group>"; };
 		115577B30E9454FD00171852 /* creditsScreenView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = creditsScreenView.h; sourceTree = "<group>"; };
 		115577B40E9454FD00171852 /* deathCardView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = deathCardView.cpp; sourceTree = "<group>"; };
@@ -140,6 +144,9 @@
 		115E19990DEBA2A100BD1F3A /* mainView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mainView.h; sourceTree = "<group>"; };
 		115E199A0DEBA2A100BD1F3A /* mainView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = mainView.mm; sourceTree = "<group>"; };
 		115E1A390DEBAE8D00BD1F3A /* iPhone.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = iPhone.mm; sourceTree = "<group>"; };
+		11701C480E9C44EA0058C93E /* backdroptiles */ = {isa = PBXFileReference; lastKnownFileType = folder; name = backdroptiles; path = ../data/backdroptiles; sourceTree = SOURCE_ROOT; };
+		11701D750E9C87450058C93E /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = ../data/iphone/Default.png; sourceTree = SOURCE_ROOT; };
+		11701D760E9C87450058C93E /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = ../data/iphone/Icon.png; sourceTree = SOURCE_ROOT; };
 		118320AA0E31545F0037B9B4 /* vehicleController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vehicleController.h; sourceTree = "<group>"; };
 		118320AB0E31545F0037B9B4 /* vehicleController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = vehicleController.cpp; sourceTree = "<group>"; };
 		118321110E328D710037B9B4 /* physics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = physics.h; sourceTree = "<group>"; };
@@ -230,13 +237,13 @@
 		110664090E5B6BA00023ABB1 /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				11701C480E9C44EA0058C93E /* backdroptiles */,
 				1136819E0E7F82FA001FFC23 /* fonts */,
 				110664DA0E5B70FB0023ABB1 /* interface */,
 				110664ED0E5B70FB0023ABB1 /* levels */,
 				110665160E5B70FB0023ABB1 /* vehicles */,
 				110664D50E5B70EA0023ABB1 /* enemies */,
 				110664C70E5B70DF0023ABB1 /* particles */,
-				1106640B0E5B6BC60023ABB1 /* backdrops */,
 				110664120E5B6D280023ABB1 /* maps */,
 			);
 			name = Data;
@@ -266,6 +273,8 @@
 				110665800E635A240023ABB1 /* healthMeter.h */,
 				11C3F42D0E2F0F3A00EE8D28 /* player.cpp */,
 				11C3F42F0E2F0F7E00EE8D28 /* player.h */,
+				11499E160E99CE0C00FBA3D0 /* powerup.cpp */,
+				11499E150E99CE0C00FBA3D0 /* powerup.h */,
 				11FBD5C00E7AE3C60070BD31 /* scoreMeter.cpp */,
 				11FBD5C10E7AE3C60070BD31 /* scoreMeter.h */,
 				11B9F6690E949106002236D1 /* shieldToggle.cpp */,
@@ -405,6 +414,8 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				11701D750E9C87450058C93E /* Default.png */,
+				11701D760E9C87450058C93E /* Icon.png */,
 				8D1107310486CEB800E47090 /* Info.plist */,
 				112388390E59FCB20051B761 /* Entitlements.plist */,
 			);
@@ -467,6 +478,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				1123883A0E59FCB20051B761 /* Entitlements.plist in Resources */,
+				11701D770E9C87450058C93E /* Default.png in Resources */,
+				11701D780E9C87450058C93E /* Icon.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -520,6 +533,7 @@
 				115577BA0E9454FD00171852 /* deathCardView.cpp in Sources */,
 				115577BC0E9454FD00171852 /* tutorialScreenView.cpp in Sources */,
 				11B9F66A0E949106002236D1 /* shieldToggle.cpp in Sources */,
+				11499E170E99CE0C00FBA3D0 /* powerup.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -596,7 +610,6 @@
 				INFOPLIST_FILE = Source/iPhone/Info.plist;
 				PREBINDING = NO;
 				PRODUCT_NAME = Paradise;
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = DefaultProfileUuid;
 				SDKROOT = iphoneos2.1;
 			};
 			name = Release;

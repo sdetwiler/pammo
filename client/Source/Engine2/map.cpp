@@ -7,7 +7,7 @@
 
 namespace pammo
 {
-    
+        
 Map::Map()
     : View()
 {
@@ -18,16 +18,20 @@ Map::~Map()
 {
 }
 
-void Map::setBackdrop(RawImage* raw)
+
+void Map::loadBackdrop(char const* backdropName)
 {
-    mSizeX = raw->mSize.x;
-    mSizeY = raw->mSize.y;
-    mBucketSizeX = 128;
-    mBucketSizeY = 128;
-    mBucketCountX = ceilf(raw->mSize.x/mBucketSizeX);
-    mBucketCountY = ceilf(raw->mSize.y/mBucketSizeY);
+    mBucketSizeX = 256;
+    mBucketSizeY = 256;
+    mBucketCountX = ceilf((float)mSizeX/mBucketSizeX);
+    mBucketCountY = ceilf((float)mSizeY/mBucketSizeY);
+    
+    assert(mBucketCountX == MAP_TILES_X);
+    assert(mBucketCountY == MAP_TILES_Y);
     
     mBuckets = new Prop*[mBucketSizeX * mBucketSizeY];
+
+    mPreview = gImageLibrary->getImage(MAP_PREVIEW);
     
     uint32_t previousYCoord = 0;
     for(uint32_t y=0; y < mBucketCountY; ++y)
@@ -38,16 +42,29 @@ void Map::setBackdrop(RawImage* raw)
         {
             uint32_t currentXCoord = previousXCoord + mBucketSizeX;
             
+            // Create the prop.
             Prop* prop = new Prop();
-            prop->mImage = makeSubImage(raw, Vector2(previousXCoord, previousYCoord), Vector2(mBucketSizeX, mBucketSizeY));
-            prop->mNext = 0;
+            prop->mImage = 0;
             mBuckets[x + y*mBucketCountX] = prop;
+            prop->mId = MAP_TILES_BASE + y + x*mBucketCountY;
     
+            // Calculate preview tex coordinates.
+            float left = (float)previousXCoord / mSizeX;
+            float right = (float)currentXCoord / mSizeX;
+            float top = (float)previousYCoord / mSizeY;
+            float bottom = (float)currentYCoord / mSizeY;
+            prop->mPreviewTexCoords[0] = Vector2(left, top);
+            prop->mPreviewTexCoords[1] = Vector2(right, top);
+            prop->mPreviewTexCoords[2] = Vector2(left, bottom);
+            prop->mPreviewTexCoords[3] = Vector2(right, bottom);
+    
+            // Calculate regular tex coords.
             prop->mTexCoords[0] = Vector2(0, 0);
             prop->mTexCoords[1] = Vector2(1, 0);
             prop->mTexCoords[2] = Vector2(0, 1);
             prop->mTexCoords[3] = Vector2(1, 1);
     
+            // Calculate verticies.
             prop->mVertecies[0] = Vector2(previousXCoord, previousYCoord);
             prop->mVertecies[1] = Vector2(currentXCoord,  previousYCoord);
             prop->mVertecies[2] = Vector2(previousXCoord, currentYCoord);
@@ -59,9 +76,102 @@ void Map::setBackdrop(RawImage* raw)
     }
 }
 
+uint32_t Map::getDrawPriority() const
+{
+    return kMapPriority;
+}
+    
+void Map::draw()
+{
+    glDisable(GL_BLEND);
+
+    Camera* camera = gWorld->getCamera();
+    camera->set();
+    
+    // Calculate lower-right and upper-left corners of camera view.
+    assert(camera->mRotation == 0);
+    Vector2 ul = camera->mCenter - camera->mSize/2;
+    Vector2 lr = camera->mCenter + camera->mSize/2;
+    
+    if(ul.x < 0) ul.x = 0;
+    if(ul.x > mSizeX) ul.x = mSizeX;
+    if(ul.y < 0) ul.y = 0;
+    if(ul.y > mSizeY) ul.y = mSizeY;
+    
+    if(lr.x < 0) lr.x = 0;
+    if(lr.x > mSizeX) lr.x = mSizeX;
+    if(lr.y < 0) lr.y = 0;
+    if(lr.y > mSizeY) lr.y = mSizeY;
+    
+    uint16_t startX = floorf(ul.x / mBucketSizeX);
+    uint16_t startY = floorf(ul.y / mBucketSizeY);
+    uint16_t endX = ceilf(lr.x / mBucketSizeX);
+    uint16_t endY = ceilf(lr.y / mBucketSizeY);
+    
+    glLoadIdentity();
+    for(uint16_t y=startY; y < endY; ++y)
+    {
+        for(uint16_t x=startX; x < endX; ++x)
+        {
+            Prop* prop = mBuckets[x + y*mBucketCountX];
+            
+            // If image doesn't exist, dispatch decode.
+            if(prop->mImage == 0)
+                prop->mImage = gImageLibrary->tryGetImage(prop->mId);
+            
+            // If the image doesn't exist, bind the preview image and tex coords.
+            if(prop->mImage == 0)
+            {
+                glTexCoordPointer(2, GL_FLOAT, 0, (float*)prop->mPreviewTexCoords);
+                glBindTexture(GL_TEXTURE_2D, mPreview->mTexture);
+            }
+            else
+            {
+                glTexCoordPointer(2, GL_FLOAT, 0, (float*)prop->mTexCoords);
+                glBindTexture(GL_TEXTURE_2D, prop->mImage->mTexture);
+            }
+        
+            // Draw.
+            glVertexPointer(2, GL_FLOAT, 0, (float*)prop->mVertecies);
+            glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+        }
+    }
+    
+    camera->unset();
+    
+    glEnable(GL_BLEND);
+}
+
+void Map::lowMemory()
+{
+    for(uint32_t x=0; x < mBucketCountX; ++x)
+    {
+        for(uint32_t y=0; y < mBucketCountY; ++y)
+        {
+            Prop* prop = mBuckets[x + y*mBucketCountX];
+            if(prop->mImage)
+            {
+                gImageLibrary->purgeImage(prop->mImage);
+                prop->mImage = 0;
+            }
+        }
+    }
+}
+
+void Map::setSize(Vector2 const& size)
+{
+    mSizeX = size.x;
+    mSizeY = size.y;
+}
+
+Vector2 Map::getSize() const
+{
+    return Vector2(mSizeX, mSizeY);
+}
+
+#if 0
 void Map::addProp(ImageEntity* entity)
 {
-#if 0
     mEntities.push_back(entity);
     
     Vector2 ul = entity->mCenter - entity->mSize/2;
@@ -91,12 +201,10 @@ void Map::addProp(ImageEntity* entity)
             addSubProp(entity->getImage(), ul, br, x, y);
         }
     }
-    #endif
 }
 
 void Map::addSubProp(Image* image, Vector2 ul, Vector2 br, uint16_t x, uint16_t y)
 {
-    #if 0
     Prop* prop = new Prop();
     prop->mImage = image;
     
@@ -168,62 +276,7 @@ void Map::addSubProp(Image* image, Vector2 ul, Vector2 br, uint16_t x, uint16_t 
     {
         mBuckets[x][y] = prop;
     }
-    #endif
 }
-
-uint32_t Map::getDrawPriority() const
-{
-    return kMapPriority;
-}
-    
-void Map::draw()
-{
-    Camera* camera = gWorld->getCamera();
-    camera->set();
-    
-    // Calculate lower-right and upper-left corners of camera view.
-    assert(camera->mRotation == 0);
-    Vector2 ul = camera->mCenter - camera->mSize/2;
-    Vector2 lr = camera->mCenter + camera->mSize/2;
-    
-    if(ul.x < 0) ul.x = 0;
-    if(ul.x > mSizeX) ul.x = mSizeX;
-    if(ul.y < 0) ul.y = 0;
-    if(ul.y > mSizeY) ul.y = mSizeY;
-    
-    if(lr.x < 0) lr.x = 0;
-    if(lr.x > mSizeX) lr.x = mSizeX;
-    if(lr.y < 0) lr.y = 0;
-    if(lr.y > mSizeY) lr.y = mSizeY;
-    
-    uint16_t startX = floorf(ul.x / mBucketSizeX);
-    uint16_t startY = floorf(ul.y / mBucketSizeY);
-    uint16_t endX = ceilf(lr.x / mBucketSizeX);
-    uint16_t endY = ceilf(lr.y / mBucketSizeY);
-    
-    glLoadIdentity();
-    for(uint16_t y=startY; y < endY; ++y)
-    {
-        for(uint16_t x=startX; x < endX; ++x)
-        {
-            Prop* prop = mBuckets[x + y*mBucketCountX];
-            //while(prop)
-            {
-                glTexCoordPointer(2, GL_FLOAT, 0, (float*)prop->mTexCoords);
-                glVertexPointer(2, GL_FLOAT, 0, (float*)prop->mVertecies);
-                glBindTexture(GL_TEXTURE_2D, prop->mImage->mTexture);
-                glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-                //prop = prop->mNext;
-            }
-        }
-    }
-    
-    camera->unset();
-}
-
-Vector2 Map::getSize() const
-{
-    return Vector2(mSizeX, mSizeY);
-}
+#endif
 
 }

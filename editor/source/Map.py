@@ -40,7 +40,7 @@ class Map:
         self._notify()
 
     def saveToFile(self, f):
-        output = {'version': 6, 'backdrop': self.backdrop.getName()}
+        output = {'version': 7, 'backdrop': self.backdrop.getName(), 'backdrophash': self.backdrop.getHash()}
         
         entities = []
         for s in self.entities: entities.append(s.saveToDic())
@@ -63,10 +63,15 @@ class Map:
     def loadFromFile(self, name, f):
         self.name = name
         dic = eval(f.readline())
-        if dic['version'] < 5: raise ''
+        if dic['version'] < 6: raise ''
 
         # Load backdrop.
         self.backdrop = Backdrop.Backdrop(dic['backdrop'])
+        
+        # Check hash.
+        newhash = self.backdrop.getHash()
+        if 'backdrophash' in dic: oldhash = dic['backdrophash']
+        else: oldhash = ''
 
         # Load entities.
         for d in dic['entities']:
@@ -76,20 +81,11 @@ class Map:
             self.entities.append(e)
 
         # Load collision shapes.
-        if 'collisionShapes' in dic:
-            for d in dic['collisionShapes']:
-                s = CollisionShape.CollisionShape()
-                s.loadFromDic(d)
-                s.addObserver(self.onCollisionShapeChanged)
-                self.collisionShapes.append(s)
-
-        # Convert collision groups to collision shapes.
-        if 'collisionGroups' in dic:
-            for d in dic['collisionGroups']:
-                s = CollisionShape.CollisionShape()
-                s.setPoints(d)
-                s.addObserver(self.onCollisionShapeChanged)
-                self.collisionShapes.append(s)
+        for d in dic['collisionShapes']:
+            s = CollisionShape.CollisionShape()
+            s.loadFromDic(d)
+            s.addObserver(self.onCollisionShapeChanged)
+            self.collisionShapes.append(s)
 
         # Load pois.
         for d in dic['pois']:
@@ -98,7 +94,11 @@ class Map:
             p.addObserver(self.onPOIChanged)
             self.pois.append(p)
 
-        self.isDirty = False
+        if newhash == oldhash:
+            self.isDirty = False
+        else:
+            self.isDirty = True
+            
         self.hasSavedOnce = True
         self._notify()
 

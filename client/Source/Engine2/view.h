@@ -108,6 +108,7 @@ public:
                 dprintf("  % 6u ave: % 6u  pct: % 2.2f%%", i, aveTime, pct);
             }
         }
+        
         dprintf("%s round: % 6u time: % 6u overhead: % 6u (%.2f%%)\n\n", 
             mName, 
             (uint32_t)mRoundTime, 
@@ -145,6 +146,7 @@ public:
     virtual bool touch(uint32_t count, Touch* touches);
     virtual void update();
     virtual void draw();
+    virtual void lowMemory();
     
     void disableAll();
     void enableAll();

@@ -46,6 +46,7 @@ class Player :
         virtual void draw();
         
         virtual void onTargetRingTouched(TargetRingWidget *widget, float value);
+        virtual void onTargetRingDoubleTouched(TargetRingWidget* widget);
         virtual void onTargetRingUntouched(TargetRingWidget* widget);
                 
         virtual void onWeaponSelectorUpdated(WeaponSelector* widget, Weapon* weapon);

@@ -61,7 +61,8 @@ void MainScreenView::onPreloadComplete()
 
 void MainScreenView::draw()
 {
-    Transform2 trans = Transform2::createScale(mBackground->mSize);
+    //Transform2 trans = Transform2::createScale(mBackground->mSize);
+    Transform2 trans = Transform2::createScale(Vector2(mBackground->mSize.y, mBackground->mSize.x)) * Transform2::createTranslation(Vector2(0.5, 0.5)) * Transform2::createRotation(-M_PI/2) * Transform2::createTranslation(Vector2(-0.5, -0.5));
     drawImage(mBackground, trans, 1);
 
     if(!mPreloadComplete)

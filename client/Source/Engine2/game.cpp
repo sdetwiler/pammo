@@ -5,7 +5,11 @@
 #include "view.h"
 
 #include "world.h"
+#include "map.h"
 #include "mainScreenView.h"
+
+#define THRASH_MEMORY 0//1
+
 namespace pammo
 {
     
@@ -35,21 +39,44 @@ Game::~Game()
 {
 }
 
+#if THRASH_MEMORY
+
+struct Nasty
+{
+    Nasty* next;
+    uint8_t garbage[300000];
+};
+
+Nasty* gNasty;
+uint32_t gTotal = 0;
+
+#endif
+
 void Game::update()
 {
     initAndDelete();
     
-    gUpdateProfiler.startRound();
+    //gUpdateProfiler.startRound();
     for(ViewMap::iterator i=mUpdateable.begin(); i!=mUpdateable.end(); ++i)
     {
         if(i->second->mNotifications & View::kUpdate)
         {
-            gUpdateProfiler.start(i->first);
+            //gUpdateProfiler.start(i->first);
             i->second->update();
-            gUpdateProfiler.end(i->first);
+            //gUpdateProfiler.end(i->first);
         }
     }
-    gUpdateProfiler.endRound();
+    
+#if THRASH_MEMORY
+    Nasty* nasty = new Nasty();
+    gTotal += sizeof(Nasty) / 1000;
+    nasty->next = gNasty;
+    gNasty = nasty;
+    
+    dprintf("Allocated %d", gTotal);
+#endif
+
+    //gUpdateProfiler.endRound();
 }
 
 void Game::draw()
@@ -86,19 +113,19 @@ void Game::draw()
     glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	
-    gDrawProfiler.startRound();
+    //gDrawProfiler.startRound();
 
     for(ViewMap::iterator i = mDrawable.begin(); i!= mDrawable.end(); ++i)
     {
         if(i->second->mNotifications & View::kDraw)
         {
-            gDrawProfiler.start(i->first);
+            //gDrawProfiler.start(i->first);
             i->second->draw();
-            gDrawProfiler.end(i->first);
+            //gDrawProfiler.end(i->first);
         }
     }
 
-    gDrawProfiler.endRound();
+    //gDrawProfiler.endRound();
 }
 
 void Game::touches(uint32_t count, Touch* touches)
@@ -113,6 +140,26 @@ void Game::touches(uint32_t count, Touch* touches)
                 return;
         }
     }
+}
+
+void Game::lowMemory()
+{
+    dprintf("Low memory.");
+    
+    for(ViewMap::iterator i = mDrawable.begin(); i!= mDrawable.end(); ++i)
+    {
+        i->second->lowMemory();
+    }
+    
+#if THRASH_MEMORY
+    while(gNasty)
+    {
+        Nasty* nasty = gNasty;
+        gNasty = gNasty->next;
+        delete nasty;
+    }
+    gTotal = 0;
+#endif
 }
     
 void Game::queueInit(View* view)

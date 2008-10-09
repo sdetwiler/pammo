@@ -49,6 +49,8 @@ bool View::touch(uint32_t count, Touch* touches)
 {
     return false;
 }
+
+void View::lowMemory() {}
     
 uint32_t View::getDrawPriority() const
 {

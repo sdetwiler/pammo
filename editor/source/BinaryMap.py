@@ -1,9 +1,11 @@
-import osfix
+import os, osfix, math
 from struct import *
+import wx
 import POI
 
 # Visuals File Format
-# 0x50 0x49 0x56 0x02 // 'PIV' 1 (Paradise Irradiated Visuals 2)
+# 0x50 0x49 0x56 0x02 // 'PIV' 3 (Paradise Irradiated Visuals 3)
+# uint16_t sizeX, sizeY
 # char* backdropName\0
 # uint16_t numProps
 #    char* propName\0
@@ -39,14 +41,17 @@ def accumulate(store, name):
 def save(map):
     saveVisuals(map)
     saveOverlays(map)
+    saveBackdrop(map)
 
 def saveVisuals(map):
     output = ''
 
     # Visuals headers.
-    output += pack('4B', 0x50, 0x49, 0x56, 0x02)
+    output += pack('4B', 0x50, 0x49, 0x56, 0x03)
 
     # Backdrop
+    output += pack('!H', map.getSizeX())
+    output += pack('!H', map.getSizeY())
     output += map.getBackdrop().getName() + pack('x')
 
     # Entities and props
@@ -103,3 +108,34 @@ def saveOverlays(map):
     path = osfix.path("../data/maps/%s.omap" % map.getName())
     f = open(path, "w+b")
     f.write(output)
+
+def saveBackdrop(map):
+    name = map.getBackdrop().getName()
+    image = wx.ImageFromBitmap(map.getBackdrop().getBitmap())
+    fullx, fully = image.GetSize()
+    
+    try: os.mkdir(osfix.path("../data/backdroptiles/%s" % name))
+    except: pass
+    
+    ts = 256
+    
+    scaled = image.Scale(ts, ts)
+    path = osfix.path("../data/backdroptiles/%s/preview.png" % name)
+    scaled.SaveFile(path, wx.BITMAP_TYPE_PNG)
+    scaled.Destroy()
+    
+    for x in range(int(math.ceil(float(map.getSizeX())/ts))):
+        for y in range(int(math.ceil(float(map.getSizeY())/ts))):
+            px, py = x*ts, y*ts
+            sx, sy = ts, ts
+            
+            if px + sx > fullx: sx = fullx - px
+            if py + sy > fully: sy = fully - py
+            
+            cropped = image.GetSubImage(wx.Rect(px, py, sx, sy))
+            resized = cropped.Size((ts, ts), (0, 0), 0, 0, 0)
+            path = osfix.path("../data/backdroptiles/%s/%d-%d.png" % (name, x, y))
+            resized.SaveFile(path, wx.BITMAP_TYPE_PNG)
+            resized.Destroy()
+            cropped.Destroy()
+    image.Destroy()

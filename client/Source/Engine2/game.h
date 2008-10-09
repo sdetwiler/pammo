@@ -15,6 +15,7 @@ public:
     void touches(uint32_t count, Touch* touches);
     void update();
     void draw();
+    void lowMemory();
         
 protected:
     friend class View;

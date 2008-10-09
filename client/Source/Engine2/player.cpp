@@ -136,9 +136,9 @@ void Player::reset()
     
     // Reset weapons.
     mWeaponSelector->reset();
-    mWeaponSelector->addWeapon(new GooWeapon);
-    mWeaponSelector->addWeapon(new LightningWeapon);
-    mWeaponSelector->addWeapon(new GrenadeLauncherWeapon);
+    mWeaponSelector->addWeapon(mGooWeapon);
+    mWeaponSelector->addWeapon(mLightningWeapon);
+    mWeaponSelector->addWeapon(mGrenadeLauncherWeapon);
 
     // Reset life.
     mHealth = 1000.0f;
@@ -325,8 +325,6 @@ void Player::update()
             mBody->mProperties = 0;
             mFiring = false;
             mController->reset();
-
-
         }
 
         if((now - mDeadTime) > 2000000)
@@ -389,6 +387,27 @@ void Player::onTargetRingTouched(TargetRingWidget *widget, float value)
     {
         mFiring = true;
         mFireDirection = value;
+    }
+}
+
+void Player::onTargetRingDoubleTouched(TargetRingWidget *widget)
+{
+    if(mDeadTime)
+        return;
+    
+    // If the user double taps the movement ring, toggle the shield.
+    if(widget == mMovementRing)
+    {
+        mShieldToggle->setToggle(!mShieldToggle->getToggle());
+    }
+    else if(widget == mTargetRing)
+    {
+        if(mWeapon == mGooWeapon)
+            mWeaponSelector->setSelected(mGrenadeLauncherWeapon);
+        else if(mWeapon == mLightningWeapon)
+            mWeaponSelector->setSelected(mGooWeapon);
+        else if(mWeapon == mGrenadeLauncherWeapon)
+            mWeaponSelector->setSelected(mLightningWeapon);
     }
 }
 

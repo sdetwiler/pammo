@@ -17,7 +17,7 @@ ImageTexture gImagePath[] =
     {"interface/iconShieldEnable.png", NULL, true},           // 4
     {"interface/iconShieldDisable.png", NULL, true},           // 5
 
-    {"interface/backgroundMain.png", NULL, false},        // 6
+    {"../Default.png", NULL, false},        // 6
     {"interface/backgroundTutorial.png", NULL, false},          // 7
     {"interface/backgroundCredits.png", NULL, false},           // 8
 
@@ -117,55 +117,124 @@ ImageTexture gImagePath[] =
     {"particles/jetFlame/00.png", NULL, true},                 // 75
 
     {"interface/buttonMask.png", NULL, true},                  // 76
-
+    
+    {"particles/powerupLifeUpgrade", NULL, false},              // 77
+    
+    {"particles/powerupLifeRestore", NULL, false},              // 78
+    
+    {"particles/powerupEnergyUpgrade", NULL, false},            // 79
+    
+    {"particles/powerupEnergyRestore", NULL, false},            // 80
+    
+    {"particles/powerupShield", NULL, false},                   // 81
+    
+    {"particles/powerupGooWeapon", NULL, false},                // 82
+    
+    {"particles/powerupGrenadeLauncherWeapon", NULL, false},    // 83
+    
+    {"backdroptiles/testmap/preview.png", NULL, false},    // 84
+    
+    {"backdroptiles/testmap/0-0.png", NULL, false},
+    {"backdroptiles/testmap/0-1.png", NULL, false},
+    {"backdroptiles/testmap/0-2.png", NULL, false},
+    {"backdroptiles/testmap/0-3.png", NULL, false},
+    {"backdroptiles/testmap/0-4.png", NULL, false},
+    {"backdroptiles/testmap/0-5.png", NULL, false},
+    {"backdroptiles/testmap/0-6.png", NULL, false},
+    {"backdroptiles/testmap/0-7.png", NULL, false},
+    
+    {"backdroptiles/testmap/1-0.png", NULL, false},
+    {"backdroptiles/testmap/1-1.png", NULL, false},
+    {"backdroptiles/testmap/1-2.png", NULL, false},
+    {"backdroptiles/testmap/1-3.png", NULL, false},
+    {"backdroptiles/testmap/1-4.png", NULL, false},
+    {"backdroptiles/testmap/1-5.png", NULL, false},
+    {"backdroptiles/testmap/1-6.png", NULL, false},
+    {"backdroptiles/testmap/1-7.png", NULL, false},
+    
+    {"backdroptiles/testmap/2-0.png", NULL, false},
+    {"backdroptiles/testmap/2-1.png", NULL, false},
+    {"backdroptiles/testmap/2-2.png", NULL, false},
+    {"backdroptiles/testmap/2-3.png", NULL, false},
+    {"backdroptiles/testmap/2-4.png", NULL, false},
+    {"backdroptiles/testmap/2-5.png", NULL, false},
+    {"backdroptiles/testmap/2-6.png", NULL, false},
+    {"backdroptiles/testmap/2-7.png", NULL, false},
+    
+    {"backdroptiles/testmap/3-0.png", NULL, false},
+    {"backdroptiles/testmap/3-1.png", NULL, false},
+    {"backdroptiles/testmap/3-2.png", NULL, false},
+    {"backdroptiles/testmap/3-3.png", NULL, false},
+    {"backdroptiles/testmap/3-4.png", NULL, false},
+    {"backdroptiles/testmap/3-5.png", NULL, false},
+    {"backdroptiles/testmap/3-6.png", NULL, false},
+    {"backdroptiles/testmap/3-7.png", NULL, false},
+    
+    {"backdroptiles/testmap/4-0.png", NULL, false},
+    {"backdroptiles/testmap/4-1.png", NULL, false},
+    {"backdroptiles/testmap/4-2.png", NULL, false},
+    {"backdroptiles/testmap/4-3.png", NULL, false},
+    {"backdroptiles/testmap/4-4.png", NULL, false},
+    {"backdroptiles/testmap/4-5.png", NULL, false},
+    {"backdroptiles/testmap/4-6.png", NULL, false},
+    {"backdroptiles/testmap/4-7.png", NULL, false},
+    
+    {"backdroptiles/testmap/5-0.png", NULL, false},
+    {"backdroptiles/testmap/5-1.png", NULL, false},
+    {"backdroptiles/testmap/5-2.png", NULL, false},
+    {"backdroptiles/testmap/5-3.png", NULL, false},
+    {"backdroptiles/testmap/5-4.png", NULL, false},
+    {"backdroptiles/testmap/5-5.png", NULL, false},
+    {"backdroptiles/testmap/5-6.png", NULL, false},
+    {"backdroptiles/testmap/5-7.png", NULL, false},
+    
+    {"backdroptiles/testmap/6-0.png", NULL, false},
+    {"backdroptiles/testmap/6-1.png", NULL, false},
+    {"backdroptiles/testmap/6-2.png", NULL, false},
+    {"backdroptiles/testmap/6-3.png", NULL, false},
+    {"backdroptiles/testmap/6-4.png", NULL, false},
+    {"backdroptiles/testmap/6-5.png", NULL, false},
+    {"backdroptiles/testmap/6-6.png", NULL, false},
+    {"backdroptiles/testmap/6-7.png", NULL, false},
+    
+    {"backdroptiles/testmap/7-0.png", NULL, false},
+    {"backdroptiles/testmap/7-1.png", NULL, false},
+    {"backdroptiles/testmap/7-2.png", NULL, false},
+    {"backdroptiles/testmap/7-3.png", NULL, false},
+    {"backdroptiles/testmap/7-4.png", NULL, false},
+    {"backdroptiles/testmap/7-5.png", NULL, false},
+    {"backdroptiles/testmap/7-6.png", NULL, false},
+    {"backdroptiles/testmap/7-7.png", NULL, false},
+    
+    {"backdroptiles/testmap/8-0.png", NULL, false},
+    {"backdroptiles/testmap/8-1.png", NULL, false},
+    {"backdroptiles/testmap/8-2.png", NULL, false},
+    {"backdroptiles/testmap/8-3.png", NULL, false},
+    {"backdroptiles/testmap/8-4.png", NULL, false},
+    {"backdroptiles/testmap/8-5.png", NULL, false},
+    {"backdroptiles/testmap/8-6.png", NULL, false},
+    {"backdroptiles/testmap/8-7.png", NULL, false},
+    
+    {"backdroptiles/testmap/9-0.png", NULL, false},
+    {"backdroptiles/testmap/9-1.png", NULL, false},
+    {"backdroptiles/testmap/9-2.png", NULL, false},
+    {"backdroptiles/testmap/9-3.png", NULL, false},
+    {"backdroptiles/testmap/9-4.png", NULL, false},
+    {"backdroptiles/testmap/9-5.png", NULL, false},
+    {"backdroptiles/testmap/9-6.png", NULL, false},
+    {"backdroptiles/testmap/9-7.png", NULL, false},
+    
+    {"backdroptiles/testmap/10-0.png", NULL, false},
+    {"backdroptiles/testmap/10-1.png", NULL, false},
+    {"backdroptiles/testmap/10-2.png", NULL, false},
+    {"backdroptiles/testmap/10-3.png", NULL, false},
+    {"backdroptiles/testmap/10-4.png", NULL, false},
+    {"backdroptiles/testmap/10-5.png", NULL, false},
+    {"backdroptiles/testmap/10-6.png", NULL, false},
+    {"backdroptiles/testmap/10-7.png", NULL, false},
 
 };
 
-
-Image* makeSubImage(RawImage* raw, Vector2 start, Vector2 size)
-{
-	Image* image = new Image;
-    image->mTexture = 0;
-    image->mSize = size;
-    
-    // Setup pixel store.
-    uint32_t srcRow = (uint32_t)raw->mSize.x*raw->mBytesPerPixel;
-    uint32_t dstRow = (uint32_t)size.x*raw->mBytesPerPixel;
-    uint8_t* pixels = new uint8_t[(uint32_t)(dstRow*size.y)];
-    for(uint32_t y=0; y < size.y; ++y)
-    {
-        uint32_t srcOffset = y*dstRow;
-        uint32_t dstOffset = (uint32_t)start.x*raw->mBytesPerPixel + (start.y+y)*srcRow;
-        uint8_t* src = pixels + srcOffset;
-        uint8_t* dst = raw->mPixels + dstOffset;
-        memcpy(src, dst, dstRow);
-    }
-
-    int mode;
-    if(raw->mBytesPerPixel == 3)
-        mode = GL_RGB;
-    else if(raw->mBytesPerPixel == 4)
-        mode = GL_RGBA;
-    
-	// Use OpenGL ES to generate a name for the texture.
-	glGenTextures(1, &image->mTexture);
-	glBindTexture(GL_TEXTURE_2D, image->mTexture);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    
-	glTexImage2D(GL_TEXTURE_2D, 0, mode, size.x, size.y, 0, mode, GL_UNSIGNED_BYTE, pixels);
-    
-    // Restore pixel store.
-    delete[] pixels;
-    
-    return image;
-}
-
-
-    
 ImageLibrary* gImageLibrary = NULL;
 
 ///////////////////////////////////////////////////////////////////////////////////
@@ -215,8 +284,6 @@ void ImageLibrary::setObserver(ImageLibraryObserver* o)
     }
 }
 
-
-
 uint32_t ImageLibrary::getUpdatePriority() const
 {
     return kImageLibraryPriority;
@@ -257,6 +324,7 @@ void ImageLibrary::purgeImage(uint32_t id)
     if(gImagePath[id].mImage)
     {
         // Free GL Texture.
+        glDeleteTextures(1, &gImagePath[id].mImage->mTexture);
         delete gImagePath[id].mImage;
         gImagePath[id].mImage = NULL;
     }
@@ -286,6 +354,9 @@ int ImageLibrary::queueRequestLoad(uint32_t id)
         pthread_mutex_unlock(&mMutex);
         return -1;
     }
+    
+    // Mark that this image is in use so that another request isn't issued.
+    gImagePath[id].mInUse = true;
 
     ImageLoadRequest* curr = mFree;
     mFree = mFree->mNext;
@@ -323,14 +394,14 @@ void ImageLibrary::createImage(uint32_t id, RawImage* raw)
     gImagePath[id].mImage = new Image;
     gImagePath[id].mImage->mTexture = 0;
     gImagePath[id].mImage->mSize = raw->mSize;
+    gImagePath[id].mImage->mTableIndex = id;
 
     int mode;
     if(raw->mBytesPerPixel == 3)
         mode = GL_RGB;
     else if(raw->mBytesPerPixel == 4)
         mode = GL_RGBA;
-
-    gImagePath[id].mImage->mTableIndex = id;
+    
 	// Use OpenGL ES to generate a name for the texture.
 	glGenTextures(1, &gImagePath[id].mImage->mTexture);
 	glBindTexture(GL_TEXTURE_2D, gImagePath[id].mImage->mTexture);
@@ -338,7 +409,29 @@ void ImageLibrary::createImage(uint32_t id, RawImage* raw)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexImage2D(GL_TEXTURE_2D, 0, mode, gImagePath[id].mImage->mSize.x, gImagePath[id].mImage->mSize.y, 0, mode, GL_UNSIGNED_BYTE, raw->mPixels);
+    glTexImage2D(GL_TEXTURE_2D, 0, mode, raw->mPixelSize.x, raw->mPixelSize.y, 0, mode, GL_UNSIGNED_BYTE, raw->mPixels);
+    
+    // Create texture coords.
+    if(raw->mPixelSize.x == raw->mSize.x && raw->mPixelSize.y == raw->mSize.y)
+    {
+        gImagePath[id].mImage->mTexCoords[0] = Vector2(0, 0);
+        gImagePath[id].mImage->mTexCoords[1] = Vector2(1, 0);
+        gImagePath[id].mImage->mTexCoords[2] = Vector2(0, 1);
+        gImagePath[id].mImage->mTexCoords[3] = Vector2(1, 1);
+    }
+    else
+    {
+        Vector2 size = raw->mSize;
+        Vector2 pixel = raw->mPixelSize;
+        
+        float right = size.x / pixel.x;
+        float top = 1 - size.y / pixel.y;
+        
+        gImagePath[id].mImage->mTexCoords[0] = Vector2(0, top);
+        gImagePath[id].mImage->mTexCoords[1] = Vector2(right, top);
+        gImagePath[id].mImage->mTexCoords[2] = Vector2(0, 1);
+        gImagePath[id].mImage->mTexCoords[3] = Vector2(right, 1);
+    }
 }
 
 
@@ -356,6 +449,13 @@ void ImageLibrary::update()
         }
         // Go to next image.
         ++mPreloadIndex;
+    }
+    
+    // Make observer callback if we haven't already.
+    if(mPreloadIndex == mImageCount && !mPreloadComplete)
+    {
+        mPreloadComplete = true;
+        if(mObserver) mObserver->onPreloadComplete();
     }
 
     pthread_mutex_lock(&mMutex);
@@ -377,10 +477,6 @@ void ImageLibrary::update()
 
     pthread_mutex_unlock(&mMutex);
 }
-
-
-
-
 
 void* ImageLibrary::threadBootFunc(void* arg)
 {

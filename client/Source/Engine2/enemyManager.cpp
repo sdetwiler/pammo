@@ -464,16 +464,6 @@ void enemyDamageCb(Enemy* e, ParticleType type, float amount)
 		gWorld->getParticleSystem()->initExplosionParticle(e->mBody->mCenter);
 		gWorld->getParticleSystem()->initRubbleParticle(e->mBody->mCenter);
         gWorld->getPlayer()->mScore += e->mPointValue;
-
-        for(uint32_t i=0; i<e->mImageCount; ++i)
-        {
-            gImageLibrary->purgeImage(e->mImages[i]);
-        }
-
-        for(uint32_t i=0; i<e->mWeaponCount; ++i)
-        {
-            gImageLibrary->purgeImage(e->mWeapon[i].mEntity.getImage());
-        }
         
         gWorld->getEnemyManager()->removeEnemy(e);
 		e->mDamageCb = NULL;

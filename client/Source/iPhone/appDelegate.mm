@@ -39,6 +39,15 @@ int main(int argc, char *argv[])
 	[mWindow makeKeyAndVisible];
 }
 
+- (void)applicationWillTerminate:(UIApplication *)application
+{
+}
+
+- (void)applicationDidReceiveMemoryWarning:(UIApplication *)application
+{
+    gGame->lowMemory();
+}
+
 - (void)applicationWillResignActive:(UIApplication *)application
 {
 	[self.mMainView stopAnimation];

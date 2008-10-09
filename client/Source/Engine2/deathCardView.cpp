@@ -16,7 +16,6 @@ DeathCardView::DeathCardView()
     // Get player.
     Player* player = gWorld->getPlayer();
 
-
     int card = ((float)player->mScore/MAX_SCORE) * INTERFACE_DEATH_CARD_COUNT;
     
     if(card>INTERFACE_DEATH_CARD_COUNT)
@@ -47,7 +46,7 @@ void DeathCardView::update()
     if(mAlpha > 1.0f)
         mAlpha = 1.0f;
     else
-        mAlpha+=0.5f;
+        mAlpha+=0.05f;
 }
 
 void DeathCardView::draw()

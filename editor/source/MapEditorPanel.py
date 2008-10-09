@@ -258,9 +258,9 @@ class MapEditorPanel(wx.Panel):
         path = osfix.path('../data/maps/%s.map' % map.getName())
         f = open(path, "w")
         map.saveToFile(f)
-        try: BinaryMap.save(map)
-        except: self.showMessage('Could not save map in binary format')
-        #BinaryMap.save(map)
+        #try: BinaryMap.save(map)
+        #except: self.showMessage('Could not save map in binary format')
+        BinaryMap.save(map)
 
     def updateMenuState(self):
         saveMenu = self.menuBar.FindItemById(self.saveMenu)

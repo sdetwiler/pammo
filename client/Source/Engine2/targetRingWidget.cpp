@@ -24,6 +24,7 @@ void TargetRingWidget::reset()
     mImage.mRotation = mValue;
     mImage.makeDirty();
     
+    mLastTouch = 0;
     mTrackingSerialNumber = 0;
 }
     
@@ -76,26 +77,39 @@ uint32_t TargetRingWidget::getDrawPriority() const
 
 bool TargetRingWidget::touch(uint32_t count, Touch* touches)
 {
+    assert(count == 1);
     for(uint32_t i=0; i < count; ++i)
     {
+        // Capture the current time, used for interval tracking on double click.    
+        uint64_t currentTime = getTime();
+        
+        //dprintf("Touch - Phase: %d Serial: %d Tracking: %d Count: %d Last: %d Cur: %d Delta: %d", touches[i].mPhase, touches[i].mSerialNumber, mTrackingSerialNumber, mTouchCount, (uint32_t)mLastTouch, (uint32_t)currentTime, (uint32_t)(currentTime - mLastTouch));
+        
         // If this is the end of a touch.
         if(touches[i].mPhase == Touch::PhaseEnd)
         {
             // If this is not the touch we are tracking, continue.
             if(touches[i].mSerialNumber != mTrackingSerialNumber)
+            {
+                //dprintf("Distraction Untouch");
                 continue;
+            }
             
             // Stop tracking.
             mTrackingSerialNumber = 0;
             if(mObserver)
                 mObserver->onTargetRingUntouched(this);
             
+            //dprintf("Untouched");
             return true;
         }
         
         // A touch or a move, we don't care about. If we are tracking a different touch, bail.
         if(mTrackingSerialNumber != 0 && mTrackingSerialNumber != touches[i].mSerialNumber)
+        {
+            //dprintf("Distraction");
             continue;
+        }
         
         // Calculate the distance from the touch to the center of this widget.
         Vector2 diff = touches[i].mLocation - mImage.mCenter;
@@ -103,7 +117,25 @@ bool TargetRingWidget::touch(uint32_t count, Touch* touches)
         
         // If its larger than the widget, bail.
         if(dist > mImage.mSize.x/2)
+        {
+            //dprintf("Outside of range");
             continue;
+        }
+        
+        // If this is starting a new touch, calculate time from last touch.
+        if(mTrackingSerialNumber == 0)
+        {
+            if(currentTime - mLastTouch < 250000)
+            {
+                if(mObserver)
+                    mObserver->onTargetRingDoubleTouched(this);
+            }
+            //else
+            //{
+            //    dprintf("Restouch too late");
+            //}
+            mLastTouch = currentTime;
+        }
             
         // Otherwise, this is a valid touch. Remember the serial. Update the image. Call observer.
         mTrackingSerialNumber = touches[i].mSerialNumber;

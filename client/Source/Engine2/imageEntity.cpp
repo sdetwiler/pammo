@@ -3,14 +3,6 @@
 namespace pammo
 {
 
-// Sets up an array of values for the texture coordinates.
-const GLfloat spriteTexcoords[] = {
-0.0, 0.0,
-1.0, 0.0,
-0.0, 1.0,
-1.0, 1.0,
-};
-
 ImageEntity::ImageEntity()
 {
     mAlpha = 1.0f;
@@ -103,7 +95,7 @@ void ImageEntity::draw()
     glLoadIdentity();
 
     glVertexPointer(2, GL_FLOAT, 0, (float*)mVertices);
-    glTexCoordPointer(2, GL_FLOAT, 0, spriteTexcoords);
+    glTexCoordPointer(2, GL_FLOAT, 0, (float*)mImage->mTexCoords);
 
     glColor4f(1.0f, 1.0f, 1.0f, mAlpha);
 

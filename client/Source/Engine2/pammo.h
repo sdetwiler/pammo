@@ -28,6 +28,7 @@ namespace pammo
 struct RawImage
 {
     Vector2 mSize;
+    Vector2 mPixelSize;
     uint8_t* mPixels;
     uint8_t mBytesPerPixel;
 };
@@ -35,6 +36,7 @@ struct RawImage
 struct Image
 {
     Vector2 mSize;
+    Vector2 mTexCoords[4];
     uint32_t mTexture;
     uint32_t mTableIndex; // To support reference/dereference images from Image*
     int      mMode; // GL_RGB, GL_RGBA
@@ -56,8 +58,6 @@ struct Touch
 
 void dprintf(char const* format, ...);
 void openRawImage(char const* filename, RawImage* image);
-Image* makeSubImage(RawImage* raw, Vector2 start, Vector2 size);
-Image* openImage(char const* filename);
 Vector2 getFrameSize();
 uint64_t getTime(void);
 

@@ -15,10 +15,10 @@ public:
         mDirectionKeyDownCount = 0;
         mFireKeyDownCount = 0;     
         memset(&mDown, 0, sizeof(mDown));
-        keyTouch[0].mLocation.x = 60;
-        keyTouch[0].mLocation.y = 260;
-        keyTouch[1].mLocation.x = 420;
-        keyTouch[1].mLocation.y = 260;
+        keyTouch[0].mLocation.x = 70;
+        keyTouch[0].mLocation.y = 250;
+        keyTouch[1].mLocation.x = 410;
+        keyTouch[1].mLocation.y = 250;
 
     }
 
@@ -40,6 +40,7 @@ public:
             *val = max;
     }
 
+    
     void InputProcessor::update(Game* game)
     {
         SDL_Event event;
@@ -319,9 +320,10 @@ public:
                 }
                 else
                 {
-                    keyTouch[0].mPhase = Touch::PhaseMove;
+                    keyTouch[0].mPhase = Touch::PhaseBegin;
                 }
 
+                dprintf("### directionKey %d", keyTouch[0].mPhase);
                 game->touches(1, keyTouch);
             }
             if(fireKey)
@@ -335,36 +337,18 @@ public:
                 }
                 else
                 {
-                    keyTouch[1].mPhase = Touch::PhaseMove;
+                    keyTouch[1].mPhase = Touch::PhaseBegin;
                 }
 
+                dprintf("### firekey %d", keyTouch[1].mPhase);
 
                 
                 game->touches(1, keyTouch+1);
             }
 
-            if(mDown[0] && mDown[1])
+            if(mDown[0])
             {
-                if(mouseUp)
-                {
-                    touch[1].mPhase = Touch::PhaseEnd;
-                }
-
-                game->touches(2, touch);
-
-                if(mouseUp)
-                {
-                    mDown[0] = false;
-                    mDown[1] = false;
-                }
-
-                if(altUp)
-                {
-                    mDown[1] = false;
-                }
-            }
-            else if(mDown[0] && !mDown[1])
-            {
+                dprintf("### mouse %d", touch[0].mPhase);
                 game->touches(1, touch);
                 if(mouseUp)
                 {
@@ -373,6 +357,9 @@ public:
             }
         }// while    
     }
+
+
+
 };// class
 
 

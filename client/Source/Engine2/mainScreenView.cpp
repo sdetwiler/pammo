@@ -56,6 +56,7 @@ void MainScreenView::update()
 
 void MainScreenView::onPreloadComplete()
 {
+    dprintf("Preload complete.");
     mPreloadComplete = true;
 }
 
@@ -67,8 +68,8 @@ void MainScreenView::draw()
 
     if(!mPreloadComplete)
     {
-        trans = Transform2::createTranslation(Vector2(230.0f - 28.0f, 245.0f - 32.0f)) * Transform2::createScale(mButtonMask->mSize);
-        drawImage(mButtonMask, trans, 1.0-mPreloadPercent);
+//        trans = Transform2::createTranslation(Vector2(230.0f - 28.0f, 245.0f - 32.0f)) * Transform2::createScale(mButtonMask->mSize);
+//        drawImage(mButtonMask, trans, 1.0-mPreloadPercent);
     }
 
 }

@@ -426,7 +426,6 @@ void ImageLibrary::createImage(uint32_t id, RawImage* raw)
         
         float right = size.x / pixel.x;
         float top = 1 - size.y / pixel.y;
-        
         gImagePath[id].mImage->mTexCoords[0] = Vector2(0, top);
         gImagePath[id].mImage->mTexCoords[1] = Vector2(right, top);
         gImagePath[id].mImage->mTexCoords[2] = Vector2(0, 1);

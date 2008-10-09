@@ -67,7 +67,7 @@ void Minimap::draw()
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
     
     // Draw outline.
-    #if 1
+    #if 0
     Vector2 outline[4];
     outline[0] = mapOffset;
     outline[1] = mapOffset + Vector2(mapSize.x, 0);

@@ -19,7 +19,7 @@ void gooSprayParticleCallback(Particle* p, ParticleSystem* system);
 GooWeapon::GooWeapon()
     : Weapon()
 {
-    mIcon.setImage(gImageLibrary->reference(INTERFACE_ICON_WEAPON_GOO));
+    mIcon.setImage(gImageLibrary->getImage(INTERFACE_ICON_WEAPON_GOO));
 }
 
 GooWeapon::~GooWeapon()
@@ -43,7 +43,7 @@ struct GooParticleData
 void GooWeapon::fire()
 {
     // Get a particle.
-    Particle* p = gWorld->getParticleSystem()->addParticleWithBody(0);
+    Particle* p = gWorld->getParticleSystem()->addParticleWithBody(0, false);
     if(!p) return;
     
     // Get player.
@@ -72,7 +72,7 @@ void GooWeapon::fire()
 	float velocity = 0;//130;
 	velocity+=((rand()%10)/10.0f);
 	
-	p->mImage.setImage(gImageLibrary->reference(PARTICLE_GOO_00 + rand()%PARTICLE_GOO_COUNT));
+	p->mImage.setImage(gImageLibrary->getImage(PARTICLE_GOO_00 + rand()%PARTICLE_GOO_COUNT));
     p->mImage.mCenter = player->mTurretTip + Vector2(40, 0) * Transform2::createRotation(initialRotation+r);
     p->mImage.mRotation = initialRotation+r;
     p->mImage.makeDirty();
@@ -91,10 +91,10 @@ void GooWeapon::fire()
 
 
     // Nozzle spray.
-    p = gWorld->getParticleSystem()->addParticle(2);
+    p = gWorld->getParticleSystem()->addParticle(2, false);
     if(!p) 
         return;
-	p->mImage.setImage(gImageLibrary->reference(PARTICLE_GOO_00 + rand()%PARTICLE_GOO_COUNT));
+	p->mImage.setImage(gImageLibrary->getImage(PARTICLE_GOO_00 + rand()%PARTICLE_GOO_COUNT));
     p->mImage.mSize *= 0.5f;
     p->mImage.mCenter = player->mTurretTip + Vector2(4, 0) * Transform2::createRotation(initialRotation+r);
     p->mImage.mRotation = initialRotation + r;

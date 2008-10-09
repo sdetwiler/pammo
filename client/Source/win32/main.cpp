@@ -458,7 +458,8 @@ int main(int argc, char *argv[])
         {
             float delta = now-lastCheck;
             float seconds = (delta)/1000000.0f;
-            dprintf("Runtime: %.2f\tFPS: %.2f\tscore: %u\tnext wave: %u", 
+            dprintf("Runtime:           time     fps  score   next");
+            dprintf("                 % 3.2f  % 3.2f% 6u  % 6u\n", 
                 ((float)now-(float)start)/1000000.0f, 
                 (float)frames/seconds,
                 gWorld?(gWorld->getPlayer()?gWorld->getPlayer()->mScore:0):0,
@@ -466,6 +467,12 @@ int main(int argc, char *argv[])
                 );
             frames = 0;
             lastCheck = now;
+
+#ifdef PROFILE
+        if(gWorld)
+            if(gWorld->getParticleSystem())
+                gWorld->getParticleSystem()->dumpStats();
+#endif
         }
     }
 

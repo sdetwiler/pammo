@@ -12,12 +12,12 @@ CreditsScreenView::CreditsScreenView()
 {
 //    gCreditsScreenView = this;
     // Load background.
-    mBackground = gImageLibrary->reference(INTERFACE_BACKGROUND_CREDITS);
+    mBackground = gImageLibrary->getImage(INTERFACE_BACKGROUND_CREDITS);
 }
 
 CreditsScreenView::~CreditsScreenView()
 {
-    gImageLibrary->unreference(mBackground);
+    gImageLibrary->purgeImage(mBackground);
 }
     
 uint32_t CreditsScreenView::getTouchPriority() const

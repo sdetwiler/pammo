@@ -21,7 +21,7 @@ GrenadeLauncherWeapon::GrenadeLauncherWeapon()
 {
     mLastFire = 0;
     mFireFrequency = 800000;
-    mIcon.setImage(gImageLibrary->reference(INTERFACE_ICON_WEAPON_GRENADELAUNCHER));
+    mIcon.setImage(gImageLibrary->getImage(INTERFACE_ICON_WEAPON_GRENADELAUNCHER));
 }
 
 GrenadeLauncherWeapon::~GrenadeLauncherWeapon()
@@ -53,7 +53,7 @@ void GrenadeLauncherWeapon::fire()
     mLastFire = now;
 
     // Get a particle.
-    Particle* p = gWorld->getParticleSystem()->addParticleWithBody(0);
+    Particle* p = gWorld->getParticleSystem()->addParticleWithBody(0, false);
     if(!p) return;
     
     // Get player.
@@ -81,15 +81,15 @@ void GrenadeLauncherWeapon::fire()
 	float velocity = 130;
 	//velocity+=((rand()%10)/10.0f);
 	
-	p->mImage.setImage(gImageLibrary->reference(PARTICLE_GRENADE_00));
+	p->mImage.setImage(gImageLibrary->getImage(PARTICLE_GRENADE_00));
     p->mImage.mCenter = player->mTurretTip;
     p->mImage.mRotation = initialRotation + r;
     p->mImage.makeDirty();
         
-    particleData->mShadow = gWorld->getParticleSystem()->addParticle(0);
+    particleData->mShadow = gWorld->getParticleSystem()->addParticle(0, false);
     particleData->mShadow->mAlpha = 0.5f;
     particleData->mShadow->mCallback = grenadeLauncherBulletShadowParticleCallback;
-    particleData->mShadow->mImage.setImage(gImageLibrary->reference(PARTICLE_SHADOW_00));
+    particleData->mShadow->mImage.setImage(gImageLibrary->getImage(PARTICLE_SHADOW_00));
     particleData->mShadow->mImage.mCenter = p->mImage.mCenter;
     particleData->mShadow->mImage.mRotation= p->mImage.mRotation;
     particleData->mShadow->mImage.makeDirty();

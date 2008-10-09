@@ -23,13 +23,13 @@ DeathCardView::DeathCardView()
         card = INTERFACE_DEATH_CARD_COUNT;
 
     // Load background.
-    mBackground = gImageLibrary->reference(INTERFACE_DEATH_CARD_00 + card);
+    mBackground = gImageLibrary->getImage(INTERFACE_DEATH_CARD_00 + card);
     mAlpha = 0;
 }
 
 DeathCardView::~DeathCardView()
 {
-    gImageLibrary->unreference(mBackground);
+    gImageLibrary->purgeImage(mBackground);
 }
     
 uint32_t DeathCardView::getDrawPriority() const

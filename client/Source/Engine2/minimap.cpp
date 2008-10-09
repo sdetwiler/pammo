@@ -13,7 +13,7 @@ Minimap::Minimap()
 {
     memset(mBuckets, 0, sizeof(mBuckets));
     
-    mLifebar = new ImageEntity(gImageLibrary->reference(INTERFACE_SHEILD_MAP_LIFEBAR));
+    mLifebar = new ImageEntity(gImageLibrary->getImage(INTERFACE_SHEILD_MAP_LIFEBAR));
     mLifebar->mCenter = Vector2(240, 32);
     mLifebar->mSize = Vector2(256, 64);
 }

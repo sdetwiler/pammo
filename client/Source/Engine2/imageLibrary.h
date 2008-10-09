@@ -138,20 +138,23 @@ struct ImageTexture
 {
     char const* mPath;
     Image*      mImage;
-    int         mRefCount;
+    bool        mInUse;
 };
 
-//extern char* gImagePath[];
 extern ImageTexture gImagePath[];
 
 class ImageLibraryObserver
 {
 public:
     virtual ~ImageLibraryObserver(){}
-    virtual void onPercentLoaded(float pct) = 0;
+    virtual void onPreloadComplete() = 0;
 };
 
 
+// Caveats:
+//   Don't use tryGetImage and getImage on the same image. Race conditions can occur.
+//   Make sure preload is complete before using getImage on images that are preloaded.
+//   Make all of your calls from the same thread.
 class ImageLibrary : public View
 {
 public:
@@ -159,30 +162,62 @@ public:
     ~ImageLibrary();
 
     void setObserver(ImageLibraryObserver* o);
-    
-    Image* reference(uint32_t id);
-//    Image* reference(char const* path);
-    void reference(Image* image);
-    void unreference(Image* image);
-
     virtual void update();
     virtual uint32_t getUpdatePriority() const;
+
+    // Blocking, inline load for image.
+    Image* getImage(uint32_t id);
+
+    // Returns image if loaded and available.
+    // Returns NULL if not available.
+    Image* tryGetImage(uint32_t id);
+
+    // Notes that the image can be unloaded from memory.
+    void purgeImage(uint32_t id);
+    void purgeImage(Image* image);
+
     
 private:
+    // Request that an image be loaded.
+    // Returns zero if request will be honored or if already requested.
+    // Returns -1 if request queue is full. Try again later.
+    int requestLoad(uint32_t id);
 
-    void load(uint32_t id);
+    // Queues a load request. 
+    int queueRequestLoad(uint32_t id);
 
-    struct ImageRef
+    uint32_t mImageCount;
+    uint32_t mPreloadIndex;
+    bool     mPreloadComplete;
+
+
+    struct ImageLoadRequest
     {
-        Image* mImage;
-        uint32_t mRefCount;
+        uint32_t          mId;
+        ImageLoadRequest* mNext;
+        RawImage          mRawImage;
     };
-    
-    typedef map< string, ImageRef*> StringImageRefMap;
-    StringImageRefMap mImages;
 
-    uint32_t mCurrImageLoad;
-    uint32_t mNumImages;
+    static const uint32_t kImageLoadStackSize = 20;
+    ImageLoadRequest* mFree;
+    ImageLoadRequest* mToService;
+    ImageLoadRequest* mToNotify;
+
+    // Load the requested image if not already loaded.
+    void load(uint32_t id, RawImage* rawImage);
+
+    // Creates the Image for the image at the specified index in the table.
+    void createImage(uint32_t id, RawImage* rawImage);
+
+    pthread_t        mThread;
+    pthread_mutex_t  mMutex;
+    pthread_cond_t   mCondition;
+
+    static void* threadBootFunc(void* arg);
+    void threadFunc();
+
+    bool mRunning;
+
 
     ImageLibraryObserver* mObserver;
 };

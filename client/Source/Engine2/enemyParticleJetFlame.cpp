@@ -31,7 +31,7 @@ void enemyParticleJetFlameCb(Enemy* e, EnemyParticle* ep, EnemyManager* manager)
     Particle* p = NULL;
 
     // Get a particle.
-    p = gWorld->getParticleSystem()->addParticle(2);//WithBody(2);
+    p = gWorld->getParticleSystem()->addParticle(2, true);
     if(!p) return;
 
     // Calculate center. Vehicle center, plus particle offset rotated for vehicle, plus turret rotated for direction.
@@ -42,7 +42,7 @@ void enemyParticleJetFlameCb(Enemy* e, EnemyParticle* ep, EnemyManager* manager)
     // Setup image properties.
     p->mImage.mCenter = center;
     p->mImage.mRotation = e->mController.mRotation+(M_PI/2.0f);
-    p->mImage.setImage(gImageLibrary->reference(atol(ep->mImagePath)));
+    p->mImage.setImage(gImageLibrary->getImage(atol(ep->mImagePath)));
     p->mImage.makeDirty();
 
     // Set jet flame specific particle properties.

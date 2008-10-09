@@ -11,7 +11,7 @@ HealthMeter::HealthMeter(uint32_t priority)
     mPriority = priority;
     mPercent = 0;
     mMaxDots = 10;
-    mHealthDot = gImageLibrary->reference(INTERFACE_HEALTHDOT);
+    mHealthDot = gImageLibrary->getImage(INTERFACE_HEALTHDOT);
     
     mGrowDirection = 1;
     mBaseLocation = Vector2(0, 0);

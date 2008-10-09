@@ -68,6 +68,7 @@ class Player :
         VehicleController* mController;
         ImageEntity  mEntity;
         Image*       mImages[PLAYER_MAX_IMAGE_COUNT];
+        ImageEntity  mShadow;
         uint32_t     mImageCount;
         uint32_t     mCurrImage;
 

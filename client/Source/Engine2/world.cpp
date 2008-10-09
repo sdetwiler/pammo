@@ -14,6 +14,9 @@
 #include "interfaceView.h"
 #include "mainScreenView.h"
 
+#ifdef PROFILE
+#include "debugScreenView.h"
+#endif 
 namespace pammo
 {
     
@@ -35,6 +38,10 @@ World::World()
     mEnemyManager = new EnemyManager;
 
 //    mInterfaceView = new InterfaceView;
+
+#ifdef PROFILE
+    mDebugView = new DebugScreenView;
+#endif
 
     mPlayer = new Player();
 
@@ -61,6 +68,10 @@ World::~World()
     mPhysics->destroy();
     mMinimap->destroy();
     //mInterfaceView->destroy();
+
+#ifdef PROFILE
+    mDebugView->destroy();
+#endif
 
     delete mParticleSystem;
     delete mCamera;

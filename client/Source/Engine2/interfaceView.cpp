@@ -9,12 +9,12 @@ namespace pammo
 InterfaceView::InterfaceView()
 {
 // SCD: THIS IS INCORRECT BUT NOT IN USE. CHANGE WHEN WE HAVE A REAL IMAGE.
-    mImage = gImageLibrary->reference(INTERFACE_BACKGROUND_MAIN);
+    mImage = gImageLibrary->getImage(INTERFACE_BACKGROUND_MAIN);
 }
 
 InterfaceView::~InterfaceView()
 {
-    gImageLibrary->unreference(mImage);
+    gImageLibrary->purgeImage(mImage);
 }
 
 uint32_t InterfaceView::getDrawPriority() const

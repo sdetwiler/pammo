@@ -11,8 +11,16 @@ namespace pammo
     
 Game* gGame;
 
+ViewProfiler gUpdateProfiler;
+ViewProfiler gDrawProfiler;
+
 Game::Game()
 {
+    gUpdateProfiler.setName("update");
+    gDrawProfiler.setName("draw");
+    gUpdateProfiler.reset();
+    gDrawProfiler.reset();
+
     gGame = this;
     
     srand(time(NULL));
@@ -31,11 +39,17 @@ void Game::update()
 {
     initAndDelete();
     
+    gUpdateProfiler.startRound();
     for(ViewMap::iterator i=mUpdateable.begin(); i!=mUpdateable.end(); ++i)
     {
         if(i->second->mNotifications & View::kUpdate)
+        {
+            gUpdateProfiler.start(i->first);
             i->second->update();
+            gUpdateProfiler.end(i->first);
+        }
     }
+    gUpdateProfiler.endRound();
 }
 
 void Game::draw()
@@ -72,11 +86,19 @@ void Game::draw()
     glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	
+    gDrawProfiler.startRound();
+
     for(ViewMap::iterator i = mDrawable.begin(); i!= mDrawable.end(); ++i)
     {
         if(i->second->mNotifications & View::kDraw)
+        {
+            gDrawProfiler.start(i->first);
             i->second->draw();
+            gDrawProfiler.end(i->first);
+        }
     }
+
+    gDrawProfiler.endRound();
 }
 
 void Game::touches(uint32_t count, Touch* touches)

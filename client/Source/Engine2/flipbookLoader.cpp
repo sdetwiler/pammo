@@ -8,7 +8,7 @@ bool loadFlipbook(uint32_t baseId, uint32_t count, Image** images)
 {
     for(uint32_t i=0; i<count; ++i)
     {
-        images[i] = gImageLibrary->reference(baseId+i);
+        images[i] = gImageLibrary->getImage(baseId+i);
     }
 
     return true;
@@ -47,7 +47,7 @@ bool loadFlipbook(char const* path, Image** images, uint32_t maxImages, uint32_t
     {
         char filename[256];
         snprintf(filename, 255, "%s/%s", path, (*j).c_str());
-        images[i] = gImageLibrary->reference(filename);
+        images[i] = gImageLibrary->getImage(filename);
         if(!images[i])
         {
             dprintf("Failed to load image %s", filename);

@@ -17,6 +17,7 @@ using namespace std;
 #include <stdlib.h>
 #include <math.h>
 #include <time.h>
+#include <pthread.h>
 
 #include "vector2.h"
 #include "transform2.h"
@@ -36,6 +37,7 @@ struct Image
     Vector2 mSize;
     uint32_t mTexture;
     uint32_t mTableIndex; // To support reference/dereference images from Image*
+    int      mMode; // GL_RGB, GL_RGBA
 };
 
 struct Touch

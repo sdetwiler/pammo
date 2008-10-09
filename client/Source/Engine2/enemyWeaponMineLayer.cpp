@@ -57,7 +57,7 @@ void enemyWeaponMineLayerCb(Enemy* e, EnemyWeapon* w, EnemyManager* manager)
 
     Particle* p = NULL;
     // Get a particle.
-    p = gWorld->getParticleSystem()->addParticleWithBody(0);
+    p = gWorld->getParticleSystem()->addParticleWithBody(0, false);
     if(!p)
         return;
     
@@ -82,7 +82,7 @@ void enemyWeaponMineLayerCb(Enemy* e, EnemyWeapon* w, EnemyManager* manager)
     p->mBody->mCenter = e->mEntity.mCenter;
 
     // Setup image.
-    p->mImage.setImage(gImageLibrary->reference(PARTICLE_MINE));
+    p->mImage.setImage(gImageLibrary->getImage(PARTICLE_MINE));
     p->mImage.mAlpha = 1.0f;
     p->mImage.mCenter = p->mBody->mCenter;
     p->mImage.makeDirty();

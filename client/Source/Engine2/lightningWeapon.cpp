@@ -20,7 +20,7 @@ void lightningGlowParticleCallback(Particle* p, ParticleSystem* system);
 LightningWeapon::LightningWeapon()
     : Weapon()
 {
-    mIcon.setImage(gImageLibrary->reference(INTERFACE_ICON_WEAPON_LIGHTNINGGUN));
+    mIcon.setImage(gImageLibrary->getImage(INTERFACE_ICON_WEAPON_LIGHTNINGGUN));
 }
 
 LightningWeapon::~LightningWeapon()
@@ -38,7 +38,7 @@ void LightningWeapon::deselect()
 void LightningWeapon::fire()
 {
     // Get a particle.
-    Particle* p = gWorld->getParticleSystem()->addParticleWithBody(2);
+    Particle* p = gWorld->getParticleSystem()->addParticleWithBody(2, false);
     if(!p) return;
     
     // Get player.
@@ -63,7 +63,7 @@ void LightningWeapon::fire()
 		velocity+=100+(rand()%100);
 	}
 	
-	p->mImage.setImage(gImageLibrary->reference(PARTICLE_LIGHTNING_00 + i));
+	p->mImage.setImage(gImageLibrary->getImage(PARTICLE_LIGHTNING_00 + i));
     p->mImage.mCenter = player->mTurretTip;
     p->mImage.mRotation = initialRotation + r;
     p->mImage.makeDirty();
@@ -80,7 +80,7 @@ void LightningWeapon::fire()
     p->mBody->mVelocity = player->mBody->mVelocity + Vector2(velocity, 0) * Transform2::createRotation(initialRotation+r);
 
     // Get a particle.
-	p = gWorld->getParticleSystem()->addParticle(2);
+	p = gWorld->getParticleSystem()->addParticle(2, false);
     if(!p) return;
     
 
@@ -89,7 +89,7 @@ void LightningWeapon::fire()
     p->mAlpha = 0.6f;
     
     // Setup image.
-    p->mImage.setImage(gImageLibrary->reference(PARTICLE_LIGHTNING_GLOW_00));
+    p->mImage.setImage(gImageLibrary->getImage(PARTICLE_LIGHTNING_GLOW_00));
     p->mImage.mCenter = player->mTurretTip;
     p->mImage.mRotation = initialRotation + (r*4);
     p->mImage.makeDirty();

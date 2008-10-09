@@ -53,14 +53,14 @@ void enemyWeaponHeatSeakerMissleParticleCb(Particle* p, ParticleSystem* system)
     p->mImage.mCenter = p->mBody->mCenter; 
     p->mImage.makeDirty();
 
-    Particle* tailP = gWorld->getParticleSystem()->addParticle(2);
+    Particle* tailP = gWorld->getParticleSystem()->addParticle(2, false);
     if(!tailP)
         return;
 
     // Setup image properties.
     tailP->mImage.mCenter = p->mBody->mCenter;
     tailP->mImage.mRotation = p->mImage.mRotation+(M_PI/2.0f);
-    tailP->mImage.setImage(gImageLibrary->reference(PARTICLE_HEATSEAKER_TAIL_00));
+    tailP->mImage.setImage(gImageLibrary->getImage(PARTICLE_HEATSEAKER_TAIL_00));
     tailP->mImage.makeDirty();
 
     // Set jet flame specific particle properties.
@@ -130,7 +130,7 @@ void enemyWeaponHeatSeakerCb(Enemy* e, EnemyWeapon* w, EnemyManager* manager)
     p->mVelocity = Vector2(300.0f, 0);    
 
     // Setup image.
-    p->mImage.setImage(gImageLibrary->reference(PARTICLE_HEATSEAKER_00));
+    p->mImage.setImage(gImageLibrary->getImage(PARTICLE_HEATSEAKER_00));
 
     Vector2 heading = gWorld->getPlayer()->getCenter() - p->mBody->mCenter;
     float rot = atan2(heading.y, heading.x);

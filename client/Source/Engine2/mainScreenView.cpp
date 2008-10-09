@@ -19,14 +19,15 @@ MainScreenView::MainScreenView()
     //gMainScreenView = this;
     // Load background.
     gImageLibrary->setObserver(this);
-    mBackground = gImageLibrary->reference(INTERFACE_BACKGROUND_MAIN);
-    mButtonMask = gImageLibrary->reference(INTERFACE_BUTTONMASK);
+    mBackground = gImageLibrary->getImage(INTERFACE_BACKGROUND_MAIN);
+    mButtonMask = gImageLibrary->getImage(INTERFACE_BUTTONMASK);
 }
 
 MainScreenView::~MainScreenView()
 {
     gImageLibrary->setObserver(NULL);
-    gImageLibrary->unreference(mBackground);
+    gImageLibrary->purgeImage(mBackground);
+    gImageLibrary->purgeImage(mButtonMask);
 }
     
 uint32_t MainScreenView::getTouchPriority() const
@@ -53,16 +54,9 @@ void MainScreenView::update()
     //}
 }
 
-void MainScreenView::onPercentLoaded(float pct)
+void MainScreenView::onPreloadComplete()
 {
-    mPreloadPercent = pct;
-    if(pct >= 1.0f)
-    {
-        dprintf("Done preloading.");
-        mPreloadComplete = true;
-    }
-    else
-        mPreloadComplete = false;
+    mPreloadComplete = true;
 }
 
 void MainScreenView::draw()

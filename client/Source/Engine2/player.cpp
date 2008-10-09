@@ -54,12 +54,12 @@ Player::Player() : View()
     mEnergyMeter->setGrowDirection(-1);
     mEnergyMeter->setBaseLocation(Vector2(200, 16));
 
-    mMovementRing = new TargetRingWidget(kMoveRingPriority, gImageLibrary->reference(INTERFACE_RING_MOVEMENT));
+    mMovementRing = new TargetRingWidget(kMoveRingPriority, gImageLibrary->getImage(INTERFACE_RING_MOVEMENT));
     mMovementRing->setCenter(Vector2(70, 250));
     mMovementRing->setSize(mMovementRing->getSize()*0.8);
     mMovementRing->setObserver(this);
     
-    mTargetRing = new TargetRingWidget(kFireRingPriority, gImageLibrary->reference(INTERFACE_RING_TARGET));
+    mTargetRing = new TargetRingWidget(kFireRingPriority, gImageLibrary->getImage(INTERFACE_RING_TARGET));
     mTargetRing->setCenter(Vector2(410, 250));
     mTargetRing->setSize(mTargetRing->getSize()*0.8);
     mTargetRing->setObserver(this);
@@ -77,7 +77,11 @@ Player::Player() : View()
     mShieldFlipCount = 0;
     mShieldEntity.setImage(mShieldImages[mShieldCurrImage]);
 
-    mTurret.setImage(gImageLibrary->reference(VEHICLE_TANK_TURRET_00));
+    mTurret.setImage(gImageLibrary->getImage(VEHICLE_TANK_TURRET_00));
+
+    mShadow.setImage(gImageLibrary->getImage(PARTICLE_SHADOW_00));
+    mShadow.mAlpha = 0.5f;
+    mShadow.mSize *= 1.2f;
 
     mController = new VehicleController();
 
@@ -205,7 +209,7 @@ bool Player::touch(uint32_t count, Touch* touches)
 void Player::createDust()
 {
     // Get a particle.
-	Particle* p = gWorld->getParticleSystem()->addParticle(1);
+	Particle* p = gWorld->getParticleSystem()->addParticle(1, true);
     if(!p) return;
     
     // Get player.
@@ -221,7 +225,7 @@ void Player::createDust()
     float initialRotation = atan2(mBody->mVelocity.y, mBody->mVelocity.x );
     
     // Setup image.
-    p->mImage.setImage(gImageLibrary->reference(PARTICLE_DUST_00));
+    p->mImage.setImage(gImageLibrary->getImage(PARTICLE_DUST_00));
     p->mImage.mCenter = player->mBody->mCenter;
     p->mImage.mRotation = initialRotation + r;
 	p->mImage.makeDirty();
@@ -234,7 +238,10 @@ void Player::update()
     mEntity.mRotation = mController->mRotation + M_PI/2;
     mEntity.mCenter = mBody->mCenter;
     mEntity.makeDirty();
-    
+
+    mShadow.mCenter = mEntity.mCenter + Vector2(-4.0f, 4.0f);
+    mShadow.makeDirty();
+
     Vector2 turretCenter = mBody->mCenter
                      + Vector2(-8.0f, 0.0f)
                      * Transform2::createRotation(mController->mRotation);
@@ -346,6 +353,7 @@ void Player::draw()
 
     gWorld->getCamera()->set();
     
+    mShadow.draw();
     mEntity.draw();
     mTurret.draw();
     

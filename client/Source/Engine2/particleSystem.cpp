@@ -167,6 +167,13 @@ ParticleSystem::ParticleSystem(uint32_t numParticles)
 		p->mNext = mFree;
 		mFree = p;
 	}
+
+#ifdef PROFILE
+    mParticleCount = numParticles;
+    mFreeCount = mParticleCount;
+    mDrawCount = 0;
+    mCullCount = 0;
+#endif
 }
 
 ParticleSystem::~ParticleSystem()
@@ -216,7 +223,21 @@ void ParticleSystem::destroy()
     }
 }
 
-Particle* ParticleSystem::addParticle(uint32_t priority)
+#ifdef PROFILE
+void ParticleSystem::dumpStats()
+{
+    dprintf("Particle System:   total   used   draw   cull");
+    dprintf("                  % 6u % 6u % 6u % 6u\n",
+        mParticleCount,
+        mParticleCount-mFreeCount,
+        mDrawCount,
+        mCullCount
+        );
+
+}
+#endif
+
+Particle* ParticleSystem::addParticle(uint32_t priority, bool optional)
 {
 	if(priority > (mManagerCount-1))
 		return NULL;
@@ -229,20 +250,29 @@ Particle* ParticleSystem::addParticle(uint32_t priority)
 	}
 
 	p = mFree;
+    p->mOptional = optional;
 	mFree = mFree->mNext;
     memset(p, 0, sizeof(Particle));
 	mManagers[priority]->addParticle(p);
+
+#ifdef PROFILE
+    --mFreeCount;
+#endif
 
     return p;
 }
 
 void ParticleSystem::returnParticle(Particle* p)
 {
-	p->mNext = mFree;
+    p->mNext = mFree;
 	mFree = p;
+
+#ifdef PROFILE
+    ++mFreeCount;
+#endif
 }
 
-Particle* ParticleSystem::addParticleWithBody(uint32_t priority)
+Particle* ParticleSystem::addParticleWithBody(uint32_t priority, bool optional)
 {
     if(priority > (mManagerCount-1))
 		return NULL;
@@ -251,7 +281,7 @@ Particle* ParticleSystem::addParticleWithBody(uint32_t priority)
     if(!body)
         return NULL;
 
-    Particle* p = addParticle(priority);
+    Particle* p = addParticle(priority, optional);
     if(!p)
     {
         gWorld->getPhysics()->removeBody(body);
@@ -273,7 +303,7 @@ void ParticleSystem::removeParticle(Particle* p)
 void ParticleSystem::initSmokeParticle(Vector2 const& initialPosition, float initialRotation, Vector2 const& initialVelocity)
 {
     // Grab a particle.
-    Particle* p = addParticle(1);
+    Particle* p = addParticle(1, true);
     if(!p) return;
         
     // Properties about smoke particles.
@@ -283,7 +313,7 @@ void ParticleSystem::initSmokeParticle(Vector2 const& initialPosition, float ini
     p->mAlpha = 1.0f;
 
     // Setup image.
-    p->mImage.setImage(gImageLibrary->reference(PARTICLE_SMOKE_00));
+    p->mImage.setImage(gImageLibrary->getImage(PARTICLE_SMOKE_00));
     p->mImage.mCenter = initialPosition;
     p->mImage.mRotation = initialRotation;
     p->mImage.makeDirty();
@@ -295,7 +325,7 @@ void ParticleSystem::initSmokeParticle(Vector2 const& initialPosition, float ini
 void ParticleSystem::initExplosionParticle(Vector2 const& initialPosition)
 {
     // Grab a particle.
-    Particle* p = addParticle(3);
+    Particle* p = addParticle(3, false);
     if(!p) return;
 
     ExplosionParticleData* data = (ExplosionParticleData*)p->mData;
@@ -309,7 +339,7 @@ void ParticleSystem::initExplosionParticle(Vector2 const& initialPosition)
     p->mAlpha = 1.0f;
 
     // Setup image.
-    p->mImage.setImage(gImageLibrary->reference(PARTICLE_EXPLOSION_00 + rand()%PARTICLE_EXPLOSION_COUNT));
+    p->mImage.setImage(gImageLibrary->getImage(PARTICLE_EXPLOSION_00 + rand()%PARTICLE_EXPLOSION_COUNT));
     p->mImage.mCenter = initialPosition + Vector2((float)(rand()%20), (float)(rand()%20));
     p->mImage.makeDirty();
 }
@@ -317,7 +347,7 @@ void ParticleSystem::initExplosionParticle(Vector2 const& initialPosition)
 void ParticleSystem::initRubbleParticle(Vector2 const& initialPosition)
 {
     // Grab a particle.
-    Particle* p = addParticle(2);
+    Particle* p = addParticle(2, true);
     if(!p) return;
 
     // Set basic particle properties.
@@ -325,7 +355,7 @@ void ParticleSystem::initRubbleParticle(Vector2 const& initialPosition)
     p->mAlpha = 0.8f;
 
     // Setup image.
-    p->mImage.setImage(gImageLibrary->reference(PARTICLE_RUBBLE_00));
+    p->mImage.setImage(gImageLibrary->getImage(PARTICLE_RUBBLE_00));
     //p->mImage.mSize = Vector2(2.0f, 2.0f);
     p->mImage.mCenter = initialPosition;// + Vector2((float)(rand()%20), (float)(rand()%20));
     p->mImage.makeDirty();
@@ -335,7 +365,7 @@ void ParticleSystem::initRubbleParticle(Vector2 const& initialPosition)
 void ParticleSystem::initBallParticle(InitBallParticleArgs const& args)
 {
     // Grab a particle.
-    Particle* p = addParticleWithBody(3);
+    Particle* p = addParticleWithBody(3, false);
     if(!p) return;
         
     // Properties about ball particles.
@@ -347,7 +377,7 @@ void ParticleSystem::initBallParticle(InitBallParticleArgs const& args)
     p->mStartPosition = args.initialPosition;
     
     // Setup image.
-    p->mImage.setImage(gImageLibrary->reference(PARTICLE_BALL_00));
+    p->mImage.setImage(gImageLibrary->getImage(PARTICLE_BALL_00));
     p->mImage.mCenter = args.initialPosition;
     p->mImage.mRotation = args.initialRotation;
     p->mImage.makeDirty();
@@ -382,6 +412,11 @@ ParticleSystem::ParticleManager::ParticleManager()
 	mHead = NULL;
 	mTail = NULL;
 	mPriority = kParticle0Priority;
+
+#ifdef PROFILE
+    mLastDrawCount = 0;
+    mLastCullCount = 0;
+#endif
 }
 
 ParticleSystem::ParticleManager::~ParticleManager()
@@ -411,8 +446,6 @@ void ParticleSystem::ParticleManager::reset()
         removeParticle(p);
         p = next;
     }
-    //mHead = NULL;
-    //mTail = NULL;
 }
 
 void ParticleSystem::ParticleManager::setSystem(ParticleSystem* particleSystem)
@@ -523,9 +556,11 @@ void ParticleSystem::ParticleManager::update()
 
     static const float screenRadius = (320.0f * 320.0f) + (480.0f * 480.0f);
     
+#ifdef PROFILE
     uint32_t toDraw=0;
-    uint32_t toSkip=0;
-	// Update in reverse order to preserve draw order based on insertion order.
+    uint32_t toCull=0;
+#endif
+    // Update in reverse order to preserve draw order based on insertion order.
 	curr = mTail;
 	while(curr)
 	{
@@ -551,21 +586,33 @@ void ParticleSystem::ParticleManager::update()
             
             if(((x+y) - particleRadius) - screenRadius <=0)
             {
+#ifdef PROFILE
                 ++toDraw;
+#endif
                 curr->mDrawNext = mDrawHead;
                 mDrawHead = curr;
             }
+#ifdef PROFILE
             else
             {
-                ++toSkip;
+                ++toCull;
             }
-
+#endif
 		}
 
         curr = curr->mPrev;
 	}
 
-    //dprintf("draw %u. cull %u", toDraw, toSkip);
+#ifdef PROFILE
+    mParticleSystem->mDrawCount-= mLastDrawCount;
+    mParticleSystem->mDrawCount+= toDraw;
+
+    mParticleSystem->mCullCount-= mLastCullCount;
+    mParticleSystem->mCullCount+= toCull;
+
+    mLastDrawCount = toDraw;
+    mLastCullCount = toCull;
+#endif
 }
 
 

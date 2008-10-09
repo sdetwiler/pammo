@@ -18,7 +18,7 @@ WeaponSelector::WeaponSelector()
     
     mSelected = 0;
     
-    mHighlight = new ImageEntity(gImageLibrary->reference(INTERFACE_ICON_WEAPON_HIGHLIGHT));
+    mHighlight = new ImageEntity(gImageLibrary->getImage(INTERFACE_ICON_WEAPON_HIGHLIGHT));
     mHighlight->mSize = Vector2(kIconSize, kIconSize);
     mHighlight->mRotation = 0;
     mHighlight->makeDirty();

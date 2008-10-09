@@ -12,12 +12,12 @@ TutorialScreenView::TutorialScreenView()
 {
 //    gTutorialScreenView = this;
     // Load background.
-    mBackground = gImageLibrary->reference(INTERFACE_BACKGROUND_TUTORIAL);
+    mBackground = gImageLibrary->getImage(INTERFACE_BACKGROUND_TUTORIAL);
 }
 
 TutorialScreenView::~TutorialScreenView()
 {
-    gImageLibrary->unreference(mBackground);
+    gImageLibrary->purgeImage(mBackground);
 }
     
 uint32_t TutorialScreenView::getTouchPriority() const

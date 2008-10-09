@@ -75,7 +75,7 @@ void enemyWeaponMachineGunCb(Enemy* e, EnemyWeapon* w, EnemyManager* manager)
     p->mAlpha = 1.0f;
     
     // Setup image.
-    p->mImage.setImage(gImageLibrary->reference(PARTICLE_MACHINEGUN_00 + rand()%PARTICLE_MACHINEGUN_COUNT));
+    p->mImage.setImage(gImageLibrary->getImage(PARTICLE_MACHINEGUN_00 + rand()%PARTICLE_MACHINEGUN_COUNT));
     p->mImage.makeDirty();
         
     // Properties about machine gun particle bodies.

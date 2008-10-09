@@ -24,7 +24,7 @@ public:
     virtual uint32_t getDrawPriority() const;
     virtual uint32_t getUpdatePriority() const;
 
-    virtual void onPercentLoaded(float pct);
+    virtual void onPreloadComplete();
 
 private:
     //void selectVehicle(uint32_t type);

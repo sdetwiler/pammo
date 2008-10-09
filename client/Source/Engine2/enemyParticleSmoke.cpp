@@ -38,7 +38,7 @@ void enemyParticleSmokeCb(Enemy* e, EnemyParticle* ep, EnemyManager* manager)
     Particle* p = NULL;
 
     // Get a particle.
-    p = gWorld->getParticleSystem()->addParticleWithBody(2);
+    p = gWorld->getParticleSystem()->addParticleWithBody(2, true);
     if(!p)
         return;
 
@@ -50,7 +50,7 @@ void enemyParticleSmokeCb(Enemy* e, EnemyParticle* ep, EnemyManager* manager)
     // Setup image properties.
     p->mImage.mCenter = center;
     p->mImage.mRotation = data->mRotation;
-    p->mImage.setImage(gImageLibrary->reference(atol(ep->mImagePath)));
+    p->mImage.setImage(gImageLibrary->getImage(atol(ep->mImagePath)));
     p->mImage.makeDirty();
 
     // Base properties about particle bodies.

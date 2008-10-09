@@ -58,7 +58,6 @@ void ImageEntity::setImageWithoutSize(Image* image)
 {
     assert(image);
     mImage = image;
-//    mSize = mImage->mSize;
     mDirty = true;
 }
 
@@ -84,6 +83,11 @@ Image* ImageEntity::getImage()
 
 void ImageEntity::draw()
 {
+#ifdef PROFILE
+    static int lastTexture = 0;
+    static uint32_t tick=0;
+    static uint32_t total=0;
+#endif
     if(mDirty)
     {
         Transform2 t = Transform2::createRotation(mRotation);
@@ -97,15 +101,43 @@ void ImageEntity::draw()
     }
     
     glLoadIdentity();
-    
+
     glVertexPointer(2, GL_FLOAT, 0, (float*)mVertices);
     glTexCoordPointer(2, GL_FLOAT, 0, spriteTexcoords);
 
     glColor4f(1.0f, 1.0f, 1.0f, mAlpha);
-    glBindTexture(GL_TEXTURE_2D, mImage->mTexture);
-	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
+    //if(lastTexture != mImage->mTexture)
+    {
+        glBindTexture(GL_TEXTURE_2D, mImage->mTexture);
+
+//        lastTexture = mImage->mTexture;
+    }
+
+#ifdef PROFILE
+    uint64_t start = getTime();
+#endif
+
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
+#ifdef PROFILE
+    uint64_t end = getTime();
+#endif
     
 	glColor4f(1, 1, 1, 1);
+
+#ifdef PROFILE
+    uint32_t delta = (uint32_t)(end-start);
+    total+=delta;
+    ++tick;
+    if(!(tick%200))
+    {
+        dprintf("glDrawArrays took %u\t(%.2f ave)", 
+            delta,
+            (float)(total)/(float)tick
+            );
+    }
+#endif
 }
 
 

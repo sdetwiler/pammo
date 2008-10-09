@@ -16,8 +16,8 @@ ShieldToggle::ShieldToggle()
     mObserver = 0;
     mToggle = 0;
     
-    mDisabledImage = gImageLibrary->reference(INTERFACE_ICON_SHELD_DISABLE);
-    mEnabledImage = gImageLibrary->reference(INTERFACE_ICON_SHELD_ENABLE);
+    mDisabledImage = gImageLibrary->getImage(INTERFACE_ICON_SHELD_DISABLE);
+    mEnabledImage = gImageLibrary->getImage(INTERFACE_ICON_SHELD_ENABLE);
     
     mEntity = new ImageEntity();
     mEntity->mCenter = Vector2(20, 100);

@@ -33,9 +33,13 @@ public:
     virtual ~ParticleSystem();
 
     // Returns null if no particles are available.
-    Particle* addParticle(uint32_t priority);
-    Particle* addParticleWithBody(uint32_t priority);
+    Particle* addParticle(uint32_t priority, bool optional);
+    Particle* addParticleWithBody(uint32_t priority, bool optional);
 	void removeParticle(Particle* p);
+
+#ifdef PROFILE
+    void dumpStats();
+#endif
 
     struct InitFireParticleArgs
     {
@@ -64,9 +68,6 @@ public:
     void disable();
 
     void destroy();
-
-    void sanityCheck(char const* msg);
-
 
 	class ParticleManager : public View
 	{
@@ -104,7 +105,18 @@ public:
 		// Owning particle system.
 		ParticleSystem* mParticleSystem;
 		ViewPriorities mPriority;
+
+        // Debugging.
+        uint32_t mLastDrawCount;
+        uint32_t mLastCullCount;
 	};
+
+#ifdef PROFILE
+    uint32_t mParticleCount;
+    uint32_t mFreeCount;
+    uint32_t mDrawCount;
+    uint32_t mCullCount;
+#endif
 
 	Particle* mFree;
 	ParticleManager** mManagers;
@@ -139,6 +151,8 @@ struct Particle
     bool         mToAdd;
     Particle*    mAddNext;
 	Particle*    mDrawNext;
+
+    bool         mOptional;       // This particle is optional and can be removed if load is too great.
 };
 
 } // namespace pammo

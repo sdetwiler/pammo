@@ -15,6 +15,10 @@ class Physics;
 class Minimap;
 class InterfaceView;
 
+#ifdef PROFILE
+class DebugScreenView;
+#endif
+
 class EnemyManager;
 
 class World
@@ -46,6 +50,10 @@ class World
         Minimap* mMinimap;
         
         InterfaceView* mInterfaceView;
+
+#ifdef PROFILE
+        DebugScreenView* mDebugView;
+#endif
 
         Player* mPlayer;
         EnemyManager* mEnemyManager;

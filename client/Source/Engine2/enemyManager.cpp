@@ -94,7 +94,7 @@ void enemyWeaponTurretUpdate(Enemy* e, EnemyWeapon* w, EnemyManager* manager, Tu
 void enemyWeaponTurretGetParticleWithBody(Enemy* e, EnemyWeapon* w, EnemyManager* manager, TurretWeaponData* data, Particle** p)
 {
     // Get a particle.
-    *p = gWorld->getParticleSystem()->addParticleWithBody(2);
+    *p = gWorld->getParticleSystem()->addParticleWithBody(2, false);
     if(!*p)
         return;
 
@@ -467,12 +467,12 @@ void enemyDamageCb(Enemy* e, ParticleType type, float amount)
 
         for(uint32_t i=0; i<e->mImageCount; ++i)
         {
-            gImageLibrary->unreference(e->mImages[i]);
+            gImageLibrary->purgeImage(e->mImages[i]);
         }
 
         for(uint32_t i=0; i<e->mWeaponCount; ++i)
         {
-            gImageLibrary->unreference(e->mWeapon[i].mEntity.getImage());
+            gImageLibrary->purgeImage(e->mWeapon[i].mEntity.getImage());
         }
         
         gWorld->getEnemyManager()->removeEnemy(e);
@@ -557,8 +557,8 @@ bool EnemyManager::loadEnemyTemplate(char const* enemyName)
 
     if(enemyTemplate->mImageType == Single)
     {
-        enemyTemplate->mImages[0] = gImageLibrary->reference(atol(enemyTemplate->mImagePath));
-        //        enemyTemplate->mImages[0] = gImageLibrary->reference(enemyTemplate->mImagePath);
+        enemyTemplate->mImages[0] = gImageLibrary->getImage(atol(enemyTemplate->mImagePath));
+        //        enemyTemplate->mImages[0] = gImageLibrary->getImage(enemyTemplate->mImagePath);
         enemyTemplate->mImageCount = 1;
     }    
     else
@@ -610,7 +610,8 @@ bool EnemyManager::initializeEnemy(Enemy* e, EnemyTemplate* enemyTemplate)
     for(uint32_t i=0; i<e->mImageCount; ++i)
     {
         e->mImages[i] = enemyTemplate->mImages[i];
-        gImageLibrary->reference(e->mImages[i]);
+        // No longer ref counting.
+        //gImageLibrary->getImage(e->mImages[i]);
     }
     // SCD A dirty hack so I don't have to set size on the flipbook rotations to preserve scaling animations.
     e->mEntity.mSize = e->mImages[0]->mSize;
@@ -647,10 +648,10 @@ bool EnemyManager::initializeEnemy(Enemy* e, EnemyTemplate* enemyTemplate)
         e->mBody->mBodyCallback = behaviorPounceAndStalkCollisionCb;
         e->mBody->mShapeCallback = behaviorPounceAndStalkShapeCollisionCb;     
 
-        ((PounceAndStalkBehaviorData*)&e->mBehavior.mData)->mShadow = gWorld->getParticleSystem()->addParticle(0);
+        ((PounceAndStalkBehaviorData*)&e->mBehavior.mData)->mShadow = gWorld->getParticleSystem()->addParticle(0, true);
         ((PounceAndStalkBehaviorData*)&e->mBehavior.mData)->mShadow->mAlpha = 0.5f;
         ((PounceAndStalkBehaviorData*)&e->mBehavior.mData)->mShadow->mCallback = pounceAndStalkShadowParticleCallback;
-        ((PounceAndStalkBehaviorData*)&e->mBehavior.mData)->mShadow->mImage.setImage(gImageLibrary->reference(PARTICLE_SHADOW_00));
+        ((PounceAndStalkBehaviorData*)&e->mBehavior.mData)->mShadow->mImage.setImage(gImageLibrary->getImage(PARTICLE_SHADOW_00));
 
         break;
     }
@@ -660,7 +661,7 @@ bool EnemyManager::initializeEnemy(Enemy* e, EnemyTemplate* enemyTemplate)
     for(uint32_t i=0; i<e->mWeaponCount; ++i)
     {
         memcpy(&e->mWeapon[i], &enemyTemplate->mWeapons[i].mWeapon, sizeof(EnemyWeapon));
-        e->mWeapon[i].mEntity.setImageAndInit(gImageLibrary->reference(atol(enemyTemplate->mWeapons[i].mImagePath)));
+        e->mWeapon[i].mEntity.setImageAndInit(gImageLibrary->getImage(atol(enemyTemplate->mWeapons[i].mImagePath)));
         switch(e->mWeapon[i].mType)
         {
         case Flamethrower:

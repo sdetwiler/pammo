@@ -10,16 +10,16 @@ namespace pammo
 class Camera;
 class Map;
 class Player;
+class InfastructureManager;
 class ParticleSystem;
 class Physics;
 class Minimap;
 class InterfaceView;
+class EnemyManager;
 
 #ifdef PROFILE
 class DebugScreenView;
 #endif
-
-class EnemyManager;
 
 class World
 {
@@ -33,6 +33,7 @@ class World
         Physics* getPhysics();
         Minimap* getMinimap();
         Player* getPlayer() const;
+        InfastructureManager* getInfastructureManager() const;
         EnemyManager* getEnemyManager() const;
         
         void reset();
@@ -47,6 +48,7 @@ class World
         Map* mMap;
         ParticleSystem* mParticleSystem;
         Physics* mPhysics;
+        InfastructureManager* mInfastructureManager;
         Minimap* mMinimap;
         
         InterfaceView* mInterfaceView;

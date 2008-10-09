@@ -31,7 +31,7 @@
 		113B2C2D0DF65EB20095A737 /* map.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 113B2C2C0DF65EB20095A737 /* map.cpp */; };
 		113E769A0E4A6FE3005A8070 /* levelLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 113E76960E4A6FE3005A8070 /* levelLoader.cpp */; };
 		113E769B0E4A6FE3005A8070 /* mainScreenView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 113E76980E4A6FE3005A8070 /* mainScreenView.cpp */; };
-		11499E170E99CE0C00FBA3D0 /* powerup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11499E160E99CE0C00FBA3D0 /* powerup.cpp */; };
+		11499E170E99CE0C00FBA3D0 /* infastructureManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11499E160E99CE0C00FBA3D0 /* infastructureManager.cpp */; };
 		115577B90E9454FD00171852 /* creditsScreenView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 115577B20E9454FD00171852 /* creditsScreenView.cpp */; };
 		115577BA0E9454FD00171852 /* deathCardView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 115577B40E9454FD00171852 /* deathCardView.cpp */; };
 		115577BC0E9454FD00171852 /* tutorialScreenView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 115577B70E9454FD00171852 /* tutorialScreenView.cpp */; };
@@ -131,8 +131,8 @@
 		113E76970E4A6FE3005A8070 /* levelLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = levelLoader.h; sourceTree = "<group>"; };
 		113E76980E4A6FE3005A8070 /* mainScreenView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mainScreenView.cpp; sourceTree = "<group>"; };
 		113E76990E4A6FE3005A8070 /* mainScreenView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mainScreenView.h; sourceTree = "<group>"; };
-		11499E150E99CE0C00FBA3D0 /* powerup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = powerup.h; sourceTree = "<group>"; };
-		11499E160E99CE0C00FBA3D0 /* powerup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = powerup.cpp; sourceTree = "<group>"; };
+		11499E150E99CE0C00FBA3D0 /* infastructureManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = infastructureManager.h; sourceTree = "<group>"; };
+		11499E160E99CE0C00FBA3D0 /* infastructureManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = infastructureManager.cpp; sourceTree = "<group>"; };
 		115577B20E9454FD00171852 /* creditsScreenView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = creditsScreenView.cpp; sourceTree = "<group>"; };
 		115577B30E9454FD00171852 /* creditsScreenView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = creditsScreenView.h; sourceTree = "<group>"; };
 		115577B40E9454FD00171852 /* deathCardView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = deathCardView.cpp; sourceTree = "<group>"; };
@@ -271,10 +271,10 @@
 			children = (
 				1106657F0E635A240023ABB1 /* healthMeter.cpp */,
 				110665800E635A240023ABB1 /* healthMeter.h */,
+				11499E160E99CE0C00FBA3D0 /* infastructureManager.cpp */,
+				11499E150E99CE0C00FBA3D0 /* infastructureManager.h */,
 				11C3F42D0E2F0F3A00EE8D28 /* player.cpp */,
 				11C3F42F0E2F0F7E00EE8D28 /* player.h */,
-				11499E160E99CE0C00FBA3D0 /* powerup.cpp */,
-				11499E150E99CE0C00FBA3D0 /* powerup.h */,
 				11FBD5C00E7AE3C60070BD31 /* scoreMeter.cpp */,
 				11FBD5C10E7AE3C60070BD31 /* scoreMeter.h */,
 				11B9F6690E949106002236D1 /* shieldToggle.cpp */,
@@ -533,7 +533,7 @@
 				115577BA0E9454FD00171852 /* deathCardView.cpp in Sources */,
 				115577BC0E9454FD00171852 /* tutorialScreenView.cpp in Sources */,
 				11B9F66A0E949106002236D1 /* shieldToggle.cpp in Sources */,
-				11499E170E99CE0C00FBA3D0 /* powerup.cpp in Sources */,
+				11499E170E99CE0C00FBA3D0 /* infastructureManager.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -6,6 +6,7 @@
 #include "map.h"
 #include "enemyManager.h"
 #include "player.h"
+#include "infastructureManager.h"
 #include "physics.h"
 #include "minimap.h"
 
@@ -210,7 +211,8 @@ void buildCollisionMap(World* world, char const* mapName)
         }
         else if(properties == 2)
         {
-            dprintf("Infastructure Point: %f, %f", x, y);
+            //dprintf("Infastructure Point: %f, %f", x, y);
+            world->getInfastructureManager()->setLocation(Vector2(x, y));
         }
     }
     

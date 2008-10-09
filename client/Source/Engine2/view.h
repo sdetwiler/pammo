@@ -19,6 +19,7 @@ enum ViewPriorities
     kParticle0Priority = 120,
     kParticle1Priority = 125,
     kPlayerPriority = 140,
+    kInfastructureManagerPriority = 145,
     kEnemyManagerPriority = 150,
     kParticle2Priority = 155,
     kParticle3Priority = 156,

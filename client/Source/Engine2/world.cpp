@@ -1,11 +1,14 @@
 #include "world.h"
+
 #include "levelLoader.h"
+#include "builder.h"
+
 #include "game.h"
 #include "camera.h"
 #include "imageLibrary.h"
 #include "player.h"
+#include "infastructureManager.h"
 #include "map.h"
-#include "builder.h"
 #include "particleSystem.h"
 #include "physics.h"
 #include "minimap.h"
@@ -17,6 +20,7 @@
 #ifdef PROFILE
 #include "debugScreenView.h"
 #endif 
+
 namespace pammo
 {
     
@@ -44,6 +48,8 @@ World::World()
 #endif
 
     mPlayer = new Player();
+    
+    mInfastructureManager = new InfastructureManager();
 
     char mapName[256];
     LevelLoader loader;
@@ -111,6 +117,11 @@ Player* World::getPlayer() const
     return mPlayer;
 }
 
+InfastructureManager* World::getInfastructureManager() const
+{
+    return mInfastructureManager;
+}
+
 EnemyManager* World::getEnemyManager() const
 {
     return mEnemyManager;
@@ -121,7 +132,7 @@ void World::reset()
     mParticleSystem->reset();
     mPlayer->reset();
     mEnemyManager->reset();
- //   mPhysics->reset();
+    mInfastructureManager->reset();
 }
 
 void World::disable()
@@ -129,6 +140,7 @@ void World::disable()
     mPlayer->disable();
     mParticleSystem->disable();
 
+    mInfastructureManager->disableAll();
     mMap->disableAll();
     mPhysics->disableAll();
     mMinimap->disableAll();
@@ -141,6 +153,7 @@ void World::enable()
     mPlayer->enable();
     mParticleSystem->enable();
 
+    mInfastructureManager->enableAll();
     mMap->enableAll();
     mPhysics->enableAll();
     mMinimap->enableAll();

@@ -118,19 +118,13 @@ ImageTexture gImagePath[] =
 
     {"interface/buttonMask.png", NULL, true},                  // 76
     
-    {"particles/powerupLifeUpgrade", NULL, false},              // 77
-    
-    {"particles/powerupLifeRestore", NULL, false},              // 78
-    
-    {"particles/powerupEnergyUpgrade", NULL, false},            // 79
-    
-    {"particles/powerupEnergyRestore", NULL, false},            // 80
-    
-    {"particles/powerupShield", NULL, false},                   // 81
-    
-    {"particles/powerupGooWeapon", NULL, false},                // 82
-    
-    {"particles/powerupGrenadeLauncherWeapon", NULL, false},    // 83
+    {"particles/powerupLifeUpgrade.png", NULL, false},              // 77
+    {"particles/powerupLifeRestore.png", NULL, false},              // 78
+    {"particles/powerupEnergyUpgrade.png", NULL, false},            // 79
+    {"particles/powerupEnergyRestore.png", NULL, false},            // 80
+    {"particles/powerupShield.png", NULL, false},                   // 81
+    {"particles/powerupGooWeapon.png", NULL, false},                // 82
+    {"particles/powerupGrenadeLauncherWeapon.png", NULL, false},    // 83
     
     {"backdroptiles/testmap/preview.png", NULL, false},    // 84
     
@@ -485,14 +479,9 @@ void* ImageLibrary::threadBootFunc(void* arg)
 
 void ImageLibrary::threadFunc()
 {
+    pthread_mutex_lock(&mMutex);
     while(true)
     {
-        pthread_mutex_lock(&mMutex);
-        dprintf("ImageLibrary::threadFunc going to sleep.");
-        pthread_cond_wait(&mCondition, &mMutex);
-
-        dprintf("ImageLibrary::threadFunc woke up.");
-
         if(mRunning == false)
         {
             pthread_mutex_unlock(&mMutex);
@@ -512,8 +501,10 @@ void ImageLibrary::threadFunc()
             curr->mNext = mToNotify;
             mToNotify = curr;
         }
-
-        pthread_mutex_unlock(&mMutex);
+        
+        dprintf("ImageLibrary::threadFunc going to sleep.");
+        pthread_cond_wait(&mCondition, &mMutex);
+        dprintf("ImageLibrary::threadFunc woke up.");
     }
 }
 

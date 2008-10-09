@@ -66,10 +66,10 @@ void MainScreenView::draw()
     Transform2 trans = Transform2::createScale(Vector2(mBackground->mSize.y, mBackground->mSize.x)) * Transform2::createTranslation(Vector2(0.5, 0.5)) * Transform2::createRotation(-M_PI/2) * Transform2::createTranslation(Vector2(-0.5, -0.5));
     drawImage(mBackground, trans, 1);
 
-    if(!mPreloadComplete)
+    if(mPreloadComplete)
     {
-//        trans = Transform2::createTranslation(Vector2(230.0f - 28.0f, 245.0f - 32.0f)) * Transform2::createScale(mButtonMask->mSize);
-//        drawImage(mButtonMask, trans, 1.0-mPreloadPercent);
+        trans = Transform2::createTranslation(Vector2(240.0f - mButtonMask->mSize.x/2, 320 - mButtonMask->mSize.y)) * Transform2::createScale(mButtonMask->mSize);
+        drawImage(mButtonMask, trans, 1.0);
     }
 
 }

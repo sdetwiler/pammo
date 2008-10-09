@@ -113,8 +113,6 @@ void enemyWeaponTurretGetParticleWithBody(Enemy* e, EnemyWeapon* w, EnemyManager
     (*p)->mStartPosition = data->mTurretTip;
 }
 
-
-
 void behaviorSurroundCb(Enemy* e, EnemyManager* manager)
 {
     SurroundBehaviorData* data = (SurroundBehaviorData*)e->mBehavior.mData;
@@ -825,7 +823,7 @@ void EnemyManager::update()
     while(e)
 	{
 	    e->mUpdateCb(e, this);
-        minimap->markEnemy(e->mBody->mCenter);
+        minimap->mark(e->mBody->mCenter, kMinimapEnemyMarker);
 		assert(e!=e->mNext);
 		e = e->mNext;
 	}

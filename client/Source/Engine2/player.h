@@ -8,6 +8,7 @@
 #include "weaponSelector.h"
 #include "shieldToggle.h"
 #include "particleSystem.h" // For particle types.
+#include "infastructureManager.h" // For powerup type.
 
 #define PLAYER_MAX_IMAGE_COUNT    VEHICLE_TANK_COUNT
 #define SHIELD_MAX_IMAGE_COUNT 3
@@ -53,6 +54,7 @@ class Player :
         virtual void onShieldToggleUpdated(ShieldToggle* widget, bool toggle);
         
 		void damage(ParticleType type, float amount);
+        void givePowerup(PowerupType type);
 
         void reset();
         void enable();
@@ -102,7 +104,7 @@ class Player :
         
         // Shield.
         ShieldToggle* mShieldToggle;
-        bool mShielding;
+        bool mShielding, mHashShield;
         ImageEntity mShieldEntity;
         Image*      mShieldImages[SHIELD_MAX_IMAGE_COUNT];
         uint32_t    mShieldImageCount;
@@ -112,7 +114,6 @@ class Player :
         // Score.
         ScoreMeter* mScoreMeter;
         uint32_t mScore;
-
         
         // Misc.
         Vector2 mSpawnPoint;

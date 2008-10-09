@@ -11,6 +11,7 @@
 #include "particleSystem.h"
 #include "vehicleController.h"
 #include "physics.h"
+#include "minimap.h"
 
 //#include "flamethrowerWeapon.h"
 #include "lightningWeapon.h"
@@ -53,6 +54,7 @@ Player::Player() : View()
     mEnergyMeter = new HealthMeter(kEnergyMeterPriority);
     mEnergyMeter->setGrowDirection(-1);
     mEnergyMeter->setBaseLocation(Vector2(200, 16));
+    mEnergyMeter->disableAll();
 
     mMovementRing = new TargetRingWidget(kMoveRingPriority, gImageLibrary->getImage(INTERFACE_RING_MOVEMENT));
     mMovementRing->setCenter(Vector2(70, 250));
@@ -87,12 +89,15 @@ Player::Player() : View()
 
     mWeaponSelector = new WeaponSelector();
     mWeaponSelector->setObserver(this);
+    mWeaponSelector->disableAll();
+    
     mGooWeapon = new GooWeapon();
     mLightningWeapon = new LightningWeapon();
     mGrenadeLauncherWeapon = new GrenadeLauncherWeapon();
 
     mShieldToggle = new ShieldToggle();
     mShieldToggle->setObserver(this);
+    mShieldToggle->disableAll();
     
     reset();
 }
@@ -136,9 +141,9 @@ void Player::reset()
     
     // Reset weapons.
     mWeaponSelector->reset();
-    mWeaponSelector->addWeapon(mGooWeapon);
+    //mWeaponSelector->addWeapon(mGooWeapon);
     mWeaponSelector->addWeapon(mLightningWeapon);
-    mWeaponSelector->addWeapon(mGrenadeLauncherWeapon);
+    //mWeaponSelector->addWeapon(mGrenadeLauncherWeapon);
 
     // Reset life.
     mHealth = 1000.0f;
@@ -147,6 +152,7 @@ void Player::reset()
     mHealthMeter->setPercent(mHealth);
     
     // Reset shield.
+    mHashShield = false;
     mEnergy = 1000.0f;
     mMaxEnergy = 1000.0f;
     mEnergyMeter->setPercent(mEnergy);
@@ -164,9 +170,9 @@ void Player::enable()
 {
     mScoreMeter->enableAll();
     mHealthMeter->enableAll();
-    mEnergyMeter->enableAll();
-    mWeaponSelector->enableAll();
-    mShieldToggle->enableAll();
+    //mEnergyMeter->enableAll();
+    //mWeaponSelector->enableAll();
+    //mShieldToggle->enableAll();
     mTargetRing->enableAll();
     mMovementRing->enableAll();
 
@@ -238,6 +244,8 @@ void Player::update()
     mEntity.mRotation = mController->mRotation + M_PI/2;
     mEntity.mCenter = mBody->mCenter;
     mEntity.makeDirty();
+    
+    gWorld->getMinimap()->mark(mEntity.mCenter, kMinimapPlayerMarker);
 
     mShadow.mCenter = mEntity.mCenter + Vector2(-4.0f, 4.0f);
     mShadow.makeDirty();
@@ -398,7 +406,8 @@ void Player::onTargetRingDoubleTouched(TargetRingWidget *widget)
     // If the user double taps the movement ring, toggle the shield.
     if(widget == mMovementRing)
     {
-        mShieldToggle->setToggle(!mShieldToggle->getToggle());
+        if(mHashShield)
+            mShieldToggle->setToggle(!mShieldToggle->getToggle());
     }
     else if(widget == mTargetRing)
     {
@@ -444,6 +453,46 @@ void Player::damage(ParticleType type, float amount)
 	mHealth -= amount;
     mCameraShake = MAX_CAMERA_SHAKE;
     mHealthMeter->setPercent(mHealth);
+}
+
+void Player::givePowerup(PowerupType type)
+{
+    switch(type)
+    {
+        case kPowerupLifeUpgrade:
+            mMaxHealth += 1000;
+            mHealth = mMaxHealth;
+            mHealthMeter->setPercent(mHealth);
+            break;
+        case kPowerupEnergyUpgrade:
+            mEnergy += 1000;
+            mEnergy = mMaxEnergy;
+            mEnergyMeter->setPercent(mEnergy);
+            break;
+        case kPowerupShield:
+            mHashShield = true;
+            mShieldToggle->enableAll();
+            mEnergyMeter->enableAll();
+            break;
+        case kPowerupGooWeapon:
+            mWeaponSelector->enableAll();
+            mWeaponSelector->addWeapon(mGooWeapon);
+            mWeaponSelector->setSelected(mGooWeapon);
+            break;
+        case kPowerupGrenadeLauncherWeapon:
+            mWeaponSelector->enableAll();
+            mWeaponSelector->addWeapon(mGrenadeLauncherWeapon);
+            mWeaponSelector->setSelected(mGrenadeLauncherWeapon);
+            break;
+        case kPowerupLifeRestore:
+            mHealth = mMaxHealth;
+            mHealthMeter->setPercent(mHealth);
+            break;
+        case kPowerupEnergyRestore:
+            mEnergy = mMaxEnergy;
+            mEnergyMeter->setPercent(mEnergy);
+            break;
+    }
 }
 
 void Player::onShieldToggleUpdated(ShieldToggle* widget, bool toggle)

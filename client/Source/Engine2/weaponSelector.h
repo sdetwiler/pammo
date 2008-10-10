@@ -32,6 +32,9 @@ class WeaponSelector : public View
         virtual void draw();
         
         void setObserver(WeaponSelectorObserver* observer);
+        
+        void nextWeapon();
+        
         void setSelected(Weapon* weapon);
         Weapon* getSelected();
         

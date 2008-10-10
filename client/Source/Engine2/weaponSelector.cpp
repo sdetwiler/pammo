@@ -91,6 +91,21 @@ void WeaponSelector::setObserver(WeaponSelectorObserver* observer)
     mObserver = observer;
 }
 
+void WeaponSelector::nextWeapon()
+{
+    // Find index of current weapon.
+    int32_t index = 0;
+    for(WeaponVector::iterator i=mWeapons.begin(); i != mWeapons.end(); ++i)
+    {
+        if((*i) == mSelected) break;
+        ++index;
+    }
+    
+    // Select the next weapon.
+    index = (index+1) % mWeapons.size();
+    setSelected(mWeapons[index]);
+}
+
 void WeaponSelector::setSelected(Weapon* weapon)
 {
     if(mSelected)

@@ -48,9 +48,9 @@ void InfastructureManager::update()
         
         uint32_t choice = rand() % count;
         
-        if(choice == 0 && !(mGivenNewPowers & kPowerupShield))
+        if(!(mGivenNewPowers & kPowerupShield) && choice == 0)
             type = kPowerupShield;
-        else if(choice == 0 || choice == 1 && !(mGivenNewPowers & kPowerupGooWeapon))
+        else if(!(mGivenNewPowers & kPowerupGooWeapon) && (choice == 0 || choice == 1))
             type = kPowerupGooWeapon;
         else
             type = kPowerupGrenadeLauncherWeapon;
@@ -118,9 +118,15 @@ void powerupParticleCallback(Particle* p, ParticleSystem* system)
     
     gWorld->getMinimap()->mark(p->mImage.mCenter, kMinimapPowerupMarker);
     
-    // Fade up.
-    p->mAlpha += 0.08f;
-    if(p->mAlpha > 1) p->mAlpha = 1;
+    // Fade up and grow.
+    if(p->mAlpha < 1)
+    {
+        p->mBody->mRadius += 1;
+        gWorld->getPhysics()->resortBody(p->mBody);
+        p->mAlpha += 1/15.;
+        
+        if(p->mAlpha > 1) p->mAlpha = 1;
+    }
 }
 
 void powerupFadeParticleCallback(Particle* p, ParticleSystem* system)
@@ -142,8 +148,6 @@ void powerupCollisionCallback(Body* self, Body* other, Contact* contact, Contact
         Particle* p = (Particle*)self->mUserArg;
         // Give powerup to player.
         PowerupType* type = (PowerupType*)p->mData;
-        
-        dprintf("Giving player powerup: %d", *type);
         
         gWorld->getPlayer()->givePowerup(*type);
         
@@ -210,12 +214,15 @@ bool InfastructureManager::createPowerup(PowerupType type)
     p->mBody->mUserArg = p;
     p->mBody->mShapeCallback = 0;
     p->mBody->mDamping = 0.01;
-    p->mBody->mRadius = 20;
+    p->mBody->mRadius = 1;
     p->mBody->mMass = 10;
-    p->mBody->mCenter = mLocation;
+    
     float x = (float)rand()/RAND_MAX - 0.5;
     float y = (float)rand()/RAND_MAX - 0.5;
-    dprintf("%f, %f", x, y);
+    p->mBody->mCenter = mLocation + Vector2(x*5, y*5);
+    
+    x = (float)rand()/RAND_MAX - 0.5;
+    y = (float)rand()/RAND_MAX - 0.5;
     p->mBody->mVelocity = Vector2(x*60, y*60);
     
     return true;

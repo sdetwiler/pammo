@@ -34,7 +34,8 @@ uint32_t Physics::getUpdatePriority() const
 
 uint32_t Physics::getDrawPriority() const
 {
-    return kPhysicsPriority;
+    //return kPhysicsPriority;
+    return 0;
 }
 
 void Physics::reset()
@@ -111,7 +112,6 @@ void Physics::update()
 
 void Physics::draw()
 {
-    return;
     gWorld->getCamera()->set();
     
     // Draw debug collision information.

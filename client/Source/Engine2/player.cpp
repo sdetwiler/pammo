@@ -346,6 +346,7 @@ void Player::update()
             gWorld->disable();
             gWorld->reset();
             mDeathCard->destroy();
+            mDeathCard = 0;
             new MainScreenView;
         }
 
@@ -411,12 +412,7 @@ void Player::onTargetRingDoubleTouched(TargetRingWidget *widget)
     }
     else if(widget == mTargetRing)
     {
-        if(mWeapon == mGooWeapon)
-            mWeaponSelector->setSelected(mGrenadeLauncherWeapon);
-        else if(mWeapon == mLightningWeapon)
-            mWeaponSelector->setSelected(mGooWeapon);
-        else if(mWeapon == mGrenadeLauncherWeapon)
-            mWeaponSelector->setSelected(mLightningWeapon);
+        mWeaponSelector->nextWeapon();
     }
 }
 

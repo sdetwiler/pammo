@@ -62,7 +62,6 @@ void openRawImage(char const* path, RawImage* img)
         img->mBytesPerPixel = 4;
     }
 
-
     uint32_t pixelBytes = img->mPixelSize.x * img->mPixelSize.y * img->mBytesPerPixel;
 	img->mPixels = new uint8_t[pixelBytes];
     memset(img->mPixels, 0, pixelBytes);
@@ -72,11 +71,13 @@ void openRawImage(char const* path, RawImage* img)
     uint32_t srcHeight = (uint32_t)img->mSize.y;
     for(uint32_t h=0; h<srcHeight; ++h)
     {
-        memcpy(img->mPixels + (x*img->mBytesPerPixel*(h+(y-srcHeight))), 
-            ((uint8_t*)surface->pixels) + (srcWidth*h*img->mBytesPerPixel), 
+        int32_t dstOffset = x * (h + y - srcHeight) * img->mBytesPerPixel;
+        int32_t srcOffset = surface->pitch * h;
+
+        memcpy(img->mPixels + dstOffset, 
+            ((uint8_t*)surface->pixels) + srcOffset, 
             srcWidth*img->mBytesPerPixel);
     }
-
 
     SDL_FreeSurface(surface);
 }

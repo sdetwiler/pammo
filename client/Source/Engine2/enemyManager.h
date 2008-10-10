@@ -218,7 +218,9 @@ struct PounceAndStalkBehaviorData
     float mDistance;  
     Vector2 mOrigin;
     bool mInCollision;
+    uint64_t mChillUntil;
     Particle* mShadow;
+    
 };
 
 
@@ -303,6 +305,7 @@ struct Enemy
 {
     ImageEntity          mEntity;
     Image*               mImages[ENEMY_MAX_IMAGE_COUNT];
+    ImageEntity          mShadow;
     uint32_t             mImageCount;
     uint32_t             mCurrImage;
     uint32_t             mPointValue;

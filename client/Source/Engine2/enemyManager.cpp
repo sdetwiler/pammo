@@ -296,8 +296,8 @@ void behaviorPounceAndStalk(Enemy* e, EnemyManager* manager)
     float d;
     PounceAndStalkBehaviorData* data = (PounceAndStalkBehaviorData*)e->mBehavior.mData;
 
-    // Assume shadow will not be used.
-    data->mShadow->mImage.mSize = 0.0f;
+    // Assume enemy is on the ground.
+    data->mShadow->mImage.mCenter = e->mEntity.mCenter - (Vector2(5.0f, -8.0f));
     data->mShadow->mImage.makeDirty();
 
     switch(data->mState)
@@ -322,10 +322,14 @@ void behaviorPounceAndStalk(Enemy* e, EnemyManager* manager)
             e->mBody->mCollideProperties = kEnemyCollisionProperties | kPlayerCollisionProperties | kEnemyBarrierCollisionProperties;
             e->mBody->mProperties = kEnemyCollisionProperties;
 
+            data->mChillUntil = getTime() + (rand()%4000)*1000;
             data->mState = PounceAndStalkBehaviorData::CheckCollision;
         }
         break;
     case PounceAndStalkBehaviorData::CheckCollision:
+        if(getTime()<data->mChillUntil)
+            break;
+
 //        dprintf("CheckCollision");
         if(data->mInCollision)
         {
@@ -371,22 +375,20 @@ void behaviorPounceAndStalk(Enemy* e, EnemyManager* manager)
 //        dprintf("PreJumpRotate");
         if(fabs(e->mController.mRotation - e->mController.mRotationTarget)<0.001f)
         {
-            //data->mDistance = 100+ rand()%70;
             data->mJumpStart = getTime();
             data->mOrigin = e->mBody->mCenter;
-            e->mController.mAcceleration = (data->mSpeed * e->mBody->mMass)/2.0f;
-
             data->mState = PounceAndStalkBehaviorData::Jump;
         }
         break;
     // Jump.
     case PounceAndStalkBehaviorData::Jump:
-        e->mController.mAcceleration = data->mSpeed * e->mBody->mMass;
+
+        e->mController.mAcceleration = data->mSpeed * e->mBody->mMass * 2.2f;
 
         uint64_t now = getTime();
         float Di = 1.0f;
-        float Vi = 6.0f;
-        float G = 9.81; // Fantasyland... or Jupiter.
+        float Vi = 3.5f;
+        float G = 9.81;
         float dt = ((float)(now - data->mJumpStart))/1000000.0f;
         float distance = Di + ((Vi*dt) - (.5*G*(dt*dt)));
 
@@ -437,13 +439,21 @@ void enemyUpdateCb(Enemy* e, EnemyManager* manager)
     // Update image entity.
     e->mCurrImage = (e->mCurrImage+1) % e->mImageCount;
     e->mEntity.setImageWithoutSize(e->mImages[e->mCurrImage]);
-   // e->mEntity.mRotation = e->mController.mRotation + (float)M_PI/2;
+    e->mShadow.mAlpha = 0.5f;
+    e->mShadow.mSize = e->mImages[0]->mSize;
+    e->mShadow.mRotation = e->mController.mRotation + (M_PI/2.0f);
+    e->mShadow.mCenter = e->mEntity.mCenter + Vector2(-4.0f, 4.0f);
+    e->mShadow.makeDirty();
+   
+    
+    // e->mEntity.mRotation = e->mController.mRotation + (float)M_PI/2;
     e->mEntity.mCenter = e->mBody->mCenter;
     e->mEntity.makeDirty();
 }
 
 void enemyDrawCb(Enemy* e, EnemyManager* manager)
 {
+    e->mShadow.draw();
     e->mEntity.draw();
     for(uint32_t i=0; i<e->mWeaponCount; ++i)
     {
@@ -598,9 +608,10 @@ bool EnemyManager::initializeEnemy(Enemy* e, EnemyTemplate* enemyTemplate)
     for(uint32_t i=0; i<e->mImageCount; ++i)
     {
         e->mImages[i] = enemyTemplate->mImages[i];
-        // No longer ref counting.
-        //gImageLibrary->getImage(e->mImages[i]);
     }
+    
+    e->mShadow.setImage(gImageLibrary->getImage(PARTICLE_SHADOW_00));
+
     // SCD A dirty hack so I don't have to set size on the flipbook rotations to preserve scaling animations.
     e->mEntity.mSize = e->mImages[0]->mSize;
 

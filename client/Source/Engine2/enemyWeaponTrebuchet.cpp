@@ -106,7 +106,7 @@ void enemyWeaponTrebuchetCb(Enemy* e, EnemyWeapon* w, EnemyManager* manager)
     p->mBody->mDamping = 0;
     p->mBody->mRadius = 8;
     p->mBody->mMass = 20;
-    p->mBody->mVelocity = e->mBody->mVelocity + Vector2(140, 0) * Transform2::createRotation(e->mController.mRotation);
+    p->mBody->mVelocity = e->mBody->mVelocity + Vector2(180, 0) * Transform2::createRotation(e->mController.mRotation);
     p->mBody->mUserArg = p;
 
     // Setup image.

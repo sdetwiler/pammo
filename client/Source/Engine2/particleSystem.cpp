@@ -303,7 +303,7 @@ void ParticleSystem::removeParticle(Particle* p)
 void ParticleSystem::initSmokeParticle(Vector2 const& initialPosition, float initialRotation, Vector2 const& initialVelocity)
 {
     // Grab a particle.
-    Particle* p = addParticle(1, true);
+    Particle* p = addParticle(2, true);
     if(!p) return;
         
     // Properties about smoke particles.

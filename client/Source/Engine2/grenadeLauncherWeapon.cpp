@@ -78,8 +78,6 @@ void GrenadeLauncherWeapon::fire()
     float initialRotation = player->mTurret.mRotation - M_PI/2.0f;
     
     // Setup image.
-	float velocity = 130;
-	//velocity+=((rand()%10)/10.0f);
 	
 	p->mImage.setImage(gImageLibrary->getImage(PARTICLE_GRENADE_00));
     p->mImage.mCenter = player->mTurretTip;
@@ -100,17 +98,31 @@ void GrenadeLauncherWeapon::fire()
     p->mBody->mBodyCallback = grenadeLauncherBulletCollisionCallback;
     p->mBody->mShapeCallback = NULL;//grenadeLauncherBulletShapeCollisionCallback;
     p->mBody->mDamping = 0;
-    p->mBody->mRadius = 16;
+    p->mBody->mRadius = 40;
     p->mBody->mMass = 10;
     p->mBody->mCenter = p->mImage.mCenter;
-    Vector2 v = Vector2(velocity, 0) * Transform2::createRotation(initialRotation+r);
-    p->mBody->mVelocity = v;
+    p->mBody->mVelocity = Vector2(160, 0) * Transform2::createRotation(initialRotation+r);
+    p->mBody->mUserArg = p;
+
+    gWorld->getParticleSystem()->initSmokeParticle(player->mTurretTip, initialRotation, Vector2(1.0f, 0));
+
 }
 
 void grenadeLauncherBulletCollisionCallback(Body* self, Body* other, Contact* contact, ContactResponse* response)
 {
-	response->mBounceMe = false;
+    if(self->mCollideProperties == 0)
+        return;
+
+    response->mBounceMe = false;
 	response->mBounceThem = false;
+    Particle* p = (Particle*)self->mUserArg;
+    GrenadeLauncherParticleData* particleData = (GrenadeLauncherParticleData*)p->mData;
+
+
+    gWorld->getParticleSystem()->initExplosionParticle(self->mCenter);
+    gWorld->getParticleSystem()->removeParticle(particleData->mShadow);
+	
+    gWorld->getParticleSystem()->removeParticle(p);
 	
 	doDamage(self, other, Grenade, 30.0f);
 }
@@ -138,10 +150,17 @@ void grenadeLauncherBulletParticleCallback(Particle* p, ParticleSystem* system)
     float dt = ((float)(now - particleData->mStartTime))/1000000.0f;
     float distance = Di + ((Vi*dt) - (.5*G*(dt*dt)));
    
-    if(distance <= Di*2.0f)
+    if(distance <= Di*1.8f)
     {
+        p->mBody->mProperties = kPlayerBulletCollisionProperties;
         p->mBody->mCollideProperties = kEnemyCollisionProperties;
     }
+    else
+    {
+        p->mBody->mProperties = 0;
+        p->mBody->mCollideProperties = 0;
+    }
+
 
     if(distance <= Di)
     {

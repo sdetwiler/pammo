@@ -359,6 +359,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\Source\Engine2\infastructureManager.h"
+				>
+			</File>
+			<File
 				RelativePath="..\Source\Engine2\interfaceView.h"
 				>
 			</File>
@@ -564,6 +568,10 @@
 			</File>
 			<File
 				RelativePath="..\Source\Engine2\imageLibrary.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\Source\Engine2\infastructureManager.cpp"
 				>
 			</File>
 			<File

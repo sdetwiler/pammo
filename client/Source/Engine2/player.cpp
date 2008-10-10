@@ -212,7 +212,7 @@ bool Player::touch(uint32_t count, Touch* touches)
     return false;
 }
 
-void Player::createDust()
+void Player::createDust(float scale)
 {
     // Get a particle.
 	Particle* p = gWorld->getParticleSystem()->addParticle(1, true);
@@ -235,6 +235,7 @@ void Player::createDust()
     p->mImage.mCenter = player->mBody->mCenter;
     p->mImage.mRotation = initialRotation + r;
 	p->mImage.makeDirty();
+    p->mImage.mSize *= scale;
 }
 
 void Player::update()
@@ -286,8 +287,11 @@ void Player::update()
         mCurrImage = (mCurrImage+1) % mImageCount;
         mEntity.setImage(mImages[mCurrImage]);
     }
-	if(vmag > 45.0f)
-		createDust();
+
+    if(vmag > 150.0f)
+        createDust(0.9f);
+    else if(vmag > 45.0f)
+		createDust((vmag-45.0f)/150.0f);
         
     if(mHealth < 1000)
     {

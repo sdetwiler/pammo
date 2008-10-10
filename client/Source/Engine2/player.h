@@ -120,7 +120,7 @@ class Player :
         DeathCardView* mDeathCard;
 
 	private:
-		void createDust();
+		void createDust(float scale);
 };
 
 } // namespace pammo

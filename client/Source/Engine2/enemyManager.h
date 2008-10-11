@@ -46,6 +46,7 @@ enum WeaponType
     MachineGun,
     Trebuchet,
     SelfDestruct,
+    DamageTouch, 
     HeatSeaker,
     MineLayer
 };
@@ -123,6 +124,11 @@ struct HeatSeakerWeaponData
 };
 
 struct SelfDestructWeaponData
+{
+    uint32_t mDamage;
+};
+
+struct DamageTouchWeaponData
 {
     uint32_t mDamage;
 };

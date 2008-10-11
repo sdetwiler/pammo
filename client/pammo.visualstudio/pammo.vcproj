@@ -307,6 +307,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\Source\Engine2\enemyWeaponDamageTouch.h"
+				>
+			</File>
+			<File
 				RelativePath="..\Source\Engine2\enemyWeaponFlamethrower.h"
 				>
 			</File>
@@ -512,6 +516,10 @@
 			</File>
 			<File
 				RelativePath="..\Source\Engine2\enemyParticleSmoke.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\Source\Engine2\enemyWeaponDamageTouch.cpp"
 				>
 			</File>
 			<File

@@ -34,6 +34,7 @@ private:
     bool parseWeaponTrebuchet(char* s);
     bool parseWeaponMachineGun(char* s);
     bool parseWeaponHeatSeaker(char* s);
+    bool parseWeaponDamageTouch(char* s);
 
     // Non-turret weapons.
     bool parseWeaponSelfDestruct(char* s);
@@ -45,6 +46,7 @@ private:
     void dumpWeaponTrebuchet(TrebuchetWeaponData* d);
     void dumpWeaponMachineGun(MachineGunWeaponData* d);
     void dumpWeaponHeatSeaker(HeatSeakerWeaponData* d);
+    void dumpWeaponDamageTouch(DamageTouchWeaponData* d);
 
     void dumpWeaponSelfDestruct(SelfDestructWeaponData* d);
     void dumpWeaponMineLayer(MineLayerWeaponData* d);

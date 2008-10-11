@@ -9,6 +9,7 @@
 #include "enemyWeaponFlamethrower.h"
 #include "enemyWeaponTrebuchet.h"
 #include "enemyWeaponSelfDestruct.h"
+#include "enemyWeaponDamageTouch.h"
 #include "enemyWeaponMachineGun.h"
 #include "enemyWeaponHeatSeaker.h"
 #include "enemyWeaponMineLayer.h"
@@ -253,7 +254,7 @@ void behaviorSpinningTopCb(Enemy* e, EnemyManager* manager)
 
 void behaviorPounceAndStalkCollisionCb(Body* self, Body* other, Contact* contact, ContactResponse* response)
 {
-    dprintf("Collision");
+//    dprintf("Collision");
     Enemy* e = (Enemy*)self->mUserArg;
     PounceAndStalkBehaviorData* data = (PounceAndStalkBehaviorData*)e->mBehavior.mData;
     data->mDistance = 0.0f;
@@ -273,7 +274,7 @@ void behaviorPounceAndStalkCollisionCb(Body* self, Body* other, Contact* contact
 
 void behaviorPounceAndStalkShapeCollisionCb(Body* self, Shape* other, Contact* contact, bool* response)
 {
-    dprintf("Shape Collision");
+//    dprintf("Shape Collision");
     Enemy* e = (Enemy*)self->mUserArg;
     PounceAndStalkBehaviorData* data = (PounceAndStalkBehaviorData*)e->mBehavior.mData;
     data->mDistance = 0.0f;
@@ -678,6 +679,10 @@ bool EnemyManager::initializeEnemy(Enemy* e, EnemyTemplate* enemyTemplate)
         case SelfDestruct:
             e->mWeapon[i].mCb = enemyWeaponSelfDestructCb;
             e->mBody->mBodyCallback = enemyWeaponSelfDestructCollisionCb;
+            break;
+        case DamageTouch:
+            e->mWeapon[i].mCb = enemyWeaponDamageTouchCb;
+            e->mBody->mBodyCallback = enemyWeaponDamageTouchCollisionCb;
             break;
         case MineLayer:
             e->mWeapon[i].mCb = enemyWeaponMineLayerCb;

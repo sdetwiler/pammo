@@ -323,7 +323,7 @@ public:
                     keyTouch[0].mPhase = Touch::PhaseBegin;
                 }
 
-                dprintf("### directionKey %d", keyTouch[0].mPhase);
+//                dprintf("### directionKey %d", keyTouch[0].mPhase);
                 game->touches(1, keyTouch);
             }
             if(fireKey)
@@ -340,7 +340,7 @@ public:
                     keyTouch[1].mPhase = Touch::PhaseBegin;
                 }
 
-                dprintf("### firekey %d", keyTouch[1].mPhase);
+//                dprintf("### firekey %d", keyTouch[1].mPhase);
 
                 
                 game->touches(1, keyTouch+1);
@@ -348,7 +348,7 @@ public:
 
             if(mDown[0])
             {
-                dprintf("### mouse %d", touch[0].mPhase);
+//                dprintf("### mouse %d", touch[0].mPhase);
                 game->touches(1, touch);
                 if(mouseUp)
                 {

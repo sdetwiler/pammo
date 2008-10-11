@@ -96,6 +96,8 @@ bool EnemyLoader::parseWeapon(char* s)
                 mTemplate->mWeapons[mTemplate->mWeaponCount].mWeapon.mType = Trebuchet;
             else if(!strcmp(s, "SelfDestruct"))
                 mTemplate->mWeapons[mTemplate->mWeaponCount].mWeapon.mType = SelfDestruct;
+            else if(!strcmp(s, "DamageTouch"))
+                mTemplate->mWeapons[mTemplate->mWeaponCount].mWeapon.mType = DamageTouch;
             else if(!strcmp(s, "HeatSeaker"))
                 mTemplate->mWeapons[mTemplate->mWeaponCount].mWeapon.mType = HeatSeaker;
             else if(!strcmp(s, "MineLayer"))
@@ -120,6 +122,8 @@ bool EnemyLoader::parseWeapon(char* s)
                 return parseWeaponTrebuchet(s);
             case SelfDestruct:
                 return parseWeaponSelfDestruct(s);
+            case DamageTouch:
+                return parseWeaponDamageTouch(s);
             case HeatSeaker:
                 return parseWeaponHeatSeaker(s);
             case MineLayer:
@@ -321,6 +325,32 @@ bool EnemyLoader::parseWeaponSelfDestruct(char* s)
 {
     EnemyWeaponTemplate* weaponTemplate = &mTemplate->mWeapons[mTemplate->mWeaponCount];
     SelfDestructWeaponData* data = (SelfDestructWeaponData*)weaponTemplate->mWeapon.mData;
+    int column = 2;
+    while(s)
+    {
+        switch(column)
+        {
+        case 2: // Image path
+            strcpy(weaponTemplate->mImagePath, s);
+            break;
+        case 3: // Damage
+            data->mDamage = atol(s);
+            ++mTemplate->mWeaponCount;
+            return true;
+        }
+
+        ++column;
+        s=strtok(NULL, ",\"");
+    }
+
+    return false;
+}
+
+
+bool EnemyLoader::parseWeaponDamageTouch(char* s)
+{
+    EnemyWeaponTemplate* weaponTemplate = &mTemplate->mWeapons[mTemplate->mWeaponCount];
+    DamageTouchWeaponData* data = (DamageTouchWeaponData*)weaponTemplate->mWeapon.mData;
     int column = 2;
     while(s)
     {
@@ -731,6 +761,7 @@ char const* sFlamethrower = "Flamethrower";
 char const* sTrebuchet    = "Trebuchet";
 char const* sMachineGun   = "Machine Gun";
 char const* sSelfDestruct = "Self Destruct";
+char const* sDamageTouch  = "Damage Touch";
 char const* sHeatSeaker   = "Heat Seaker";
 char const* sMineLayer    = "Mine Layer";
 char const* EnemyLoader::getWeaponName(WeaponType type)
@@ -747,6 +778,8 @@ char const* EnemyLoader::getWeaponName(WeaponType type)
         return sMachineGun;
     case SelfDestruct:
         return sSelfDestruct;
+    case DamageTouch:
+        return sDamageTouch;
     case HeatSeaker:
         return sHeatSeaker;
     default:
@@ -866,6 +899,9 @@ void EnemyLoader::dumpWeapon(EnemyWeaponTemplate* w)
     case SelfDestruct:
         dumpWeaponSelfDestruct((SelfDestructWeaponData*)w->mWeapon.mData);
         break;
+    case DamageTouch:
+        dumpWeaponDamageTouch((DamageTouchWeaponData*)w->mWeapon.mData);
+        break;
     }
 }
 
@@ -954,6 +990,14 @@ void EnemyLoader::dumpWeaponSelfDestruct(SelfDestructWeaponData* d)
         d->mDamage
     );
 }
+void EnemyLoader::dumpWeaponDamageTouch(DamageTouchWeaponData* d)
+{
+    dprintf("\
+    Damage:       %u",
+        d->mDamage
+    );
+}
+
 
 void EnemyLoader::dumpWeaponMineLayer(MineLayerWeaponData* d)
 {

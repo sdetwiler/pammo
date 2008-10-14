@@ -185,7 +185,7 @@ void buildCollisionMap(World* world, char const* mapName)
             points[i].y = readFloat(&cur, &remain);
             //dprintf("  (%f, %f)", points[i].x, points[i].y);
         }
-        dprintf("Properties: %d Shape Properties: %d", properties, shapeProperties);
+        //dprintf("Properties: %d Shape Properties: %d", properties, shapeProperties);
         physics->addShape(shapeProperties, numPoints, points);
     }
     

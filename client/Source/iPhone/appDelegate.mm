@@ -3,6 +3,8 @@
 
 int main(int argc, char *argv[])
 {
+    [NSThread setThreadPriority:1.0];
+    
 	// Set cwd.
 	size_t len = strlen(argv[0]);
 	while(len != 0 && argv[0][len] != '/')

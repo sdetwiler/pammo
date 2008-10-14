@@ -117,7 +117,7 @@ def saveBackdrop(map):
     try: os.mkdir(osfix.path("../data/backdroptiles/%s" % name))
     except: pass
     
-    ts = 256
+    ts = 128
     
     scaled = image.Scale(ts, ts)
     path = osfix.path("../data/backdroptiles/%s/preview.png" % name)

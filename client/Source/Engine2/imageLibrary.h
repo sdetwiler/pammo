@@ -150,8 +150,8 @@ struct Image;
 
 #define MAP_PREVIEW              84
 
-#define MAP_TILES_X              11
-#define MAP_TILES_Y              8
+#define MAP_TILES_X              22
+#define MAP_TILES_Y              15
 #define MAP_TILES_BASE           85
 
 
@@ -239,7 +239,6 @@ private:
     void threadFunc();
 
     bool mRunning;
-
 
     ImageLibraryObserver* mObserver;
 };

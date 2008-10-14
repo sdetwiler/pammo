@@ -61,6 +61,8 @@ void openRawImage(char const* filename, RawImage* image);
 Vector2 getFrameSize();
 uint64_t getTime(void);
 
+void spawnThread(void* (*threadFunc)(void*), void* arg);
+
 } // namespace pammo
 
 using namespace pammo;

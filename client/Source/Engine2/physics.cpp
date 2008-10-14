@@ -34,14 +34,12 @@ uint32_t Physics::getUpdatePriority() const
 
 uint32_t Physics::getDrawPriority() const
 {
- //   return kPhysicsPriority;
+    //return kPhysicsPriority;
     return 0;
 }
 
 void Physics::reset()
 {
-    return;
-
     Body* cur;
     Body* next;
 

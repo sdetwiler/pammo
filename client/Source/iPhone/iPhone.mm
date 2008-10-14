@@ -5,8 +5,52 @@
 #import <OpenGLES/ES1/gl.h>
 #import <QuartzCore/QuartzCore.h>
 
+@interface ThreadGlue : NSObject
+{
+    void* (*mThreadFunc)(void*);
+    void* mArg;
+}
+
+- (id)initWithFunc:(void* (*)(void*))func andArg:(void*)arg;
+- (void)threadFunc:(id)object;
+
+@end
+
+@implementation ThreadGlue
+
+- (id)initWithFunc:(void* (*)(void*))func andArg:(void*)arg
+{
+	if(!(self = [super init]))
+		return self;
+        
+    mThreadFunc = func;
+    mArg = arg;
+    
+    return self;
+}
+
+- (void)threadFunc:(id)object
+{
+    NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
+    [NSThread setThreadPriority:0.0];
+    
+    mThreadFunc(mArg);
+    
+    [pool release];
+}
+
+@end
+
 namespace pammo
 {
+
+void spawnThread(void* (*func)(void*), void* arg)
+{
+    ThreadGlue* glue = [[ThreadGlue alloc] initWithFunc:func andArg:arg];
+    
+    NSThread *thread = [[NSThread alloc] initWithTarget:glue selector:@selector(threadFunc:) object:nil];
+    [thread start];
+}
 
 void dprintf(char const* format, ...)
 {
@@ -26,10 +70,6 @@ Vector2 getFrameSize()
 
 void openRawImage(char const* path, RawImage* image)
 {
-    dprintf("And then I had to dirty touch the young dog to make myself feel good about my histories in (Steve) NAMM.");
-    
-    NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
-    
 	CGImageRef spriteImage;
 	CGContextRef spriteContext;
     
@@ -91,20 +131,29 @@ void openRawImage(char const* path, RawImage* image)
         for(uint32_t yi=0; yi<image->mSize.y; ++yi)
         {
             uint8_t* src = image->mPixels + (uint32_t)(yi*image->mPixelSize.x*4);
-            uint8_t* dst = image->mPixels + (uint32_t)(yi*image->mPixelSize.x*3);
+            uint16_t* dst = (uint16_t*)(image->mPixels + (uint32_t)(yi*image->mPixelSize.x*2));
             for(uint32_t xi=0; xi<image->mSize.x; ++xi)
             {
-                dst[xi*3 + 0] = src[xi*4 + 0];
-                dst[xi*3 + 1] = src[xi*4 + 1];
-                dst[xi*3 + 2] = src[xi*4 + 2];
+                uint32_t r = src[xi*4 + 0] * 31 / 255;
+                uint32_t g = src[xi*4 + 1] * 63 / 255;
+                uint32_t b = src[xi*4 + 2] * 31/ 255;
+                
+                dst[xi] = r << 11 | g << 5 | b;
             }
+            
+            //uint8_t* src = image->mPixels + (uint32_t)(yi*image->mPixelSize.x*4);
+            //uint8_t* dst = image->mPixels + (uint32_t)(yi*image->mPixelSize.x*3);
+            //for(uint32_t xi=0; xi<image->mSize.x; ++xi)
+            //{
+            //    dst[xi*3 + 0] = src[xi*4 + 0];
+            //    dst[xi*3 + 1] = src[xi*4 + 1];
+            //    dst[xi*3 + 2] = src[xi*4 + 2];
+            //}
         }
     }
     
 	CGContextRelease(spriteContext);
     CGColorSpaceRelease(colorSpace);
-    
-    [pool release];
 }
 
 uint64_t getTime(void)

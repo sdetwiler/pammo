@@ -55,6 +55,7 @@
 		11C874530E4028B9008B701A /* weapon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11C874520E4028B9008B701A /* weapon.cpp */; };
 		11C8750E0E40E6B4008B701A /* lightningWeapon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11C8750D0E40E6B4008B701A /* lightningWeapon.cpp */; };
 		11C875140E40E7B2008B701A /* weaponSelector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11C875130E40E7B2008B701A /* weaponSelector.cpp */; };
+		11EB88620EA3BF96002BE2C5 /* enemyWeaponDamageTouch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11EB88600EA3BF96002BE2C5 /* enemyWeaponDamageTouch.cpp */; };
 		11EEB7220DEBC73F009F3B13 /* camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11EEB70B0DEBC73F009F3B13 /* camera.cpp */; };
 		11EEB7230DEBC73F009F3B13 /* drawImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11EEB70E0DEBC73F009F3B13 /* drawImage.cpp */; };
 		11EEB7250DEBC73F009F3B13 /* game.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11EEB7110DEBC73F009F3B13 /* game.cpp */; };
@@ -176,6 +177,8 @@
 		11C875120E40E7B2008B701A /* weaponSelector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = weaponSelector.h; sourceTree = "<group>"; };
 		11C875130E40E7B2008B701A /* weaponSelector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = weaponSelector.cpp; sourceTree = "<group>"; };
 		11D631F00DEB9E6400CA2A0A /* header.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = header.pch; sourceTree = "<group>"; };
+		11EB88600EA3BF96002BE2C5 /* enemyWeaponDamageTouch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = enemyWeaponDamageTouch.cpp; sourceTree = "<group>"; };
+		11EB88610EA3BF96002BE2C5 /* enemyWeaponDamageTouch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = enemyWeaponDamageTouch.h; sourceTree = "<group>"; };
 		11EEB70B0DEBC73F009F3B13 /* camera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = camera.cpp; sourceTree = "<group>"; };
 		11EEB70C0DEBC73F009F3B13 /* camera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = camera.h; sourceTree = "<group>"; };
 		11EEB70E0DEBC73F009F3B13 /* drawImage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = drawImage.cpp; sourceTree = "<group>"; };
@@ -297,6 +300,8 @@
 				110666A10E6865A70023ABB1 /* enemyParticleJetFlame.h */,
 				110666A20E6865A70023ABB1 /* enemyParticleSmoke.cpp */,
 				110666A30E6865A70023ABB1 /* enemyParticleSmoke.h */,
+				11EB88600EA3BF96002BE2C5 /* enemyWeaponDamageTouch.cpp */,
+				11EB88610EA3BF96002BE2C5 /* enemyWeaponDamageTouch.h */,
 				110665A50E6372AE0023ABB1 /* enemyWeaponFlamethrower.cpp */,
 				110665A60E6372AE0023ABB1 /* enemyWeaponFlamethrower.h */,
 				110666C00E6F8E450023ABB1 /* enemyWeaponHeatSeaker.cpp */,
@@ -534,6 +539,7 @@
 				115577BC0E9454FD00171852 /* tutorialScreenView.cpp in Sources */,
 				11B9F66A0E949106002236D1 /* shieldToggle.cpp in Sources */,
 				11499E170E99CE0C00FBA3D0 /* infastructureManager.cpp in Sources */,
+				11EB88620EA3BF96002BE2C5 /* enemyWeaponDamageTouch.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

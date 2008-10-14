@@ -21,8 +21,8 @@ Map::~Map()
 
 void Map::loadBackdrop(char const* backdropName)
 {
-    mBucketSizeX = 256;
-    mBucketSizeY = 256;
+    mBucketSizeX = 128;
+    mBucketSizeY = 128;
     mBucketCountX = ceilf((float)mSizeX/mBucketSizeX);
     mBucketCountY = ceilf((float)mSizeY/mBucketSizeY);
     
@@ -46,7 +46,7 @@ void Map::loadBackdrop(char const* backdropName)
             Prop* prop = new Prop();
             prop->mImage = 0;
             mBuckets[x + y*mBucketCountX] = prop;
-            prop->mId = MAP_TILES_BASE + y + x*mBucketCountY;
+            prop->mId = MAP_TILES_BASE + x + y*mBucketCountX;
     
             // Calculate preview tex coordinates.
             float left = (float)previousXCoord / mSizeX;
@@ -109,9 +109,10 @@ void Map::draw()
     uint16_t endY = ceilf(lr.y / mBucketSizeY);
     
     glLoadIdentity();
-    for(uint16_t y=startY; y < endY; ++y)
+    // Draw surrounding tiles.
+    for(uint32_t y=startY; y < endY; ++y)
     {
-        for(uint16_t x=startX; x < endX; ++x)
+        for(uint32_t x=startX; x < endX; ++x)
         {
             Prop* prop = mBuckets[x + y*mBucketCountX];
             
@@ -140,14 +141,150 @@ void Map::draw()
     camera->unset();
     
     glEnable(GL_BLEND);
+    
+    // Prehint, based on where the camera is in the main tile.
+    bool hintLeft = false, hintUp = false, hintRight = false, hintDown = false;
+    
+    // Determin left / right hint.
+    if((uint32_t)camera->mCenter.x % mBucketSizeX > mBucketSizeX / 2)
+    {
+        if(startX > 1)
+        {
+            //dprintf("Prehinting in -X");
+            hintLeft = true;
+            
+            // Hint the column to the left.
+            for(uint32_t y = startY; y < endY; ++y)
+            {
+                Prop* prop = mBuckets[startX-1 + y*mBucketCountX];
+                if(prop->mImage == 0)
+                    prop->mImage = gImageLibrary->tryGetImage(prop->mId);
+            }
+        }
+        else
+        {
+            //dprintf("Not prehinting in -X");
+        }
+    }
+    else
+    {
+        if(endX < mBucketCountX - 2)
+        {
+            //dprintf("Prehinting in +X");
+            hintRight = true;
+            
+            // Hint the column to the right.
+            for(uint32_t y = startY; y < endY; ++y)
+            {
+                Prop* prop = mBuckets[endX+1 + y*mBucketCountX];
+                if(prop->mImage == 0)
+                    prop->mImage = gImageLibrary->tryGetImage(prop->mId);
+            }
+        }
+        else
+        {
+            //dprintf("Not prehinting in +X");
+        }
+    }
+    
+    // Determin up  down hint.
+    if((uint32_t)camera->mCenter.y % mBucketSizeY > mBucketSizeY / 2)
+    {
+        if(startY > 1)
+        {
+            //dprintf("Prehinting in -Y");
+            hintUp = true;
+            
+            // Hint the row above.
+            for(uint32_t x = startX; x < endX; ++x)
+            {
+                Prop* prop = mBuckets[x + (startY-1)*mBucketCountX];
+                if(prop->mImage == 0)
+                    prop->mImage = gImageLibrary->tryGetImage(prop->mId);
+            }
+        }
+        else
+        {
+            //dprintf("Not prehinting in -Y");
+        }
+    }
+    else
+    {
+        if(endY < mBucketCountY - 2)
+        {
+            //dprintf("Prehinting in +Y");
+            hintDown = true;
+            
+            // Hint the row below.
+            for(uint32_t x = startX; x < endX; ++x)
+            {
+                Prop* prop = mBuckets[x + (endY+1)*mBucketCountX];
+                if(prop->mImage == 0)
+                    prop->mImage = gImageLibrary->tryGetImage(prop->mId);
+            }
+        }
+        else
+        {
+            //dprintf("Not prehinting in +Y");
+        }
+    }
+    
+    // Prehint diagonals.
+    if(hintLeft && hintUp)
+    {
+        Prop* prop = mBuckets[startX-1 + (startY-1)*mBucketCountX];
+        if(prop->mImage == 0)
+            prop->mImage = gImageLibrary->tryGetImage(prop->mId);
+    }
+    if(hintRight && hintUp)
+    {
+        Prop* prop = mBuckets[endX+1 + (startY-1)*mBucketCountX];
+        if(prop->mImage == 0)
+            prop->mImage = gImageLibrary->tryGetImage(prop->mId);
+    }
+    if(hintLeft && hintDown)
+    {
+        Prop* prop = mBuckets[startX-1 + (endY+1)*mBucketCountX];
+        if(prop->mImage == 0)
+            prop->mImage = gImageLibrary->tryGetImage(prop->mId);
+    }
+    if(hintRight && hintDown)
+    {
+        Prop* prop = mBuckets[endX+1 + (endY+1)*mBucketCountX];
+        if(prop->mImage == 0)
+            prop->mImage = gImageLibrary->tryGetImage(prop->mId);
+    }
 }
 
 void Map::lowMemory()
 {
+    // Code copied from draw.
+    Camera* camera = gWorld->getCamera();
+    Vector2 ul = camera->mCenter - camera->mSize/2;
+    Vector2 lr = camera->mCenter + camera->mSize/2;
+    
+    if(ul.x < 0) ul.x = 0;
+    if(ul.x > mSizeX) ul.x = mSizeX;
+    if(ul.y < 0) ul.y = 0;
+    if(ul.y > mSizeY) ul.y = mSizeY;
+    
+    if(lr.x < 0) lr.x = 0;
+    if(lr.x > mSizeX) lr.x = mSizeX;
+    if(lr.y < 0) lr.y = 0;
+    if(lr.y > mSizeY) lr.y = mSizeY;
+    
+    uint16_t startX = floorf(ul.x / mBucketSizeX);
+    uint16_t startY = floorf(ul.y / mBucketSizeY);
+    uint16_t endX = ceilf(lr.x / mBucketSizeX);
+    uint16_t endY = ceilf(lr.y / mBucketSizeY);
+    
     for(uint32_t x=0; x < mBucketCountX; ++x)
     {
         for(uint32_t y=0; y < mBucketCountY; ++y)
         {
+            if(x >= startX && x <= endX && y >= startY && y <= endY)
+                continue;
+                
             Prop* prop = mBuckets[x + y*mBucketCountX];
             if(prop->mImage)
             {

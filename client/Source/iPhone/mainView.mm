@@ -12,7 +12,6 @@
 
 @implementation MainView
 
-// OSX Magic.
 + (Class) layerClass
 {
 	return [CAEAGLLayer class];
@@ -100,14 +99,12 @@
 	[super dealloc];
 }
 
-
 - (void)startAnimation
 {
 	mTimer = [NSTimer scheduledTimerWithTimeInterval:1./30. target:self selector:@selector(drawView) userInfo:nil repeats:YES];
     mLastTime = getTime();
     mMicros = 0;
 }
-
 
 - (void)stopAnimation
 {

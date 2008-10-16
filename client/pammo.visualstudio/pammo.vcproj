@@ -635,6 +635,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\Source\win32\thread.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\Source\win32\timer_platform.cpp"
 				>
 			</File>

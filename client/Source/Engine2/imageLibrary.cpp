@@ -1,3 +1,4 @@
+#include "platform.h"
 #include "imageLibrary.h"
 #include "view.h"
 
@@ -439,15 +440,15 @@ void ImageLibrary::createImage(uint32_t id, RawImage* raw)
     gImagePath[id].mImage->mSize = raw->mSize;
     gImagePath[id].mImage->mTableIndex = id;
 
-    int mode, size;
+    int mode, type;
     if(raw->mBytesPerPixel == 3)
     {
-        size = GL_UNSIGNED_SHORT_5_6_5;
+        type = PAMMO_GL_16BIT;  // win32 doesn't support 565 so we remain 24 bit
         mode = GL_RGB;
     }
     else if(raw->mBytesPerPixel == 4)
     {
-        size = GL_UNSIGNED_BYTE;
+        type = GL_UNSIGNED_BYTE;
         mode = GL_RGBA;
     }
     
@@ -460,7 +461,7 @@ void ImageLibrary::createImage(uint32_t id, RawImage* raw)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     
     //uint64_t start = getTime();
-    glTexImage2D(GL_TEXTURE_2D, 0, mode, raw->mPixelSize.x, raw->mPixelSize.y, 0, mode, size, raw->mPixels);
+    glTexImage2D(GL_TEXTURE_2D, 0, mode, raw->mPixelSize.x, raw->mPixelSize.y, 0, mode, type, raw->mPixels);
     //dprintf("Binding took %d", (uint32_t)(getTime() - start));
     
     // Create texture coords.

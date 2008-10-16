@@ -100,22 +100,21 @@ void lightningBulletCollisionCallback(Body* self, Body* other, Contact* contact,
 {
 	response->mBounceMe = true;
 	response->mBounceThem = true;
+
+    doDamage(self, other, Lightning , 20.0f);
 	
+
     // Stop in place and fade to dark.
 	Particle* me = (Particle*)self->mUserArg;
     gWorld->getPhysics()->removeBody(me->mBody);
 	me->mBody = 0;
 	me->mCallback = lightningBulletFadeParticleCallback;
-	
-	//doDamage(self, other, Fire, 10.0f);
-	
-	Enemy* e = (Enemy*)other->mUserArg;
-	if(e->mDamageCb)
-		e->mDamageCb(e, Lightning, 20);
 }
 	
 void lightningBulletShapeCollisionCallback(Body* self, Shape* other, Contact* contact, bool* response)
 {
+    gWorld->getParticleSystem()->initSmokeParticle(self->mCenter, 0.0f, Vector2(0,0));
+
     // When particles hit a wall, stop in place and fade to dark.
 	Particle* me = (Particle*)self->mUserArg;
     gWorld->getPhysics()->removeBody(me->mBody);
@@ -144,8 +143,8 @@ void lightningBulletParticleCallback(Particle* p, ParticleSystem* system)
 	
 void lightningBulletFadeParticleCallback(Particle* p, ParticleSystem* system)
 {
-	p->mAlpha-=0.08f;
-	if(p->mAlpha <= 0)
+	//p->mAlpha-=0.08f;
+	//if(p->mAlpha <= 0)
 		system->removeParticle(p);
 }
 

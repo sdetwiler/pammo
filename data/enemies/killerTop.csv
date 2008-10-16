@@ -1,7 +1,7 @@
 "Enemy","Name",,,,,,,,,,,,
 ,"killerTop",,,,,,,,,,,,
 "Properties","Image Type","Image Path","Mass","Radius","Health","Point Value","Minimum Player Score","Max Instance Per Wave",,,,,
-,"Single","71",50,9,10,10,0,20,,,,,
+,"Single","71",50,9,10,15,50,10,,,,,
 "Behavior","Type","Speed","","","","","","","","","","",""
 ,"Spinning Top",7,,,,,,,,,,,
 "Weapon","Type","Image Path","Damage","","","","","","","","","",""

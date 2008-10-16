@@ -110,21 +110,22 @@ void GrenadeLauncherWeapon::fire()
 
 void grenadeLauncherBulletCollisionCallback(Body* self, Body* other, Contact* contact, ContactResponse* response)
 {
-    if(self->mCollideProperties == 0)
-        return;
+ //   if(self->mCollideProperties == 0)
+ //       return;
 
     response->mBounceMe = false;
-	response->mBounceThem = false;
+	response->mBounceThem = true;
+	doDamage(self, other, Grenade, 30.0f);
+
     Particle* p = (Particle*)self->mUserArg;
     GrenadeLauncherParticleData* particleData = (GrenadeLauncherParticleData*)p->mData;
 
 
     gWorld->getParticleSystem()->initExplosionParticle(self->mCenter);
-    gWorld->getParticleSystem()->removeParticle(particleData->mShadow);
+    //gWorld->getParticleSystem()->removeParticle(particleData->mShadow);
 	
-    gWorld->getParticleSystem()->removeParticle(p);
+    //gWorld->getParticleSystem()->removeParticle(p);
 	
-	doDamage(self, other, Grenade, 30.0f);
 }
 	
 void grenadeLaucherBulletShapeCollisionCallback(Body* self, Shape* other, Contact* contact, bool* response)
@@ -152,11 +153,13 @@ void grenadeLauncherBulletParticleCallback(Particle* p, ParticleSystem* system)
    
     if(distance <= Di*1.8f)
     {
+        dprintf("+");
         p->mBody->mProperties = kPlayerBulletCollisionProperties;
         p->mBody->mCollideProperties = kEnemyCollisionProperties;
     }
     else
     {
+        dprintf("-");
         p->mBody->mProperties = 0;
         p->mBody->mCollideProperties = 0;
     }

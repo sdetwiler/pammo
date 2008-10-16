@@ -193,11 +193,11 @@ void behaviorDriveByCb(Enemy* e, EnemyManager* manager)
         float rot = atan2(heading.y, heading.x);
         e->mController.mRotationTarget = rot;
         e->mController.mAcceleration = data->mSpeed * e->mBody->mMass;
-
-        e->mEntity.mRotation = e->mController.mRotation + (float)M_PI/2;
-        e->mEntity.mCenter = e->mBody->mCenter;
-        e->mEntity.makeDirty();
     }
+    e->mEntity.mRotation = e->mController.mRotation + (float)M_PI/2;
+    e->mEntity.mCenter = e->mBody->mCenter;
+    e->mEntity.makeDirty();
+
 }
 
 void behaviorCampCb(Enemy* e, EnemyManager* manager)
@@ -960,7 +960,6 @@ uint32_t EnemyManager::createWave(uint32_t pointValue)
         return 0xffffffff;
     }
 
-    //Vector2 const* pos = getSpawnPoint(rand() % getSpawnPointCount());
 
     int noOpPassCount = 0;
     static const int maxNoOps = 3;
@@ -979,15 +978,18 @@ uint32_t EnemyManager::createWave(uint32_t pointValue)
         spawnEvent.mCount = 0;
         spawnEvent.mSpawnId = rand() % getSpawnPointCount();
 
-//        dprintf("Selected %s worth %u each", spawnEvent.mEnemyName, enemyTemplateCount.mEnemyTemplate->mPointValue);
+        dprintf("  Selected %s worth %u each", spawnEvent.mEnemyName, enemyTemplateCount.mEnemyTemplate->mPointValue);
 
-        // Pick a random amount of points to assign to a group of these enemies.
+        // Pick a random amount of points to try to assign to a group of these enemies.
         uint32_t groupPoints = (rand() % pointsRemain) + 1;
-        pointsRemain-= groupPoints;
+        if(groupPoints < enemyTemplateCount.mEnemyTemplate->mPointValue)
+            groupPoints = enemyTemplateCount.mEnemyTemplate->mPointValue;
+//        pointsRemain-= groupPoints;
 
+        uint32_t pointsDistributed = 0;
         while(groupPoints >= enemyTemplateCount.mEnemyTemplate->mPointValue)
         {
-//            dprintf("Distributing %u points to current group", groupPoints);
+            dprintf("    Distributing %u points to current group", groupPoints);
 
             // Add another enemy to this spawn event.
             ++spawnEvent.mCount;
@@ -1002,18 +1004,18 @@ uint32_t EnemyManager::createWave(uint32_t pointValue)
             groupPoints-= enemyTemplateCount.mEnemyTemplate->mPointValue;
             
             // Track how many total points have been scheduled for this wave.
-            pointsAdded+= enemyTemplateCount.mEnemyTemplate->mPointValue;
+            pointsDistributed+= enemyTemplateCount.mEnemyTemplate->mPointValue;
 
             // If the maximum number of enemies of this type has been reached for this wave.
             if(enemyTemplateCount.mCount >= enemyTemplateCount.mEnemyTemplate->mMaxWaveCount)
             {
                 // Remove this enemyTemplate from the possible canidates.
-//                dprintf("Reached instance cap for this enemy type");
+                dprintf("      Reached instance cap for this enemy type");
                 for(EnemyTemplateCountVector::iterator it = templates.begin(); it!=templates.end(); ++it)
                 {
                     if((*it).mEnemyTemplate == enemyTemplateCount.mEnemyTemplate)
                     {
-                        dprintf("  removed");
+                        dprintf("      ...removed");
                         templates.erase(it);
 
                         break;
@@ -1023,15 +1025,22 @@ uint32_t EnemyManager::createWave(uint32_t pointValue)
                 groupPoints = 0;
             }
         }
+        if(pointsDistributed < pointsRemain)
+            pointsRemain-= pointsDistributed;
+        else
+            pointsRemain = 0;
 
+        pointsAdded+= pointsDistributed;
+
+        // If enemies exist in this spawn event.
         if(spawnEvent.mCount)
         {
-//            dprintf("%u points remain to be distributed for this wave", pointsRemain);
-
+            dprintf("  addSpawnEvent for %u enemies", spawnEvent.mCount);
             // At least 1 a second.
             spawnEvent.mDuration = 1+(rand()%spawnEvent.mCount)*1000000;
             addSpawnEvent(spawnEvent);
         }
+            dprintf("%u points remain to be distributed for this wave", pointsRemain);
 
     }
 

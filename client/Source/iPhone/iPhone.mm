@@ -68,9 +68,29 @@ Vector2 getFrameSize()
     return Vector2(480, 320);
 }
 
-void openRawImage(char const* path, RawImage* image)
+void openRawImagePVRTC(char const* path, RawImage* image)
 {
-	CGImageRef spriteImage;
+    FILE* f = fopen(path, "rb");
+    
+    // Read the entire map into memory.
+    fseek(f, 0, SEEK_END);
+    size_t s = ftell(f);
+    rewind(f);
+    
+    uint8_t* buffer = new uint8_t[s];
+    fread(buffer, s, 1, f);
+    fclose(f);
+    
+    image->mSize.x = sqrt(s*2);
+    image->mSize.y = image->mSize.x;
+    image->mPixelSize = image->mSize;
+    image->mBytesPerPixel = 0;
+    image->mPixels = buffer;
+}
+
+void openRawImagePNG(char const* path, RawImage* image)
+{
+    CGImageRef spriteImage;
 	CGContextRef spriteContext;
     
 	NSString* s = [[NSString alloc] initWithCString:path];
@@ -128,8 +148,11 @@ void openRawImage(char const* path, RawImage* image)
     // If this image is only 3 component, we need to downsample.
     if(image->mBytesPerPixel == 3)
     {
+        // Convert down to 16bit.
+        image->mBytesPerPixel = 2;
         for(uint32_t yi=0; yi<image->mSize.y; ++yi)
         {
+            // Going down to 16bit.
             uint8_t* src = image->mPixels + (uint32_t)(yi*image->mPixelSize.x*4);
             uint16_t* dst = (uint16_t*)(image->mPixels + (uint32_t)(yi*image->mPixelSize.x*2));
             for(uint32_t xi=0; xi<image->mSize.x; ++xi)
@@ -140,7 +163,12 @@ void openRawImage(char const* path, RawImage* image)
                 
                 dst[xi] = r << 11 | g << 5 | b;
             }
-            
+        }
+        
+        // Convert down to 24bit.
+        //for(uint32_t yi=0; yi<image->mSize.y; ++yi)
+        //{
+            // Going down to 24bit.
             //uint8_t* src = image->mPixels + (uint32_t)(yi*image->mPixelSize.x*4);
             //uint8_t* dst = image->mPixels + (uint32_t)(yi*image->mPixelSize.x*3);
             //for(uint32_t xi=0; xi<image->mSize.x; ++xi)
@@ -149,11 +177,28 @@ void openRawImage(char const* path, RawImage* image)
             //    dst[xi*3 + 1] = src[xi*4 + 1];
             //    dst[xi*3 + 2] = src[xi*4 + 2];
             //}
-        }
+        //}
+        
     }
     
 	CGContextRelease(spriteContext);
     CGColorSpaceRelease(colorSpace);
+}
+
+void openRawImage(char const* path, RawImage* image)
+{
+    if(strstr(path, ".pvrtc") != 0)
+    {
+        openRawImagePVRTC(path, image);
+    }
+    else if(strstr(path, ".png") != 0)
+    {
+        openRawImagePNG(path, image);
+    }
+    else
+    {
+        assert(0);
+    }
 }
 
 uint64_t getTime(void)

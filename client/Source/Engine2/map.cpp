@@ -11,41 +11,36 @@ namespace pammo
 Map::Map()
     : View()
 {
-    mBuckets = 0;
 }
     
 Map::~Map()
 {
 }
 
-
 void Map::loadBackdrop(char const* backdropName)
 {
-    mBucketSizeX = 128;
-    mBucketSizeY = 128;
+    mBucketSizeX = 496;
+    mBucketSizeY = 496;
     mBucketCountX = ceilf((float)mSizeX/mBucketSizeX);
     mBucketCountY = ceilf((float)mSizeY/mBucketSizeY);
     
     assert(mBucketCountX == MAP_TILES_X);
     assert(mBucketCountY == MAP_TILES_Y);
-    
-    mBuckets = new Prop*[mBucketSizeX * mBucketSizeY];
 
     mPreview = gImageLibrary->getImage(MAP_PREVIEW);
     
-    uint32_t previousYCoord = 0;
+    uint32_t previousYCoord = 8;
     for(uint32_t y=0; y < mBucketCountY; ++y)
     {
         uint32_t currentYCoord = previousYCoord + mBucketSizeY;
-        uint32_t previousXCoord = 0;
+        uint32_t previousXCoord = 8;
         for(uint32_t x=0; x < mBucketCountX; ++x)
         {
             uint32_t currentXCoord = previousXCoord + mBucketSizeX;
             
             // Create the prop.
-            Prop* prop = new Prop();
+            Prop* prop = &mBuckets[x + y*mBucketCountX];
             prop->mImage = 0;
-            mBuckets[x + y*mBucketCountX] = prop;
             prop->mId = MAP_TILES_BASE + x + y*mBucketCountX;
     
             // Calculate preview tex coordinates.
@@ -59,10 +54,12 @@ void Map::loadBackdrop(char const* backdropName)
             prop->mPreviewTexCoords[3] = Vector2(right, bottom);
     
             // Calculate regular tex coords.
-            prop->mTexCoords[0] = Vector2(0, 0);
-            prop->mTexCoords[1] = Vector2(1, 0);
-            prop->mTexCoords[2] = Vector2(0, 1);
-            prop->mTexCoords[3] = Vector2(1, 1);
+            float lo = 8 / 512.;
+            float hi = 504 / 512.;
+            prop->mTexCoords[0] = Vector2(lo, lo);
+            prop->mTexCoords[1] = Vector2(hi, lo);
+            prop->mTexCoords[2] = Vector2(lo, hi);
+            prop->mTexCoords[3] = Vector2(hi, hi);
     
             // Calculate verticies.
             prop->mVertecies[0] = Vector2(previousXCoord, previousYCoord);
@@ -90,8 +87,8 @@ void Map::draw()
     
     // Calculate lower-right and upper-left corners of camera view.
     assert(camera->mRotation == 0);
-    Vector2 ul = camera->mCenter - camera->mSize/2;
-    Vector2 lr = camera->mCenter + camera->mSize/2;
+    Vector2 ul = camera->mCenter - camera->mSize/2 - Vector2(8, 8);
+    Vector2 lr = camera->mCenter + camera->mSize/2 - Vector2(8, 8);
     
     if(ul.x < 0) ul.x = 0;
     if(ul.x > mSizeX) ul.x = mSizeX;
@@ -114,11 +111,12 @@ void Map::draw()
     {
         for(uint32_t x=startX; x < endX; ++x)
         {
-            Prop* prop = mBuckets[x + y*mBucketCountX];
+            Prop* prop = &mBuckets[x + y*mBucketCountX];
             
             // If image doesn't exist, dispatch decode.
             if(prop->mImage == 0)
                 prop->mImage = gImageLibrary->tryGetImage(prop->mId);
+                //prop->mImage = gImageLibrary->getImage(prop->mId);
             
             // If the image doesn't exist, bind the preview image and tex coords.
             if(prop->mImage == 0)
@@ -141,6 +139,9 @@ void Map::draw()
     camera->unset();
     
     glEnable(GL_BLEND);
+    
+    // Disable pre-hinting
+    #if 0
     
     // Prehint, based on where the camera is in the main tile.
     bool hintLeft = false, hintUp = false, hintRight = false, hintDown = false;
@@ -254,6 +255,7 @@ void Map::draw()
         if(prop->mImage == 0)
             prop->mImage = gImageLibrary->tryGetImage(prop->mId);
     }
+    #endif
 }
 
 void Map::lowMemory()
@@ -285,7 +287,7 @@ void Map::lowMemory()
             if(x >= startX && x <= endX && y >= startY && y <= endY)
                 continue;
                 
-            Prop* prop = mBuckets[x + y*mBucketCountX];
+            Prop* prop = &mBuckets[x + y*mBucketCountX];
             if(prop->mImage)
             {
                 gImageLibrary->purgeImage(prop->mImage);

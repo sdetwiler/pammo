@@ -150,16 +150,19 @@ struct Image;
 
 #define MAP_PREVIEW              84
 
-#define MAP_TILES_X              22
-#define MAP_TILES_Y              15
+//#define MAP_TILES_X              22
+//#define MAP_TILES_Y              15
+//#define MAP_TILES_X              11
+//#define MAP_TILES_Y              8
+#define MAP_TILES_X              6
+#define MAP_TILES_Y              4
 #define MAP_TILES_BASE           85
-
-
 
 struct ImageTexture
 {
     char const* mPath;
-    Image*      mImage;
+    Image       mImage;
+    bool        mBound;
     bool        mInUse;
 };
 

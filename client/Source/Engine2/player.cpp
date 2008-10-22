@@ -13,7 +13,6 @@
 #include "physics.h"
 #include "minimap.h"
 
-//#include "flamethrowerWeapon.h"
 #include "lightningWeapon.h"
 #include "gooWeapon.h"
 #include "grenadeLauncherWeapon.h"
@@ -141,9 +140,7 @@ void Player::reset()
     
     // Reset weapons.
     mWeaponSelector->reset();
-    //mWeaponSelector->addWeapon(mGooWeapon);
     mWeaponSelector->addWeapon(mLightningWeapon);
-    //mWeaponSelector->addWeapon(mGrenadeLauncherWeapon);
 
     // Reset life.
     mHealth = 1000.0f;
@@ -161,7 +158,6 @@ void Player::reset()
     // Reset misc.
     mScore = 0;
     mScoreMeter->setScore(mScore);
-
 
     setCenter(getSpawnPoint());
 }

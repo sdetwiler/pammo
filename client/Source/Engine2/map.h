@@ -3,6 +3,7 @@
 
 #include "pammo.h"
 #include "view.h"
+#include "imageLibrary.h"
 
 namespace pammo
 {
@@ -38,7 +39,6 @@ protected:
         Vector2 mVertecies[4];
         Vector2 mTexCoords[4];
         Vector2 mPreviewTexCoords[4];
-        //Prop* mNext;
     };
     
     Image* mPreview;
@@ -46,7 +46,7 @@ protected:
     uint32_t mSizeX, mSizeY;
     uint32_t mBucketSizeX, mBucketSizeY;
     uint32_t mBucketCountX, mBucketCountY;
-    Prop** mBuckets;
+    Prop mBuckets[MAP_TILES_X*MAP_TILES_Y];
     
     //typedef vector< ImageEntity* > ImageEntityVector;
     //ImageEntityVector mEntities;

@@ -17,11 +17,15 @@
 #include <sdl_config_win32.h>
 
 #include <gl/gl.h>
-
 #include <direct.h>
 
-#define PAMMO_GL_16BIT GL_UNSIGNED_BYTE
+#define PAMMO_GL_16BIT 0
+#define PAMMO_GL_8BIT_RGA 0
+#define PAMMO_GL_8BIT_RGBA 0
+#define PAMMO_MAP_PREVIEW_PATH "backdroptiles/paris/preview.png"
+#define PAMMO_MAP_TILES_FORMAT "data/backdroptiles/paris/%d-%d.png"
 
+#define GL_CLAMP_TO_EDGE GL_CLAMP
 #define glOrthof  glOrtho
 #define snprintf  _snprintf
 #define getcwd    _getcwd

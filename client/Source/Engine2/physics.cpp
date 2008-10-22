@@ -21,6 +21,15 @@ Physics::Physics() : View()
         for(uint32_t y=0; y < kShapeBucketCount; ++y)
             mShapeBuckets[x][y] = 0;
     }
+    
+    // Body array.
+    uint32_t count = 300;
+    Body* bodies = new Body[count];
+    for(uint32_t i=0; i < count; ++i)
+    {
+        bodies[i].mNext = mFreed;
+        mFreed = &bodies[i];
+    }
 }
 
 Physics::~Physics()
@@ -41,15 +50,17 @@ uint32_t Physics::getDrawPriority() const
 void Physics::reset()
 {
     Body* cur;
-    Body* next;
+    Body* tmp;
 
     // Remove all pending add bodies.
     cur = mAddBodies;
     while(cur)
     {
-        next = cur->mNext;
-        removeBody(cur);
-        cur = next;
+        tmp = cur;
+        cur = cur->mNext;
+        
+        tmp->mNext = mFreed;
+        mFreed = tmp;
     }
     mAddBodies = NULL;
 
@@ -57,9 +68,11 @@ void Physics::reset()
     cur = mBodies;
     while(cur)
     {
-        next = cur->mNext;
-        removeBody(cur);
-        cur = next;
+        tmp = cur;
+        cur = cur->mNext;
+        
+        tmp->mNext = mFreed;
+        mFreed = tmp;
     }
     mBodies = NULL;
 }
@@ -205,7 +218,9 @@ Body* Physics::addBody()
     }
     else
     {
-        body = new Body();
+        //body = new Body();
+        dprintf("Out of bodies!");
+        return 0;
     }
     
     memset(body, 0, sizeof(Body));

@@ -38,7 +38,6 @@
 		115E19870DEBA14E00BD1F3A /* appDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 115E19860DEBA14E00BD1F3A /* appDelegate.mm */; };
 		115E199E0DEBA2A100BD1F3A /* mainView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 115E199A0DEBA2A100BD1F3A /* mainView.mm */; };
 		115E1A3A0DEBAE8D00BD1F3A /* iPhone.mm in Sources */ = {isa = PBXBuildFile; fileRef = 115E1A390DEBAE8D00BD1F3A /* iPhone.mm */; };
-		11701C640E9C44EA0058C93E /* backdroptiles in Copy Data */ = {isa = PBXBuildFile; fileRef = 11701C480E9C44EA0058C93E /* backdroptiles */; };
 		11701D770E9C87450058C93E /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 11701D750E9C87450058C93E /* Default.png */; };
 		11701D780E9C87450058C93E /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 11701D760E9C87450058C93E /* Icon.png */; };
 		118320AC0E31545F0037B9B4 /* vehicleController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 118320AB0E31545F0037B9B4 /* vehicleController.cpp */; };
@@ -63,6 +62,7 @@
 		11F1374A0DF34A7F00651323 /* imageLibrary.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11F137490DF34A7F00651323 /* imageLibrary.cpp */; };
 		11FBD5C20E7AE3C60070BD31 /* interfaceView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11FBD5BE0E7AE3C60070BD31 /* interfaceView.cpp */; };
 		11FBD5C30E7AE3C60070BD31 /* scoreMeter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11FBD5C00E7AE3C60070BD31 /* scoreMeter.cpp */; };
+		1AD3FEEF0EAE658300F3C2E5 /* backdroppvrtc in Copy Data */ = {isa = PBXBuildFile; fileRef = 1AD3FED20EAE658300F3C2E5 /* backdroppvrtc */; };
 		1D3623EC0D0F72F000981E51 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D3623EB0D0F72F000981E51 /* CoreGraphics.framework */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
@@ -77,7 +77,7 @@
 			dstPath = data;
 			dstSubfolderSpec = 1;
 			files = (
-				11701C640E9C44EA0058C93E /* backdroptiles in Copy Data */,
+				1AD3FEEF0EAE658300F3C2E5 /* backdroppvrtc in Copy Data */,
 				113681B80E7F82FA001FFC23 /* fonts in Copy Data */,
 				110664D40E5B70DF0023ABB1 /* particles in Copy Data */,
 				110664D90E5B70EA0023ABB1 /* enemies in Copy Data */,
@@ -145,7 +145,6 @@
 		115E19990DEBA2A100BD1F3A /* mainView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mainView.h; sourceTree = "<group>"; };
 		115E199A0DEBA2A100BD1F3A /* mainView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = mainView.mm; sourceTree = "<group>"; };
 		115E1A390DEBAE8D00BD1F3A /* iPhone.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = iPhone.mm; sourceTree = "<group>"; };
-		11701C480E9C44EA0058C93E /* backdroptiles */ = {isa = PBXFileReference; lastKnownFileType = folder; name = backdroptiles; path = ../data/backdroptiles; sourceTree = SOURCE_ROOT; };
 		11701D750E9C87450058C93E /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = ../data/iphone/Default.png; sourceTree = SOURCE_ROOT; };
 		11701D760E9C87450058C93E /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = ../data/iphone/Icon.png; sourceTree = SOURCE_ROOT; };
 		118320AA0E31545F0037B9B4 /* vehicleController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vehicleController.h; sourceTree = "<group>"; };
@@ -197,6 +196,7 @@
 		11FBD5BF0E7AE3C60070BD31 /* interfaceView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = interfaceView.h; sourceTree = "<group>"; };
 		11FBD5C00E7AE3C60070BD31 /* scoreMeter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = scoreMeter.cpp; sourceTree = "<group>"; };
 		11FBD5C10E7AE3C60070BD31 /* scoreMeter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = scoreMeter.h; sourceTree = "<group>"; };
+		1AD3FED20EAE658300F3C2E5 /* backdroppvrtc */ = {isa = PBXFileReference; lastKnownFileType = folder; name = backdroppvrtc; path = ../data/backdroppvrtc; sourceTree = SOURCE_ROOT; };
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1D3623EB0D0F72F000981E51 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		1D6058910D05DD3D006BFB54 /* Paradise.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Paradise.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -240,7 +240,7 @@
 		110664090E5B6BA00023ABB1 /* Data */ = {
 			isa = PBXGroup;
 			children = (
-				11701C480E9C44EA0058C93E /* backdroptiles */,
+				1AD3FED20EAE658300F3C2E5 /* backdroppvrtc */,
 				1136819E0E7F82FA001FFC23 /* fonts */,
 				110664DA0E5B70FB0023ABB1 /* interface */,
 				110664ED0E5B70FB0023ABB1 /* levels */,

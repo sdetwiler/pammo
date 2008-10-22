@@ -158,10 +158,12 @@ struct Image;
 #define MAP_TILES_Y              4
 #define MAP_TILES_BASE           85
 
+#define NUM_IMAGES (MAP_TILES_BASE + MAP_TILES_X*MAP_TILES_Y)
+
 struct ImageTexture
 {
     char const* mPath;
-    Image       mImage;
+    Image*      mImage;
     bool        mBound;
     bool        mInUse;
 };

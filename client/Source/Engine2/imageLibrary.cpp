@@ -5,136 +5,138 @@
 namespace pammo
 {
 
-ImageTexture gImagePath[] = 
+Image gImages[NUM_IMAGES];
+
+ImageTexture gImagePath[NUM_IMAGES] = 
 {
-    {"interface/iconWeaponHighlight.png", Image(), false, true},         // 0
-    {"interface/iconWeaponLightningGun.png", Image(), false, true},      // 1 
-    {"interface/iconWeaponGoo.png", Image(), false, true},               // 2
-    {"interface/iconWeaponGrenadeLauncher.png", Image(), false, true},   // 3
-    {"interface/iconShieldEnable.png", Image(), false, true},           // 4
-    {"interface/iconShieldDisable.png", Image(), false, true},           // 5
+    {"interface/iconWeaponHighlight.png", NULL, false, true},         // 0
+    {"interface/iconWeaponLightningGun.png", NULL, false, true},      // 1 
+    {"interface/iconWeaponGoo.png", NULL, false, true},               // 2
+    {"interface/iconWeaponGrenadeLauncher.png", NULL, false, true},   // 3
+    {"interface/iconShieldEnable.png", NULL, false, true},           // 4
+    {"interface/iconShieldDisable.png", NULL, false, true},           // 5
 
-    {"../Default.png", Image(), false, false},        // 6
-    {"interface/backgroundTutorial.png", Image(), false, false},          // 7
-    {"interface/backgroundCredits.png", Image(), false, false},           // 8
+    {"../Default.png", NULL, false, false},        // 6
+    {"interface/backgroundTutorial.png", NULL, false, false},          // 7
+    {"interface/backgroundCredits.png", NULL, false, false},           // 8
 
-    {"interface/shieldMapLifeBar.png", Image(), false, true},            // 9
-    {"interface/healthDot.png", Image(), false, true},                   // 10
+    {"interface/shieldMapLifeBar.png", NULL, false, true},            // 9
+    {"interface/healthDot.png", NULL, false, true},                   // 10
 
-    {"interface/ringMovement.png", Image(), false, true},                // 11
-    {"interface/ringTarget.png", Image(), false, true},                  // 12
+    {"interface/ringMovement.png", NULL, false, true},                // 11
+    {"interface/ringTarget.png", NULL, false, true},                  // 12
 
-    {"interface/deathCards/00.png", Image(), false, false},               // 13
-    {"interface/deathCards/01.png", Image(), false, false},               // 14
-    {"interface/deathCards/02.png", Image(), false, false},               // 15
-    {"interface/deathCards/03.png", Image(), false, false},               // 16
-    {"interface/deathCards/04.png", Image(), false, false},               // 17
-    {"interface/deathCards/05.png", Image(), false, false},               // 18
-    {"interface/deathCards/06.png", Image(), false, false},               // 19
-    {"interface/deathCards/07.png", Image(), false, false},               // 20
-    {"interface/deathCards/08.png", Image(), false, false},               // 21
-    {"interface/deathCards/09.png", Image(), false, false},               // 22
-    {"interface/deathCards/10.png", Image(), false, false},               // 23
+    {"interface/deathCards/00.png", NULL, false, false},               // 13
+    {"interface/deathCards/01.png", NULL, false, false},               // 14
+    {"interface/deathCards/02.png", NULL, false, false},               // 15
+    {"interface/deathCards/03.png", NULL, false, false},               // 16
+    {"interface/deathCards/04.png", NULL, false, false},               // 17
+    {"interface/deathCards/05.png", NULL, false, false},               // 18
+    {"interface/deathCards/06.png", NULL, false, false},               // 19
+    {"interface/deathCards/07.png", NULL, false, false},               // 20
+    {"interface/deathCards/08.png", NULL, false, false},               // 21
+    {"interface/deathCards/09.png", NULL, false, false},               // 22
+    {"interface/deathCards/10.png", NULL, false, false},               // 23
 
-    {"vehicles/tank/00.png", Image(), false, true},                      // 24
-    {"vehicles/tank/01.png", Image(), false, true},                      // 25
-    {"vehicles/tank/02.png", Image(), false, true},                      // 26
-    {"vehicles/tank/turret/00.png", Image(), false, true},               // 27
+    {"vehicles/tank/00.png", NULL, false, true},                      // 24
+    {"vehicles/tank/01.png", NULL, false, true},                      // 25
+    {"vehicles/tank/02.png", NULL, false, true},                      // 26
+    {"vehicles/tank/turret/00.png", NULL, false, true},               // 27
 
-    {"fonts/caslonAntique/0.png", Image(), false, true},                 // 28
-    {"fonts/caslonAntique/1.png", Image(), false, true},                 // 29
-    {"fonts/caslonAntique/2.png", Image(), false, true},                 // 30
-    {"fonts/caslonAntique/3.png", Image(), false, true},                 // 31
-    {"fonts/caslonAntique/4.png", Image(), false, true},                 // 32
-    {"fonts/caslonAntique/5.png", Image(), false, true},                 // 33
-    {"fonts/caslonAntique/6.png", Image(), false, true},                 // 34
-    {"fonts/caslonAntique/7.png", Image(), false, true},                 // 35
-    {"fonts/caslonAntique/8.png", Image(), false, true},                 // 36
-    {"fonts/caslonAntique/9.png", Image(), false, true},                 // 37
+    {"fonts/caslonAntique/0.png", NULL, false, true},                 // 28
+    {"fonts/caslonAntique/1.png", NULL, false, true},                 // 29
+    {"fonts/caslonAntique/2.png", NULL, false, true},                 // 30
+    {"fonts/caslonAntique/3.png", NULL, false, true},                 // 31
+    {"fonts/caslonAntique/4.png", NULL, false, true},                 // 32
+    {"fonts/caslonAntique/5.png", NULL, false, true},                 // 33
+    {"fonts/caslonAntique/6.png", NULL, false, true},                 // 34
+    {"fonts/caslonAntique/7.png", NULL, false, true},                 // 35
+    {"fonts/caslonAntique/8.png", NULL, false, true},                 // 36
+    {"fonts/caslonAntique/9.png", NULL, false, true},                 // 37
 
-    {"particles/flame/00.png", Image(), false, true},                    // 38
+    {"particles/flame/00.png", NULL, false, true},                    // 38
 
-    {"particles/heatSeaker/00.png", Image(), false, true},               // 39
-    {"particles/heatSeaker/tail/00.png", Image(), false, true},          // 40
+    {"particles/heatSeaker/00.png", NULL, false, true},               // 39
+    {"particles/heatSeaker/tail/00.png", NULL, false, true},          // 40
 
-    {"particles/mine.png", Image(), false, true},                        // 41
+    {"particles/mine.png", NULL, false, true},                        // 41
 
-    {"particles/ball.png", Image(), false, true},                        // 42
-    {"particles/shadow/00.png", Image(), false, true},                      // 43
+    {"particles/ball.png", NULL, false, true},                        // 42
+    {"particles/shadow/00.png", NULL, false, true},                      // 43
 
-    {"particles/machineGun/00.png", Image(), false, true},               // 44
-    {"particles/machineGun/01.png", Image(), false, true},               // 45
-    {"particles/machineGun/02.png", Image(), false, true},               // 46
+    {"particles/machineGun/00.png", NULL, false, true},               // 44
+    {"particles/machineGun/01.png", NULL, false, true},               // 45
+    {"particles/machineGun/02.png", NULL, false, true},               // 46
 
-    {"particles/goo/00.png", Image(), false, true},                      // 47
-    {"particles/goo/01.png", Image(), false, true},                      // 48
-    {"particles/goo/02.png", Image(), false, true},                      // 49
+    {"particles/goo/00.png", NULL, false, true},                      // 47
+    {"particles/goo/01.png", NULL, false, true},                      // 48
+    {"particles/goo/02.png", NULL, false, true},                      // 49
 
-    {"particles/smoke/00.png", Image(), false, true},                    // 50
+    {"particles/smoke/00.png", NULL, false, true},                    // 50
 
-    {"particles/dust/00.png", Image(), false, true},                     // 51
+    {"particles/dust/00.png", NULL, false, true},                     // 51
 
-    {"particles/rubble/00.png", Image(), false, true},                   // 52
+    {"particles/rubble/00.png", NULL, false, true},                   // 52
 
-    {"particles/lightningGlow/00.png", Image(), false, true},            // 53
+    {"particles/lightningGlow/00.png", NULL, false, true},            // 53
 
-    {"particles/lightning/00.png", Image(), false, true},                // 54
-    {"particles/lightning/01.png", Image(), false, true},                // 55
-    {"particles/lightning/02.png", Image(), false, true},                // 56
+    {"particles/lightning/00.png", NULL, false, true},                // 54
+    {"particles/lightning/01.png", NULL, false, true},                // 55
+    {"particles/lightning/02.png", NULL, false, true},                // 56
 
-    {"particles/grenade/00.png", Image(), false, true},                  // 57
+    {"particles/grenade/00.png", NULL, false, true},                  // 57
 
-    {"particles/explosion/00.png", Image(), false, true},                // 58
-    {"particles/explosion/01.png", Image(), false, true},                // 59
+    {"particles/explosion/00.png", NULL, false, true},                // 58
+    {"particles/explosion/01.png", NULL, false, true},                // 59
 
-    {"particles/shield/00.png", Image(), false, true},                   // 60
-    {"particles/shield/01.png", Image(), false, true},                   // 61
-    {"particles/shield/02.png", Image(), false, true},                   // 62
+    {"particles/shield/00.png", NULL, false, true},                   // 60
+    {"particles/shield/01.png", NULL, false, true},                   // 61
+    {"particles/shield/02.png", NULL, false, true},                   // 62
 
-    {"particles/fakeWeapon.png", Image(), false, true},                  // 63
+    {"particles/fakeWeapon.png", NULL, false, true},                  // 63
 
-    {"vehicles/bigBoy/00.png", Image(), false, true},                    // 64
+    {"vehicles/bigBoy/00.png", NULL, false, true},                    // 64
 
-    {"vehicles/flameTank/00.png", Image(), false, true},                 // 65
-    {"vehicles/flameTank/01.png", Image(), false, true},                 // 66
-    {"vehicles/flameTank/02.png", Image(), false, true},                 // 67
-    {"vehicles/flameTank/03.png", Image(), false, true},                 // 68
-    {"vehicles/flameTank/04.png", Image(), false, true},                 // 69
-    {"vehicles/flameTank/turret/00.png", Image(), false, true},          // 70
+    {"vehicles/flameTank/00.png", NULL, false, true},                 // 65
+    {"vehicles/flameTank/01.png", NULL, false, true},                 // 66
+    {"vehicles/flameTank/02.png", NULL, false, true},                 // 67
+    {"vehicles/flameTank/03.png", NULL, false, true},                 // 68
+    {"vehicles/flameTank/04.png", NULL, false, true},                 // 69
+    {"vehicles/flameTank/turret/00.png", NULL, false, true},          // 70
 
-    {"vehicles/killerTop/00.png", Image(), false, true},                 // 71
+    {"vehicles/killerTop/00.png", NULL, false, true},                 // 71
 
-    {"vehicles/mineLayer/00.png", Image(), false, true},                 // 72
+    {"vehicles/mineLayer/00.png", NULL, false, true},                 // 72
 
-    {"vehicles/torpedo/00.png", Image(), false, true},                   // 73
+    {"vehicles/torpedo/00.png", NULL, false, true},                   // 73
 
-    {"vehicles/trebuchet/00.png", Image(), false, true},                 // 74
+    {"vehicles/trebuchet/00.png", NULL, false, true},                 // 74
 
-    {"particles/jetFlame/00.png", Image(), false, true},                 // 75
+    {"particles/jetFlame/00.png", NULL, false, true},                 // 75
 
-    {"interface/buttonMask.png", Image(), false, true},                  // 76
+    {"interface/buttonMask.png", NULL, false, true},                  // 76
     
-    {"particles/powerupLifeUpgrade.png", Image(), false, true},              // 77
-    {"particles/powerupLifeRestore.png", Image(), false, true},              // 78
-    {"particles/powerupEnergyUpgrade.png", Image(), false, true},            // 79
-    {"particles/powerupEnergyRestore.png", Image(), false, true},            // 80
-    {"particles/powerupShield.png", Image(), false, true},                   // 81
-    {"particles/powerupGooWeapon.png", Image(), false, true},                // 82
-    {"particles/powerupGrenadeLauncherWeapon.png", Image(), false, true},    // 83
+    {"particles/powerupLifeUpgrade.png", NULL, false, true},              // 77
+    {"particles/powerupLifeRestore.png", NULL, false, true},              // 78
+    {"particles/powerupEnergyUpgrade.png", NULL, false, true},            // 79
+    {"particles/powerupEnergyRestore.png", NULL, false, true},            // 80
+    {"particles/powerupShield.png", NULL, false, true},                   // 81
+    {"particles/powerupGooWeapon.png", NULL, false, true},                // 82
+    {"particles/powerupGrenadeLauncherWeapon.png", NULL, false, true},    // 83
     
-    {PAMMO_MAP_PREVIEW_PATH, Image(), false, true},    // 84
+    {PAMMO_MAP_PREVIEW_PATH, NULL, false, true},    // 84
     
     #if 0
     // Alloc a bunch of empty entries, 6 x 4.
-    {"", Image(), false, false}, {"", Image(), false, false}, {"", Image(), false, false}, {"", Image(), false, false}, {"", Image(), false, false}, {"", Image(), false, false},
-    {"", Image(), false, false}, {"", Image(), false, false}, {"", Image(), false, false}, {"", Image(), false, false}, {"", Image(), false, false}, {"", Image(), false, false},
-    {"", Image(), false, false}, {"", Image(), false, false}, {"", Image(), false, false}, {"", Image(), false, false}, {"", Image(), false, false}, {"", Image(), false, false},
-    {"", Image(), false, false}, {"", Image(), false, false}, {"", Image(), false, false}, {"", Image(), false, false}, {"", Image(), false, false}, {"", Image(), false, false},
+    {"", NULL, false, false}, {"", NULL, false, false}, {"", NULL, false, false}, {"", NULL, false, false}, {"", NULL, false, false}, {"", NULL, false, false},
+    {"", NULL, false, false}, {"", NULL, false, false}, {"", NULL, false, false}, {"", NULL, false, false}, {"", NULL, false, false}, {"", NULL, false, false},
+    {"", NULL, false, false}, {"", NULL, false, false}, {"", NULL, false, false}, {"", NULL, false, false}, {"", NULL, false, false}, {"", NULL, false, false},
+    {"", NULL, false, false}, {"", NULL, false, false}, {"", NULL, false, false}, {"", NULL, false, false}, {"", NULL, false, false}, {"", NULL, false, false},
     #else
-    {"", Image(), false, true}, {"", Image(), false, true}, {"", Image(), false, true}, {"", Image(), false, true}, {"", Image(), false, true}, {"", Image(), false, true},
-    {"", Image(), false, true}, {"", Image(), false, true}, {"", Image(), false, true}, {"", Image(), false, true}, {"", Image(), false, true}, {"", Image(), false, true},
-    {"", Image(), false, true}, {"", Image(), false, true}, {"", Image(), false, true}, {"", Image(), false, true}, {"", Image(), false, true}, {"", Image(), false, true},
-    {"", Image(), false, true}, {"", Image(), false, true}, {"", Image(), false, true}, {"", Image(), false, true}, {"", Image(), false, true}, {"", Image(), false, true},
+    {"", NULL, false, true}, {"", NULL, false, true}, {"", NULL, false, true}, {"", NULL, false, true}, {"", NULL, false, true}, {"", NULL, false, true},
+    {"", NULL, false, true}, {"", NULL, false, true}, {"", NULL, false, true}, {"", NULL, false, true}, {"", NULL, false, true}, {"", NULL, false, true},
+    {"", NULL, false, true}, {"", NULL, false, true}, {"", NULL, false, true}, {"", NULL, false, true}, {"", NULL, false, true}, {"", NULL, false, true},
+    {"", NULL, false, true}, {"", NULL, false, true}, {"", NULL, false, true}, {"", NULL, false, true}, {"", NULL, false, true}, {"", NULL, false, true},
     #endif
 };
 
@@ -146,7 +148,7 @@ ImageLibrary* gImageLibrary = NULL;
 ImageLibrary::ImageLibrary()
 {
     mObserver = 0;
-    mImageCount = sizeof(gImagePath)/sizeof(ImageTexture);
+    mImageCount = NUM_IMAGES;
 
     mPreloadIndex = 0;
     mPreloadComplete = false;
@@ -154,6 +156,7 @@ ImageLibrary::ImageLibrary()
     mFree = NULL;
     mToService = NULL;
     mToNotify = NULL;
+    
     // Build the available request queue.
     for(uint32_t i=0; i<kImageLoadStackSize; ++i)
     {
@@ -162,7 +165,12 @@ ImageLibrary::ImageLibrary()
         curr->mNext = mFree;
         mFree = curr;
     }
-
+    
+    // Assign to gImagePath from gImage.
+    for(uint32_t i=0; i < mImageCount; ++i)
+    {
+        gImagePath[i].mImage = &gImages[i];
+    }
 
     mRunning = true;
     pthread_mutex_init(&mMutex, NULL);
@@ -196,7 +204,7 @@ Image* ImageLibrary::tryGetImage(uint32_t id)
 {
     if(gImagePath[id].mBound)
     {
-        return &gImagePath[id].mImage;
+        return gImagePath[id].mImage;
     }
 
     requestLoad(id);
@@ -217,7 +225,7 @@ Image* ImageLibrary::getImage(uint32_t id)
 
     gImagePath[id].mInUse = true;
     
-    return &gImagePath[id].mImage;
+    return gImagePath[id].mImage;
 }
 
 void ImageLibrary::purgeImage(uint32_t id)
@@ -227,7 +235,7 @@ void ImageLibrary::purgeImage(uint32_t id)
     if(gImagePath[id].mBound)
     {
         // Free GL Texture.
-        glDeleteTextures(1, &gImagePath[id].mImage.mTexture);
+        glDeleteTextures(1, &gImagePath[id].mImage->mTexture);
         gImagePath[id].mBound = false;
     }
 }
@@ -304,8 +312,8 @@ void ImageLibrary::load(uint32_t id, RawImage* rawImage)
 void ImageLibrary::createImage(uint32_t id, RawImage* raw)
 {
     gImagePath[id].mBound = true;
-    gImagePath[id].mImage.mSize = raw->mSize;
-    gImagePath[id].mImage.mTableIndex = id;
+    gImagePath[id].mImage->mSize = raw->mSize;
+    gImagePath[id].mImage->mTableIndex = id;
     
     bool compressed;
 
@@ -313,30 +321,30 @@ void ImageLibrary::createImage(uint32_t id, RawImage* raw)
     switch(raw->mBytesPerPixel)
     {
         case 4:
-            dprintf("Binding 32bit image");
+            //dprintf("Binding 32bit image");
             compressed = false;
             type = GL_UNSIGNED_BYTE;
             mode = GL_RGBA;
             break;
         case 3:
-            dprintf("Binding 24bit image");
+            //dprintf("Binding 24bit image");
             compressed = false;
             type = GL_UNSIGNED_BYTE;
             mode = GL_RGB;
             break;
         case 2:
-            dprintf("Binding 16bit image");
+            //dprintf("Binding 16bit image");
             compressed = false;
             type = PAMMO_GL_16BIT;
             mode = GL_RGB;
             break;
         case 1:
-            dprintf("Binding compressed rgb image");
+            //dprintf("Binding compressed rgb image");
             compressed = true;
             mode = PAMMO_GL_8BIT_RGA;
             break;
         case 0:
-            dprintf("Binding compressed rgba image");
+            //dprintf("Binding compressed rgba image");
             compressed = true;
             mode = PAMMO_GL_8BIT_RGBA;
             break;
@@ -345,8 +353,8 @@ void ImageLibrary::createImage(uint32_t id, RawImage* raw)
     }
     
 	// Use OpenGL ES to generate a name for the texture.
-	glGenTextures(1, &gImagePath[id].mImage.mTexture);
-	glBindTexture(GL_TEXTURE_2D, gImagePath[id].mImage.mTexture);
+	glGenTextures(1, &gImagePath[id].mImage->mTexture);
+	glBindTexture(GL_TEXTURE_2D, gImagePath[id].mImage->mTexture);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -362,10 +370,10 @@ void ImageLibrary::createImage(uint32_t id, RawImage* raw)
     // Create texture coords.
     if(raw->mPixelSize.x == raw->mSize.x && raw->mPixelSize.y == raw->mSize.y)
     {
-        gImagePath[id].mImage.mTexCoords[0] = Vector2(0, 0);
-        gImagePath[id].mImage.mTexCoords[1] = Vector2(1, 0);
-        gImagePath[id].mImage.mTexCoords[2] = Vector2(0, 1);
-        gImagePath[id].mImage.mTexCoords[3] = Vector2(1, 1);
+        gImagePath[id].mImage->mTexCoords[0] = Vector2(0, 0);
+        gImagePath[id].mImage->mTexCoords[1] = Vector2(1, 0);
+        gImagePath[id].mImage->mTexCoords[2] = Vector2(0, 1);
+        gImagePath[id].mImage->mTexCoords[3] = Vector2(1, 1);
     }
     else
     {
@@ -374,10 +382,10 @@ void ImageLibrary::createImage(uint32_t id, RawImage* raw)
         
         float right = size.x / pixel.x;
         float top = 1 - size.y / pixel.y;
-        gImagePath[id].mImage.mTexCoords[0] = Vector2(0, top);
-        gImagePath[id].mImage.mTexCoords[1] = Vector2(right, top);
-        gImagePath[id].mImage.mTexCoords[2] = Vector2(0, 1);
-        gImagePath[id].mImage.mTexCoords[3] = Vector2(right, 1);
+        gImagePath[id].mImage->mTexCoords[0] = Vector2(0, top);
+        gImagePath[id].mImage->mTexCoords[1] = Vector2(right, top);
+        gImagePath[id].mImage->mTexCoords[2] = Vector2(0, 1);
+        gImagePath[id].mImage->mTexCoords[3] = Vector2(right, 1);
     }
 }
 

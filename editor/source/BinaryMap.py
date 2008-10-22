@@ -109,6 +109,12 @@ def saveOverlays(map):
     f = open(path, "w+b")
     f.write(output)
 
+def saveTile(pngpath, pvrtcpath, image):
+    image.SaveFile(pngpath, wx.BITMAP_TYPE_PNG)
+    
+    try: os.system("/Developer/Platforms/iPhoneOS.platform/usr/bin/texturetool -e PVRTC -o %s %s" % (pvrtcpath, pngpath))
+    except: pass
+
 def saveBackdrop(map):
     name = map.getBackdrop().getName()
     image = wx.ImageFromBitmap(map.getBackdrop().getBitmap())
@@ -116,26 +122,31 @@ def saveBackdrop(map):
     
     try: os.mkdir(osfix.path("../data/backdroptiles/%s" % name))
     except: pass
+    try: os.mkdir(osfix.path("../data/backdroppvrtc/%s" % name))
+    except: pass
     
-    ts = 128
+    ts = 496
+    et = 16
     
-    scaled = image.Scale(ts, ts)
-    path = osfix.path("../data/backdroptiles/%s/preview.png" % name)
-    scaled.SaveFile(path, wx.BITMAP_TYPE_PNG)
+    scaled = image.Scale(ts+et, ts+et)
+    pngpath = osfix.path("../data/backdroptiles/%s/preview.png" % name)
+    pvrtcpath = osfix.path("../data/backdroppvrtc/%s/preview.pvrtc" % name)
+    saveTile(pngpath, pvrtcpath, scaled)
     scaled.Destroy()
     
     for x in range(int(math.ceil(float(map.getSizeX())/ts))):
         for y in range(int(math.ceil(float(map.getSizeY())/ts))):
             px, py = x*ts, y*ts
-            sx, sy = ts, ts
+            sx, sy = ts + et, ts + et
             
             if px + sx > fullx: sx = fullx - px
             if py + sy > fully: sy = fully - py
             
             cropped = image.GetSubImage(wx.Rect(px, py, sx, sy))
-            resized = cropped.Size((ts, ts), (0, 0), 0, 0, 0)
-            path = osfix.path("../data/backdroptiles/%s/%d-%d.png" % (name, x, y))
-            resized.SaveFile(path, wx.BITMAP_TYPE_PNG)
+            resized = cropped.Size((ts+et, ts+et), (0, 0), 0, 0, 0)
+            pngpath = osfix.path("../data/backdroptiles/%s/%d-%d.png" % (name, x, y))
+            pvrtcpath = osfix.path("../data/backdroppvrtc/%s/%d-%d.pvrtc" % (name, x, y))
+            saveTile(pngpath, pvrtcpath, resized)
             resized.Destroy()
             cropped.Destroy()
     image.Destroy()

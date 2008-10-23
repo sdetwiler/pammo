@@ -1,7 +1,6 @@
 
 #include "debugScreenView.h"
 #include "imageLibrary.h"
-#include "drawImage.h"
 
 #include "particleSystem.h"
 #include "player.h"
@@ -76,11 +75,7 @@ void debugGooBulletParticleCallback(Particle* p, ParticleSystem* system)
     p->mBody->mRadius *= s;
 
     p->mImage.makeDirty();
-
 }
-
-
-
 
 DebugScreenView::DebugScreenView()
     : View()
@@ -90,7 +85,6 @@ DebugScreenView::DebugScreenView()
 DebugScreenView::~DebugScreenView()
 {
 }
-    
 
 uint32_t DebugScreenView::getDrawPriority() const
 {
@@ -104,13 +98,11 @@ uint32_t DebugScreenView::getUpdatePriority() const
 
 void DebugScreenView::update()
 {
-
     for(int i=0; i<5; ++i)
     {
         // Get a particle.
         Particle* p = gWorld->getParticleSystem()->addParticleWithBody(0, false);
         if(!p) return;
-        
 
         // Set basic particle properties.
         p->mCallback = debugGooBulletParticleCallback;
@@ -126,16 +118,15 @@ void DebugScreenView::update()
         p->mImage.makeDirty();
 
         p->mBody->mProperties = kPlayerBulletCollisionProperties;
-        p->mBody->mCollideProperties = kEnemyCollisionProperties | kPlayerBarrierCollisionProperties;
-        p->mBody->mBodyCallback = debugGooBulletCollisionCallback;
-        p->mBody->mShapeCallback = debugGooBulletShapeCollisionCallback;
+        p->mBody->mCollideProperties = kPlayerBulletCollisionProperties | kPlayerBarrierCollisionProperties;
+        p->mBody->mBodyCallback = 0;
+        p->mBody->mShapeCallback = 0;
         p->mBody->mDamping = 0;
         p->mBody->mRadius = 16;
         p->mBody->mMass = 10;
         p->mBody->mCenter = p->mImage.mCenter;
         Vector2 v = Vector2(velocity, 0) * Transform2::createRotation(p->mImage.mRotation);
         p->mBody->mVelocity = v;
-
     }
 }
 

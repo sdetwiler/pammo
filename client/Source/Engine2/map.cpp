@@ -81,6 +81,7 @@ uint32_t Map::getDrawPriority() const
 void Map::draw()
 {
     glDisable(GL_BLEND);
+    glColor4f(1, 1, 1, 1);
 
     Camera* camera = gWorld->getCamera();
     camera->set();
@@ -105,7 +106,6 @@ void Map::draw()
     uint16_t endX = ceilf(lr.x / mBucketSizeX);
     uint16_t endY = ceilf(lr.y / mBucketSizeY);
     
-    glLoadIdentity();
     // Draw surrounding tiles.
     for(uint32_t y=startY; y < endY; ++y)
     {
@@ -139,6 +139,11 @@ void Map::draw()
     camera->unset();
     
     glEnable(GL_BLEND);
+    ImageEntity::resetTextureCache();
+    
+    
+    
+    
     
     // Disable pre-hinting
     #if 0

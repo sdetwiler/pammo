@@ -2,6 +2,7 @@
 #include "game.h"
 
 #include "imageLibrary.h"
+#include "imageEntity.h"
 #include "view.h"
 
 #include "world.h"
@@ -56,14 +57,14 @@ void Game::update()
 {
     initAndDelete();
     
-    //gUpdateProfiler.startRound();
+    gUpdateProfiler.startRound();
     for(ViewMap::iterator i=mUpdateable.begin(); i!=mUpdateable.end(); ++i)
     {
         if(i->second->mNotifications & View::kUpdate)
         {
-            //gUpdateProfiler.start(i->first);
+            gUpdateProfiler.start(i->first);
             i->second->update();
-            //gUpdateProfiler.end(i->first);
+            gUpdateProfiler.end(i->first);
         }
     }
     
@@ -76,13 +77,14 @@ void Game::update()
     dprintf("Allocated %d", gTotal);
 #endif
 
-    //gUpdateProfiler.endRound();
+    gUpdateProfiler.endRound();
 }
 
 void Game::draw()
 {
     initAndDelete();
     
+    ImageEntity::resetTextureCache();
 	Vector2 frame = getFrameSize();
 	
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -91,15 +93,13 @@ void Game::draw()
 	glEnable(GL_BLEND);
 	glDisable(GL_DEPTH_TEST);
 	glEnable(GL_TEXTURE_2D);
-	glEnable(GL_LINE_SMOOTH);
-	
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-	
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
+    
     // Rotate coordinate system if we are on the iPhone.
 #ifdef IPHONE
 	glViewport(0, 0, (int)frame.y, (int)frame.x);
@@ -109,23 +109,22 @@ void Game::draw()
 #endif
     
 	glOrthof(0, frame.x, frame.y, 0, -1.0, 1.0);
-
     glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	
-    //gDrawProfiler.startRound();
+    gDrawProfiler.startRound();
 
     for(ViewMap::iterator i = mDrawable.begin(); i!= mDrawable.end(); ++i)
     {
         if(i->second->mNotifications & View::kDraw)
         {
-            //gDrawProfiler.start(i->first);
+            gDrawProfiler.start(i->first);
             i->second->draw();
-            //gDrawProfiler.end(i->first);
+            gDrawProfiler.end(i->first);
         }
     }
 
-    //gDrawProfiler.endRound();
+    gDrawProfiler.endRound();
 }
 
 void Game::touches(uint32_t count, Touch* touches)

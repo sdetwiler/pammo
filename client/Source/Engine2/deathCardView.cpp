@@ -18,8 +18,8 @@ DeathCardView::DeathCardView()
 
     int card = ((float)player->mScore/MAX_SCORE) * INTERFACE_DEATH_CARD_COUNT;
     
-    if(card>INTERFACE_DEATH_CARD_COUNT)
-        card = INTERFACE_DEATH_CARD_COUNT;
+    if(card>=INTERFACE_DEATH_CARD_COUNT)
+        card = INTERFACE_DEATH_CARD_COUNT-1;
 
     // Load background.
     mBackground = gImageLibrary->getImage(INTERFACE_DEATH_CARD_00 + card);

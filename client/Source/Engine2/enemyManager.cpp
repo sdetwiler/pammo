@@ -154,7 +154,6 @@ void behaviorApproachAndFireCb(Enemy* e, EnemyManager* manager)
 
     Vector2 heading = gWorld->getPlayer()->getCenter() - e->mBody->mCenter;
     float mag = magnitude(heading);
-    float speed = .5f;
     float rot = atan2(heading.y, heading.x);
     if(rot < 0) 
         rot += (float)M_PI*2;
@@ -452,16 +451,6 @@ void enemyUpdateCb(Enemy* e, EnemyManager* manager)
     e->mEntity.makeDirty();
 }
 
-void enemyDrawCb(Enemy* e, EnemyManager* manager)
-{
-    e->mShadow.draw();
-    e->mEntity.draw();
-    for(uint32_t i=0; i<e->mWeaponCount; ++i)
-    {
-        e->mWeapon[i].mEntity.draw();
-    }
-}
-
 void enemyDamageCb(Enemy* e, ParticleType type, float amount)
 {
 	e->mHealth-=amount;
@@ -617,7 +606,6 @@ bool EnemyManager::initializeEnemy(Enemy* e, EnemyTemplate* enemyTemplate)
     e->mEntity.mSize = e->mImages[0]->mSize;
 
     e->mUpdateCb = enemyUpdateCb;
-    e->mDrawCb   = enemyDrawCb;
     e->mDamageCb = enemyDamageCb;
 
     // Behavior.
@@ -833,14 +821,50 @@ void EnemyManager::update()
         mNextWaveScore+= wavePoints;
     }
     
+    // Calculate the span of the screen.
+    Camera* camera = gWorld->getCamera();
+    float cameraLeft = camera->mCenter.x - camera->mSize.x/2;
+    float cameraTop = camera->mCenter.y - camera->mSize.y/2;
+    float cameraRight = camera->mCenter.x + camera->mSize.x/2;
+    float cameraBottom = camera->mCenter.y + camera->mSize.y/2;
+    
+    // Reset draw iterators.
+    mDrawHead = mDrawTail = 0;
+    
     // Update enemies.
 	Enemy* e = mEnemies;
     Minimap* minimap = gWorld->getMinimap();
     while(e)
 	{
+        // Call update.
 	    e->mUpdateCb(e, this);
+        
+        // Mark on minimap.
         minimap->mark(e->mBody->mCenter, kMinimapEnemyMarker);
-		assert(e!=e->mNext);
+        
+        // If the enemy is on the screen, add it to the draw list.
+        float sx = e->mEntity.mSize.x/2;
+        float sy = e->mEntity.mSize.y/2;
+        float cx = e->mEntity.mCenter.x;
+        float cy = e->mEntity.mCenter.y;
+        
+        // If it is inside the camera, add it to the draw list.
+        if(    cx + sx > cameraLeft  && cy + sy > cameraTop
+            && cx - sx < cameraRight && cy - sy < cameraBottom)
+        {
+            e->mDrawNext = 0;
+            
+            if(!mDrawHead)
+            {
+                mDrawHead = mDrawTail = e;
+            }
+            else
+            {
+                mDrawTail->mDrawNext = e;
+                mDrawTail = e;
+            }
+        }
+        
 		e = e->mNext;
 	}
 }
@@ -848,13 +872,26 @@ void EnemyManager::update()
 void EnemyManager::draw()
 {
     gWorld->getCamera()->set();
-
-	Enemy* e = mEnemies;
+    
+    // Draw shadows.
+	Enemy* e = mDrawHead;
 	while(e)
 	{
-		e->mDrawCb(e, this);
-		e = e->mNext;
+        e->mShadow.draw();
+        e = e->mDrawNext;
 	}
+
+    // Draw enemies.
+    e = mDrawHead;
+	while(e)
+	{
+        //e->mShadow.draw();
+        e->mEntity.draw();
+        for(uint32_t i=0; i<e->mWeaponCount; ++i)
+            e->mWeapon[i].mEntity.draw();
+        e = e->mDrawNext;
+	}
+    
     gWorld->getCamera()->unset();
 }
 

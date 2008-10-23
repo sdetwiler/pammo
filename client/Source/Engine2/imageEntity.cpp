@@ -3,6 +3,9 @@
 namespace pammo
 {
 
+const uint32_t kInvalidTextureCache = 0xFFFFFFFF;
+uint32_t ImageEntity::mTextureCache = kInvalidTextureCache;
+
 ImageEntity::ImageEntity()
 {
     mAlpha = 1.0f;
@@ -32,6 +35,11 @@ ImageEntity::ImageEntity(Image* image)
 
 ImageEntity::~ImageEntity()
 {}
+
+void ImageEntity::resetTextureCache()
+{
+    mTextureCache = kInvalidTextureCache;
+}
 
 void ImageEntity::makeDirty()
 {
@@ -76,58 +84,96 @@ Image* ImageEntity::getImage()
 void ImageEntity::draw()
 {
 #ifdef PROFILE
-    static int lastTexture = 0;
     static uint32_t tick=0;
-    static uint32_t total=0;
+    static uint32_t build=0;
+    static uint32_t setup=0;
+    static uint32_t bind=0;
+    static uint32_t draw=0;
+    uint64_t start;
+    uint64_t end;
 #endif
+
+#ifdef PROFILE
+    start = getTime();
+#endif
+
     if(mDirty)
     {
-        Transform2 t = Transform2::createRotation(mRotation);
+        float cosa = cos(mRotation);
+        float sina = sin(mRotation);
         
-        mVertices[0] = Vector2(-mSize.x/2, -mSize.y/2) * t + mCenter;
-        mVertices[1] = Vector2(mSize.x/2, -mSize.y/2) * t + mCenter;
-        mVertices[2] = Vector2(-mSize.x/2, mSize.y/2) * t + mCenter;
-        mVertices[3] = Vector2(mSize.x/2, mSize.y/2) * t + mCenter;
+        float sx = mSize.x;
+        float sy = mSize.y;
+        
+        float a = sx * cosa * 0.5;
+        float b = -sy * sina * 0.5;
+        float c = sx * sina * 0.5;
+        float d = sy * cosa * 0.5;
+        
+        float x = mCenter.x;
+        float y = mCenter.y;
+        
+        mVertices[0] = -a + -b + x;
+        mVertices[1] = -c + -d + y;
+        
+        mVertices[2] =  a + -b + x;
+        mVertices[3] =  c + -d + y;
+        
+        mVertices[4] = -a +  b + x;
+        mVertices[5] = -c +  d + y;
+        
+        mVertices[6] =  a +  b + x;
+        mVertices[7] =  c +  d + y;
         
         mDirty = false;
     }
-    
-    glLoadIdentity();
+
+#ifdef PROFILE
+    end = getTime();
+    build += (uint32_t)(end - start);
+    start = end;
+#endif
 
     glVertexPointer(2, GL_FLOAT, 0, (float*)mVertices);
     glTexCoordPointer(2, GL_FLOAT, 0, (float*)mImage->mTexCoords);
-
     glColor4f(1.0f, 1.0f, 1.0f, mAlpha);
 
-    //if(lastTexture != mImage->mTexture)
+#ifdef PROFILE
+    end = getTime();
+    setup += (uint32_t)(end - start);
+    start = end;
+#endif
+
+    if(mTextureCache != mImage->mTexture)
     {
         glBindTexture(GL_TEXTURE_2D, mImage->mTexture);
-
-//        lastTexture = mImage->mTexture;
+        mTextureCache = mImage->mTexture;
     }
 
 #ifdef PROFILE
-    uint64_t start = getTime();
+    end = getTime();
+    bind += (uint32_t)(end - start);
+    start = end;
 #endif
 
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
 #ifdef PROFILE
-    uint64_t end = getTime();
+    end = getTime();
+    draw += (uint32_t)(end - start);
+    start = end;
 #endif
-    
-	glColor4f(1, 1, 1, 1);
 
 #ifdef PROFILE
-    uint32_t delta = (uint32_t)(end-start);
-    total+=delta;
     ++tick;
-    if(!(tick%200))
+    static float count = 3200;
+    if(tick >= count)
     {
-        dprintf("glDrawArrays took %u\t(%.2f ave)", 
-            delta,
-            (float)(total)/(float)tick
-            );
+        tick = 0;
+        dprintf("Draw Report:\n\tBuild: %f\n\tSetup: %f\n\tBind: %f\n\tDraw: %f",
+            build/count, setup/count, bind/count, draw/count);
+        
+        build = setup = bind = draw = 0;
     }
 #endif
 }

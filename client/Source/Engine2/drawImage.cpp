@@ -1,4 +1,5 @@
 #include "drawImage.h"
+#include "imageEntity.h"
 
 namespace pammo
 {
@@ -24,14 +25,16 @@ void drawImage(Image* image, Transform2 const& transform, float alpha)
     trans[15] = 1.0;
 
     glLoadMatrixf(trans);
+    glColor4f(1.0f, 1.0f, 1.0f, alpha);
+    glBindTexture(GL_TEXTURE_2D, image->mTexture);
     
     glVertexPointer(2, GL_FLOAT, 0, spriteVertices);
     glTexCoordPointer(2, GL_FLOAT, 0, (float*)image->mTexCoords);
 
-    glColor4f(1.0f, 1.0f, 1.0f, alpha);
-    glBindTexture(GL_TEXTURE_2D, image->mTexture);
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-	glColor4f(1, 1, 1, 1);
+    
+    glLoadIdentity();
+    ImageEntity::resetTextureCache();
 }
 
 }

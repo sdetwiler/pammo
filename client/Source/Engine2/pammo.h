@@ -39,7 +39,6 @@ struct Image
     Vector2 mTexCoords[4];
     uint32_t mTexture;
     uint32_t mTableIndex; // To support reference/dereference images from Image*
-    int      mMode; // GL_RGB, GL_RGBA
 };
 
 struct Touch

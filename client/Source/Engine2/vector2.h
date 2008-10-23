@@ -153,6 +153,11 @@ static inline float magnitude(Vector2 const& rhs)
 	return sqrt(rhs.x*rhs.x + rhs.y*rhs.y);
 }
 
+static inline float magnitudeSquarded(Vector2 const& rhs)
+{
+	return rhs.x*rhs.x + rhs.y*rhs.y;
+}
+
 static inline Vector2 normalize(Vector2 const& rhs)
 {
 	return rhs / Vector2(magnitude(rhs));

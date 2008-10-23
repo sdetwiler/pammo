@@ -20,7 +20,7 @@ ImageTexture gImagePath[NUM_IMAGES] =
     {"interface/backgroundTutorial.png", NULL, false, false},          // 7
     {"interface/backgroundCredits.png", NULL, false, false},           // 8
 
-    {"interface/shieldMapLifeBar.png", NULL, false, true},            // 9
+    {"interface/minimap.png", NULL, false, true},            // 9
     {"interface/healthDot.png", NULL, false, true},                   // 10
 
     {"interface/ringMovement.png", NULL, false, true},                // 11

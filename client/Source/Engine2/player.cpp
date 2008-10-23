@@ -441,11 +441,11 @@ void Player::damage(ParticleType type, float amount)
 {
     if(mShielding)
     {
-        dprintf("Shielding, no damage");
+        //dprintf("Shielding, no damage");
         return;
     }
     
-    dprintf("damage");
+    //dprintf("damage");
 	mHealth -= amount;
     mCameraShake = MAX_CAMERA_SHAKE;
     mHealthMeter->setPercent(mHealth);

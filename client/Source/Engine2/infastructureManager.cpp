@@ -17,10 +17,10 @@ InfastructureManager::InfastructureManager()
 void InfastructureManager::reset()
 {
     mGivenNewPowers = 0;
-    mNextNewPowerScore = 0;
+    mNextNewPowerScore = 300;
     
-    mNextUpgradeScore = 300;
-    mNextRestoreScore = 125;
+    mNextUpgradeScore = 500;
+    mNextRestoreScore = 150;
 }
 
 uint32_t InfastructureManager::getUpdatePriority() const
@@ -63,7 +63,7 @@ void InfastructureManager::update()
             if(count == 1)
                 mNextNewPowerScore = INT_MAX;
             else
-                mNextNewPowerScore += 0;
+                mNextNewPowerScore += 600;
                 //mNextNewPowerScore += 50;
         }
     }

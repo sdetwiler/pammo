@@ -102,7 +102,7 @@ const uint32_t kShapeBucketCount = 30;
 class Physics : public View
 {
     public:
-        Physics();
+        Physics(uint32_t numBodies);
         ~Physics();
     
         virtual uint32_t getUpdatePriority() const;
@@ -131,12 +131,14 @@ class Physics : public View
         Vector2 mShapeBucketSize;
         uint64_t mShapeQuery;
         ShapeBucket* mShapeBuckets[kShapeBucketCount][kShapeBucketCount];
+        ShapeBucket* mShapeBucketOffscreen;
         
         void integrate();
         void collide();
         
         void collideAgainstBodies(Body* b1);
         void collideAgainstShapes(Body* b1);
+        void collideAgainstBucket(Body* b1, ShapeBucket* bucket, float radiusSquared);
         
         void oneBodyResponse(Body* b1, Contact* contact);
         void twoBodyResponse(Body* b1, Body* b2, Contact* contact);

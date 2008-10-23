@@ -41,7 +41,8 @@ def accumulate(store, name):
 def save(map):
     saveVisuals(map)
     saveOverlays(map)
-    saveBackdrop(map)
+    #saveBackdrop(map)
+    saveMinimap(map)
 
 def saveVisuals(map):
     output = ''
@@ -150,3 +151,71 @@ def saveBackdrop(map):
             resized.Destroy()
             cropped.Destroy()
     image.Destroy()
+
+def saveMinimap(map):
+    # Create mask bitmap.
+    maskBitmap = wx.EmptyBitmap(64, 64)
+    dc = wx.MemoryDC(maskBitmap)
+    gc = wx.GraphicsContext.Create(dc)
+    gc.SetBrush(wx.Brush(wx.Color(255, 255, 255, 255)))
+    gc.SetPen(wx.NullPen)
+    gc.DrawEllipse(1, 1, 62, 62)
+    gc.Destroy()
+    dc.Destroy()
+    maskImage = wx.ImageFromBitmap(maskBitmap)
+    #path = osfix.path("../../mask.png")
+    #maskImage.SaveFile(path, wx.BITMAP_TYPE_PNG)
+    
+    # Create collision bitmap.
+    collisionBitmap = wx.EmptyBitmapRGBA(64, 64, 0, 0, 0, 0)
+    dc = wx.MemoryDC(collisionBitmap)
+    gc = wx.GraphicsContext.Create(dc)
+    sx = 64./map.getSizeX()
+    sy = 64./map.getSizeY()
+    for shape in map.getCollisionShapes():
+        if not shape.getPlayerCollide():
+            continue
+        
+        gc.SetBrush(wx.Brush(wx.Color(255, 255, 255, 255)))
+        gc.SetPen(wx.NullPen)
+
+        points = shape.getPoints()
+        path = gc.CreatePath()
+        path.MoveToPoint(sx*points[0][0], sy*points[0][1])
+        for point in points[1:]:
+            path.AddLineToPoint(sx*point[0], sy*point[1])
+        path.CloseSubpath()
+        gc.FillPath(path)
+        gc.StrokePath(path)
+    gc.Destroy()
+    dc.Destroy()
+    collisionImage = wx.ImageFromBitmap(collisionBitmap)
+    #path = osfix.path("../../pre-collision.png")
+    #collisionImage.SaveFile(path, wx.BITMAP_TYPE_PNG)
+    
+    for x in range(64):
+        for y in range(64):
+            if maskImage.GetAlpha(x, y) == 0:
+                collisionImage.SetAlpha(x, y, 0)
+            else:
+                a = collisionImage.GetAlpha(x, y)
+                a = a/255.* 80 + 100
+                collisionImage.SetAlpha(x, y, a)
+                collisionImage.SetRGB(x, y, 50, 230, 10)
+    collisionBitmap = wx.BitmapFromImage(collisionImage)
+    #path = osfix.path("../../collision.png")
+    #collisionImage.SaveFile(path, wx.BITMAP_TYPE_PNG)
+    
+    # Create final bitmap.
+    bitmap = wx.EmptyBitmap(64, 64)
+    dc = wx.MemoryDC(bitmap)
+    gc = wx.GraphicsContext.Create(dc)
+    gc.DrawBitmap(collisionBitmap, 0, 0, 64, 64)
+    gc.SetBrush(wx.NullBrush)
+    gc.SetPen(wx.Pen(wx.Color(30, 15, 4, 220), 2))
+    gc.DrawEllipse(1, 1, 62, 62)
+    gc.Destroy()
+    dc.Destroy()
+    image = wx.ImageFromBitmap(bitmap)
+    path = osfix.path("../data/interface/minimap.png")
+    image.SaveFile(path, wx.BITMAP_TYPE_PNG)

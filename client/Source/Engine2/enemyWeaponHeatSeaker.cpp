@@ -107,7 +107,7 @@ void enemyWeaponHeatSeakerCb(Enemy* e, EnemyWeapon* w, EnemyManager* manager)
             duration = period - duration;
         }
 
-        data->mFireStateChange = now + duration;
+        data->mFireStateChange = now + (uint64_t)duration;
     }
     if(data->mFiring == false)
     {

@@ -39,6 +39,22 @@ enum ViewPriorities
 
 };
 
+#ifndef PROFILE
+
+class ViewProfiler
+{
+public:
+    ViewProfiler() {}
+    void setName(char const* name) { }
+    void reset() { }
+    void startRound() { }
+    void endRound() { }
+    void start(uint32_t prio) { }
+    void end(uint32_t prio) { }
+    void report() { }
+};
+
+#else
 
 class ViewProfiler
 {
@@ -130,6 +146,8 @@ private:
     uint32_t mRoundTime;
 
 };
+
+#endif
 
 class View
 {

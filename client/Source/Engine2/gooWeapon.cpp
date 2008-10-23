@@ -68,7 +68,6 @@ void GooWeapon::fire()
     
     // Setup image.
 	//int i=rand()%3;
-	char filename[256];
 	float velocity = 0;//130;
 	velocity+=((rand()%10)/10.0f);
 	

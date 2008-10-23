@@ -56,7 +56,6 @@ void LightningWeapon::fire()
     
     // Setup image.
 	int i=rand()%PARTICLE_LIGHTNING_COUNT;
-	char filename[256];
 	float velocity = 130;
     if(i)
 	{

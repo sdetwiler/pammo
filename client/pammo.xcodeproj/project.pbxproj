@@ -62,6 +62,7 @@
 		11F1374A0DF34A7F00651323 /* imageLibrary.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11F137490DF34A7F00651323 /* imageLibrary.cpp */; };
 		11FBD5C20E7AE3C60070BD31 /* interfaceView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11FBD5BE0E7AE3C60070BD31 /* interfaceView.cpp */; };
 		11FBD5C30E7AE3C60070BD31 /* scoreMeter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 11FBD5C00E7AE3C60070BD31 /* scoreMeter.cpp */; };
+		1AD3000D0EAEAFDE00F3C2E5 /* debugScreenView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1AD3000B0EAEAFDE00F3C2E5 /* debugScreenView.cpp */; };
 		1AD3FEEF0EAE658300F3C2E5 /* backdroppvrtc in Copy Data */ = {isa = PBXBuildFile; fileRef = 1AD3FED20EAE658300F3C2E5 /* backdroppvrtc */; };
 		1D3623EC0D0F72F000981E51 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D3623EB0D0F72F000981E51 /* CoreGraphics.framework */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
@@ -196,6 +197,8 @@
 		11FBD5BF0E7AE3C60070BD31 /* interfaceView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = interfaceView.h; sourceTree = "<group>"; };
 		11FBD5C00E7AE3C60070BD31 /* scoreMeter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = scoreMeter.cpp; sourceTree = "<group>"; };
 		11FBD5C10E7AE3C60070BD31 /* scoreMeter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = scoreMeter.h; sourceTree = "<group>"; };
+		1AD3000B0EAEAFDE00F3C2E5 /* debugScreenView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = debugScreenView.cpp; sourceTree = "<group>"; };
+		1AD3000C0EAEAFDE00F3C2E5 /* debugScreenView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = debugScreenView.h; sourceTree = "<group>"; };
 		1AD3FED20EAE658300F3C2E5 /* backdroppvrtc */ = {isa = PBXFileReference; lastKnownFileType = folder; name = backdroppvrtc; path = ../data/backdroppvrtc; sourceTree = SOURCE_ROOT; };
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1D3623EB0D0F72F000981E51 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -347,10 +350,8 @@
 				1121D1360E2F0BA2008C8598 /* builder.h */,
 				11EEB70B0DEBC73F009F3B13 /* camera.cpp */,
 				11EEB70C0DEBC73F009F3B13 /* camera.h */,
-				115577B20E9454FD00171852 /* creditsScreenView.cpp */,
-				115577B30E9454FD00171852 /* creditsScreenView.h */,
-				115577B40E9454FD00171852 /* deathCardView.cpp */,
-				115577B50E9454FD00171852 /* deathCardView.h */,
+				11EEB70E0DEBC73F009F3B13 /* drawImage.cpp */,
+				11EEB7130DEBC73F009F3B13 /* drawImage.h */,
 				119214570E71E1C2001E43AC /* flipbookLoader.cpp */,
 				119214580E71E1C2001E43AC /* flipbookLoader.h */,
 				11EEB7110DEBC73F009F3B13 /* game.cpp */,
@@ -359,18 +360,12 @@
 				112A588B0E303B5800A3C218 /* imageEntity.h */,
 				11F137490DF34A7F00651323 /* imageLibrary.cpp */,
 				11F137480DF34A7F00651323 /* imageLibrary.h */,
-				11FBD5BE0E7AE3C60070BD31 /* interfaceView.cpp */,
-				11FBD5BF0E7AE3C60070BD31 /* interfaceView.h */,
 				113E76960E4A6FE3005A8070 /* levelLoader.cpp */,
 				113E76970E4A6FE3005A8070 /* levelLoader.h */,
-				113E76980E4A6FE3005A8070 /* mainScreenView.cpp */,
-				113E76990E4A6FE3005A8070 /* mainScreenView.h */,
 				113B2C2C0DF65EB20095A737 /* map.cpp */,
 				113B2C2B0DF65EB20095A737 /* map.h */,
 				11EEB7160DEBC73F009F3B13 /* pammo.h */,
 				11EEB7190DEBC73F009F3B13 /* transform2.h */,
-				115577B70E9454FD00171852 /* tutorialScreenView.cpp */,
-				115577B80E9454FD00171852 /* tutorialScreenView.h */,
 				11EEB71A0DEBC73F009F3B13 /* vector2.h */,
 				113811490E2FEBDF00E9FF5F /* view.cpp */,
 				113811480E2FEBDF00E9FF5F /* view.h */,
@@ -383,9 +378,8 @@
 		11EEB7080DEBC73F009F3B13 /* Engine2 */ = {
 			isa = PBXGroup;
 			children = (
-				11EEB70E0DEBC73F009F3B13 /* drawImage.cpp */,
-				11EEB7130DEBC73F009F3B13 /* drawImage.h */,
 				11C875110E40E78E008B701A /* Core Infastructure */,
+				1AD3FFE10EAEAE5E00F3C2E5 /* Views */,
 				11C8750B0E40E677008B701A /* Enemy Subsystem */,
 				11C8750A0E40E652008B701A /* Player Subsystem */,
 				11C875100E40E772008B701A /* Particle Subsystem */,
@@ -401,6 +395,25 @@
 				1D6058910D05DD3D006BFB54 /* Paradise.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		1AD3FFE10EAEAE5E00F3C2E5 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				115577B20E9454FD00171852 /* creditsScreenView.cpp */,
+				115577B30E9454FD00171852 /* creditsScreenView.h */,
+				115577B40E9454FD00171852 /* deathCardView.cpp */,
+				115577B50E9454FD00171852 /* deathCardView.h */,
+				1AD3000B0EAEAFDE00F3C2E5 /* debugScreenView.cpp */,
+				1AD3000C0EAEAFDE00F3C2E5 /* debugScreenView.h */,
+				11FBD5BE0E7AE3C60070BD31 /* interfaceView.cpp */,
+				11FBD5BF0E7AE3C60070BD31 /* interfaceView.h */,
+				113E76980E4A6FE3005A8070 /* mainScreenView.cpp */,
+				113E76990E4A6FE3005A8070 /* mainScreenView.h */,
+				115577B70E9454FD00171852 /* tutorialScreenView.cpp */,
+				115577B80E9454FD00171852 /* tutorialScreenView.h */,
+			);
+			name = Views;
 			sourceTree = "<group>";
 		};
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
@@ -540,6 +553,7 @@
 				11B9F66A0E949106002236D1 /* shieldToggle.cpp in Sources */,
 				11499E170E99CE0C00FBA3D0 /* infastructureManager.cpp in Sources */,
 				11EB88620EA3BF96002BE2C5 /* enemyWeaponDamageTouch.cpp in Sources */,
+				1AD3000D0EAEAFDE00F3C2E5 /* debugScreenView.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

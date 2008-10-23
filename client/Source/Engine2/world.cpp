@@ -33,9 +33,9 @@ World::World()
     mCamera = new Camera();
     mMap = new Map();
     
-    mParticleSystem = new ParticleSystem(500);
+    mParticleSystem = new ParticleSystem(1600);
     
-    mPhysics = new Physics();
+    mPhysics = new Physics(800);
     
     mMinimap = new Minimap();
     
@@ -44,7 +44,7 @@ World::World()
 //    mInterfaceView = new InterfaceView;
 
 #ifdef PROFILE
-    mDebugView = new DebugScreenView;
+    //mDebugView = new DebugScreenView;
 #endif
 
     mPlayer = new Player();

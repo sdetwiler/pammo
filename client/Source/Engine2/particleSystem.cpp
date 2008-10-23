@@ -553,8 +553,12 @@ void ParticleSystem::ParticleManager::update()
 		curr = curr->mRemoveNext;
 	}
 	mRemoveHead = NULL;
-
-    static const float screenRadius = (320.0f * 320.0f) + (480.0f * 480.0f);
+    
+    Camera* camera = gWorld->getCamera();
+    float cameraLeft = camera->mCenter.x - camera->mSize.x/2;
+    float cameraTop = camera->mCenter.y - camera->mSize.y/2;
+    float cameraRight = camera->mCenter.x + camera->mSize.x/2;
+    float cameraBottom = camera->mCenter.y + camera->mSize.y/2;
     
 #ifdef PROFILE
     uint32_t toDraw=0;
@@ -568,23 +572,15 @@ void ParticleSystem::ParticleManager::update()
 		if(curr->mCallback)
 		{
 			curr->mCallback(curr, mParticleSystem);
-
-            // check if should draw.
-            float particleRadius;
-            if(curr->mImage.mSize.x > curr->mImage.mSize.y)
-                particleRadius = curr->mImage.mSize.x;
-            else
-                particleRadius = curr->mImage.mSize.y;
-
-            particleRadius*=particleRadius;
-
-            // Center to center.
-            float x = gWorld->getCamera()->mCenter.x - curr->mImage.mCenter.x;
-            x*=x;
-            float y = gWorld->getCamera()->mCenter.y - curr->mImage.mCenter.y;
-            y*=y;
             
-            if(((x+y) - particleRadius) - screenRadius <=0)
+            float sx = curr->mImage.mSize.x/2;
+            float sy = curr->mImage.mSize.y/2;
+            
+            float cx = curr->mImage.mCenter.x;
+            float cy = curr->mImage.mCenter.y;
+            
+            if(    cx + sx > cameraLeft  && cy + sy > cameraTop
+                && cx - sx < cameraRight && cy - sy < cameraBottom)
             {
 #ifdef PROFILE
                 ++toDraw;

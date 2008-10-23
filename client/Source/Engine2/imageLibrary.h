@@ -24,7 +24,7 @@ struct Image;
 #define INTERFACE_BACKGROUND_TUTORIAL               7
 #define INTERFACE_BACKGROUND_CREDITS                8
 
-#define INTERFACE_SHEILD_MAP_LIFEBAR                9
+#define INTERFACE_MINIMAP                9
 #define INTERFACE_HEALTHDOT                         10
 
 #define INTERFACE_RING_MOVEMENT                     11

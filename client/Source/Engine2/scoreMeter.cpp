@@ -11,8 +11,6 @@ ScoreMeter::ScoreMeter()
     mScore = 0;
     for(int i=0; i<10; ++i)
     {
-        char filename[256];
-        //snprintf(filename, 255, "data/fonts/caslonAntique/%d.png", i);
         mImages[i] = gImageLibrary->getImage(FONT_CASLONANTIQUE_0 + i);
     }
 }

@@ -139,7 +139,6 @@ bool LevelLoader::load(char const* filename, char* mapName)
 //    SpawnEvent spawnEvent;
     char* enemyName;
     bool ret = true;
-    bool header = true;
     cur = buf;
     char* s = buf;
     char* e;

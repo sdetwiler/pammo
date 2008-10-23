@@ -21,6 +21,8 @@ public:
     void setImage(Image* image);
     void setImageWithoutSize(Image* image);
     Image* getImage();
+    
+    static void resetTextureCache();
 
     void makeDirty();
 		
@@ -32,10 +34,8 @@ public:
 protected:
     Image* mImage;
     bool mDirty;
-    Vector2 mVertices[4];
-
-private:
-
+    float mVertices[8];
+    static uint32_t mTextureCache;
 };
 
 } // namespace pammo

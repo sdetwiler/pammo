@@ -73,7 +73,7 @@ void GrenadeLauncherWeapon::fire()
     particleData->mRotation = 0;
 
     // Choose some numbers.
-    float f = 10.0f;
+    //float f = 10.0f;
     float r = 0.0f;//1.0f/f - ((rand()%100)/(f*90)) ;
     float initialRotation = player->mTurret.mRotation - M_PI/2.0f;
     
@@ -117,8 +117,8 @@ void grenadeLauncherBulletCollisionCallback(Body* self, Body* other, Contact* co
 	response->mBounceThem = true;
 	doDamage(self, other, Grenade, 30.0f);
 
-    Particle* p = (Particle*)self->mUserArg;
-    GrenadeLauncherParticleData* particleData = (GrenadeLauncherParticleData*)p->mData;
+    //Particle* p = (Particle*)self->mUserArg;
+    //GrenadeLauncherParticleData* particleData = (GrenadeLauncherParticleData*)p->mData;
 
 
     gWorld->getParticleSystem()->initExplosionParticle(self->mCenter);

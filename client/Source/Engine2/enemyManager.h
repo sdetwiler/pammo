@@ -337,6 +337,7 @@ struct Enemy
     Enemy* mNext;
     Enemy* mPrev;
     Enemy* mRemoveNext;
+    Enemy* mDrawNext;
 };
 
 struct SpawnEvent
@@ -410,6 +411,8 @@ private:
     Enemy* mAddEnemies;
     Enemy* mRemoveEnemies;
     Enemy* mFreed;
+    Enemy* mDrawHead;
+    Enemy* mDrawTail;
 };
 
 } // namespace pammo

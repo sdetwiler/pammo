@@ -124,7 +124,9 @@ ImageTexture gImagePath[NUM_IMAGES] =
     {"particles/powerupGooWeapon.png", NULL, false, true},                // 82
     {"particles/powerupGrenadeLauncherWeapon.png", NULL, false, true},    // 83
     
-    {PAMMO_MAP_PREVIEW_PATH, NULL, false, true},    // 84
+    {"interface/ingameOverlay.png", NULL, false, true},    // 84
+    
+    {PAMMO_MAP_PREVIEW_PATH, NULL, false, true},    // 85
     
     #if 0
     // Alloc a bunch of empty entries, 6 x 4.

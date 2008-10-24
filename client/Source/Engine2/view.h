@@ -27,7 +27,6 @@ enum ViewPriorities
     
     kDebugScreenPriority = 170,
 
-    kInterfaceViewPriority = 190,
     kMoveRingPriority = 200,
     kFireRingPriority = 201,
     kMinimapPriority = 230,
@@ -36,7 +35,8 @@ enum ViewPriorities
     kHealthMeterPriority = 260,
     kEnergyMeterPriority = 261,
     kScoreMeterPriority = 262,
-    kDeathCardPriority = 300
+    kDeathCardPriority = 300,
+    kInterfaceViewPriority = 350,
 
 };
 

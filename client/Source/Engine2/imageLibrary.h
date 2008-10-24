@@ -148,7 +148,9 @@ struct Image;
 
 #define POWERUP_GRENADE_LAUNCHER_WEAPON             83
 
-#define MAP_PREVIEW              84
+#define INTERFACE_INGAME_OVERLAY             84
+
+#define MAP_PREVIEW              85
 
 //#define MAP_TILES_X              22
 //#define MAP_TILES_Y              15
@@ -156,7 +158,7 @@ struct Image;
 //#define MAP_TILES_Y              8
 #define MAP_TILES_X              6
 #define MAP_TILES_Y              4
-#define MAP_TILES_BASE           85
+#define MAP_TILES_BASE           86
 
 #define NUM_IMAGES (MAP_TILES_BASE + MAP_TILES_X*MAP_TILES_Y)
 

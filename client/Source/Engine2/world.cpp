@@ -43,7 +43,7 @@ World::World()
     
     mEnemyManager = new EnemyManager;
 
-//    mInterfaceView = new InterfaceView;
+    mInterfaceView = new InterfaceView;
 
 #ifdef PROFILE
     //mDebugView = new DebugScreenView;
@@ -75,7 +75,7 @@ World::~World()
     mPlayer->destroy();
     mPhysics->destroy();
     mMinimap->destroy();
-    //mInterfaceView->destroy();
+    mInterfaceView->destroy();
 
 #ifdef PROFILE
     mDebugView->destroy();
@@ -148,7 +148,7 @@ void World::disable()
     mMap->disableAll();
     mPhysics->disableAll();
     mMinimap->disableAll();
- //   mInterfaceView->disableAll();
+    mInterfaceView->disableAll();
     mEnemyManager->disableAll();
 }
 
@@ -161,7 +161,7 @@ void World::enable()
     mMap->enableAll();
     mPhysics->enableAll();
     mMinimap->enableAll();
-    //mInterfaceView->enableAll();
+    mInterfaceView->enableAll();
     mEnemyManager->enableAll();
     gAudioLibrary->playAudioInstance(mBackgroundAudio, false);
 

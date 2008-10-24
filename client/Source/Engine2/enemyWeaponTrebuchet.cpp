@@ -36,7 +36,9 @@ void enemyWeaponTrebuchetBallParticleCb(Particle* p, ParticleSystem* system)
 
     if(distance <= Di)
     {
-        gWorld->getParticleSystem()->removeParticle(particleData->mShadow);
+        if(particleData->mShadow)
+            gWorld->getParticleSystem()->removeParticle(particleData->mShadow);
+            
         gWorld->getParticleSystem()->initExplosionParticle(p->mImage.mCenter);
 		system->removeParticle(p);
 		return;
@@ -46,16 +48,18 @@ void enemyWeaponTrebuchetBallParticleCb(Particle* p, ParticleSystem* system)
     p->mImage.mSize = 8.0f * distance;
     p->mImage.makeDirty();
 
-    particleData->mShadow->mImage.mRotation = p->mImage.mRotation;
-    particleData->mShadow->mImage.mCenter = p->mImage.mCenter - (Vector2(4.0f, -7.0f)*distance);
-    particleData->mShadow->mImage.mSize = 16.0f * distance;
-    particleData->mShadow->mImage.makeDirty();
-
+    if(particleData->mShadow)
+    {
+        particleData->mShadow->mImage.mRotation = p->mImage.mRotation;
+        particleData->mShadow->mImage.mCenter = p->mImage.mCenter - (Vector2(4.0f, -7.0f)*distance);
+        particleData->mShadow->mImage.mSize = 16.0f * distance;
+        particleData->mShadow->mImage.makeDirty();
+    }
 }
 
 void enemyWeaponTrebuchetBallCollisionCb(Body* self, Body* other, Contact* contact, ContactResponse* response)
 {
-    dprintf("trebuchetBall collision");
+    //dprintf("trebuchetBall collision");
     Particle* p = (Particle*)self->mUserArg;
 	response->mBounceThem = true;
 	response->mBounceMe = true;
@@ -65,7 +69,8 @@ void enemyWeaponTrebuchetBallCollisionCb(Body* self, Body* other, Contact* conta
 	doDamage(self, other, Grenade, 10.0f);
 
 	gWorld->getParticleSystem()->initExplosionParticle(self->mCenter);
-    gWorld->getParticleSystem()->removeParticle(particleData->mShadow);
+    if(particleData->mShadow)
+        gWorld->getParticleSystem()->removeParticle(particleData->mShadow);
     gWorld->getParticleSystem()->removeParticle(p);
 }
 
@@ -115,6 +120,8 @@ void enemyWeaponTrebuchetCb(Enemy* e, EnemyWeapon* w, EnemyManager* manager)
     p->mImage.makeDirty();
 
     particleData->mShadow = gWorld->getParticleSystem()->addParticle(0, false);
+    if(!particleData->mShadow) return;
+    
     particleData->mShadow->mAlpha = 0.5f;
     particleData->mShadow->mCallback = enemyWeaponTrebuchetBallShadowParticleCb;
     particleData->mShadow->mImage.setImage(gImageLibrary->getImage(PARTICLE_SHADOW_00));

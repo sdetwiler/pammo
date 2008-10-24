@@ -5,7 +5,10 @@
 #include "player.h"
 #include "enemyManager.h"
 
+#include "audioLibrary.h"
+
 Timer gTimer;
+bool  gAudioEnabled;
 
 class InputProcessor
 {
@@ -384,6 +387,10 @@ int initTimer(Timer* timer)
     return 0;
 }
 
+static void postmix(void *udata, Uint8 *_stream, int _len)
+{
+}
+
 int main(int argc, char *argv[]) 
 {
     if(initTimer(&gTimer) < 0)
@@ -407,11 +414,23 @@ int main(int argc, char *argv[])
            
 
     SDL_Surface* screen;
-    SDL_Init(SDL_INIT_VIDEO);
+    SDL_Init(SDL_INIT_VIDEO|SDL_INIT_AUDIO);
     screen = SDL_SetVideoMode((int)getFrameSize().x, (int)getFrameSize().y, 0, SDL_OPENGL);
     SDL_WM_SetCaption("Paridise", NULL);
 
+    int ret;
+    ret = Sound_Init();
+
     Game* game = new Game;
+
+// based on openal init now not sdl.
+    //if(ret == 1)
+    //    gAudioLibrary->enableAudio(true);
+    //else
+    //    gAudioLibrary->enableAudio(false);
+
+
+
 
     InputProcessor input;
 
@@ -464,6 +483,7 @@ int main(int argc, char *argv[])
     }
 
     delete game;
+    Sound_Quit();
 
     return 0;
 }

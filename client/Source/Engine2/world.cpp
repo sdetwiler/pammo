@@ -30,6 +30,8 @@ World::World()
 {
     gWorld = this;
 
+    mBackgroundAudio = gAudioLibrary->getAudioInstance(AUDIO_BACKGROUND_INGAME);
+
     mCamera = new Camera();
     mMap = new Map();
     
@@ -137,6 +139,8 @@ void World::reset()
 
 void World::disable()
 {
+    gAudioLibrary->stopAudioInstance(mBackgroundAudio);
+
     mPlayer->disable();
     mParticleSystem->disable();
 
@@ -159,6 +163,7 @@ void World::enable()
     mMinimap->enableAll();
     //mInterfaceView->enableAll();
     mEnemyManager->enableAll();
+    gAudioLibrary->playAudioInstance(mBackgroundAudio, false);
 
 }
 

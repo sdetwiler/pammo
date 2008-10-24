@@ -11,8 +11,9 @@ int main(int argc, char *argv[])
 		--len;
 	char* homeDir = new char[len+1];
 	strncpy(homeDir, argv[0], len);
-	homeDir[len+1] = 0;
+	homeDir[len+1] = 0;	
 	chdir(homeDir);
+	dprintf("%s", homeDir);
 	delete[] homeDir;
 	
     NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];

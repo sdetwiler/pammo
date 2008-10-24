@@ -32,7 +32,8 @@ Game::Game()
     
     // Initialize the image library.
     gImageLibrary = new ImageLibrary();
-    
+    gAudioLibrary = new AudioLibrary();
+
     new MainScreenView;
 }
 

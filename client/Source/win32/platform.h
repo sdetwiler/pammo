@@ -19,6 +19,8 @@
 #include <gl/gl.h>
 #include <direct.h>
 
+//#define PAMMO_GL_16BIT GL_UNSIGNED_BYTE
+
 #define PAMMO_GL_16BIT 0
 #define PAMMO_GL_8BIT_RGA 0
 #define PAMMO_GL_8BIT_RGBA 0
@@ -33,8 +35,19 @@
 #define roundf    ceil
 
 #include <SDL.h>
-
+#include <SDL_sound.h>
 #include <dirent.h>
+
+namespace pammo
+{
+struct Audio
+{
+    Sound_Sample*    mSample;
+    Sound_AudioInfo  mOutFormat;
+    uint64_t         mNextRead;
+    uint64_t         mReadFreq;
+};
+}
 
 struct Timer
 {

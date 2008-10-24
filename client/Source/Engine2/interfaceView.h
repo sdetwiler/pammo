@@ -7,7 +7,7 @@
 namespace pammo
 {
 
-class Image;
+struct Image;
 
 class InterfaceView : public View
 {

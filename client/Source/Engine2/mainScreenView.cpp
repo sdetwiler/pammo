@@ -1,7 +1,7 @@
 
 #include "mainScreenView.h"
-#include "TutorialScreenView.h"
-#include "CreditsScreenView.h"
+#include "tutorialScreenView.h"
+#include "creditsScreenView.h"
 
 #include "world.h"
 #include "imageLibrary.h"
@@ -16,15 +16,22 @@ namespace pammo
 MainScreenView::MainScreenView()
     : View()
 {
+    mAudio = gAudioLibrary->getAudioInstance(AUDIO_BACKGROUND_INTRO);
+    gAudioLibrary->playAudioInstance(mAudio, false);
     //gMainScreenView = this;
     // Load background.
+    mAudioPreloadComplete = false;
+    mImagePreloadComplete = false;
     gImageLibrary->setObserver(this);
+    gAudioLibrary->setObserver(this);
     mBackground = gImageLibrary->getImage(INTERFACE_BACKGROUND_MAIN);
     mButtonMask = gImageLibrary->getImage(INTERFACE_BUTTONMASK);
 }
 
 MainScreenView::~MainScreenView()
 {
+    gAudioLibrary->stopAudioInstance(mAudio);
+    gAudioLibrary->closeAudioInstance(mAudio);
     gImageLibrary->setObserver(NULL);
     gImageLibrary->purgeImage(mBackground);
     gImageLibrary->purgeImage(mButtonMask);
@@ -54,10 +61,16 @@ void MainScreenView::update()
     //}
 }
 
-void MainScreenView::onPreloadComplete()
+void MainScreenView::onAudioPreloadComplete()
 {
-    dprintf("Preload complete.");
-    mPreloadComplete = true;
+    dprintf("Audio preload complete.");
+    mAudioPreloadComplete = true;
+}
+
+void MainScreenView::onImagePreloadComplete()
+{
+    dprintf("Image preload complete.");
+    mImagePreloadComplete = true;
 }
 
 void MainScreenView::draw()
@@ -66,7 +79,7 @@ void MainScreenView::draw()
     Transform2 trans = Transform2::createScale(Vector2(mBackground->mSize.y, mBackground->mSize.x)) * Transform2::createTranslation(Vector2(0.5, 0.5)) * Transform2::createRotation(-M_PI/2) * Transform2::createTranslation(Vector2(-0.5, -0.5));
     drawImage(mBackground, trans, 1);
 
-    if(mPreloadComplete)
+    if(mAudioPreloadComplete && mImagePreloadComplete)
     {
         trans = Transform2::createTranslation(Vector2(240.0f - mButtonMask->mSize.x/2, 320 - mButtonMask->mSize.y)) * Transform2::createScale(mButtonMask->mSize);
         drawImage(mButtonMask, trans, 1.0);
@@ -123,8 +136,11 @@ bool MainScreenView::touch(uint32_t count, Touch* touches)
             new TutorialScreenView;
             return true;
         case 1:
-            if(mPreloadComplete)
+            if(mAudioPreloadComplete && mImagePreloadComplete)
             {
+                if(mAudio)
+                    gAudioLibrary->stopAudioInstance(mAudio);
+
                 destroy();
                 if(!gWorld)
                     new World;

@@ -191,7 +191,7 @@ void ImageLibrary::setObserver(ImageLibraryObserver* o)
     if(mObserver)
     {
         if(mPreloadComplete)
-            mObserver->onPreloadComplete();
+            mObserver->onImagePreloadComplete();
     }
 }
 
@@ -361,9 +361,11 @@ void ImageLibrary::createImage(uint32_t id, RawImage* raw)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     
     //uint64_t start = getTime();
+#ifndef _MSC_VER // if not windows
     if(compressed)
         glCompressedTexImage2D(GL_TEXTURE_2D, 0, mode, raw->mPixelSize.x, raw->mPixelSize.y, 0, raw->mPixelSize.x*raw->mPixelSize.y/2, raw->mPixels);
     else
+#endif
         glTexImage2D(GL_TEXTURE_2D, 0, mode, raw->mPixelSize.x, raw->mPixelSize.y, 0, mode, type, raw->mPixels);
     //dprintf("Binding took %d", (uint32_t)(getTime() - start));
     
@@ -409,7 +411,7 @@ void ImageLibrary::update()
     if(mPreloadIndex == mImageCount && !mPreloadComplete)
     {
         mPreloadComplete = true;
-        if(mObserver) mObserver->onPreloadComplete();
+        if(mObserver) mObserver->onImagePreloadComplete();
     }
 
     pthread_mutex_lock(&mMutex);

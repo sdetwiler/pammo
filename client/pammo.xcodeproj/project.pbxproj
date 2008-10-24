@@ -69,6 +69,10 @@
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		28FD15000DC6FC520079059D /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD14FF0DC6FC520079059D /* OpenGLES.framework */; };
 		28FD15080DC6FC5B0079059D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD15070DC6FC5B0079059D /* QuartzCore.framework */; };
+		AC46AD420EB1914100BD825F /* audio in Copy Data */ = {isa = PBXBuildFile; fileRef = AC46AD3D0EB1914100BD825F /* audio */; };
+		AC46AD460EB1917500BD825F /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AC46AD450EB1917500BD825F /* AudioToolbox.framework */; };
+		AC46AD4A0EB1918200BD825F /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AC46AD490EB1918200BD825F /* OpenAL.framework */; };
+		AC46AD4F0EB1973600BD825F /* audioLibrary.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC46AD4D0EB1973600BD825F /* audioLibrary.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -78,6 +82,7 @@
 			dstPath = data;
 			dstSubfolderSpec = 1;
 			files = (
+				AC46AD420EB1914100BD825F /* audio in Copy Data */,
 				1AD3FEEF0EAE658300F3C2E5 /* backdroppvrtc in Copy Data */,
 				113681B80E7F82FA001FFC23 /* fonts in Copy Data */,
 				110664D40E5B70DF0023ABB1 /* particles in Copy Data */,
@@ -207,6 +212,11 @@
 		28FD14FF0DC6FC520079059D /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		28FD15070DC6FC5B0079059D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Source/iPhone/Info.plist; sourceTree = "<group>"; };
+		AC46AD3D0EB1914100BD825F /* audio */ = {isa = PBXFileReference; lastKnownFileType = folder; name = audio; path = ../data/audio; sourceTree = SOURCE_ROOT; };
+		AC46AD450EB1917500BD825F /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		AC46AD490EB1918200BD825F /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
+		AC46AD4D0EB1973600BD825F /* audioLibrary.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = audioLibrary.cpp; sourceTree = "<group>"; };
+		AC46AD4E0EB1973600BD825F /* audioLibrary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = audioLibrary.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -219,6 +229,8 @@
 				1D3623EC0D0F72F000981E51 /* CoreGraphics.framework in Frameworks */,
 				28FD15000DC6FC520079059D /* OpenGLES.framework in Frameworks */,
 				28FD15080DC6FC5B0079059D /* QuartzCore.framework in Frameworks */,
+				AC46AD460EB1917500BD825F /* AudioToolbox.framework in Frameworks */,
+				AC46AD4A0EB1918200BD825F /* OpenAL.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -243,6 +255,7 @@
 		110664090E5B6BA00023ABB1 /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				AC46AD3D0EB1914100BD825F /* audio */,
 				1AD3FED20EAE658300F3C2E5 /* backdroppvrtc */,
 				1136819E0E7F82FA001FFC23 /* fonts */,
 				110664DA0E5B70FB0023ABB1 /* interface */,
@@ -346,6 +359,8 @@
 		11C875110E40E78E008B701A /* Core Infastructure */ = {
 			isa = PBXGroup;
 			children = (
+				AC46AD4D0EB1973600BD825F /* audioLibrary.cpp */,
+				AC46AD4E0EB1973600BD825F /* audioLibrary.h */,
 				1121D1350E2F0BA2008C8598 /* builder.cpp */,
 				1121D1360E2F0BA2008C8598 /* builder.h */,
 				11EEB70B0DEBC73F009F3B13 /* camera.cpp */,
@@ -443,6 +458,8 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				AC46AD490EB1918200BD825F /* OpenAL.framework */,
+				AC46AD450EB1917500BD825F /* AudioToolbox.framework */,
 				28FD15070DC6FC5B0079059D /* QuartzCore.framework */,
 				28FD14FF0DC6FC520079059D /* OpenGLES.framework */,
 				1D3623EB0D0F72F000981E51 /* CoreGraphics.framework */,
@@ -554,6 +571,7 @@
 				11499E170E99CE0C00FBA3D0 /* infastructureManager.cpp in Sources */,
 				11EB88620EA3BF96002BE2C5 /* enemyWeaponDamageTouch.cpp in Sources */,
 				1AD3000D0EAEAFDE00F3C2E5 /* debugScreenView.cpp in Sources */,
+				AC46AD4F0EB1973600BD825F /* audioLibrary.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

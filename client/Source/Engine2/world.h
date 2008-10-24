@@ -3,6 +3,7 @@
 
 #include "pammo.h"
 #include "view.h"
+#include "audioLibrary.h"
 
 namespace pammo
 {
@@ -57,8 +58,9 @@ class World
         DebugScreenView* mDebugView;
 #endif
 
-        Player* mPlayer;
-        EnemyManager* mEnemyManager;
+        AudioInstance* mBackgroundAudio;
+        Player*        mPlayer;
+        EnemyManager*  mEnemyManager;
 };
     
 extern World* gWorld;

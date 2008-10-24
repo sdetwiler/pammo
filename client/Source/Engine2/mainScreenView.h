@@ -4,13 +4,16 @@
 #include "pammo.h"
 #include "view.h"
 #include "imageLibrary.h"
+#include "audioLibrary.h"
 
 namespace pammo
 {
 
 struct Image;
 
-class MainScreenView : public View, public ImageLibraryObserver
+class MainScreenView : public View, 
+                       public ImageLibraryObserver,
+                       public AudioLibraryObserver
 {
 public:
     MainScreenView();
@@ -24,7 +27,8 @@ public:
     virtual uint32_t getDrawPriority() const;
     virtual uint32_t getUpdatePriority() const;
 
-    virtual void onPreloadComplete();
+    virtual void onImagePreloadComplete();
+    virtual void onAudioPreloadComplete();
 
 private:
     //void selectVehicle(uint32_t type);
@@ -32,9 +36,12 @@ private:
     Image* mBackground;
     Image* mButtonMask;
 
+    AudioInstance* mAudio;
+
     float mPreloadPercent;
-    bool mPreloadComplete;
-    
+    bool mImagePreloadComplete;
+    bool mAudioPreloadComplete;
+
     //struct VehicleDesc
     //{
     //    uint32_t mType;

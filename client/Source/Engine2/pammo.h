@@ -60,6 +60,28 @@ void openRawImage(char const* filename, RawImage* image);
 Vector2 getFrameSize();
 uint64_t getTime(void);
 
+
+struct Audio; // Defined per platform in platform.h
+struct AudioClip; // AudioLibrary.h
+struct AudioInstance; // AudioLibrary.h
+
+//int loadAudio(char const* filename, Audio* audio);
+
+//#define AUDIO_VOLUME_MIN    0
+//#define AUDIO_VOLUME_MAX    128
+
+//int initializeAudio();
+//void startAudio(Audio* audio, int volume=AUDIO_VOLUME_MAX);
+//void stopAudio(Audio* audio);
+//void updateAudio(Audio* audio);
+//void unloadAudio(Audio* audio);
+
+
+int openAudio_platform(AudioInstance* instance);
+void closeAudio_platform(AudioInstance* instance);
+void updateAudio_platform(AudioInstance* instance);
+
+
 void spawnThread(void* (*threadFunc)(void*), void* arg);
 
 } // namespace pammo

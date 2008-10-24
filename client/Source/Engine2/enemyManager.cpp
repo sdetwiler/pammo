@@ -19,6 +19,7 @@
 
 #include "camera.h"
 #include "imageLibrary.h"
+#include "audioLibrary.h"
 #include "minimap.h"
 
 
@@ -457,8 +458,11 @@ void enemyDamageCb(Enemy* e, ParticleType type, float amount)
 
 	if(e->mHealth <=0)
 	{
-		//dprintf("dead 0x%p", e, e);
-		gWorld->getParticleSystem()->initExplosionParticle(e->mBody->mCenter+Vector2(5,5));
+        AudioInstance* instance = gAudioLibrary->getAudioInstance(AUDIO_EXPLOSION);
+        if(instance)
+            gAudioLibrary->playAudioInstance(instance, true);
+
+        gWorld->getParticleSystem()->initExplosionParticle(e->mBody->mCenter+Vector2(5,5));
 		gWorld->getParticleSystem()->initExplosionParticle(e->mBody->mCenter);
 		gWorld->getParticleSystem()->initRubbleParticle(e->mBody->mCenter);
         gWorld->getPlayer()->mScore += e->mPointValue;

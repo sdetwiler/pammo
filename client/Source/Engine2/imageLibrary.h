@@ -174,7 +174,7 @@ class ImageLibraryObserver
 {
 public:
     virtual ~ImageLibraryObserver(){}
-    virtual void onPreloadComplete() = 0;
+    virtual void onImagePreloadComplete() = 0;
 };
 
 
@@ -186,7 +186,7 @@ class ImageLibrary : public View
 {
 public:
     ImageLibrary();
-    ~ImageLibrary();
+    virtual ~ImageLibrary();
 
     void setObserver(ImageLibraryObserver* o);
     virtual void update();

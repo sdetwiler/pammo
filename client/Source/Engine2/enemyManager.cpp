@@ -735,6 +735,9 @@ void EnemyManager::reset()
 
 void EnemyManager::update()
 {
+    //mDrawHead = mDrawTail = 0;
+    //return;
+    
 	while(mAddEnemies)
 	{
 		// Pop from add stack.

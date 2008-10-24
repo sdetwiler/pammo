@@ -149,7 +149,7 @@ void Player::reset()
     mHealthMeter->setPercent(mHealth);
     
     // Reset shield.
-    mHashShield = false;
+    mHasShield = false;
     mEnergy = 1000.0f;
     mMaxEnergy = 1000.0f;
     mEnergyMeter->setPercent(mEnergy);
@@ -407,7 +407,7 @@ void Player::onTargetRingDoubleTouched(TargetRingWidget *widget)
     // If the user double taps the movement ring, toggle the shield.
     if(widget == mMovementRing)
     {
-        if(mHashShield)
+        if(mHasShield)
             mShieldToggle->setToggle(!mShieldToggle->getToggle());
     }
     else if(widget == mTargetRing)
@@ -456,17 +456,17 @@ void Player::givePowerup(PowerupType type)
     switch(type)
     {
         case kPowerupLifeUpgrade:
-            mMaxHealth += 1000;
+            mMaxHealth += 200;
             mHealth = mMaxHealth;
             mHealthMeter->setPercent(mHealth);
             break;
         case kPowerupEnergyUpgrade:
-            mEnergy += 1000;
+            mMaxEnergy += 200;
             mEnergy = mMaxEnergy;
             mEnergyMeter->setPercent(mEnergy);
             break;
         case kPowerupShield:
-            mHashShield = true;
+            mHasShield = true;
             mShieldToggle->enableAll();
             mEnergyMeter->enableAll();
             break;
@@ -493,7 +493,6 @@ void Player::givePowerup(PowerupType type)
 
 void Player::onShieldToggleUpdated(ShieldToggle* widget, bool toggle)
 {
-    dprintf("Shield toggle callback");
     mShielding = toggle;
 }
 

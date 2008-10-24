@@ -104,7 +104,7 @@ class Player :
         
         // Shield.
         ShieldToggle* mShieldToggle;
-        bool mShielding, mHashShield;
+        bool mShielding, mHasShield;
         ImageEntity mShieldEntity;
         Image*      mShieldImages[SHIELD_MAX_IMAGE_COUNT];
         uint32_t    mShieldImageCount;

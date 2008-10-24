@@ -3,7 +3,6 @@
 
 int main(int argc, char *argv[])
 {
-    [NSThread setThreadPriority:1.0];
     
 	// Set cwd.
 	size_t len = strlen(argv[0]);
@@ -28,7 +27,13 @@ int main(int argc, char *argv[])
 @synthesize mMainView;
 
 - (void)applicationDidFinishLaunching:(UIApplication *)application
-{	
+{
+    // Set thread priority.
+    [NSThread setThreadPriority:1.0];
+    
+    // Disable dimmer.
+    application.isIdleTimerDisabled = NO;
+    
 	// Create window
 	self.mWindow = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
 	

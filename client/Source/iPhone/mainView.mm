@@ -101,28 +101,32 @@
 
 - (void)startAnimation
 {
-	mTimer = [NSTimer scheduledTimerWithTimeInterval:1./30. target:self selector:@selector(drawView) userInfo:nil repeats:YES];
+	mTimer = [NSTimer scheduledTimerWithTimeInterval:1./120. target:self selector:@selector(drawView) userInfo:nil repeats:YES];
     mLastTime = getTime();
     mMicros = 0;
 }
 
 - (void)stopAnimation
 {
+    [mTimer invalidate];
 	mTimer = nil;
 }
 
 - (void)drawView
 {
+    //[mTimer invalidate];
+	//mTimer = [NSTimer scheduledTimerWithTimeInterval:1./30. target:self selector:@selector(drawView) userInfo:nil repeats:NO];
+    
     uint64_t t = getTime();
     uint64_t delta = t - mLastTime;
-    mLastTime = t;
     
     // If callback is not within a fudge area, do nothing.
-    uint64_t fudge = 3000;
-    if(delta < 33333-fudge || delta > 33333+fudge)
+    //uint64_t fudge = 3000;
+    if(delta < 32000)// || delta > 33333+fudge)
     {
         return;
     }
+    mLastTime = t;
     
     #if 0
     static uint32_t slots[50];
@@ -135,10 +139,10 @@
         uint64_t total = 0;
         for(uint32_t i=0; i < 50; ++i)
         {
-            //printf("%d, ", slots[i]);
+            printf("%d, ", slots[i]);
             total += slots[i];
         }
-        printf("average: %d\n", total / 50);
+        printf("\naverage: %d\n", total / 50);
         cur = 0;
     }
     #endif

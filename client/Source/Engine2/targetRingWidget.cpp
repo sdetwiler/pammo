@@ -89,36 +89,29 @@ bool TargetRingWidget::touch(uint32_t count, Touch* touches)
         {
             // If this is not the touch we are tracking, continue.
             if(touches[i].mSerialNumber != mTrackingSerialNumber)
-            {
-                //dprintf("Distraction Untouch");
                 continue;
-            }
             
             // Stop tracking.
             mTrackingSerialNumber = 0;
-            if(mObserver)
-                mObserver->onTargetRingUntouched(this);
-            
-            //dprintf("Untouched");
+            if(mObserver) mObserver->onTargetRingUntouched(this);
             return true;
-        }
-        
-        // A touch or a move, we don't care about. If we are tracking a different touch, bail.
-        if(mTrackingSerialNumber != 0 && mTrackingSerialNumber != touches[i].mSerialNumber)
-        {
-            //dprintf("Distraction");
-            continue;
         }
         
         // Calculate the distance from the touch to the center of this widget.
         Vector2 diff = touches[i].mLocation - mImage.mCenter;
-        float dist = magnitude(diff);
+        float dist = magnitudeSquarded(diff);
         
         // If its larger than the widget, bail.
-        if(dist > mImage.mSize.x/2)
+        if(dist > mImage.mSize.x*mImage.mSize.x/4)
         {
-            //dprintf("Outside of range");
-            continue;
+            // If this is not the touch we are tracking, continue.
+            if(touches[i].mSerialNumber != mTrackingSerialNumber)
+                continue;
+            
+            // Stop tracking.
+            mTrackingSerialNumber = 0;
+            if(mObserver) mObserver->onTargetRingUntouched(this);
+            return true;
         }
         
         // If this is starting a new touch, calculate time from last touch.
@@ -129,10 +122,6 @@ bool TargetRingWidget::touch(uint32_t count, Touch* touches)
                 if(mObserver)
                     mObserver->onTargetRingDoubleTouched(this);
             }
-            //else
-            //{
-            //    dprintf("Restouch too late");
-            //}
             mLastTouch = currentTime;
         }
             

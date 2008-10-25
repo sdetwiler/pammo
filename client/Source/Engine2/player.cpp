@@ -141,6 +141,7 @@ void Player::reset()
     // Reset weapons.
     mWeaponSelector->reset();
     mWeaponSelector->addWeapon(mLightningWeapon);
+    //mWeaponSelector->addWeapon(mGooWeapon);
 
     // Reset life.
     mHealth = 1000.0f;

@@ -7,6 +7,8 @@
 #include "imageLibrary.h"
 #include "enemyManager.h"
 
+const uint32_t kGooNormalRadius = 16;
+
 namespace pammo
 {
 
@@ -36,8 +38,19 @@ void GooWeapon::deselect()
 
 struct GooParticleData
 {
-    int mDirection;
-    uint64_t mExpireTime;
+    enum Mode
+    {
+        kModeFlying,
+        kModeExpanding,
+        kModeContracting
+    };
+    
+    Mode mMode;
+    uint32_t mRemainingFrames;
+    float mSize;
+    float mRotateDirection;
+    float mAlphaVelocity;
+    float mSizeFactor;
 };
 
 void GooWeapon::fire()
@@ -51,15 +64,16 @@ void GooWeapon::fire()
 
     // Set basic particle properties.
     p->mCallback = gooBulletParticleCallback;
-    p->mAlpha = 1.0f;
+    p->mAlpha = 0.0f;
     
+    // Set particle properties.
     GooParticleData* particleData = (GooParticleData*)p->mData;
-    if(rand()%2)
-        particleData->mDirection = -1;
-    else
-        particleData->mDirection = 1;
-
-    particleData->mExpireTime = getTime() + 2000000;
+    particleData->mSize = 0.4;
+    particleData->mAlphaVelocity = 0.3;
+    particleData->mSizeFactor = 1.2;
+    particleData->mRemainingFrames = 60;
+    if(rand()%2) particleData->mRotateDirection = -1;
+    else particleData->mRotateDirection = 1;
 
     // Choose some numbers.
     float f = 10.0f;
@@ -68,11 +82,11 @@ void GooWeapon::fire()
     
     // Setup image.
 	//int i=rand()%3;
-	float velocity = 0;//130;
-	velocity+=((rand()%10)/10.0f);
+	float velocity = 140;
+	velocity += ((rand()%40)/40.0f);
 	
 	p->mImage.setImage(gImageLibrary->getImage(PARTICLE_GOO_00 + rand()%PARTICLE_GOO_COUNT));
-    p->mImage.mCenter = player->mTurretTip + Vector2(40, 0) * Transform2::createRotation(initialRotation+r);
+    p->mImage.mCenter = player->mTurretTip + Vector2(4, 0) * Transform2::createRotation(initialRotation+r);
     p->mImage.mRotation = initialRotation+r;
     p->mImage.makeDirty();
         
@@ -82,25 +96,23 @@ void GooWeapon::fire()
     p->mBody->mBodyCallback = gooBulletCollisionCallback;
     p->mBody->mShapeCallback = gooBulletShapeCollisionCallback;
     p->mBody->mDamping = 0;
-    p->mBody->mRadius = 16;
+    p->mBody->mRadius = kGooNormalRadius * particleData->mSize;
     p->mBody->mMass = 10;
     p->mBody->mCenter = p->mImage.mCenter;
-    Vector2 v = Vector2(velocity, 0) * Transform2::createRotation(p->mImage.mRotation);
-    p->mBody->mVelocity = v;
-
+    p->mBody->mVelocity = player->mBody->mVelocity + Vector2(velocity, 0) * Transform2::createRotation(p->mImage.mRotation);
 
     // Nozzle spray.
-    p = gWorld->getParticleSystem()->addParticle(2, false);
-    if(!p) 
-        return;
-	p->mImage.setImage(gImageLibrary->getImage(PARTICLE_GOO_00 + rand()%PARTICLE_GOO_COUNT));
-    p->mImage.mSize *= 0.5f;
-    p->mImage.mCenter = player->mTurretTip + Vector2(4, 0) * Transform2::createRotation(initialRotation+r);
-    p->mImage.mRotation = initialRotation + r;
-    p->mAlpha = 1.0f;
-    p->mImage.makeDirty();
-    p->mVelocity =  Vector2(velocity+10.0f, 0) * Transform2::createRotation(initialRotation+r);
-    p->mCallback = gooSprayParticleCallback;
+    //p = gWorld->getParticleSystem()->addParticle(2, false);
+    //if(!p) 
+    //    return;
+	//p->mImage.setImage(gImageLibrary->getImage(PARTICLE_GOO_00 + rand()%PARTICLE_GOO_COUNT));
+    //p->mImage.mSize *= 0.5f;
+    //p->mImage.mCenter = player->mTurretTip + Vector2(4, 0) * Transform2::createRotation(initialRotation+r);
+    //p->mImage.mRotation = initialRotation + r;
+    //p->mAlpha = 1.0f;
+    //p->mImage.makeDirty();
+    //p->mVelocity =  Vector2(velocity+10.0f, 0) * Transform2::createRotation(initialRotation+r);
+    //p->mCallback = gooSprayParticleCallback;
 
 }
 
@@ -115,6 +127,9 @@ void gooBulletCollisionCallback(Body* self, Body* other, Contact* contact, Conta
 void gooBulletShapeCollisionCallback(Body* self, Shape* other, Contact* contact, bool* response)
 {
     *response = true;
+    //*response = false;
+    self->mVelocity = Vector2(0, 0);
+    contact->mSeparatingVelocity = 0;
 }
 
 void gooSprayParticleCallback(Particle* p, ParticleSystem* system)
@@ -130,40 +145,58 @@ void gooSprayParticleCallback(Particle* p, ParticleSystem* system)
 
 void gooBulletParticleCallback(Particle* p, ParticleSystem* system)
 {
-    GooParticleData* particleData = (GooParticleData*)p->mData;
-
+    GooParticleData* data = (GooParticleData*)p->mData;
     
-    float s;
-    uint64_t now = getTime();
-    p->mAlpha-=0.01f;
-    if(now >= particleData->mExpireTime)
+    if(data->mAlphaVelocity)
     {
-        p->mAlpha-=0.02f;
-        s = 0.95;     
-        if(p->mAlpha <= 0.2)
-	    {
-            // Once it gets down to 0.2 transparency, turn off collision.
-		    p->mBody->mProperties = 0;
-		    p->mBody->mCollideProperties = 0;
-	    }
-	    if(p->mAlpha <= 0)
-        {
-		    system->removeParticle(p);
-            return;
-        }
+        p->mAlpha += data->mAlphaVelocity;
+        if(p->mAlpha < 0) p->mAlpha = 0;
+        if(p->mAlpha > 1) p->mAlpha = 1;
     }
-    else
-    {
-        s = (1.005 + ((float)(rand()%100)/10000.0f));
-    }
+    
+    data->mSize *= data->mSizeFactor;
 
     p->mImage.mCenter = p->mBody->mCenter;
-    p->mImage.mRotation += (particleData->mDirection*0.015f);
-    p->mImage.mSize *= s;
-    p->mBody->mRadius *= s;
-
+    p->mImage.mRotation += (data->mRotateDirection*0.015f);
+    p->mImage.mSize =  p->mImage.getImage()->mSize * data->mSize;
     p->mImage.makeDirty();
-
+    
+    p->mBody->mRadius = kGooNormalRadius * data->mSize;
+    gWorld->getPhysics()->resortBody(p->mBody);
+    
+    switch(data->mMode)
+    {
+        case GooParticleData::kModeFlying:
+            --data->mRemainingFrames;
+            if(data->mSize >= 1)
+            {
+                data->mAlphaVelocity = -0.01;
+                data->mSizeFactor = (1.005 + ((float)(rand()%100)/10000.0f));
+                p->mBody->mDamping = 0.3;
+                
+                data->mMode = GooParticleData::kModeExpanding;
+            }
+            break;
+        case GooParticleData::kModeExpanding:
+            data->mSizeFactor = (1.005 + ((float)(rand()%100)/10000.0f));
+            --data->mRemainingFrames;
+            if(data->mRemainingFrames == 0)
+            {
+                data->mAlphaVelocity = -0.03f;
+                data->mSizeFactor = 0.95;
+                
+                data->mMode = GooParticleData::kModeContracting;
+            }
+            break;
+        case GooParticleData::kModeContracting:
+            if(p->mAlpha == 0)
+            {
+                system->removeParticle(p);
+            }
+            break;
+        default:
+            assert(0);
+    }
 }
 	
 

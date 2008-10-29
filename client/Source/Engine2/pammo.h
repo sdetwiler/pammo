@@ -80,7 +80,7 @@ struct AudioInstance; // AudioLibrary.h
 int openAudio_platform(AudioInstance* instance);
 void closeAudio_platform(AudioInstance* instance);
 void updateAudio_platform(AudioInstance* instance);
-
+void stopAudio_platform(AudioInstance* instance);
 
 void spawnThread(void* (*threadFunc)(void*), void* arg);
 

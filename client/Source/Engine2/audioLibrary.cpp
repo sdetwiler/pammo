@@ -51,7 +51,7 @@ AudioLibrary::AudioLibrary()
 
     mPreloadComplete = true; // SCD For now disable preload.
     mCompleteNotified = false;
-    return;
+ //   return;
     
     mALDevice = alcOpenDevice(NULL);
 	if(!mALDevice)
@@ -304,11 +304,23 @@ void AudioLibrary::stopAudioInstance(AudioInstance* instance)
     
     alSourceStop(instance->mSource);
 
+    stopAudio_platform(instance);
+
     reclaimBuffers(instance);
 
     instance->mState = AudioInstance::Stopped;
 }
 
+    
+void audioBufferSanityCheck(AudioInstance* instance)
+{
+    dprintf("-- %d", instance->mSource);
+    for(AudioBuffer* curr = instance->mBuffersHead; curr; curr = curr->mNext)
+    {
+        dprintf("%p %d", curr, curr->mBuffer);
+    }
+}
+    
 void AudioLibrary::update()
 {
     if(mPreloadComplete && !mCompleteNotified)
@@ -324,11 +336,15 @@ void AudioLibrary::update()
     AudioInstance* currActive = mAudioInstanceActiveHead;
     while(currActive)
     {
+//        audioBufferSanityCheck(currActive);
+        
+        
         // Check if any buffers are ready to be unqueued within currActive.
         ALint numBuffers = 0;
         alGetSourcei(currActive->mSource, AL_BUFFERS_PROCESSED, &numBuffers);
         if(numBuffers > 0)
         {
+//            dprintf("%d processed ready to remove", numBuffers);
             ALuint* buffers = (ALuint*)alloca(sizeof(ALuint) * numBuffers);
             alSourceUnqueueBuffers(currActive->mSource, numBuffers, buffers);
             int error = alGetError();
@@ -352,20 +368,25 @@ void AudioLibrary::update()
                         // Middle/tail remove.
                         if(prev)
                         {
+//                            dprintf("Middle/tail remove");
                             prev->mNext = curr->mNext;
                         }
                         // Head remove.
                         else
                         {
+//                            dprintf("Head remove");
                             currActive->mBuffersHead = curr->mNext;
                         }
 
                         // Tail remove.
                         if(currActive->mBuffersTail == curr)
+                        {
+//                            dprintf("... actually tail remove");
                             currActive->mBuffersTail = prev;
+                        }
 
                         // return it to the free queue.
-                        dprintf("D %u on %u", curr->mBuffer, currActive->mSource);
+//                        dprintf("D %u on %u", curr->mBuffer, currActive->mSource);
 
                         returnAudioBuffer(curr);
                         break;
@@ -374,6 +395,7 @@ void AudioLibrary::update()
                     prev = curr;
                 }    
             }
+//            dprintf("done");
         }    
 
         if(currActive->mState == AudioInstance::ReadyToPlay || currActive->mState == AudioInstance::Playing)
@@ -384,6 +406,7 @@ void AudioLibrary::update()
                 // Set to be removed when done playing?
                 if(currActive->mAutoRemove)
                 {
+//                    dprintf("%d pushing to delete stack", currActive->mSource);
                     // Push onto toDelete stack.
                     currActive->mDeleteNext = mAudioInstanceToDelete;
                     mAudioInstanceToDelete = currActive;
@@ -399,7 +422,7 @@ void AudioLibrary::update()
     // Close and free all instances that were found to be closed and freed.
     while(mAudioInstanceToDelete)
     {
-        dprintf("Removing %d", mAudioInstanceToDelete->mSource);
+//        dprintf("Removing %d", mAudioInstanceToDelete->mSource);
         stopAudioInstance(mAudioInstanceToDelete);
         closeAudioInstance(mAudioInstanceToDelete);
         mAudioInstanceToDelete = mAudioInstanceToDelete->mDeleteNext;

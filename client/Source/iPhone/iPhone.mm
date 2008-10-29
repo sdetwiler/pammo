@@ -223,7 +223,7 @@ uint64_t getTime(void)
     void alEnumToString(char const* str, int e);
 
     
-#define AUDIO_BUFFER_SIZE 65536
+#define AUDIO_BUFFER_SIZE 10240 //65536
     
 int openAudio_platform(AudioInstance* instance)
 {
@@ -242,9 +242,6 @@ int openAudio_platform(AudioInstance* instance)
     {
         return -1;
     }
-    
-    
-    
 
     UInt32 size = sizeof(instance->mAudio.mNumPackets);
     result = AudioFileGetProperty(instance->mAudio.mFile, kAudioFilePropertyAudioDataPacketCount, &size, &instance->mAudio.mNumPackets);
@@ -297,15 +294,20 @@ int openAudio_platform(AudioInstance* instance)
         bytes = 2;
     else if(instance->mFormat == AL_FORMAT_STEREO8 || instance->mFormat == AL_FORMAT_MONO8)
         bytes = 1;
-    
-    instance->mAudio.mReadFreq = (((float)(instance->mSampleRate * bytes)) / (float)AUDIO_BUFFER_SIZE) * 1000000.0f;
-    instance->mAudio.mReadFreq -= 1000000; // estimated HW latency to prevent underflows.
+
+    instance->mAudio.mReadFreq = ( (float)AUDIO_BUFFER_SIZE/ (float)(instance->mSampleRate * bytes) ) * 1000000.0f;
+    instance->mAudio.mReadFreq -= 50000; // estimated HW latency to prevent underflows.
     instance->mAudio.mNextRead = getTime();
-    
     
     return 0;
 }
 
+void stopAudio_platform(AudioInstance* instance)
+{
+    instance->mAudio.mCurrentPacket = 0;
+    instance->mAudio.mCurrentByte  = 0;
+}
+    
 void closeAudio_platform(AudioInstance* instance)
 {
     // return any buffers.
@@ -336,7 +338,9 @@ void updateAudio_platform(AudioInstance* instance)
     uint8_t* buf =  (uint8_t*)alloca(numBytes);
     
 	OSStatus ret;
+//    dprintf("reading");
 	ret = AudioFileReadBytes(instance->mAudio.mFile, false, instance->mAudio.mCurrentByte, &numBytes, buf);
+//    dprintf("%d", ret);
 	if(ret < 0 && ret !=-39) // error that isn't EOF
 	{
         dprintf("fillCurrentAudioBuffer failed to read %d", ret);
@@ -344,6 +348,7 @@ void updateAudio_platform(AudioInstance* instance)
 	}
     if(numBytes)
     {
+//        dprintf("numBytes %d", numBytes);
         instance->mAudio.mCurrentByte+= numBytes;
         AudioBuffer* b = gAudioLibrary->getAudioBuffer();
         if(!b)
@@ -353,7 +358,7 @@ void updateAudio_platform(AudioInstance* instance)
         }
         
         alBufferData(b->mBuffer, instance->mFormat, buf, numBytes, instance->mSampleRate);
-        dprintf("Q %u on %u", b->mBuffer, instance->mSource);
+//        dprintf("Q %u on %u", b->mBuffer, instance->mSource);
         alSourceQueueBuffers(instance->mSource, 1, &b->mBuffer);
         if(instance->mState == AudioInstance::ReadyToPlay)
         {
@@ -363,14 +368,17 @@ void updateAudio_platform(AudioInstance* instance)
         
         if(!instance->mBuffersHead)
         {
-            dprintf("head insert");
+//            dprintf("head insert");
             instance->mBuffersHead = b;
             instance->mBuffersTail = b;
         }
+        else
+        {
+            instance->mBuffersTail->mNext = b;
+            instance->mBuffersTail = b;
+        }
         
-        instance->mBuffersTail->mNext = b;
         b->mNext = NULL;
-        instance->mBuffersTail = b;
     }
     
     

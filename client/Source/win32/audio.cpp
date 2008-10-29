@@ -79,6 +79,10 @@ void closeAudio_platform(AudioInstance* instance)
     Sound_FreeSample(instance->mAudio.mSample);
     instance->mAudio.mSample = NULL;
 }
+void stopAudio_platform(AudioInstance* instance)
+{
+
+}
 
 void updateAudio_platform(AudioInstance* instance)
 {

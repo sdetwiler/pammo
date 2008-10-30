@@ -88,8 +88,8 @@ void Game::draw()
     ImageEntity::resetTextureCache();
 	Vector2 frame = getFrameSize();
 	
-	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-	glClear(GL_COLOR_BUFFER_BIT);
+	//glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	//glClear(GL_COLOR_BUFFER_BIT);
 	
 	glEnable(GL_BLEND);
 	glDisable(GL_DEPTH_TEST);

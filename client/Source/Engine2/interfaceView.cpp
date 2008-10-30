@@ -8,7 +8,7 @@ namespace pammo
 
 InterfaceView::InterfaceView()
 {
-    mImage = gImageLibrary->getImage(INTERFACE_INGAME_OVERLAY);
+    mImage = gImageLibrary->getImage(INTERFACE_OVERLAY);
 }
 
 InterfaceView::~InterfaceView()

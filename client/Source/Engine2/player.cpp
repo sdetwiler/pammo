@@ -19,7 +19,7 @@
 #include "weaponSelector.h"
 
 #include "enemyManager.h"
-#include "healthMeter.h"
+#include "barMeter.h"
 #include "scoreMeter.h"
 #include "flipbookLoader.h"
 
@@ -47,12 +47,14 @@ Player::Player() : View()
     mBody = NULL;
     mScoreMeter = new ScoreMeter();
     
-    mHealthMeter = new HealthMeter(kHealthMeterPriority);
-    mHealthMeter->setBaseLocation(Vector2(280, 16));
+    mHealthMeter = new BarMeter(kHealthMeterPriority);
+    mHealthMeter->setBaseLocation(Vector2(303, -1));
+    mHealthMeter->setColor(1.0, 0.1, 0.05);
     
-    mEnergyMeter = new HealthMeter(kEnergyMeterPriority);
+    mEnergyMeter = new BarMeter(kEnergyMeterPriority);
     mEnergyMeter->setGrowDirection(-1);
-    mEnergyMeter->setBaseLocation(Vector2(200, 16));
+    mEnergyMeter->setBaseLocation(Vector2(27, -1));
+    mEnergyMeter->setColor(0.05, 0.4, 0.9);
     mEnergyMeter->disableAll();
 
     mMovementRing = new TargetRingWidget(kMoveRingPriority, gImageLibrary->getImage(INTERFACE_RING_MOVEMENT));
@@ -144,17 +146,22 @@ void Player::reset()
     //mWeaponSelector->addWeapon(mGooWeapon);
 
     // Reset life.
-    mHealth = 1000.0f;
-    mMaxHealth = 1000.0f;
+    mHealth = 1.0f;
+    mMaxHealth = 1.0f;
     mDeadTime = 0;
-    mHealthMeter->setPercent(mHealth);
+    mHealthMeter->setCurrentPercent(mHealth);
     
     // Reset shield.
     mHasShield = false;
-    mEnergy = 1000.0f;
-    mMaxEnergy = 1000.0f;
-    mEnergyMeter->setPercent(mEnergy);
+    mEnergy = 1.0f;
+    mMaxEnergy = 1.0f;
+    mEnergyMeter->setCurrentPercent(mEnergy);
     mShieldToggle->reset();
+    
+    // Force shield.
+    //mHasShield = true;
+    //mShieldToggle->enableAll();
+    //mEnergyMeter->enableAll();
 
     // Reset misc.
     mScore = 0;
@@ -289,12 +296,6 @@ void Player::update()
         createDust(0.9f);
     else if(vmag > 45.0f)
 		createDust((vmag-45.0f)/150.0f);
-        
-    if(mHealth < 1000)
-    {
-        //mHealth += 2;
-        mHealthMeter->setPercent(mHealth);
-    }
     
     // Shield.
     if(mShielding)
@@ -312,13 +313,13 @@ void Player::update()
         mShieldEntity.makeDirty();
         
         // Subtract energy.
-        mEnergy -= 1;
+        mEnergy -= 1/300.;
         if(mEnergy <= 0)
         {
             mEnergy = 0;
             mShieldToggle->setToggle(false);
         }
-        mEnergyMeter->setPercent(mEnergy);
+        mEnergyMeter->setTargetPercent(mEnergy);
     }
 
     mScoreMeter->setScore(mScore);
@@ -447,9 +448,9 @@ void Player::damage(ParticleType type, float amount)
     }
     
     //dprintf("damage");
-	mHealth -= amount;
+	mHealth -= amount / 1000.;
     mCameraShake = MAX_CAMERA_SHAKE;
-    mHealthMeter->setPercent(mHealth);
+    mHealthMeter->setTargetPercent(mHealth);
 }
 
 void Player::givePowerup(PowerupType type)
@@ -457,14 +458,14 @@ void Player::givePowerup(PowerupType type)
     switch(type)
     {
         case kPowerupLifeUpgrade:
-            mMaxHealth += 200;
+            mMaxHealth += 0.2;
             mHealth = mMaxHealth;
-            mHealthMeter->setPercent(mHealth);
+            mHealthMeter->setTargetPercent(mHealth);
             break;
         case kPowerupEnergyUpgrade:
-            mMaxEnergy += 200;
+            mMaxEnergy += 0.2;
             mEnergy = mMaxEnergy;
-            mEnergyMeter->setPercent(mEnergy);
+            mEnergyMeter->setTargetPercent(mEnergy);
             break;
         case kPowerupShield:
             mHasShield = true;
@@ -483,11 +484,11 @@ void Player::givePowerup(PowerupType type)
             break;
         case kPowerupLifeRestore:
             mHealth = mMaxHealth;
-            mHealthMeter->setPercent(mHealth);
+            mHealthMeter->setTargetPercent(mHealth);
             break;
         case kPowerupEnergyRestore:
             mEnergy = mMaxEnergy;
-            mEnergyMeter->setPercent(mEnergy);
+            mEnergyMeter->setTargetPercent(mEnergy);
             break;
     }
 }

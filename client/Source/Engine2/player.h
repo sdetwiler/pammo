@@ -22,7 +22,7 @@ class ImageEntity;
 class VehicleController;
 class Weapon;
 class ScoreMeter;
-class HealthMeter;
+class BarMeter;
 class DeathCardView;
 class GooWeapon;
 class LightningWeapon;
@@ -92,14 +92,14 @@ class Player :
         GrenadeLauncherWeapon* mGrenadeLauncherWeapon;
         
         // Health.
-        HealthMeter* mHealthMeter;
+        BarMeter* mHealthMeter;
         float mHealth, mMaxHealth;
         uint64_t mDeadTime;
 
         int32_t mCameraShake;
 	
         // Energy.
-		HealthMeter* mEnergyMeter;
+		BarMeter* mEnergyMeter;
         float mEnergy, mMaxEnergy;
         
         // Shield.

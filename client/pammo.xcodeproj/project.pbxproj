@@ -13,7 +13,7 @@
 		110665600E5B70FB0023ABB1 /* interface in Copy Data */ = {isa = PBXBuildFile; fileRef = 110664DA0E5B70FB0023ABB1 /* interface */; };
 		110665610E5B70FB0023ABB1 /* levels in Copy Data */ = {isa = PBXBuildFile; fileRef = 110664ED0E5B70FB0023ABB1 /* levels */; };
 		110665630E5B70FB0023ABB1 /* vehicles in Copy Data */ = {isa = PBXBuildFile; fileRef = 110665160E5B70FB0023ABB1 /* vehicles */; };
-		110665810E635A240023ABB1 /* healthMeter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1106657F0E635A240023ABB1 /* healthMeter.cpp */; };
+		110665810E635A240023ABB1 /* barMeter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1106657F0E635A240023ABB1 /* barMeter.cpp */; };
 		110665A90E6372AE0023ABB1 /* enemyWeaponFlamethrower.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 110665A50E6372AE0023ABB1 /* enemyWeaponFlamethrower.cpp */; };
 		110665AA0E6372AE0023ABB1 /* enemyWeaponTrebuchet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 110665A70E6372AE0023ABB1 /* enemyWeaponTrebuchet.cpp */; };
 		1106667E0E63D4630023ABB1 /* enemyWeaponSelfDestruct.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1106667C0E63D4630023ABB1 /* enemyWeaponSelfDestruct.cpp */; };
@@ -104,8 +104,8 @@
 		110664DA0E5B70FB0023ABB1 /* interface */ = {isa = PBXFileReference; lastKnownFileType = folder; name = interface; path = ../data/interface; sourceTree = SOURCE_ROOT; };
 		110664ED0E5B70FB0023ABB1 /* levels */ = {isa = PBXFileReference; lastKnownFileType = folder; name = levels; path = ../data/levels; sourceTree = SOURCE_ROOT; };
 		110665160E5B70FB0023ABB1 /* vehicles */ = {isa = PBXFileReference; lastKnownFileType = folder; name = vehicles; path = ../data/vehicles; sourceTree = SOURCE_ROOT; };
-		1106657F0E635A240023ABB1 /* healthMeter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = healthMeter.cpp; sourceTree = "<group>"; };
-		110665800E635A240023ABB1 /* healthMeter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = healthMeter.h; sourceTree = "<group>"; };
+		1106657F0E635A240023ABB1 /* barMeter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = barMeter.cpp; sourceTree = "<group>"; };
+		110665800E635A240023ABB1 /* barMeter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = barMeter.h; sourceTree = "<group>"; };
 		110665A50E6372AE0023ABB1 /* enemyWeaponFlamethrower.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = enemyWeaponFlamethrower.cpp; sourceTree = "<group>"; };
 		110665A60E6372AE0023ABB1 /* enemyWeaponFlamethrower.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = enemyWeaponFlamethrower.h; sourceTree = "<group>"; };
 		110665A70E6372AE0023ABB1 /* enemyWeaponTrebuchet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = enemyWeaponTrebuchet.cpp; sourceTree = "<group>"; };
@@ -288,8 +288,8 @@
 		11C8750A0E40E652008B701A /* Player Subsystem */ = {
 			isa = PBXGroup;
 			children = (
-				1106657F0E635A240023ABB1 /* healthMeter.cpp */,
-				110665800E635A240023ABB1 /* healthMeter.h */,
+				1106657F0E635A240023ABB1 /* barMeter.cpp */,
+				110665800E635A240023ABB1 /* barMeter.h */,
 				11499E160E99CE0C00FBA3D0 /* infastructureManager.cpp */,
 				11499E150E99CE0C00FBA3D0 /* infastructureManager.h */,
 				11C3F42D0E2F0F3A00EE8D28 /* player.cpp */,
@@ -550,7 +550,7 @@
 				113E769B0E4A6FE3005A8070 /* mainScreenView.cpp in Sources */,
 				11B684EE0E5236D000BB0872 /* minimap.cpp in Sources */,
 				11B6858B0E53B9CA00BB0872 /* enemyLoader.cpp in Sources */,
-				110665810E635A240023ABB1 /* healthMeter.cpp in Sources */,
+				110665810E635A240023ABB1 /* barMeter.cpp in Sources */,
 				110665A90E6372AE0023ABB1 /* enemyWeaponFlamethrower.cpp in Sources */,
 				110665AA0E6372AE0023ABB1 /* enemyWeaponTrebuchet.cpp in Sources */,
 				1106667E0E63D4630023ABB1 /* enemyWeaponSelfDestruct.cpp in Sources */,

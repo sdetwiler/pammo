@@ -35,7 +35,7 @@ uint32_t InfastructureManager::getDrawPriority() const
 
 void InfastructureManager::update()
 {
-    uint32_t score = gWorld->getPlayer()->mScore + 5000;
+    uint32_t score = gWorld->getPlayer()->mScore;
     
     if(score >= mNextNewPowerScore)
     {

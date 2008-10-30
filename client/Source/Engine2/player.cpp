@@ -142,6 +142,7 @@ void Player::reset()
     
     // Reset weapons.
     mWeaponSelector->reset();
+    //mWeaponSelector->addWeapon(mGrenadeLauncherWeapon);
     mWeaponSelector->addWeapon(mLightningWeapon);
     //mWeaponSelector->addWeapon(mGooWeapon);
 
@@ -313,7 +314,7 @@ void Player::update()
         mShieldEntity.makeDirty();
         
         // Subtract energy.
-        mEnergy -= 1/300.;
+        mEnergy -= 1/400.;
         if(mEnergy <= 0)
         {
             mEnergy = 0;

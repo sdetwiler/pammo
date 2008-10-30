@@ -20,7 +20,7 @@ GrenadeLauncherWeapon::GrenadeLauncherWeapon()
     : Weapon()
 {
     mLastFire = 0;
-    mFireFrequency = 800000;
+    mFireFrequency = 250000;
     mIcon.setImage(gImageLibrary->getImage(INTERFACE_ICON_WEAPON_GRENADELAUNCHER));
 }
 
@@ -73,9 +73,10 @@ void GrenadeLauncherWeapon::fire()
     particleData->mRotation = 0;
 
     // Choose some numbers.
-    //float f = 10.0f;
-    float r = 0.0f;//1.0f/f - ((rand()%100)/(f*90)) ;
+    float r = (float)rand()/RAND_MAX * M_PI/8 - M_PI/16;
     float initialRotation = player->mTurret.mRotation - M_PI/2.0f;
+    
+    float velocity = 140 + (rand()%40);
     
     // Setup image.
 	
@@ -101,7 +102,7 @@ void GrenadeLauncherWeapon::fire()
     p->mBody->mRadius = 40;
     p->mBody->mMass = 10;
     p->mBody->mCenter = p->mImage.mCenter;
-    p->mBody->mVelocity = Vector2(160, 0) * Transform2::createRotation(initialRotation+r);
+    p->mBody->mVelocity = Vector2(velocity, 0) * Transform2::createRotation(initialRotation+r);
     p->mBody->mUserArg = p;
 
     gWorld->getParticleSystem()->initSmokeParticle(player->mTurretTip, initialRotation, Vector2(1.0f, 0));

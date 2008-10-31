@@ -67,8 +67,8 @@ int openAudio_platform(AudioInstance* instance)
     }
     instance->mSampleRate = instance->mAudio.mSample->actual.rate;
 
-    instance->mAudio.mReadFreq = (((float)(instance->mSampleRate * bytes)) / (float)SDL_BUFFER_SIZE) * 1000000.0f;
-    instance->mAudio.mReadFreq -= 1000000;
+    instance->mAudio.mReadFreq = ((float)SDL_BUFFER_SIZE/(float)(instance->mSampleRate * bytes)) * 1000000.0f;
+    instance->mAudio.mReadFreq -= 500000;
     instance->mAudio.mNextRead = getTime();
 
     return 0;
@@ -105,11 +105,14 @@ void updateAudio_platform(AudioInstance* instance)
     {
         if(numBytes < SDL_BUFFER_SIZE)
         {
-            if(numBytes < SDL_BUFFER_SIZE)
+            instance->mPlaysRemain--;
+            if(instance->mPlaysRemain)
             {
-                dprintf("%d", instance->mAudio.mSample->flags);
-                dprintf("EOF");
+                resetAudio_platform(instance);
             }
+
+            dprintf("%d", instance->mAudio.mSample->flags);
+            dprintf("EOF");
         }
         AudioBuffer* b = gAudioLibrary->getAudioBuffer();
         if(!b)
@@ -118,7 +121,7 @@ void updateAudio_platform(AudioInstance* instance)
             return;
         }
         alBufferData(b->mBuffer, instance->mFormat, instance->mAudio.mSample->buffer, numBytes, instance->mSampleRate);
-        dprintf("Q %u on %u", b->mBuffer, instance->mSource);
+        //dprintf("Q %u on %u", b->mBuffer, instance->mSource);
         alSourceQueueBuffers(instance->mSource, 1, &b->mBuffer);
         if(instance->mState == AudioInstance::ReadyToPlay)
         {
@@ -128,7 +131,7 @@ void updateAudio_platform(AudioInstance* instance)
 
         if(!instance->mBuffersHead)
         {
-            dprintf("head insert");
+ //           dprintf("head insert");
             instance->mBuffersHead = b;
             instance->mBuffersTail = b;
         }

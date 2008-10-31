@@ -154,7 +154,7 @@ void openRawImagePNG(char const* path, RawImage* image)
     // Draw image into the buffer.
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
 	spriteContext = CGBitmapContextCreate(image->mPixels, image->mPixelSize.x, image->mPixelSize.y, 8,
-        image->mPixelSize.x * 4, colorSpace, kCGImageAlphaPremultipliedLast);
+                                          image->mPixelSize.x * 4, colorSpace, kCGImageAlphaPremultipliedLast);
 	CGContextDrawImage(spriteContext, CGRectMake(0.0, 0.0, image->mSize.x, image->mSize.y), spriteImage);
     
     // If this image is only 3 component, we need to downsample.
@@ -341,11 +341,24 @@ void updateAudio_platform(AudioInstance* instance)
 //    dprintf("reading");
 	ret = AudioFileReadBytes(instance->mAudio.mFile, false, instance->mAudio.mCurrentByte, &numBytes, buf);
 //    dprintf("%d", ret);
-	if(ret < 0 && ret !=-39) // error that isn't EOF
+	if(ret < 0 ) // error that isn't EOF
 	{
-        dprintf("fillCurrentAudioBuffer failed to read %d", ret);
-		return;
+        if(ret == -39)
+        {
+            instance->mPlaysRemain--;
+            if(instance->mPlaysRemain)
+            {
+                instance->mAudio.mCurrentByte = 0;
+            
+            }
+        }    
+        else
+        {
+            dprintf("fillCurrentAudioBuffer failed to read %d", ret);
+            return;
+        }
 	}
+    
     if(numBytes)
     {
 //        dprintf("numBytes %d", numBytes);

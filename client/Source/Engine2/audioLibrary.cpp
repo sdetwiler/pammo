@@ -10,6 +10,7 @@ AudioClip gAudioClip[] =
     {"audio/intro.wav", false, NULL, 0, 0},      // 0
     {"audio/background.wav", false, NULL, 0, 0},       // 1
     {"audio/explosion00.wav", false, NULL, 0, 0},      // 2
+    {"audio/flamethrower.wav", false, NULL, 0, 0},      // 3
 };
 
 AudioLibrary* gAudioLibrary = NULL;
@@ -352,6 +353,7 @@ void AudioLibrary::update()
             int error = alGetError();
             if(error)
             {
+                dprintf("%d %p", numBuffers, currActive->mBuffersHead);
                 alEnumToString("alSourceUnqueueBuffers", error);
                 break;
             }
@@ -405,13 +407,13 @@ void AudioLibrary::update()
             // End of stream case.
             if(currActive->mState == AudioInstance::Playing && currActive->mBuffersHead == NULL)        
             {
-             /**   currActive->mPlaysRemain--;
-                if(currActive->mPlaysRemain)
-                {
-                    resetAudio_platform(currActive);
-                    updateAudio_platform(currActive);
-                }
-                else **/
+                //currActive->mPlaysRemain--;
+                //if(currActive->mPlaysRemain)
+                //{
+                //    resetAudio_platform(currActive);
+                //    updateAudio_platform(currActive);
+                //}
+                //else
                 {
 
                     // Set to be removed when done playing?

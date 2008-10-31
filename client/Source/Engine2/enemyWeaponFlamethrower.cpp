@@ -38,6 +38,8 @@ void enemyWeaponFlamethrowerCb(Enemy* e, EnemyWeapon* w, EnemyManager* manager)
 
     enemyWeaponTurretUpdate(e, w, manager, &data->mTurret);
 
+    bool lastState = data->mFiring;
+    
     uint64_t now = getTime();
     if(data->mFireStateChange < now)
     {
@@ -55,6 +57,13 @@ void enemyWeaponFlamethrowerCb(Enemy* e, EnemyWeapon* w, EnemyManager* manager)
     if(data->mFiring == false)
     {
         return;
+    }
+    
+    if(lastState != data->mFiring)
+    {
+        AudioInstance* instance = gAudioLibrary->getAudioInstance(AUDIO_FLAMETHROWER);
+        if(instance)
+            gAudioLibrary->playAudioInstance(instance, PLAY_ONCE, true);
     }
 
     Particle* p = NULL;

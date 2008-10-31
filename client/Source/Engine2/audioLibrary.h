@@ -14,6 +14,7 @@ namespace pammo
 #define AUDIO_BACKGROUND_INTRO        (uint32_t)0
 #define AUDIO_BACKGROUND_INGAME       1
 #define AUDIO_EXPLOSION               2
+#define AUDIO_FLAMETHROWER            3
 
 
 // An audio clip that can be played.

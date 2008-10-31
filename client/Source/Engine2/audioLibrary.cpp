@@ -202,6 +202,7 @@ AudioInstance* AudioLibrary::getAudioInstance(uint32_t id)
     
     instance->mPrev = mAudioInstanceActiveTail;  
     mAudioInstanceActiveTail = instance;
+    instance->mPlaysRemain = 1; // Only play once by default;
     instance->mAutoRemove = true; // By default, auto remove when done playing.
     instance->mBuffersHead = NULL; // No buffers to start.
     instance->mBuffersTail = NULL;
@@ -275,11 +276,12 @@ void AudioLibrary::closeAudioInstance(AudioInstance* instance)
     mAudioInstancesFree = instance;
 }
 
-void AudioLibrary::playAudioInstance(AudioInstance* instance, bool autoRemove)
+void AudioLibrary::playAudioInstance(AudioInstance* instance, uint32_t playCount, bool autoRemove)
 {
     if(!mAudioEnabled)
         return;
 
+    instance->mPlaysRemain = playCount;
     instance->mAutoRemove = autoRemove;
     alSourcePlay(instance->mSource);
     instance->mState = AudioInstance::ReadyToPlay;
@@ -403,13 +405,23 @@ void AudioLibrary::update()
             // End of stream case.
             if(currActive->mState == AudioInstance::Playing && currActive->mBuffersHead == NULL)        
             {
-                // Set to be removed when done playing?
-                if(currActive->mAutoRemove)
+             /**   currActive->mPlaysRemain--;
+                if(currActive->mPlaysRemain)
                 {
-//                    dprintf("%d pushing to delete stack", currActive->mSource);
-                    // Push onto toDelete stack.
-                    currActive->mDeleteNext = mAudioInstanceToDelete;
-                    mAudioInstanceToDelete = currActive;
+                    resetAudio_platform(currActive);
+                    updateAudio_platform(currActive);
+                }
+                else **/
+                {
+
+                    // Set to be removed when done playing?
+                    if(currActive->mAutoRemove)
+                    {
+    //                    dprintf("%d pushing to delete stack", currActive->mSource);
+                        // Push onto toDelete stack.
+                        currActive->mDeleteNext = mAudioInstanceToDelete;
+                        mAudioInstanceToDelete = currActive;
+                    }
                 }
             }
             else

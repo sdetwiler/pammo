@@ -111,48 +111,62 @@ struct Image;
 
 #define PARTICLE_FAKE_WEAPON                        63
 
+#define VEHICLE_BIGBOY_COUNT                  5
 #define VEHICLE_BIGBOY_00                           64
+#define VEHICLE_BIGBOY_01                           65
+#define VEHICLE_BIGBOY_02                           66
+#define VEHICLE_BIGBOY_03                           67
+#define VEHICLE_BIGBOY_04                           68
 
 #define VEHICLE_FLAMETANK_COUNT               5
-#define VEHICLE_FLAMETANK_00                        65
-#define VEHICLE_FLAMETANK_01                        66
-#define VEHICLE_FLAMETANK_02                        67
-#define VEHICLE_FLAMETANK_03                        68
-#define VEHICLE_FLAMETANK_04                        69
+#define VEHICLE_FLAMETANK_00                        69
+#define VEHICLE_FLAMETANK_01                        70
+#define VEHICLE_FLAMETANK_02                        71
+#define VEHICLE_FLAMETANK_03                        72
+#define VEHICLE_FLAMETANK_04                        73
 
-#define VEHICLE_FLAMETANK_TURRET_00                 70
+#define VEHICLE_FLAMETANK_TURRET_00                 74
 
-#define VEHICLE_KILLERTOP_00                        71
+#define VEHICLE_KILLERTOP_00                        75
 
-#define VEHICLE_MINELAYER_00                        72
+#define VEHICLE_MINELAYER_00                        76
 
-#define VEHICLE_TORPEDO_00                          73
+#define VEHICLE_TORPEDO_00                          77
 
-#define VEHICLE_TREBUCHET_00                        74
+#define VEHICLE_TREBUCHET_COUNT               9
+#define VEHICLE_TREBUCHET_00                        78
+#define VEHICLE_TREBUCHET_01                        79
+#define VEHICLE_TREBUCHET_02                        80
+#define VEHICLE_TREBUCHET_03                        81
+#define VEHICLE_TREBUCHET_04                        82
+#define VEHICLE_TREBUCHET_05                        83
+#define VEHICLE_TREBUCHET_06                        84
+#define VEHICLE_TREBUCHET_07                        85
+#define VEHICLE_TREBUCHET_08                        86
 
-#define PARTICLE_JETFLAME_00                        75
+#define PARTICLE_JETFLAME_00                        87
 
-#define INTERFACE_BUTTONMASK                        76
+#define INTERFACE_BUTTONMASK                        88
 
-#define POWERUP_LIFE_UPGRADE                        77
+#define POWERUP_LIFE_UPGRADE                        89
 
-#define POWERUP_LIFE_RESTORE                        78
+#define POWERUP_LIFE_RESTORE                        90
 
-#define POWERUP_ENERGY_UPGRADE                      79
+#define POWERUP_ENERGY_UPGRADE                      91
 
-#define POWERUP_ENERGY_RESTORE                      80
+#define POWERUP_ENERGY_RESTORE                      92
 
-#define POWERUP_SHIELD                              81
+#define POWERUP_SHIELD                              93
 
-#define POWERUP_GOO_WEAPON                          82
+#define POWERUP_GOO_WEAPON                          94
 
-#define POWERUP_GRENADE_LAUNCHER_WEAPON             83
+#define POWERUP_GRENADE_LAUNCHER_WEAPON             95
 
-#define INTERFACE_OVERLAY             84
+#define INTERFACE_OVERLAY             96
 
-#define INTERFACE_BAR_METER             85
+#define INTERFACE_BAR_METER             97
 
-#define MAP_PREVIEW              86
+#define MAP_PREVIEW              98
 
 //#define MAP_TILES_X              22
 //#define MAP_TILES_Y              15
@@ -160,7 +174,7 @@ struct Image;
 //#define MAP_TILES_Y              8
 #define MAP_TILES_X              6
 #define MAP_TILES_Y              4
-#define MAP_TILES_BASE           87
+#define MAP_TILES_BASE           99
 
 #define NUM_IMAGES (MAP_TILES_BASE + MAP_TILES_X*MAP_TILES_Y)
 

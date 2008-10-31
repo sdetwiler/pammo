@@ -84,6 +84,14 @@ void stopAudio_platform(AudioInstance* instance)
 
 }
 
+void resetAudio_platform(AudioInstance* instance)
+{
+    int ret = Sound_Rewind(instance->mAudio.mSample);
+    if(ret < 0)
+        dprintf("ASSS");
+    instance->mAudio.mNextRead = getTime();
+}
+
 void updateAudio_platform(AudioInstance* instance)
 {
     uint64_t now = getTime();

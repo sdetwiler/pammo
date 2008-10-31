@@ -17,7 +17,7 @@ MainScreenView::MainScreenView()
     : View()
 {
     mAudio = gAudioLibrary->getAudioInstance(AUDIO_BACKGROUND_INTRO);
-    gAudioLibrary->playAudioInstance(mAudio, false);
+    gAudioLibrary->playAudioInstance(mAudio, PLAY_FOREVER, false);
     //gMainScreenView = this;
     // Load background.
     mAudioPreloadComplete = false;

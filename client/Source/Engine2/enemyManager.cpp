@@ -460,7 +460,7 @@ void enemyDamageCb(Enemy* e, ParticleType type, float amount)
 	{
         AudioInstance* instance = gAudioLibrary->getAudioInstance(AUDIO_EXPLOSION);
         if(instance)
-            gAudioLibrary->playAudioInstance(instance, true);
+            gAudioLibrary->playAudioInstance(instance, PLAY_ONCE, true);
 
         gWorld->getParticleSystem()->initExplosionParticle(e->mBody->mCenter+Vector2(5,5));
 		gWorld->getParticleSystem()->initExplosionParticle(e->mBody->mCenter);
@@ -555,8 +555,19 @@ bool EnemyManager::loadEnemyTemplate(char const* enemyName)
     }    
     else
     {
-        dprintf("TODO: Restore enemy template flipbook support. Path will be startIndex:count");
-        enemyTemplate->mImageCount = 1;
+    //    dprintf("TODO: Restore enemy template flipbook support. Path will be startIndex:count");
+        char* strCount = strchr(enemyTemplate->mImagePath, ':');
+        if(strCount)
+        {
+            enemyTemplate->mImageCount = atol(strCount+1);
+            dprintf("Flipbook has %d images", enemyTemplate->mImageCount);
+        }
+        else
+        {
+            dprintf("Flipbook specified but path was not in the form ID:COUNT");
+            enemyTemplate->mImageCount = 1;
+        }
+        // atol on imagePath will terminate at the : and only parse the leading digits.
         loadFlipbook(atol(enemyTemplate->mImagePath), enemyTemplate->mImageCount, enemyTemplate->mImages);
         //        loadFlipbook(enemyTemplate->mImagePath, enemyTemplate->mImages, ENEMY_MAX_IMAGE_COUNT, &enemyTemplate->mImageCount);
     }

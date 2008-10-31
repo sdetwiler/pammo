@@ -34,6 +34,8 @@ struct AudioBuffer
     AudioBuffer* mNext;
 };
 
+#define PLAY_ONCE    1
+#define PLAY_FOREVER 0xffffffff
 // Represents an instance of an AudioClip in the scene.
 struct AudioInstance
 {
@@ -43,6 +45,7 @@ struct AudioInstance
     AudioBuffer*   mBuffersHead; // OpenAL Buffers holding audio.
     AudioBuffer*   mBuffersTail; // OpenAL Buffers holding audio.
     bool           mAutoRemove; // Should this instance be removed automatically when it is finished playing?    
+    uint32_t       mPlaysRemain; // How many times more should this instance play?
     enum State
     {
         Stopped,
@@ -98,7 +101,7 @@ public:
     // Begin playing the audio instance.
     // If autoClose is done, the instance will be freed when the stream completes.
     // The instance pointer could become invalid at anytime in this case, so fire and forget.
-    void playAudioInstance(AudioInstance* instance, bool autoClose);
+    void playAudioInstance(AudioInstance* instance, uint32_t playCount, bool autoClose);
    
     // Pause playback of the audio instance.
     void pauseAudioInstance(AudioInstance* instance);

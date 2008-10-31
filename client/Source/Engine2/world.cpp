@@ -163,7 +163,7 @@ void World::enable()
     mMinimap->enableAll();
     mInterfaceView->enableAll();
     mEnemyManager->enableAll();
-    gAudioLibrary->playAudioInstance(mBackgroundAudio, false);
+    gAudioLibrary->playAudioInstance(mBackgroundAudio, PLAY_FOREVER, false);
 
 }
 

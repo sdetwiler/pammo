@@ -11,7 +11,7 @@
 
 #define ENEMY_MAX_WEAPON_COUNT 4
 #define ENEMY_MAX_PARTICLE_COUNT 4
-#define ENEMY_MAX_IMAGE_COUNT 8
+#define ENEMY_MAX_IMAGE_COUNT 10
 
 namespace pammo
 {

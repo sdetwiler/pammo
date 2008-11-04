@@ -17,14 +17,26 @@ void lightningBulletParticleCallback(Particle* p, ParticleSystem* system);
 void lightningBulletFadeParticleCallback(Particle* p, ParticleSystem* system);
 void lightningGlowParticleCallback(Particle* p, ParticleSystem* system);
 
+uint32_t LightningWeapon::mParticleCount = 0;
+    
+struct LightningWeaponParticleData
+{
+    LightningWeapon* mWeapon;
+};
+        
+    
 LightningWeapon::LightningWeapon()
     : Weapon()
 {
+    mAudio = gAudioLibrary->getAudioInstance(AUDIO_LIGHTNINGGUN);
     mIcon.setImage(gImageLibrary->getImage(INTERFACE_ICON_WEAPON_LIGHTNINGGUN));
 }
 
 LightningWeapon::~LightningWeapon()
 {
+    gAudioLibrary->stopAudioInstance(mAudio);
+    gAudioLibrary->closeAudioInstance(mAudio);
+    
 }
 
 void LightningWeapon::select()
@@ -92,7 +104,17 @@ void LightningWeapon::fire()
     p->mImage.mCenter = player->mTurretTip;
     p->mImage.mRotation = initialRotation + (r*4);
     p->mImage.makeDirty();
-        
+    
+    LightningWeaponParticleData* data = (LightningWeaponParticleData*)(p->mData);
+    data->mWeapon = this;
+    
+    ++mParticleCount;
+    if(mParticleCount == 1)
+    {
+        gAudioLibrary->playAudioInstance(mAudio, PLAY_FOREVER, false);
+    }        
+
+    alSource3f(mAudio->mSource, AL_POSITION, p->mImage.mCenter.x, p->mImage.mCenter.y, 0.0f);
 }
 
 void lightningBulletCollisionCallback(Body* self, Body* other, Contact* contact, ContactResponse* response)
@@ -112,6 +134,7 @@ void lightningBulletCollisionCallback(Body* self, Body* other, Contact* contact,
 	
 void lightningBulletShapeCollisionCallback(Body* self, Shape* other, Contact* contact, bool* response)
 {
+    
     gWorld->getParticleSystem()->initSmokeParticle(self->mCenter, 0.0f, Vector2(0,0));
 
     // When particles hit a wall, stop in place and fade to dark.
@@ -149,13 +172,23 @@ void lightningBulletFadeParticleCallback(Particle* p, ParticleSystem* system)
 
 void lightningGlowParticleCallback(Particle* p, ParticleSystem* system)
 {
+    LightningWeaponParticleData* data = (LightningWeaponParticleData*)(p->mData);
+    
     p->mImage.mCenter = gWorld->getPlayer()->getCenter();
 	p->mImage.mSize*=1.4;
 	p->mImage.makeDirty();
     
     p->mAlpha-=0.2f;
     if(p->mAlpha <= 0)
+    {
+        --data->mWeapon->mParticleCount;
+        if(data->mWeapon->mParticleCount == 0)
+        {
+            gAudioLibrary->stopAudioInstance(data->mWeapon->mAudio);
+        }            
+        
         system->removeParticle(p);
+    }
 }
 
 

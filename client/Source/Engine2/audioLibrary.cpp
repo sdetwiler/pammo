@@ -10,7 +10,8 @@ AudioClip gAudioClip[] =
     {"audio/intro.wav", false, NULL, 0, 0},      // 0
     {"audio/background.wav", false, NULL, 0, 0},       // 1
     {"audio/explosion00.wav", false, NULL, 0, 0},      // 2
-    {"audio/flamethrower.wav", false, NULL, 0, 0},      // 3
+    {"audio/flamethrower01.wav", false, NULL, 0, 0},      // 3
+    {"audio/lightningGun.wav", false, NULL, 0, 0},      // 4
 };
 
 AudioLibrary* gAudioLibrary = NULL;
@@ -89,6 +90,10 @@ AudioLibrary::AudioLibrary()
     for(uint32_t i=0; i<kAudioInstanceQueueSize-1; ++i)
     {
         alGenSources(1, &mAudioInstances[i].mSource);
+
+        // Set the distance attinuation values for the sources.
+        alSourcef(mAudioInstances[i].mSource, AL_MAX_DISTANCE, 400.0f);
+        alSourcef(mAudioInstances[i].mSource, AL_REFERENCE_DISTANCE, 300.0f);
         mAudioInstances[i].mNext = &mAudioInstances[i+1];
     }
     mAudioInstancesFree = &mAudioInstances[0];
@@ -233,7 +238,7 @@ void AudioLibrary::reclaimBuffers(AudioInstance* instance)
     while(curr)
     {
         AudioBuffer* next = curr->mNext;
-        dprintf("D %u on %u (reclaimed)", curr->mBuffer, instance->mSource);
+//        dprintf("D %u on %u (reclaimed)", curr->mBuffer, instance->mSource);
         returnAudioBuffer(curr);
         curr = next;
     }
@@ -407,23 +412,13 @@ void AudioLibrary::update()
             // End of stream case.
             if(currActive->mState == AudioInstance::Playing && currActive->mBuffersHead == NULL)        
             {
-                //currActive->mPlaysRemain--;
-                //if(currActive->mPlaysRemain)
-                //{
-                //    resetAudio_platform(currActive);
-                //    updateAudio_platform(currActive);
-                //}
-                //else
+                // Set to be removed when done playing?
+                if(currActive->mAutoRemove)
                 {
-
-                    // Set to be removed when done playing?
-                    if(currActive->mAutoRemove)
-                    {
-    //                    dprintf("%d pushing to delete stack", currActive->mSource);
-                        // Push onto toDelete stack.
-                        currActive->mDeleteNext = mAudioInstanceToDelete;
-                        mAudioInstanceToDelete = currActive;
-                    }
+                    //                    dprintf("%d pushing to delete stack", currActive->mSource);
+                    // Push onto toDelete stack.
+                    currActive->mDeleteNext = mAudioInstanceToDelete;
+                    mAudioInstanceToDelete = currActive;
                 }
             }
             else

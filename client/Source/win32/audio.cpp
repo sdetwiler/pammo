@@ -111,8 +111,8 @@ void updateAudio_platform(AudioInstance* instance)
                 resetAudio_platform(instance);
             }
 
-            dprintf("%d", instance->mAudio.mSample->flags);
-            dprintf("EOF");
+//            dprintf("%d", instance->mAudio.mSample->flags);
+//            dprintf("EOF");
         }
         AudioBuffer* b = gAudioLibrary->getAudioBuffer();
         if(!b)

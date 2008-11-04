@@ -64,6 +64,7 @@ void enemyWeaponFlamethrowerCb(Enemy* e, EnemyWeapon* w, EnemyManager* manager)
         AudioInstance* instance = gAudioLibrary->getAudioInstance(AUDIO_FLAMETHROWER);
         if(instance)
             gAudioLibrary->playAudioInstance(instance, PLAY_ONCE, true);
+        alSource3f(instance->mSource, AL_POSITION, e->mBody->mCenter.x, e->mBody->mCenter.y, 0.0f);
     }
 
     Particle* p = NULL;

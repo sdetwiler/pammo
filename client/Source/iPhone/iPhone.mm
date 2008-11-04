@@ -338,18 +338,21 @@ void updateAudio_platform(AudioInstance* instance)
     uint8_t* buf =  (uint8_t*)alloca(numBytes);
     
 	OSStatus ret;
-//    dprintf("reading");
 	ret = AudioFileReadBytes(instance->mAudio.mFile, false, instance->mAudio.mCurrentByte, &numBytes, buf);
-//    dprintf("%d", ret);
-	if(ret < 0 ) // error that isn't EOF
+	if(ret < 0 ) // error
 	{
-        if(ret == -39)
+        if(ret == -39) // EOF
         {
             instance->mPlaysRemain--;
-            if(instance->mPlaysRemain)
+            if(instance->mPlaysRemain>0)
             {
                 instance->mAudio.mCurrentByte = 0;
-            
+                instance->mState = AudioInstance::ReadyToPlay;                
+            }
+            else
+            {
+                // No more reading.
+                instance->mAudio.mNextRead = 0xffffffffffffffffull;
             }
         }    
         else
@@ -361,7 +364,6 @@ void updateAudio_platform(AudioInstance* instance)
     
     if(numBytes)
     {
-//        dprintf("numBytes %d", numBytes);
         instance->mAudio.mCurrentByte+= numBytes;
         AudioBuffer* b = gAudioLibrary->getAudioBuffer();
         if(!b)

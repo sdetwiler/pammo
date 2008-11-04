@@ -280,6 +280,9 @@ void Player::update()
     gWorld->getCamera()->mCenter = mBody->mCenter + shake;
     gWorld->getCamera()->makeDirty();
  
+    // Update audio listener position.
+    alListener3f(AL_POSITION, gWorld->getCamera()->mCenter.x, gWorld->getCamera()->mCenter.y, 0.0f);
+    alSource3f(gWorld->mBackgroundAudio->mSource, AL_POSITION, gWorld->getCamera()->mCenter.x, gWorld->getCamera()->mCenter.y, 0.0f);    
     // Fire if we should be.
     if(mFiring)
     {

@@ -461,7 +461,9 @@ void enemyDamageCb(Enemy* e, ParticleType type, float amount)
         AudioInstance* instance = gAudioLibrary->getAudioInstance(AUDIO_EXPLOSION);
         if(instance)
             gAudioLibrary->playAudioInstance(instance, PLAY_ONCE, true);
-
+ 
+        alSource3f(instance->mSource, AL_POSITION, e->mBody->mCenter.x, e->mBody->mCenter.y, 0.0f);    
+        
         gWorld->getParticleSystem()->initExplosionParticle(e->mBody->mCenter+Vector2(5,5));
 		gWorld->getParticleSystem()->initExplosionParticle(e->mBody->mCenter);
 		gWorld->getParticleSystem()->initRubbleParticle(e->mBody->mCenter);

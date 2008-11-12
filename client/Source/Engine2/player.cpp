@@ -281,8 +281,11 @@ void Player::update()
     gWorld->getCamera()->makeDirty();
  
     // Update audio listener position.
-    alListener3f(AL_POSITION, gWorld->getCamera()->mCenter.x, gWorld->getCamera()->mCenter.y, 0.0f);
-    alSource3f(gWorld->mBackgroundAudio->mSource, AL_POSITION, gWorld->getCamera()->mCenter.x, gWorld->getCamera()->mCenter.y, 0.0f);    
+    if(gAudioLibrary->getAudioEnabled())
+    {
+        alListener3f(AL_POSITION, gWorld->getCamera()->mCenter.x, gWorld->getCamera()->mCenter.y, 0.0f);
+        alSource3f(gWorld->mBackgroundAudio->mSource, AL_POSITION, gWorld->getCamera()->mCenter.x, gWorld->getCamera()->mCenter.y, 0.0f);    
+    }
     // Fire if we should be.
     if(mFiring)
     {
@@ -495,6 +498,16 @@ void Player::givePowerup(PowerupType type)
             mEnergyMeter->setTargetPercent(mEnergy);
             break;
     }
+    
+    AudioInstance* instance = gAudioLibrary->getAudioInstance(AUDIO_POWERUP);
+    if(instance)
+        gAudioLibrary->playAudioInstance(instance, PLAY_ONCE, true);
+    
+    if(gAudioLibrary->getAudioEnabled())
+    {
+        alSource3f(instance->mSource, AL_POSITION, mBody->mCenter.x, mBody->mCenter.y, 0.0f);    
+    }
+    
 }
 
 void Player::onShieldToggleUpdated(ShieldToggle* widget, bool toggle)

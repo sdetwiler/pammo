@@ -1,19 +1,19 @@
 "Enemy","Name",,,,,,,,,,,,
-,"flameTank",,,,,,,,,,,,
+,"torpedoB",,,,,,,,,,,,
 "Properties","Image Type","Image Path","Mass","Radius","Health","Point Value","Minimum Player Score","Maximum Player Score","Max Instance Per Wave",,,,,
-,"Flipbook","69:5",50,20,100,350,2500,9000,3,,,,,
-"Behavior","Type","Speed","Target Radius","","","","","","","","","",""
-,"Surround",5,200,,,,,,,,,,
-"Weapon","Type","Image Path","Image Position X","Image Position Y","Fire Position X","Fire Position Y","Rotation Min","Rotation Max","Accuracy","Damage","Distance Max","Spread Angle","Firing Rate"
-,"Flamethrower","87",10,0,20,0,0,360,80,5,200,15,0.2
+,"Single","80",50,10,60,400,29000,-1,20,,,,,
+"Behavior","Type","Speed","","","","","","","","","","",""
+,"Kamikaze",8,,,,,,,,,,,
+"Weapon","Type","Image Path","Damage","","","","","","","","","",""
+,"SelfDestruct","63",200,,,,,,,,,,
 "Weapon","Type","","","","","","","","","","","",""
 ,"None",,,,,,,,,,,,
 "Weapon","Type","","","","","","","","","","","",""
 ,"None",,,,,,,,,,,,
 "Weapon","Type","","","","","","","","","","","",""
 ,"None",,,,,,,,,,,,
-"Particle","Type","","","","","","","","","","","",""
-,"None",,,,,,,,,,,,
+"Particle","Type","Image Path","Image Position X","Image Position Y","Rotation","Speed","","","","","","",""
+,"Jet Flame","90",-16,0,-90,-200,,,,,,,
 "Particle","Type","","","","","","","","","","","",""
 ,"None",,,,,,,,,,,,
 "Particle","Type","","","","","","","","","","","",""

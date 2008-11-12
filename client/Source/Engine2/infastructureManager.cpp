@@ -6,6 +6,7 @@
 #include "physics.h"
 #include "minimap.h"
 
+#define UPGRADE_SCALE 5
 namespace pammo
 {
 
@@ -17,10 +18,10 @@ InfastructureManager::InfastructureManager()
 void InfastructureManager::reset()
 {
     mGivenNewPowers = 0;
-    mNextNewPowerScore = 300;
+    mNextNewPowerScore = 300 * UPGRADE_SCALE;
     
-    mNextUpgradeScore = 500;
-    mNextRestoreScore = 150;
+    mNextUpgradeScore = 500 * UPGRADE_SCALE;
+    mNextRestoreScore = 150 * UPGRADE_SCALE;
 }
 
 uint32_t InfastructureManager::getUpdatePriority() const
@@ -63,7 +64,7 @@ void InfastructureManager::update()
             if(count == 1)
                 mNextNewPowerScore = INT_MAX;
             else
-                mNextNewPowerScore += 600;
+                mNextNewPowerScore += (600 * UPGRADE_SCALE);
                 //mNextNewPowerScore += 50;
         }
     }

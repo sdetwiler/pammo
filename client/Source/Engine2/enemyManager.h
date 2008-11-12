@@ -295,6 +295,7 @@ struct EnemyTemplate
 
     uint32_t              mPointValue; // How many points is this enemy worth?
     uint32_t              mMinScore;   // What is the minimum player score to unlock this enemy?
+    uint32_t              mMaxScore;   // What is the maximum player score before this enemy is re-locked. 
     uint32_t              mMaxWaveCount; // Maximum number of this type of enemy per wave.
 
     EnemyBehavior         mBehavior;
@@ -388,7 +389,8 @@ public:
 
     uint32_t createWave(uint32_t pointValue);
     uint32_t mNextWaveScore;
-
+    uint32_t mWaveIncrement;
+    
 protected:
 
 private:

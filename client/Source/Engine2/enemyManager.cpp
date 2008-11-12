@@ -460,10 +460,11 @@ void enemyDamageCb(Enemy* e, ParticleType type, float amount)
 	{
         AudioInstance* instance = gAudioLibrary->getAudioInstance(AUDIO_EXPLOSION);
         if(instance)
+        {
             gAudioLibrary->playAudioInstance(instance, PLAY_ONCE, true);
- 
-        alSource3f(instance->mSource, AL_POSITION, e->mBody->mCenter.x, e->mBody->mCenter.y, 0.0f);    
-        
+            alSource3f(instance->mSource, AL_POSITION, e->mBody->mCenter.x, e->mBody->mCenter.y, 0.0f);    
+        }
+
         gWorld->getParticleSystem()->initExplosionParticle(e->mBody->mCenter+Vector2(5,5));
 		gWorld->getParticleSystem()->initExplosionParticle(e->mBody->mCenter);
 		gWorld->getParticleSystem()->initRubbleParticle(e->mBody->mCenter);
@@ -496,6 +497,7 @@ void enemyPounceAndStalkDamageCb(Enemy* e, ParticleType type, float amount)
 EnemyManager::EnemyManager()
 {
     mNextWaveScore = 0;
+    mWaveIncrement = 500;
 	mAddEnemies = NULL;
 	mRemoveEnemies = NULL;
 	mEnemies = NULL;
@@ -535,6 +537,7 @@ void EnemyManager::addSpawnEvent(SpawnEvent& evt)
 
 bool EnemyManager::loadEnemyTemplate(char const* enemyName)
 {
+    dprintf("%s", enemyName);
     EnemyTemplate* enemyTemplate = new EnemyTemplate;
     
     enemyTemplate->mMinScore = 0;
@@ -833,12 +836,22 @@ void EnemyManager::update()
     // Check if a new wave should be created.
     if(gWorld->getPlayer()->mScore >= mNextWaveScore)
     {
-        uint32_t wavePoints = gWorld->getPlayer()->mScore;
-        if(!wavePoints)
-            wavePoints = 50;
-        wavePoints = createWave(wavePoints);
-        wavePoints -= (wavePoints/4);
-        mNextWaveScore+= wavePoints;
+        uint32_t addedScore = createWave(mWaveIncrement);
+        // createWave failed because no enemies exist. disable future waves.
+        if(addedScore == 0xffffffff)
+            mNextWaveScore = addedScore;
+        else
+        {
+            mNextWaveScore += addedScore;
+         //   mNextWaveScore -= (mNextWaveScore/4); // always give a little room.
+            mWaveIncrement*=1.1f;
+        }
+ //       uint32_t wavePoints = gWorld->getPlayer()->mScore;
+ //       if(wavePoints<50)
+ //           wavePoints = 50;
+ //       wavePoints = createWave(wavePoints);
+ //       wavePoints -= (wavePoints/4);
+ //       mNextWaveScore+= wavePoints;
     }
     
     // Calculate the span of the screen.
@@ -1005,10 +1018,23 @@ uint32_t EnemyManager::createWave(uint32_t pointValue)
     EnemyTemplateCountVector templates;
     for(IntEnemyTemplateMap::iterator i = mEnemyTemplatesByMinScore.begin(); i!=mEnemyTemplatesByMinScore.end(); ++i)
     {
-        if(i->first > gWorld->getPlayer()->mScore)
-            break;
+        dprintf("    %s %d", i->second->mName, i->second->mMinScore, i->second->mMaxScore);
 
-        templates.push_back(EnemyTemplateCount(i->second));
+        // If the enemyTemplate's min score is greater than the current score, done.
+        if(i->first > gWorld->getPlayer()->mScore)
+        {
+            dprintf("      done scanning");
+            break;
+        }
+
+        // If the enemy's max score is larger than the current score, add it as a canidate.
+        if(i->second->mMaxScore > gWorld->getPlayer()->mScore)
+        {
+            dprintf("      added");
+            templates.push_back(EnemyTemplateCount(i->second));
+        }
+        else
+            dprintf("      maxscore is less than curr score");
     }
 
     if(templates.size() == 0)

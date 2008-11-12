@@ -114,7 +114,10 @@ void LightningWeapon::fire()
         gAudioLibrary->playAudioInstance(mAudio, PLAY_FOREVER, false);
     }        
 
-    alSource3f(mAudio->mSource, AL_POSITION, p->mImage.mCenter.x, p->mImage.mCenter.y, 0.0f);
+    if(gAudioLibrary->getAudioEnabled())
+    {
+        alSource3f(mAudio->mSource, AL_POSITION, p->mImage.mCenter.x, p->mImage.mCenter.y, 0.0f);
+    }
 }
 
 void lightningBulletCollisionCallback(Body* self, Body* other, Contact* contact, ContactResponse* response)

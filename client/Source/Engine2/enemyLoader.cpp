@@ -63,9 +63,12 @@ bool EnemyLoader::parseProperties(char* s)
             mTemplate->mPointValue = atol(s);
             break;
         case 7: // Minimum player score to unlock enemy.
-            mTemplate->mMinScore= atol(s);
+            mTemplate->mMinScore = atol(s);
             break;
-        case 8: // Maximum number of instances per wave.
+        case 8: // Maximum player score before re-locking enemy.
+            mTemplate->mMaxScore = atol(s);
+            break;
+        case 9: // Maximum number of instances per wave.
             mTemplate->mMaxWaveCount = atol(s);
             return true;
         }
@@ -848,6 +851,7 @@ Enemy: %s\n\
     Radius:      %.2f\n\
     Point Value: %u\n\
     Min Score:   %u\n\
+    Max Score:   %u\n\
     Max/wave:    %u\n\
   Behavior\n\
     Type:      %s"
@@ -860,6 +864,7 @@ Enemy: %s\n\
     mTemplate->mRadius,
     mTemplate->mPointValue,
     mTemplate->mMinScore,
+    mTemplate->mMaxScore,
     mTemplate->mMaxWaveCount,
     getBehaviorName(mTemplate->mBehavior.mType)
     );

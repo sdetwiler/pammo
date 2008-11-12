@@ -16,6 +16,7 @@ namespace pammo
 #define AUDIO_EXPLOSION               2
 #define AUDIO_FLAMETHROWER            3
 #define AUDIO_LIGHTNINGGUN            4
+#define AUDIO_POWERUP                 5
 
 
 // An audio clip that can be played.

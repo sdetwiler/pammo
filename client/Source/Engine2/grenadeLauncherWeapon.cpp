@@ -99,7 +99,7 @@ void GrenadeLauncherWeapon::fire()
     p->mBody->mBodyCallback = grenadeLauncherBulletCollisionCallback;
     p->mBody->mShapeCallback = NULL;//grenadeLauncherBulletShapeCollisionCallback;
     p->mBody->mDamping = 0;
-    p->mBody->mRadius = 40;
+    p->mBody->mRadius = 50;
     p->mBody->mMass = 10;
     p->mBody->mCenter = p->mImage.mCenter;
     p->mBody->mVelocity = Vector2(velocity, 0) * Transform2::createRotation(initialRotation+r);
@@ -154,13 +154,13 @@ void grenadeLauncherBulletParticleCallback(Particle* p, ParticleSystem* system)
    
     if(distance <= Di*1.8f)
     {
-        dprintf("+");
+//        dprintf("+");
         p->mBody->mProperties = kPlayerBulletCollisionProperties;
         p->mBody->mCollideProperties = kEnemyCollisionProperties;
     }
     else
     {
-        dprintf("-");
+//        dprintf("-");
         p->mBody->mProperties = 0;
         p->mBody->mCollideProperties = 0;
     }
@@ -169,6 +169,14 @@ void grenadeLauncherBulletParticleCallback(Particle* p, ParticleSystem* system)
     if(distance <= Di)
     {
         gWorld->getParticleSystem()->initExplosionParticle(p->mImage.mCenter);
+        AudioInstance* instance = gAudioLibrary->getAudioInstance(AUDIO_EXPLOSION);
+        if(instance)
+        {
+            gAudioLibrary->playAudioInstance(instance, PLAY_ONCE, true);
+            alSource3f(instance->mSource, AL_POSITION, p->mImage.mCenter.x, p->mImage.mCenter.y, 0.0f);    
+        }
+        
+        
         system->removeParticle(particleData->mShadow);
 		system->removeParticle(p);
 		return;

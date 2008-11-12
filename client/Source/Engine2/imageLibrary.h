@@ -129,44 +129,48 @@ struct Image;
 
 #define VEHICLE_KILLERTOP_00                        75
 
+#define VEHICLE_MINELAYER_COUNT               4
 #define VEHICLE_MINELAYER_00                        76
+#define VEHICLE_MINELAYER_01                        77
+#define VEHICLE_MINELAYER_02                        78
+#define VEHICLE_MINELAYER_03                        79
 
-#define VEHICLE_TORPEDO_00                          77
+#define VEHICLE_TORPEDO_00                          80
 
 #define VEHICLE_TREBUCHET_COUNT               9
-#define VEHICLE_TREBUCHET_00                        78
-#define VEHICLE_TREBUCHET_01                        79
-#define VEHICLE_TREBUCHET_02                        80
-#define VEHICLE_TREBUCHET_03                        81
-#define VEHICLE_TREBUCHET_04                        82
-#define VEHICLE_TREBUCHET_05                        83
-#define VEHICLE_TREBUCHET_06                        84
-#define VEHICLE_TREBUCHET_07                        85
-#define VEHICLE_TREBUCHET_08                        86
+#define VEHICLE_TREBUCHET_00                        81
+#define VEHICLE_TREBUCHET_01                        82
+#define VEHICLE_TREBUCHET_02                        83
+#define VEHICLE_TREBUCHET_03                        84
+#define VEHICLE_TREBUCHET_04                        85
+#define VEHICLE_TREBUCHET_05                        86
+#define VEHICLE_TREBUCHET_06                        87
+#define VEHICLE_TREBUCHET_07                        88
+#define VEHICLE_TREBUCHET_08                        89
 
-#define PARTICLE_JETFLAME_00                        87
+#define PARTICLE_JETFLAME_00                        90
 
-#define INTERFACE_BUTTONMASK                        88
+#define INTERFACE_BUTTONMASK                        91
 
-#define POWERUP_LIFE_UPGRADE                        89
+#define POWERUP_LIFE_UPGRADE                        92
 
-#define POWERUP_LIFE_RESTORE                        90
+#define POWERUP_LIFE_RESTORE                        93
 
-#define POWERUP_ENERGY_UPGRADE                      91
+#define POWERUP_ENERGY_UPGRADE                      94
 
-#define POWERUP_ENERGY_RESTORE                      92
+#define POWERUP_ENERGY_RESTORE                      95
 
-#define POWERUP_SHIELD                              93
+#define POWERUP_SHIELD                              96
 
-#define POWERUP_GOO_WEAPON                          94
+#define POWERUP_GOO_WEAPON                          97
 
-#define POWERUP_GRENADE_LAUNCHER_WEAPON             95
+#define POWERUP_GRENADE_LAUNCHER_WEAPON             98
 
-#define INTERFACE_OVERLAY             96
+#define INTERFACE_OVERLAY             99
 
-#define INTERFACE_BAR_METER             97
+#define INTERFACE_BAR_METER             100
 
-#define MAP_PREVIEW              98
+#define MAP_PREVIEW              101
 
 //#define MAP_TILES_X              22
 //#define MAP_TILES_Y              15
@@ -174,7 +178,7 @@ struct Image;
 //#define MAP_TILES_Y              8
 #define MAP_TILES_X              6
 #define MAP_TILES_Y              4
-#define MAP_TILES_BASE           99
+#define MAP_TILES_BASE           102
 
 #define NUM_IMAGES (MAP_TILES_BASE + MAP_TILES_X*MAP_TILES_Y)
 

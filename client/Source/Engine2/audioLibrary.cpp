@@ -12,6 +12,7 @@ AudioClip gAudioClip[] =
     {"audio/explosion00.wav", false, NULL, 0, 0},      // 2
     {"audio/flamethrower01.wav", false, NULL, 0, 0},      // 3
     {"audio/lightningGun.wav", false, NULL, 0, 0},      // 4
+    {"audio/powerup.wav", false, NULL, 0, 0},      // 5
 };
 
 AudioLibrary* gAudioLibrary = NULL;

@@ -15,8 +15,6 @@
 namespace pammo
 {
 
-class GraphicsContext;
-
 class Camera
 {
 	public:

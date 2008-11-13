@@ -157,6 +157,19 @@ void openRawImagePNG(char const* path, RawImage* image)
                                           image->mPixelSize.x * 4, colorSpace, kCGImageAlphaPremultipliedLast);
 	CGContextDrawImage(spriteContext, CGRectMake(0.0, 0.0, image->mSize.x, image->mSize.y), spriteImage);
     
+    // If this is 32bit, undoe the horrors of premultiplied alpha.
+    if(image->mBytesPerPixel == 4)
+    {
+        for(uint32_t i=0; i < image->mPixelSize.x * image->mPixelSize.y; ++i)
+        {
+            uint32_t alpha = image->mPixels[i*4 + 3];
+            if(alpha == 0) continue;
+            image->mPixels[i*4 + 0] = image->mPixels[i*4 + 0] * 255 / alpha;
+            image->mPixels[i*4 + 1] = image->mPixels[i*4 + 1] * 255 / alpha;
+            image->mPixels[i*4 + 2] = image->mPixels[i*4 + 2] * 255 / alpha;
+        }
+    }
+    
     // If this image is only 3 component, we need to downsample.
     if(image->mBytesPerPixel == 3)
     {

@@ -41,7 +41,7 @@ def accumulate(store, name):
 def save(map):
     saveVisuals(map)
     saveOverlays(map)
-    #saveBackdrop(map)
+    saveBackdrop(map)
     saveMinimap(map)
 
 def saveVisuals(map):

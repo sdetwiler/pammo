@@ -12,6 +12,7 @@
 #include "vehicleController.h"
 #include "physics.h"
 #include "minimap.h"
+#include "map.h"
 
 #include "lightningWeapon.h"
 #include "gooWeapon.h"
@@ -277,8 +278,15 @@ void Player::update()
         --mCameraShake;
     }
 
-    gWorld->getCamera()->mCenter = mBody->mCenter + shake;
-    gWorld->getCamera()->makeDirty();
+    // Update camera, clamping to edges of map.
+    Camera* camera = gWorld->getCamera();
+    Vector2 size = gWorld->getMap()->getSize();
+    camera->mCenter = mBody->mCenter + shake;
+    if(camera->mCenter.x - camera->mSize.x/2 < 8) camera->mCenter.x = 8 + camera->mSize.x/2;
+    if(camera->mCenter.y - camera->mSize.y/2 < 8) camera->mCenter.y = 8 + camera->mSize.y/2;
+    if(camera->mCenter.x + camera->mSize.x/2 > size.x) camera->mCenter.x = size.x - camera->mSize.x/2;
+    if(camera->mCenter.y + camera->mSize.y/2 > size.y) camera->mCenter.y = size.y - camera->mSize.y/2;
+    camera->makeDirty();
  
     // Update audio listener position.
     if(gAudioLibrary->getAudioEnabled())

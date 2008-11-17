@@ -22,6 +22,9 @@ public:
 
 private:
     Image* mImages[10];
+    Image* mGlowImage;
+    float mGlowImageScale;
+    float mStep;
     uint32_t mScore;
 };
 

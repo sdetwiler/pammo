@@ -356,8 +356,8 @@ void behaviorPounceAndStalk(Enemy* e, EnemyManager* manager)
         d = magnitude(data->mOrigin - e->mBody->mCenter);
         if(d >= data->mDistance)
         {
-            e->mBody->mCollideProperties = 0;
-            e->mBody->mProperties = 0;
+//            e->mBody->mCollideProperties = 0;
+//            e->mBody->mProperties = 0;
 
             data->mState = PounceAndStalkBehaviorData::RotateToJump;
         }
@@ -378,6 +378,8 @@ void behaviorPounceAndStalk(Enemy* e, EnemyManager* manager)
         {
             data->mJumpStart = getTime();
             data->mOrigin = e->mBody->mCenter;
+            e->mBody->mCollideProperties = 0;
+            e->mBody->mProperties = 0;
             data->mState = PounceAndStalkBehaviorData::Jump;
         }
         break;
@@ -458,7 +460,8 @@ void enemyDamageCb(Enemy* e, ParticleType type, float amount)
 
 	if(e->mHealth <=0)
 	{
-        AudioInstance* instance = gAudioLibrary->getAudioInstance(AUDIO_EXPLOSION);
+        int exp = rand()%AUDIO_EXPLOSION_COUNT;
+        AudioInstance* instance = gAudioLibrary->getAudioInstance(AUDIO_EXPLOSION0+exp);
         if(instance)
         {
             gAudioLibrary->playAudioInstance(instance, PLAY_ONCE, true);
@@ -844,7 +847,7 @@ void EnemyManager::update()
         {
             mNextWaveScore += addedScore;
          //   mNextWaveScore -= (mNextWaveScore/4); // always give a little room.
-            mWaveIncrement*=1.1f;
+            mWaveIncrement*=1.15f;
         }
  //       uint32_t wavePoints = gWorld->getPlayer()->mScore;
  //       if(wavePoints<50)

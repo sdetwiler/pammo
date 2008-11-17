@@ -19,7 +19,7 @@ class LightningWeapon : public Weapon
         
         virtual void fire();
     
-        static uint32_t mParticleCount;
+        uint32_t mParticleCount;
         AudioInstance* mAudio;
 };
 

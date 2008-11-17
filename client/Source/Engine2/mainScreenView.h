@@ -33,11 +33,15 @@ public:
 private:
     //void selectVehicle(uint32_t type);
     
-    Image* mBackground;
+    Image* mBackground0;
+    Image* mBackground1;
+    Image* mBackground2;
+    
     Image* mButtonMask;
 
     AudioInstance* mAudio;
 
+    float mCloudAlpha;
     float mPreloadPercent;
     bool mImagePreloadComplete;
     bool mAudioPreloadComplete;

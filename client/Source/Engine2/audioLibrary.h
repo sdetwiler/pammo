@@ -13,10 +13,21 @@ namespace pammo
 
 #define AUDIO_BACKGROUND_INTRO        (uint32_t)0
 #define AUDIO_BACKGROUND_INGAME       1
-#define AUDIO_EXPLOSION               2
-#define AUDIO_FLAMETHROWER            3
-#define AUDIO_LIGHTNINGGUN            4
-#define AUDIO_POWERUP                 5
+
+#define AUDIO_EXPLOSION_COUNT    4
+#define AUDIO_EXPLOSION0              2
+#define AUDIO_EXPLOSION1              3
+#define AUDIO_EXPLOSION2              4
+#define AUDIO_EXPLOSION3              5
+
+#define AUDIO_FLAMETHROWER            6
+#define AUDIO_LIGHTNINGGUN            7
+#define AUDIO_GOOGUN                  8
+#define AUDIO_POWERUP                 9
+#define AUDIO_MACHINEGUN              10
+#define AUDIO_MACHINEGUNEND           11
+#define AUDIO_ROCKETLAUNCHER          12
+#define AUDIO_CLINK                   13
 
 
 // An audio clip that can be played.
@@ -136,13 +147,13 @@ private:
     void reclaimBuffers(AudioInstance* instance);
 
     // AudioBuffers.
-    static const uint32_t kAudioBufferQueueSize = 128;
+    static const uint32_t kAudioBufferQueueSize = 256;
     AudioBuffer  mAudioBuffers[kAudioBufferQueueSize];
     AudioBuffer* mAudioBuffersFree;
     AudioBuffer* mAudioBuffersToReturn;
 
     // AudioIntances.
-    static const uint32_t kAudioInstanceQueueSize = 32;
+    static const uint32_t kAudioInstanceQueueSize = 64;
     AudioInstance  mAudioInstances[kAudioInstanceQueueSize];
     AudioInstance* mAudioInstancesFree;
 

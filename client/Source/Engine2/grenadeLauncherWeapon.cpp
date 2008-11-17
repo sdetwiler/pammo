@@ -169,7 +169,7 @@ void grenadeLauncherBulletParticleCallback(Particle* p, ParticleSystem* system)
     if(distance <= Di)
     {
         gWorld->getParticleSystem()->initExplosionParticle(p->mImage.mCenter);
-        AudioInstance* instance = gAudioLibrary->getAudioInstance(AUDIO_EXPLOSION);
+        AudioInstance* instance = gAudioLibrary->getAudioInstance(AUDIO_EXPLOSION1);
         if(instance)
         {
             gAudioLibrary->playAudioInstance(instance, PLAY_ONCE, true);

@@ -17,7 +17,6 @@ void lightningBulletParticleCallback(Particle* p, ParticleSystem* system);
 void lightningBulletFadeParticleCallback(Particle* p, ParticleSystem* system);
 void lightningGlowParticleCallback(Particle* p, ParticleSystem* system);
 
-uint32_t LightningWeapon::mParticleCount = 0;
     
 struct LightningWeaponParticleData
 {
@@ -28,6 +27,7 @@ struct LightningWeaponParticleData
 LightningWeapon::LightningWeapon()
     : Weapon()
 {
+    mParticleCount = 0;
     mAudio = gAudioLibrary->getAudioInstance(AUDIO_LIGHTNINGGUN);
     mIcon.setImage(gImageLibrary->getImage(INTERFACE_ICON_WEAPON_LIGHTNINGGUN));
 }

@@ -149,6 +149,14 @@ void enemyWeaponHeatSeakerCb(Enemy* e, EnemyWeapon* w, EnemyManager* manager)
     p->mBody->mVelocity = e->mBody->mVelocity + p->mVelocity * Transform2::createRotation(p->mImage.mRotation);
     p->mStartPosition = p->mBody->mCenter;
     p->mMaxDistance = data->mMaxDistance;
+    
+    AudioInstance* instance = gAudioLibrary->getAudioInstance(AUDIO_ROCKETLAUNCHER);
+    if(instance)
+    {
+        gAudioLibrary->playAudioInstance(instance, PLAY_ONCE, true);
+        alSource3f(instance->mSource, AL_POSITION, e->mBody->mCenter.x, e->mBody->mCenter.y, 0.0f);    
+    }
+    
 }
 
 } // namespace pammo

@@ -90,6 +90,18 @@ void enemyWeaponMachineGunCb(Enemy* e, EnemyWeapon* w, EnemyManager* manager)
     p->mBody->mVelocity = e->mBody->mVelocity + Vector2(300, 0) * Transform2::createRotation(p->mImage.mRotation);
     p->mStartPosition = p->mBody->mCenter;
     p->mMaxDistance = data->mMaxDistance;
+
+    // I feel guilty...
+    if(!rand()%4)
+    {
+        AudioInstance* instance = gAudioLibrary->getAudioInstance(AUDIO_MACHINEGUN);
+        if(instance)
+        {
+            gAudioLibrary->playAudioInstance(instance, PLAY_ONCE, true);
+            alSource3f(instance->mSource, AL_POSITION, e->mBody->mCenter.x, e->mBody->mCenter.y, 0.0f);    
+        }
+    }
+    
 }
 
 } // namespace pammo

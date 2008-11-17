@@ -25,6 +25,8 @@ public:
 
 private:
     
+    uint32_t mStage;
+    
     Image* mBackground;
 };
   

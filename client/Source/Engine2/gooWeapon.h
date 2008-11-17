@@ -18,6 +18,10 @@ class GooWeapon : public Weapon
         virtual void deselect();
         
         virtual void fire();
+
+        uint32_t mParticleCount;
+        AudioInstance* mAudio;
+    
 };
 
 }

@@ -10,9 +10,18 @@ AudioClip gAudioClip[] =
     {"audio/intro.wav", false, NULL, 0, 0},      // 0
     {"audio/background.wav", false, NULL, 0, 0},       // 1
     {"audio/explosion00.wav", false, NULL, 0, 0},      // 2
-    {"audio/flamethrower01.wav", false, NULL, 0, 0},      // 3
-    {"audio/lightningGun.wav", false, NULL, 0, 0},      // 4
-    {"audio/powerup.wav", false, NULL, 0, 0},      // 5
+    {"audio/explosion01.wav", false, NULL, 0, 0},      // 3
+    {"audio/explosion02.wav", false, NULL, 0, 0},      // 4
+    {"audio/explosion03.wav", false, NULL, 0, 0},      // 5
+    {"audio/flamethrower01.wav", false, NULL, 0, 0},      // 6
+    {"audio/lightningGun.wav", false, NULL, 0, 0},      // 7
+    {"audio/gooGun.wav", false, NULL, 0, 0},      // 8
+    {"audio/powerup.wav", false, NULL, 0, 0},      // 9
+    {"audio/machineGun.wav", false, NULL, 0, 0},      // 10
+    {"audio/machineGunEnd.wav", false, NULL, 0, 0},      // 11
+    {"audio/rocketauncher.wav", false, NULL, 0, 0},      // 12
+    {"audio/clink.wav", false, NULL, 0, 0},      // 13
+    
 };
 
 AudioLibrary* gAudioLibrary = NULL;
@@ -411,12 +420,12 @@ void AudioLibrary::update()
         if(currActive->mState == AudioInstance::ReadyToPlay || currActive->mState == AudioInstance::Playing)
         {
             // End of stream case.
-            if(currActive->mState == AudioInstance::Playing && currActive->mBuffersHead == NULL)        
+            if(currActive->mState == AudioInstance::Playing && currActive->mBuffersHead == NULL && !currActive->mPlaysRemain)
             {
                 // Set to be removed when done playing?
                 if(currActive->mAutoRemove)
                 {
-                    //                    dprintf("%d pushing to delete stack", currActive->mSource);
+                                        dprintf("%d pushing to delete stack", currActive->mSource);
                     // Push onto toDelete stack.
                     currActive->mDeleteNext = mAudioInstanceToDelete;
                     mAudioInstanceToDelete = currActive;

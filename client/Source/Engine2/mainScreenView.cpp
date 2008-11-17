@@ -16,6 +16,7 @@ namespace pammo
 MainScreenView::MainScreenView()
     : View()
 {
+    mCloudAlpha = 0;
     mAudio = gAudioLibrary->getAudioInstance(AUDIO_BACKGROUND_INTRO);
     gAudioLibrary->playAudioInstance(mAudio, PLAY_FOREVER, false);
     //gMainScreenView = this;
@@ -24,7 +25,9 @@ MainScreenView::MainScreenView()
     mImagePreloadComplete = false;
     gImageLibrary->setObserver(this);
     gAudioLibrary->setObserver(this);
-    mBackground = gImageLibrary->getImage(INTERFACE_BACKGROUND_MAIN);
+    mBackground0 = gImageLibrary->getImage(INTERFACE_BACKGROUND_MAIN0);
+    mBackground1 = gImageLibrary->getImage(INTERFACE_BACKGROUND_MAIN1);
+    mBackground2 = gImageLibrary->getImage(INTERFACE_BACKGROUND_MAIN2);
     mButtonMask = gImageLibrary->getImage(INTERFACE_BUTTONMASK);
 }
 
@@ -33,7 +36,9 @@ MainScreenView::~MainScreenView()
     gAudioLibrary->stopAudioInstance(mAudio);
     gAudioLibrary->closeAudioInstance(mAudio);
     gImageLibrary->setObserver(NULL);
-    gImageLibrary->purgeImage(mBackground);
+    gImageLibrary->purgeImage(mBackground0);
+    gImageLibrary->purgeImage(mBackground1);
+    gImageLibrary->purgeImage(mBackground2);
     gImageLibrary->purgeImage(mButtonMask);
 }
     
@@ -54,6 +59,8 @@ uint32_t MainScreenView::getUpdatePriority() const
 
 void MainScreenView::update()
 {
+  if(mCloudAlpha < 1.0)
+      mCloudAlpha+=.02;
     //if(!gWorld)
     //{
     //    new World;
@@ -75,9 +82,14 @@ void MainScreenView::onImagePreloadComplete()
 
 void MainScreenView::draw()
 {
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	glClear(GL_COLOR_BUFFER_BIT);
+    
     //Transform2 trans = Transform2::createScale(mBackground->mSize);
-    Transform2 trans = Transform2::createScale(Vector2(mBackground->mSize.y, mBackground->mSize.x)) * Transform2::createTranslation(Vector2(0.5, 0.5)) * Transform2::createRotation(-M_PI/2) * Transform2::createTranslation(Vector2(-0.5, -0.5));
-    drawImage(mBackground, trans, 1);
+    Transform2 trans = Transform2::createScale(Vector2(mBackground0->mSize.y, mBackground0->mSize.x)) * Transform2::createTranslation(Vector2(0.5, 0.5)) * Transform2::createRotation(-M_PI/2) * Transform2::createTranslation(Vector2(-0.5, -0.5));
+    drawImage(mBackground0, trans, mCloudAlpha); // clouds
+    drawImage(mBackground1, trans, 1); // arch
+    drawImage(mBackground2, trans, 1); // console
 
     if(mAudioPreloadComplete && mImagePreloadComplete)
     {

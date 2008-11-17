@@ -408,6 +408,10 @@ void updateAudio_platform(AudioInstance* instance)
         
         b->mNext = NULL;
     }
+    else
+    {
+        dprintf("numbytes is zero!");
+    }
     
     
     ALint state;

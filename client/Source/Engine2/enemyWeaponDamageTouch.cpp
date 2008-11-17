@@ -4,6 +4,7 @@
 #include "imageLibrary.h"
 #include "enemyManager.h"
 #include "enemyWeaponDamageTouch.h"
+#include "audioLibrary.h"
 
 namespace pammo
 {
@@ -26,6 +27,13 @@ void enemyWeaponDamageTouchCollisionCb(Body* self, Body* other, Contact* contact
                 e->mController.mAcceleration = e->mController.mAcceleration * -10.0f;
 
                 gWorld->getParticleSystem()->initSmokeParticle(e->mBody->mCenter, 0, Vector2(1.0f, 0));
+                AudioInstance* instance = gAudioLibrary->getAudioInstance(AUDIO_CLINK);
+                if(instance)
+                {
+                    gAudioLibrary->playAudioInstance(instance, PLAY_ONCE, true);
+                    alSource3f(instance->mSource, AL_POSITION, self->mCenter.x, self->mCenter.y, 0.0f);    
+                }
+                
 
                 gWorld->getPlayer()->damage(Vehicle, (float)data->mDamage); 
                 //e->mDamageCb(e, Vehicle, 100.0f);

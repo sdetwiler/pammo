@@ -10,9 +10,10 @@ namespace pammo
 TutorialScreenView::TutorialScreenView()
     : View()
 {
+    mStage = 0;
 //    gTutorialScreenView = this;
     // Load background.
-    mBackground = gImageLibrary->getImage(INTERFACE_BACKGROUND_TUTORIAL);
+    mBackground = gImageLibrary->getImage(INTERFACE_BACKGROUND_TUTORIAL0);
 }
 
 TutorialScreenView::~TutorialScreenView()
@@ -54,9 +55,21 @@ bool TutorialScreenView::touch(uint32_t count, Touch* touches)
     if(touches[0].mPhase != Touch::PhaseEnd)
         return false;
     
-    destroy();
-    new MainScreenView;
-
+    ++mStage;
+    switch(mStage)
+    {
+        case 1:
+            gImageLibrary->purgeImage(mBackground);
+            mBackground = gImageLibrary->getImage(INTERFACE_BACKGROUND_TUTORIAL1);
+            break;
+        case 2:
+            gImageLibrary->purgeImage(mBackground);
+            mBackground = gImageLibrary->getImage(INTERFACE_BACKGROUND_TUTORIAL2);
+            break;
+        default:
+            destroy();
+            new MainScreenView;
+    }
     return true;
 }
 

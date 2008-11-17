@@ -21,6 +21,8 @@ void gooSprayParticleCallback(Particle* p, ParticleSystem* system);
 GooWeapon::GooWeapon()
     : Weapon()
 {
+    mParticleCount = 0;
+    mAudio = gAudioLibrary->getAudioInstance(AUDIO_GOOGUN);
     mIcon.setImage(gImageLibrary->getImage(INTERFACE_ICON_WEAPON_GOO));
 }
 
@@ -51,6 +53,7 @@ struct GooParticleData
     float mRotateDirection;
     float mAlphaVelocity;
     float mSizeFactor;
+    GooWeapon* mWeapon;
 };
 
 void GooWeapon::fire()
@@ -68,6 +71,7 @@ void GooWeapon::fire()
     
     // Set particle properties.
     GooParticleData* particleData = (GooParticleData*)p->mData;
+    particleData->mWeapon = this;
     particleData->mSize = 0.4;
     particleData->mAlphaVelocity = 0.3;
     particleData->mSizeFactor = 1.2;
@@ -101,19 +105,18 @@ void GooWeapon::fire()
     p->mBody->mCenter = p->mImage.mCenter;
     p->mBody->mVelocity = player->mBody->mVelocity + Vector2(velocity, 0) * Transform2::createRotation(p->mImage.mRotation);
 
-    // Nozzle spray.
-    //p = gWorld->getParticleSystem()->addParticle(2, false);
-    //if(!p) 
-    //    return;
-	//p->mImage.setImage(gImageLibrary->getImage(PARTICLE_GOO_00 + rand()%PARTICLE_GOO_COUNT));
-    //p->mImage.mSize *= 0.5f;
-    //p->mImage.mCenter = player->mTurretTip + Vector2(4, 0) * Transform2::createRotation(initialRotation+r);
-    //p->mImage.mRotation = initialRotation + r;
-    //p->mAlpha = 1.0f;
-    //p->mImage.makeDirty();
-    //p->mVelocity =  Vector2(velocity+10.0f, 0) * Transform2::createRotation(initialRotation+r);
-    //p->mCallback = gooSprayParticleCallback;
-
+    ++mParticleCount;
+    if(mParticleCount == 1)
+    {
+        gAudioLibrary->playAudioInstance(mAudio, PLAY_FOREVER, false);
+    }        
+    
+    if(gAudioLibrary->getAudioEnabled())
+    {
+        alSource3f(mAudio->mSource, AL_POSITION, p->mImage.mCenter.x, p->mImage.mCenter.y, 0.0f);
+    }
+    
+    
 }
 
 void gooBulletCollisionCallback(Body* self, Body* other, Contact* contact, ContactResponse* response)
@@ -173,6 +176,13 @@ void gooBulletParticleCallback(Particle* p, ParticleSystem* system)
                 data->mAlphaVelocity = -0.01;
                 data->mSizeFactor = (1.005 + ((float)(rand()%100)/10000.0f));
                 p->mBody->mDamping = 0.3;
+                
+                --data->mWeapon->mParticleCount;
+                if(data->mWeapon->mParticleCount == 0)
+                {
+                    gAudioLibrary->stopAudioInstance(data->mWeapon->mAudio);
+                }            
+                
                 
                 data->mMode = GooParticleData::kModeExpanding;
             }

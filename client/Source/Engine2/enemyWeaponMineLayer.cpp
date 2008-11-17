@@ -20,6 +20,13 @@ void enemyWeaponMineLayerMineParticleCb(Particle* p, ParticleSystem* system)
     if(data->mExpireTime <= now)
     {
         gWorld->getParticleSystem()->initExplosionParticle(p->mBody->mCenter);
+        AudioInstance* instance = gAudioLibrary->getAudioInstance(AUDIO_EXPLOSION1);
+        if(instance)
+        {
+            gAudioLibrary->playAudioInstance(instance, PLAY_ONCE, true);
+            alSource3f(instance->mSource, AL_POSITION, p->mImage.mCenter.x, p->mImage.mCenter.y, 0.0f);    
+        }
+        
         gWorld->getParticleSystem()->removeParticle(p);
     }
 }

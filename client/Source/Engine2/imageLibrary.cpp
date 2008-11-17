@@ -16,8 +16,8 @@ ImageTexture gImagePath[NUM_IMAGES] =
     {"interface/iconShieldEnable.png", NULL, false, true},           // 4
     {"interface/iconShieldDisable.png", NULL, false, true},           // 5
 
-    {"../Default.png", NULL, false, false},        // 6
-    {"interface/backgroundTutorial.png", NULL, false, false},          // 7
+    {"interface/backgroundMain0.png", NULL, false, false},        // 6
+    {"interface/backgroundTutorial0.png", NULL, false, false},         // 7
     {"interface/backgroundCredits.png", NULL, false, false},           // 8
 
     {"interface/minimap.png", NULL, false, true},            // 9
@@ -140,9 +140,16 @@ ImageTexture gImagePath[NUM_IMAGES] =
     {"particles/powerupGrenadeLauncherWeapon.png", NULL, false, true},    // 98
     
     {"interface/frame.png", NULL, false, true},    // 99
-    {"interface/barMeter.png", NULL, false, true},    // 100
+    {"interface/scoreGlow.png", NULL, false, true},    // 100
     
-    {PAMMO_MAP_PREVIEW_PATH, NULL, false, true},    // 101
+    {"interface/barMeter.png", NULL, false, true},    // 101
+    {"interface/backgroundTutorial1.png", NULL, false, false},          // 102
+    {"interface/backgroundTutorial2.png", NULL, false, false},          // 103
+
+    {"interface/backgroundMain1.png", NULL, false, false},          // 104
+    {"interface/backgroundMain2.png", NULL, false, false},          // 105
+   
+    {PAMMO_MAP_PREVIEW_PATH, NULL, false, true},    // 106
     
     #if 0
     // Alloc a bunch of empty entries, 6 x 4.
@@ -367,6 +374,7 @@ void ImageLibrary::createImage(uint32_t id, RawImage* raw)
             mode = PAMMO_GL_8BIT_RGBA;
             break;
         default:
+            dprintf("WTF: %d",raw->mBytesPerPixel);
             assert(0);
     }
     

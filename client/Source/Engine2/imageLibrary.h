@@ -20,8 +20,8 @@ struct Image;
 #define INTERFACE_ICON_SHELD_ENABLE                 4
 #define INTERFACE_ICON_SHELD_DISABLE                5
 
-#define INTERFACE_BACKGROUND_MAIN                   6
-#define INTERFACE_BACKGROUND_TUTORIAL               7
+#define INTERFACE_BACKGROUND_MAIN0                  6
+#define INTERFACE_BACKGROUND_TUTORIAL0              7
 #define INTERFACE_BACKGROUND_CREDITS                8
 
 #define INTERFACE_MINIMAP                9
@@ -166,11 +166,17 @@ struct Image;
 
 #define POWERUP_GRENADE_LAUNCHER_WEAPON             98
 
-#define INTERFACE_OVERLAY             99
+#define INTERFACE_OVERLAY                           99
+#define INTERFACE_SCOREGLOW                         100
+#define INTERFACE_BAR_METER                         101
 
-#define INTERFACE_BAR_METER             100
+#define INTERFACE_BACKGROUND_TUTORIAL1              102
+#define INTERFACE_BACKGROUND_TUTORIAL2              103
+#define INTERFACE_BACKGROUND_MAIN1                  104
+#define INTERFACE_BACKGROUND_MAIN2                  105
+    
 
-#define MAP_PREVIEW              101
+#define MAP_PREVIEW                                 106
 
 //#define MAP_TILES_X              22
 //#define MAP_TILES_Y              15
@@ -178,7 +184,7 @@ struct Image;
 //#define MAP_TILES_Y              8
 #define MAP_TILES_X              6
 #define MAP_TILES_Y              4
-#define MAP_TILES_BASE           102
+#define MAP_TILES_BASE           107
 
 #define NUM_IMAGES (MAP_TILES_BASE + MAP_TILES_X*MAP_TILES_Y)
 

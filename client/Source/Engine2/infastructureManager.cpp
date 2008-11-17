@@ -6,7 +6,7 @@
 #include "physics.h"
 #include "minimap.h"
 
-#define UPGRADE_SCALE 5
+#define UPGRADE_SCALE 1.5f
 namespace pammo
 {
 
@@ -64,7 +64,7 @@ void InfastructureManager::update()
             if(count == 1)
                 mNextNewPowerScore = INT_MAX;
             else
-                mNextNewPowerScore += (600 * UPGRADE_SCALE);
+                mNextNewPowerScore += (mNextNewPowerScore * UPGRADE_SCALE);
                 //mNextNewPowerScore += 50;
         }
     }
@@ -79,7 +79,7 @@ void InfastructureManager::update()
             type = kPowerupLifeUpgrade;
             
         if(createPowerup(type))
-            mNextUpgradeScore += 1000;
+            mNextUpgradeScore += (mNextUpgradeScore*UPGRADE_SCALE);
     }
     
     if(score >= mNextRestoreScore)
@@ -92,7 +92,7 @@ void InfastructureManager::update()
             type = kPowerupLifeRestore;
             
         if(createPowerup(type))
-            mNextRestoreScore += 1000;
+            mNextRestoreScore += (mNextRestoreScore*UPGRADE_SCALE);
     }
 }
 

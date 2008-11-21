@@ -89,7 +89,7 @@ void enemyWeaponMineLayerCb(Enemy* e, EnemyWeapon* w, EnemyManager* manager)
     p->mBody->mCenter = e->mEntity.mCenter;
 
     // Setup image.
-    p->mImage.setImage(gImageLibrary->getImage(PARTICLE_MINE));
+    p->mImage.setImage(gImageLibrary->getImage(PARTICLE_MINE_00));
     p->mImage.mAlpha = 1.0f;
     p->mImage.mCenter = p->mBody->mCenter;
     p->mImage.makeDirty();

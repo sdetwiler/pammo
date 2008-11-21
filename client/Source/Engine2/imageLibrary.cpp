@@ -41,115 +41,119 @@ ImageTexture gImagePath[NUM_IMAGES] =
     {"vehicles/tank/00.png", NULL, false, true},                      // 24
     {"vehicles/tank/01.png", NULL, false, true},                      // 25
     {"vehicles/tank/02.png", NULL, false, true},                      // 26
-    {"vehicles/tank/turret/00.png", NULL, false, true},               // 27
+    {"vehicles/tank/03.png", NULL, false, true},                      // 27
+    {"vehicles/tank/04.png", NULL, false, true},                      // 28
+    {"vehicles/tank/05.png", NULL, false, true},                      // 29
+    {"vehicles/tank/turret/00.png", NULL, false, true},               // 30
 
-    {"fonts/caslonAntique/0.png", NULL, false, true},                 // 28
-    {"fonts/caslonAntique/1.png", NULL, false, true},                 // 29
-    {"fonts/caslonAntique/2.png", NULL, false, true},                 // 30
-    {"fonts/caslonAntique/3.png", NULL, false, true},                 // 31
-    {"fonts/caslonAntique/4.png", NULL, false, true},                 // 32
-    {"fonts/caslonAntique/5.png", NULL, false, true},                 // 33
-    {"fonts/caslonAntique/6.png", NULL, false, true},                 // 34
-    {"fonts/caslonAntique/7.png", NULL, false, true},                 // 35
-    {"fonts/caslonAntique/8.png", NULL, false, true},                 // 36
-    {"fonts/caslonAntique/9.png", NULL, false, true},                 // 37
+    {"fonts/caslonAntique/0.png", NULL, false, true},                 // 31
+    {"fonts/caslonAntique/1.png", NULL, false, true},                 // 32
+    {"fonts/caslonAntique/2.png", NULL, false, true},                 // 33
+    {"fonts/caslonAntique/3.png", NULL, false, true},                 // 34
+    {"fonts/caslonAntique/4.png", NULL, false, true},                 // 35
+    {"fonts/caslonAntique/5.png", NULL, false, true},                 // 36
+    {"fonts/caslonAntique/6.png", NULL, false, true},                 // 37
+    {"fonts/caslonAntique/7.png", NULL, false, true},                 // 38
+    {"fonts/caslonAntique/8.png", NULL, false, true},                 // 39
+    {"fonts/caslonAntique/9.png", NULL, false, true},                 // 40
 
-    {"particles/flame/00.png", NULL, false, true},                    // 38
+    {"particles/flame/00.png", NULL, false, true},                    // 41
 
-    {"particles/heatSeaker/00.png", NULL, false, true},               // 39
-    {"particles/heatSeaker/tail/00.png", NULL, false, true},          // 40
+    {"particles/heatSeaker/00.png", NULL, false, true},               // 42
+    {"particles/heatSeaker/tail/00.png", NULL, false, true},          // 43
 
-    {"particles/mine.png", NULL, false, true},                        // 41
+    {"particles/mine00.png", NULL, false, true},                      // 44
+    {"particles/mine01.png", NULL, false, true},                      // 45
 
-    {"particles/ball.png", NULL, false, true},                        // 42
-    {"particles/shadow/00.png", NULL, false, true},                      // 43
+    {"particles/ball.png", NULL, false, true},                        // 46
+    {"particles/shadow/00.png", NULL, false, true},                   // 47
 
-    {"particles/machineGun/00.png", NULL, false, true},               // 44
-    {"particles/machineGun/01.png", NULL, false, true},               // 45
-    {"particles/machineGun/02.png", NULL, false, true},               // 46
+    {"particles/machineGun/00.png", NULL, false, true},               // 48
+    {"particles/machineGun/01.png", NULL, false, true},               // 49
+    {"particles/machineGun/02.png", NULL, false, true},               // 50
 
-    {"particles/goo/00.png", NULL, false, true},                      // 47
-    {"particles/goo/01.png", NULL, false, true},                      // 48
-    {"particles/goo/02.png", NULL, false, true},                      // 49
+    {"particles/goo/00.png", NULL, false, true},                      // 51
+    {"particles/goo/01.png", NULL, false, true},                      // 52
+    {"particles/goo/02.png", NULL, false, true},                      // 53
 
-    {"particles/smoke/00.png", NULL, false, true},                    // 50
+    {"particles/smoke/00.png", NULL, false, true},                    // 54
 
-    {"particles/dust/00.png", NULL, false, true},                     // 51
+    {"particles/dust/00.png", NULL, false, true},                     // 55
 
-    {"particles/rubble/00.png", NULL, false, true},                   // 52
+    {"particles/rubble/00.png", NULL, false, true},                   // 56
 
-    {"particles/lightningGlow/00.png", NULL, false, true},            // 53
+    {"particles/lightningGlow/00.png", NULL, false, true},            // 57
 
-    {"particles/lightning/00.png", NULL, false, true},                // 54
-    {"particles/lightning/01.png", NULL, false, true},                // 55
-    {"particles/lightning/02.png", NULL, false, true},                // 56
+    {"particles/lightning/00.png", NULL, false, true},                // 58
+    {"particles/lightning/01.png", NULL, false, true},                // 59
+    {"particles/lightning/02.png", NULL, false, true},                // 60
 
-    {"particles/grenade/00.png", NULL, false, true},                  // 57
+    {"particles/grenade/00.png", NULL, false, true},                  // 61
 
-    {"particles/explosion/00.png", NULL, false, true},                // 58
-    {"particles/explosion/01.png", NULL, false, true},                // 59
+    {"particles/explosion/00.png", NULL, false, true},                // 62
+    {"particles/explosion/01.png", NULL, false, true},                // 63
 
-    {"particles/shield/00.png", NULL, false, true},                   // 60
-    {"particles/shield/01.png", NULL, false, true},                   // 61
-    {"particles/shield/02.png", NULL, false, true},                   // 62
-
-    {"particles/fakeWeapon.png", NULL, false, true},                  // 63
-
-    {"vehicles/bigBoy/00.png", NULL, false, true},                    // 64
-    {"vehicles/bigBoy/01.png", NULL, false, true},                    // 65
-    {"vehicles/bigBoy/02.png", NULL, false, true},                    // 66
-    {"vehicles/bigBoy/03.png", NULL, false, true},                    // 67
-    {"vehicles/bigBoy/04.png", NULL, false, true},                    // 68
-
-    {"vehicles/flameTank/00.png", NULL, false, true},                 // 69
-    {"vehicles/flameTank/01.png", NULL, false, true},                 // 70
-    {"vehicles/flameTank/02.png", NULL, false, true},                 // 71
-    {"vehicles/flameTank/03.png", NULL, false, true},                 // 72
-    {"vehicles/flameTank/04.png", NULL, false, true},                 // 73
-    {"vehicles/flameTank/turret/00.png", NULL, false, true},          // 74
-
-    {"vehicles/killerTop/00.png", NULL, false, true},                 // 75
-
-    {"vehicles/mineLayer/00.png", NULL, false, true},                 // 76
-    {"vehicles/mineLayer/01.png", NULL, false, true},                 // 77
-    {"vehicles/mineLayer/02.png", NULL, false, true},                 // 78
-    {"vehicles/mineLayer/03.png", NULL, false, true},                 // 79
-
-    {"vehicles/torpedo/00.png", NULL, false, true},                   // 80
-
-    {"vehicles/trebuchet/00.png", NULL, false, true},                 // 81
-    {"vehicles/trebuchet/01.png", NULL, false, true},                 // 82
-    {"vehicles/trebuchet/02.png", NULL, false, true},                 // 83
-    {"vehicles/trebuchet/03.png", NULL, false, true},                 // 84
-    {"vehicles/trebuchet/04.png", NULL, false, true},                 // 85
-    {"vehicles/trebuchet/05.png", NULL, false, true},                 // 86
-    {"vehicles/trebuchet/06.png", NULL, false, true},                 // 87
-    {"vehicles/trebuchet/07.png", NULL, false, true},                 // 88
-    {"vehicles/trebuchet/08.png", NULL, false, true},                 // 89
-
-    {"particles/jetFlame/00.png", NULL, false, true},                 // 90
-
-    {"interface/buttonMask.png", NULL, false, true},                  // 91
+    {"particles/shield/00.png", NULL, false, true},                   // 64
+    {"particles/shield/01.png", NULL, false, true},                   // 65
+    {"particles/shield/02.png", NULL, false, true},                   // 66
     
-    {"particles/powerupLifeUpgrade.png", NULL, false, true},              // 92
-    {"particles/powerupLifeRestore.png", NULL, false, true},              // 93
-    {"particles/powerupEnergyUpgrade.png", NULL, false, true},            // 94
-    {"particles/powerupEnergyRestore.png", NULL, false, true},            // 95
-    {"particles/powerupShield.png", NULL, false, true},                   // 96
-    {"particles/powerupGooWeapon.png", NULL, false, true},                // 97
-    {"particles/powerupGrenadeLauncherWeapon.png", NULL, false, true},    // 98
-    
-    {"interface/frame.png", NULL, false, true},    // 99
-    {"interface/scoreGlow.png", NULL, false, true},    // 100
-    
-    {"interface/barMeter.png", NULL, false, true},    // 101
-    {"interface/backgroundTutorial1.png", NULL, false, false},          // 102
-    {"interface/backgroundTutorial2.png", NULL, false, false},          // 103
+    {"particles/fakeWeapon.png", NULL, false, true},                  // 67
 
-    {"interface/backgroundMain1.png", NULL, false, false},          // 104
-    {"interface/backgroundMain2.png", NULL, false, false},          // 105
+    {"vehicles/bigBoy/00.png", NULL, false, true},                    // 68
+    {"vehicles/bigBoy/01.png", NULL, false, true},                    // 69
+    {"vehicles/bigBoy/02.png", NULL, false, true},                    // 70
+    {"vehicles/bigBoy/03.png", NULL, false, true},                    // 71
+    {"vehicles/bigBoy/04.png", NULL, false, true},                    // 72
+
+    {"vehicles/flameTank/00.png", NULL, false, true},                 // 73
+    {"vehicles/flameTank/01.png", NULL, false, true},                 // 74
+    {"vehicles/flameTank/02.png", NULL, false, true},                 // 75
+    {"vehicles/flameTank/03.png", NULL, false, true},                 // 76
+    {"vehicles/flameTank/04.png", NULL, false, true},                 // 77
+    {"vehicles/flameTank/turret/00.png", NULL, false, true},          // 78
+
+    {"vehicles/killerTop/00.png", NULL, false, true},                 // 79
+
+    {"vehicles/mineLayer/00.png", NULL, false, true},                 // 80
+    {"vehicles/mineLayer/01.png", NULL, false, true},                 // 81
+    {"vehicles/mineLayer/02.png", NULL, false, true},                 // 82
+    {"vehicles/mineLayer/03.png", NULL, false, true},                 // 83
+
+    {"vehicles/torpedo/00.png", NULL, false, true},                   // 84
+
+    {"vehicles/trebuchet/00.png", NULL, false, true},                 // 85
+    {"vehicles/trebuchet/01.png", NULL, false, true},                 // 86
+    {"vehicles/trebuchet/02.png", NULL, false, true},                 // 87
+    {"vehicles/trebuchet/03.png", NULL, false, true},                 // 88
+    {"vehicles/trebuchet/04.png", NULL, false, true},                 // 89
+    {"vehicles/trebuchet/05.png", NULL, false, true},                 // 90
+    {"vehicles/trebuchet/06.png", NULL, false, true},                 // 91
+    {"vehicles/trebuchet/07.png", NULL, false, true},                 // 92
+    {"vehicles/trebuchet/08.png", NULL, false, true},                 // 93
+
+    {"particles/jetFlame/00.png", NULL, false, true},                 // 94
+
+    {"interface/buttonMask.png", NULL, false, true},                  // 95
+    
+    {"particles/powerupLifeUpgrade.png", NULL, false, true},              // 96
+    {"particles/powerupLifeRestore.png", NULL, false, true},              // 97
+    {"particles/powerupEnergyUpgrade.png", NULL, false, true},            // 98
+    {"particles/powerupEnergyRestore.png", NULL, false, true},            // 99
+    {"particles/powerupShield.png", NULL, false, true},                   // 100
+    {"particles/powerupGooWeapon.png", NULL, false, true},                // 101
+    {"particles/powerupGrenadeLauncherWeapon.png", NULL, false, true},    // 102
+    
+    {"interface/frame.png", NULL, false, true},    // 103
+    {"interface/scoreGlow.png", NULL, false, true},    // 104
+    
+    {"interface/barMeter.png", NULL, false, true},    // 105
+    {"interface/backgroundTutorial1.png", NULL, false, false},          // 106
+    {"interface/backgroundTutorial2.png", NULL, false, false},          // 107
+
+    {"interface/backgroundMain1.png", NULL, false, false},          // 108
+    {"interface/backgroundMain2.png", NULL, false, false},          // 109
    
-    {PAMMO_MAP_PREVIEW_PATH, NULL, false, true},    // 106
+    {PAMMO_MAP_PREVIEW_PATH, NULL, false, true},    // 110
     
     #if 0
     // Alloc a bunch of empty entries, 6 x 4.

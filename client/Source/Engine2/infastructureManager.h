@@ -44,6 +44,8 @@ class InfastructureManager : public View
         uint32_t mNextUpgradeScore;
         uint32_t mNextRestoreScore;
         
+        float mUpgradeScale;
+    
         bool createPowerup(PowerupType type);
 };
 

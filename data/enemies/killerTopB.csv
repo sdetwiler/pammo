@@ -1,11 +1,11 @@
 "Enemy","Name",,,,,,,,,,,,
 ,"killerTopB",,,,,,,,,,,,
 "Properties","Image Type","Image Path","Mass","Radius","Health","Point Value","Minimum Player Score","Maximum Player Score","Max Instance Per Wave",,,,,
-,"Single","75",50,9,30,250,11000,25000,10,,,,,
+,"Single","79",50,9,30,250,11000,25000,10,,,,,
 "Behavior","Type","Speed","","","","","","","","","","",""
 ,"Spinning Top",9,,,,,,,,,,,
 "Weapon","Type","Image Path","Damage","","","","","","","","","",""
-,"DamageTouch","63",100,,,,,,,,,,
+,"DamageTouch","67",100,,,,,,,,,,
 "Weapon","Type","","","","","","","","","","","",""
 ,"None",,,,,,,,,,,,
 "Weapon","Type","","","","","","","","","","","",""

@@ -387,20 +387,17 @@ void AudioLibrary::update()
                         // Middle/tail remove.
                         if(prev)
                         {
-//                            dprintf("Middle/tail remove");
                             prev->mNext = curr->mNext;
                         }
                         // Head remove.
                         else
                         {
-//                            dprintf("Head remove");
                             currActive->mBuffersHead = curr->mNext;
                         }
 
                         // Tail remove.
                         if(currActive->mBuffersTail == curr)
                         {
-//                            dprintf("... actually tail remove");
                             currActive->mBuffersTail = prev;
                         }
 
@@ -425,14 +422,20 @@ void AudioLibrary::update()
                 // Set to be removed when done playing?
                 if(currActive->mAutoRemove)
                 {
-                                        dprintf("%d pushing to delete stack", currActive->mSource);
+//                                        dprintf("%d pushing to delete stack", currActive->mSource);
                     // Push onto toDelete stack.
                     currActive->mDeleteNext = mAudioInstanceToDelete;
                     mAudioInstanceToDelete = currActive;
                 }
             }
             else
+            {
+                // If this is the first update for the stream, double pump to prime it.
+                //if(currActive->mState == AudioInstance::ReadyToPlay)
+                //    updateAudio_platform(currActive);
+                
                 updateAudio_platform(currActive);
+            }
         }
 
         currActive = currActive->mNext;

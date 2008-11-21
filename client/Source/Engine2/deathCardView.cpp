@@ -5,7 +5,7 @@
 #include "player.h"
 #include "world.h"
 
-#define MAX_SCORE 3000.0f
+#define MAX_SCORE 50000.0f
 
 namespace pammo
 {
@@ -13,6 +13,8 @@ namespace pammo
 DeathCardView::DeathCardView()
     : View()
 {
+    mTouched = false;
+    
     // Get player.
     Player* player = gWorld->getPlayer();
 
@@ -41,6 +43,16 @@ uint32_t DeathCardView::getUpdatePriority() const
     return kDeathCardPriority;
 }
 
+uint32_t DeathCardView::getTouchPriority() const
+{
+    return kDeathCardPriority;
+}
+
+bool DeathCardView::isTouched() const
+{
+    return mTouched;
+}
+    
 void DeathCardView::update()
 {
     if(mAlpha > 1.0f)
@@ -56,6 +68,12 @@ void DeathCardView::draw()
     drawImage(mBackground, trans, mAlpha);
 }
 
-
+bool DeathCardView::touch(uint32_t count, Touch* touches)
+{
+    mTouched = true;
+    return true;
+}
+    
+    
 } // namespace pammo
 

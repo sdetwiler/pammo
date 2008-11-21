@@ -358,7 +358,7 @@ void Player::update()
                 mDeathCard = new DeathCardView;
         }
 
-        if((now - mDeadTime) > 5000000)
+        if(mDeathCard && mDeathCard->isTouched())
         {
             gWorld->disable();
             gWorld->reset();

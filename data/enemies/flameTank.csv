@@ -1,11 +1,11 @@
 "Enemy","Name",,,,,,,,,,,,
 ,"flameTank",,,,,,,,,,,,
 "Properties","Image Type","Image Path","Mass","Radius","Health","Point Value","Minimum Player Score","Maximum Player Score","Max Instance Per Wave",,,,,
-,"Flipbook","69:5",50,20,100,350,2500,9000,3,,,,,
+,"Flipbook","73:5",50,20,100,350,2500,9000,3,,,,,
 "Behavior","Type","Speed","Target Radius","","","","","","","","","",""
 ,"Surround",5,200,,,,,,,,,,
 "Weapon","Type","Image Path","Image Position X","Image Position Y","Fire Position X","Fire Position Y","Rotation Min","Rotation Max","Accuracy","Damage","Distance Max","Spread Angle","Firing Rate"
-,"Flamethrower","74",10,0,20,0,0,360,80,5,200,15,0.2
+,"Flamethrower","78",10,0,20,0,0,360,80,5,200,15,0.2
 "Weapon","Type","","","","","","","","","","","",""
 ,"None",,,,,,,,,,,,
 "Weapon","Type","","","","","","","","","","","",""

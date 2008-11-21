@@ -1,11 +1,11 @@
 "Enemy","Name",,,,,,,,,,,,
 ,"mineLayerC",,,,,,,,,,,,
 "Properties","Image Type","Image Path","Mass","Radius","Health","Point Value","Minimum Player Score","Maximum Player Score","Max Instance Per Wave",,,,,
-,"Flipbook","76:4",200,30,800,1000,29000,-1,1,,,,,
+,"Flipbook","80:4",200,30,800,1000,29000,-1,1,,,,,
 "Behavior","Type","Speed","Target Distance","","","","","","","","","",""
 ,"Drive By",1,200,,,,,,,,,,
 "Weapon","Type","Image Path","Damage","Max Lifetime","Firing Rate","","","","","","","",""
-,"MineLayer","63",200,10,5,,,,,,,,
+,"MineLayer","67",200,10,5,,,,,,,,
 "Weapon","Type","","","","","","","","","","","",""
 ,"None",,,,,,,,,,,,
 "Weapon","Type","","","","","","","","","","","",""

@@ -6,7 +6,6 @@
 #include "physics.h"
 #include "minimap.h"
 
-#define UPGRADE_SCALE 1.5f
 namespace pammo
 {
 
@@ -18,10 +17,11 @@ InfastructureManager::InfastructureManager()
 void InfastructureManager::reset()
 {
     mGivenNewPowers = 0;
-    mNextNewPowerScore = 300 * UPGRADE_SCALE;
+    mUpgradeScale = 1.5f;
+    mNextNewPowerScore = 900 * mUpgradeScale;
     
-    mNextUpgradeScore = 500 * UPGRADE_SCALE;
-    mNextRestoreScore = 150 * UPGRADE_SCALE;
+    mNextUpgradeScore = 1000 * mUpgradeScale;
+    mNextRestoreScore = 1500 * mUpgradeScale;
 }
 
 uint32_t InfastructureManager::getUpdatePriority() const
@@ -64,7 +64,7 @@ void InfastructureManager::update()
             if(count == 1)
                 mNextNewPowerScore = INT_MAX;
             else
-                mNextNewPowerScore += (mNextNewPowerScore * UPGRADE_SCALE);
+                mNextNewPowerScore += (mNextNewPowerScore * mUpgradeScale);
                 //mNextNewPowerScore += 50;
         }
     }
@@ -79,7 +79,7 @@ void InfastructureManager::update()
             type = kPowerupLifeUpgrade;
             
         if(createPowerup(type))
-            mNextUpgradeScore += (mNextUpgradeScore*UPGRADE_SCALE);
+            mNextUpgradeScore += (mNextUpgradeScore*mUpgradeScale);
     }
     
     if(score >= mNextRestoreScore)
@@ -92,8 +92,10 @@ void InfastructureManager::update()
             type = kPowerupLifeRestore;
             
         if(createPowerup(type))
-            mNextRestoreScore += (mNextRestoreScore*UPGRADE_SCALE);
+            mNextRestoreScore += (mNextRestoreScore*mUpgradeScale);
     }
+    
+    mUpgradeScale*=1.05f; // get harder over time.
 }
 
 void InfastructureManager::draw()

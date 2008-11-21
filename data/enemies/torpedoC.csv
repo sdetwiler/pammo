@@ -1,11 +1,11 @@
 "Enemy","Name",,,,,,,,,,,,
 ,"torpedoB",,,,,,,,,,,,
 "Properties","Image Type","Image Path","Mass","Radius","Health","Point Value","Minimum Player Score","Maximum Player Score","Max Instance Per Wave",,,,,
-,"Single","80",50,10,60,400,29000,-1,20,,,,,
+,"Single","84",50,10,60,400,29000,-1,20,,,,,
 "Behavior","Type","Speed","","","","","","","","","","",""
 ,"Kamikaze",8,,,,,,,,,,,
 "Weapon","Type","Image Path","Damage","","","","","","","","","",""
-,"SelfDestruct","63",200,,,,,,,,,,
+,"SelfDestruct","67",200,,,,,,,,,,
 "Weapon","Type","","","","","","","","","","","",""
 ,"None",,,,,,,,,,,,
 "Weapon","Type","","","","","","","","","","","",""
@@ -13,7 +13,7 @@
 "Weapon","Type","","","","","","","","","","","",""
 ,"None",,,,,,,,,,,,
 "Particle","Type","Image Path","Image Position X","Image Position Y","Rotation","Speed","","","","","","",""
-,"Jet Flame","90",-16,0,-90,-200,,,,,,,
+,"Jet Flame","94",-16,0,-90,-200,,,,,,,
 "Particle","Type","","","","","","","","","","","",""
 ,"None",,,,,,,,,,,,
 "Particle","Type","","","","","","","","","","","",""

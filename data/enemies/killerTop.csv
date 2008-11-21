@@ -1,11 +1,11 @@
 "Enemy","Name",,,,,,,,,,,,
 ,"killerTop",,,,,,,,,,,,
 "Properties","Image Type","Image Path","Mass","Radius","Health","Point Value","Minimum Player Score","Maximum Player Score","Max Instance Per Wave",,,,,
-,"Single","75",50,9,10,100,50,2000,10,,,,,
+,"Single","79",50,9,10,100,50,2000,10,,,,,
 "Behavior","Type","Speed","","","","","","","","","","",""
 ,"Spinning Top",7,,,,,,,,,,,
 "Weapon","Type","Image Path","Damage","","","","","","","","","",""
-,"DamageTouch","63",100,,,,,,,,,,
+,"DamageTouch","67",100,,,,,,,,,,
 "Weapon","Type","","","","","","","","","","","",""
 ,"None",,,,,,,,,,,,
 "Weapon","Type","","","","","","","","","","","",""

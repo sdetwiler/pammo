@@ -42,7 +42,7 @@ def save(map):
     saveVisuals(map)
     saveOverlays(map)
     saveBackdrop(map)
-    saveMinimap(map)
+    #saveMinimap(map)
 
 def saveVisuals(map):
     output = ''
@@ -113,7 +113,7 @@ def saveOverlays(map):
 def saveTile(pngpath, pvrtcpath, image):
     image.SaveFile(pngpath, wx.BITMAP_TYPE_PNG)
     
-    try: os.system("/Developer/Platforms/iPhoneOS.platform/usr/bin/texturetool -e PVRTC -o %s %s" % (pvrtcpath, pngpath))
+    try: os.system("/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/texturetool -e PVRTC -o %s %s" % (pvrtcpath, pngpath))
     except: pass
 
 def saveBackdrop(map):

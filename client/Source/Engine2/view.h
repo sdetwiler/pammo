@@ -19,8 +19,8 @@ enum ViewPriorities
     kTutorialScreenPriority = 104,
     kParticle0Priority = 120,
     kParticle1Priority = 125,
+    kInfastructureManagerPriority = 130,
     kPlayerPriority = 140,
-    kInfastructureManagerPriority = 145,
     kEnemyManagerPriority = 150,
     kParticle2Priority = 155,
     kParticle3Priority = 156,
@@ -35,8 +35,8 @@ enum ViewPriorities
     kHealthMeterPriority = 260,
     kEnergyMeterPriority = 261,
     kScoreMeterPriority = 262,
+    kInterfaceViewPriority = 280,
     kDeathCardPriority = 300,
-    kInterfaceViewPriority = 350,
 
 };
 

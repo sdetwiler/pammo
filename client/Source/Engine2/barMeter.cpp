@@ -66,15 +66,18 @@ void BarMeter::setColor(float r, float g, float b)
 
 void BarMeter::update()
 {
+    float mag = fabs(mTargetPercent - mCurrentPercent);
+    mag = ceilf(mag / 0.1) * 0.015;
+
     if(mCurrentPercent < mTargetPercent)
     {
-        mCurrentPercent += 0.015;
+        mCurrentPercent += mag;
         if(mCurrentPercent > mTargetPercent)
             mCurrentPercent = mTargetPercent;
     }
     else if(mCurrentPercent > mTargetPercent)
     {
-        mCurrentPercent -= 0.015;
+        mCurrentPercent -= mag;
         if(mCurrentPercent < mTargetPercent)
             mCurrentPercent = mTargetPercent;
     }

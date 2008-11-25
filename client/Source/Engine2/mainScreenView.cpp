@@ -85,8 +85,8 @@ void MainScreenView::draw()
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
     
-    //Transform2 trans = Transform2::createScale(mBackground->mSize);
-    Transform2 trans = Transform2::createScale(Vector2(mBackground0->mSize.y, mBackground0->mSize.x)) * Transform2::createTranslation(Vector2(0.5, 0.5)) * Transform2::createRotation(-M_PI/2) * Transform2::createTranslation(Vector2(-0.5, -0.5));
+    Transform2 trans = Transform2::createScale(mBackground0->mSize);
+    //Transform2 trans = Transform2::createScale(Vector2(mBackground0->mSize.y, mBackground0->mSize.x)) * Transform2::createTranslation(Vector2(0.5, 0.5)) * Transform2::createRotation(-M_PI/2) * Transform2::createTranslation(Vector2(-0.5, -0.5));
     drawImage(mBackground0, trans, mCloudAlpha); // clouds
     drawImage(mBackground1, trans, 1); // arch
     drawImage(mBackground2, trans, 1); // console

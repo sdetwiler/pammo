@@ -174,7 +174,7 @@ void openRawImagePNG(char const* path, RawImage* image)
     if(image->mBytesPerPixel == 3)
     {
         // Convert down to 16bit.
-        image->mBytesPerPixel = 2;
+        /*image->mBytesPerPixel = 2;
         for(uint32_t yi=0; yi<image->mSize.y; ++yi)
         {
             // Going down to 16bit.
@@ -188,21 +188,21 @@ void openRawImagePNG(char const* path, RawImage* image)
                 
                 dst[xi] = r << 11 | g << 5 | b;
             }
-        }
+        }*/
         
         // Convert down to 24bit.
-        //for(uint32_t yi=0; yi<image->mSize.y; ++yi)
-        //{
+        for(uint32_t yi=0; yi<image->mPixelSize.y; ++yi)
+        {
             // Going down to 24bit.
-            //uint8_t* src = image->mPixels + (uint32_t)(yi*image->mPixelSize.x*4);
-            //uint8_t* dst = image->mPixels + (uint32_t)(yi*image->mPixelSize.x*3);
-            //for(uint32_t xi=0; xi<image->mSize.x; ++xi)
-            //{
-            //    dst[xi*3 + 0] = src[xi*4 + 0];
-            //    dst[xi*3 + 1] = src[xi*4 + 1];
-            //    dst[xi*3 + 2] = src[xi*4 + 2];
-            //}
-        //}
+            uint8_t* src = image->mPixels + (uint32_t)(yi*image->mPixelSize.x*4);
+            uint8_t* dst = image->mPixels + (uint32_t)(yi*image->mPixelSize.x*3);
+            for(uint32_t xi=0; xi<image->mPixelSize.x; ++xi)
+            {
+                dst[xi*3 + 0] = src[xi*4 + 0];
+                dst[xi*3 + 1] = src[xi*4 + 1];
+                dst[xi*3 + 2] = src[xi*4 + 2];
+            }
+        }
         
     }
     

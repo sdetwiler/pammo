@@ -305,6 +305,7 @@ void behaviorPounceAndStalk(Enemy* e, EnemyManager* manager)
     {
     // Turn to another direction.
     case PounceAndStalkBehaviorData::RotateToMove:
+        e->mPlayAnimation = false;
 //        dprintf("RotateToMove");
         direction = gWorld->getPlayer()->mBody->mCenter - e->mBody->mCenter;
         e->mController.mAcceleration = 0.0f;
@@ -314,6 +315,7 @@ void behaviorPounceAndStalk(Enemy* e, EnemyManager* manager)
         break;
     // Turn.    
     case PounceAndStalkBehaviorData::PreMoveRotate:
+            e->mPlayAnimation = false;
 //        dprintf("PreMoveRotate");
         if(fabs(e->mController.mRotation - e->mController.mRotationTarget)<0.001f)
         {
@@ -328,6 +330,7 @@ void behaviorPounceAndStalk(Enemy* e, EnemyManager* manager)
         }
         break;
     case PounceAndStalkBehaviorData::CheckCollision:
+            e->mPlayAnimation = false;
         if(getTime()<data->mChillUntil)
             break;
 
@@ -351,6 +354,7 @@ void behaviorPounceAndStalk(Enemy* e, EnemyManager* manager)
         break;
     // Head in a direction for a bit.
     case PounceAndStalkBehaviorData::Move:
+            e->mPlayAnimation = true;
 //        dprintf("Move");
         e->mBody->mCollideProperties = kEnemyCollisionProperties | kPlayerCollisionProperties | kEnemyBarrierCollisionProperties;
         d = magnitude(data->mOrigin - e->mBody->mCenter);
@@ -364,6 +368,8 @@ void behaviorPounceAndStalk(Enemy* e, EnemyManager* manager)
         break;
     // Turn to another direction.
     case PounceAndStalkBehaviorData::RotateToJump:
+            e->mPlayAnimation = false;
+            
 //        dprintf("RotateToJump");
         e->mController.mAcceleration = 0.0f;
         direction = gWorld->getPlayer()->mBody->mCenter - e->mBody->mCenter;
@@ -373,6 +379,7 @@ void behaviorPounceAndStalk(Enemy* e, EnemyManager* manager)
         break;
     // Rotate.
     case PounceAndStalkBehaviorData::PreJumpRotate:
+            e->mPlayAnimation = false;
 //        dprintf("PreJumpRotate");
         if(fabs(e->mController.mRotation - e->mController.mRotationTarget)<0.001f)
         {
@@ -385,6 +392,7 @@ void behaviorPounceAndStalk(Enemy* e, EnemyManager* manager)
         break;
     // Jump.
     case PounceAndStalkBehaviorData::Jump:
+            e->mPlayAnimation = false;
 
         e->mController.mAcceleration = data->mSpeed * e->mBody->mMass * 2.2f;
 
@@ -440,7 +448,9 @@ void enemyUpdateCb(Enemy* e, EnemyManager* manager)
     }
 
     // Update image entity.
-    e->mCurrImage = (e->mCurrImage+1) % e->mImageCount;
+    if(e->mPlayAnimation)
+        e->mCurrImage = (e->mCurrImage+1) % e->mImageCount;
+
     e->mEntity.setImageWithoutSize(e->mImages[e->mCurrImage]);
     e->mShadow.mAlpha = 0.5f;
     e->mShadow.mSize = e->mImages[0]->mSize;
@@ -563,7 +573,6 @@ bool EnemyManager::loadEnemyTemplate(char const* enemyName)
     }    
     else
     {
-    //    dprintf("TODO: Restore enemy template flipbook support. Path will be startIndex:count");
         char* strCount = strchr(enemyTemplate->mImagePath, ':');
         if(strCount)
         {
@@ -622,7 +631,7 @@ bool EnemyManager::initializeEnemy(Enemy* e, EnemyTemplate* enemyTemplate)
     {
         e->mImages[i] = enemyTemplate->mImages[i];
     }
-    
+    e->mPlayAnimation = true;
     e->mShadow.setImage(gImageLibrary->getImage(PARTICLE_SHADOW_00));
 
     // SCD A dirty hack so I don't have to set size on the flipbook rotations to preserve scaling animations.

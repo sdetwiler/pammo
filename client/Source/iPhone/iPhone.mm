@@ -244,7 +244,7 @@ int openAudio_platform(AudioInstance* instance)
     [[[NSBundle mainBundle] bundlePath] getCString:basePath maxLength:1024 encoding:NSASCIIStringEncoding];
     char fullPath[1024];
     sprintf(fullPath, "%s/data/%s", basePath, instance->mClip->mPath);
-    dprintf("%s", fullPath);
+//    dprintf("%s", fullPath);
     CFURLRef url = NULL;
     url = CFURLCreateFromFileSystemRepresentation(kCFAllocatorDefault, (UInt8 const*)fullPath, strlen(fullPath), false);
     if(!url)
@@ -309,7 +309,7 @@ int openAudio_platform(AudioInstance* instance)
         bytes = 1;
 
     instance->mAudio.mReadFreq = ( (float)AUDIO_BUFFER_SIZE/ (float)(instance->mSampleRate * bytes) ) * 1000000.0f;
-    instance->mAudio.mReadFreq -= 20000; // estimated HW latency to prevent underflows.
+    instance->mAudio.mReadFreq -= 40000; // estimated HW latency to prevent underflows.
     instance->mAudio.mNextRead = getTime();
     
     return 0;

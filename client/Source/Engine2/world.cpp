@@ -29,6 +29,8 @@ World* gWorld = NULL;
 World::World()
 {
     gWorld = this;
+    
+    gGame->stopIntroBackgroundAudio();
 
     mBackgroundAudio = gAudioLibrary->getAudioInstance(AUDIO_BACKGROUND_INGAME);
 
@@ -85,6 +87,8 @@ World::~World()
     delete mCamera;
     
     gWorld = NULL;
+
+    gGame->stopIntroBackgroundAudio();
 
     new MainScreenView;
 }

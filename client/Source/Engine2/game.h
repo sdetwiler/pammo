@@ -16,7 +16,11 @@ public:
     void update();
     void draw();
     void lowMemory();
-        
+    
+    // James: I appologize in advance for this nasty hack...
+    void startIntroBackgroundAudio();
+    void stopIntroBackgroundAudio();
+    
 protected:
     friend class View;
     
@@ -45,6 +49,8 @@ private:
     ViewMap mDrawable;
     ViewMap mTouchable;
     ViewMap mUpdateable;
+    
+    AudioInstance* mIntroBackgroundAudio;
 };
     
 extern Game* gGame;

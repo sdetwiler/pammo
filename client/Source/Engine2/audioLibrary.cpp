@@ -19,7 +19,7 @@ AudioClip gAudioClip[] =
     {"audio/powerup.wav", false, NULL, 0, 0},      // 9
     {"audio/machineGun.wav", false, NULL, 0, 0},      // 10
     {"audio/machineGunEnd.wav", false, NULL, 0, 0},      // 11
-    {"audio/rocketauncher.wav", false, NULL, 0, 0},      // 12
+    {"audio/rocketLauncher.wav", false, NULL, 0, 0},      // 12
     {"audio/clink.wav", false, NULL, 0, 0},      // 13
     
 };
@@ -102,8 +102,8 @@ AudioLibrary::AudioLibrary()
         alGenSources(1, &mAudioInstances[i].mSource);
 
         // Set the distance attinuation values for the sources.
-        alSourcef(mAudioInstances[i].mSource, AL_MAX_DISTANCE, 400.0f);
-        alSourcef(mAudioInstances[i].mSource, AL_REFERENCE_DISTANCE, 300.0f);
+        alSourcef(mAudioInstances[i].mSource, AL_MAX_DISTANCE, 500.0f);
+        alSourcef(mAudioInstances[i].mSource, AL_REFERENCE_DISTANCE, 400.0f);
         mAudioInstances[i].mNext = &mAudioInstances[i+1];
     }
     mAudioInstancesFree = &mAudioInstances[0];
@@ -430,10 +430,6 @@ void AudioLibrary::update()
             }
             else
             {
-                // If this is the first update for the stream, double pump to prime it.
-                //if(currActive->mState == AudioInstance::ReadyToPlay)
-                //    updateAudio_platform(currActive);
-                
                 updateAudio_platform(currActive);
             }
         }
@@ -449,62 +445,6 @@ void AudioLibrary::update()
         closeAudioInstance(mAudioInstanceToDelete);
         mAudioInstanceToDelete = mAudioInstanceToDelete->mDeleteNext;
     }
-
-    //pthread_mutex_lock(&mMutex);
-
-    //while(mToNotify)
-    //{
-    //    AudioLoadRequest* curr = mToNotify;
-    //    mToNotify = curr->mNext;
-
-    //    if(gAudioClip[curr->mId].mInUse == true)
-    //    {
-    //        load(curr->mId);
-    //    }
-
-    //    curr->mNext = mFree;
-    //    mFree = curr;
-    //}
-
-    //pthread_mutex_unlock(&mMutex);
 }
-
-//void* AudioLibrary::threadBootFunc(void* arg)
-//{
-//    ((AudioLibrary*)arg)->threadFunc();
-//    return 0;
-//}
-//
-//void AudioLibrary::threadFunc()
-//{
-//    pthread_mutex_lock(&mMutex);
-//    while(true)
-//    {
-//        if(mRunning == false)
-//        {
-//            pthread_mutex_unlock(&mMutex);
-//            return;
-//        }
-//
-//        while(mToService)
-//        {
-//            AudioLoadRequest* curr = mToService;
-//            mToService = curr->mNext;
-//            pthread_mutex_unlock(&mMutex);
-//
-//            load(curr->mId);
-//
-//            pthread_mutex_lock(&mMutex);
-//
-//            curr->mNext = mToNotify;
-//            mToNotify = curr;
-//        }
-//        
-//        //dprintf("AudioLibrary::threadFunc going to sleep.");
-//        pthread_cond_wait(&mCondition, &mMutex);
-//        //dprintf("AudioLibrary::threadFunc woke up.");
-//    }
-//}
-
 
 } // namespace pammo

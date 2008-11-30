@@ -92,7 +92,7 @@ void enemyWeaponMachineGunCb(Enemy* e, EnemyWeapon* w, EnemyManager* manager)
     p->mMaxDistance = data->mMaxDistance;
 
     // I feel guilty...
-    if(!rand()%4)
+    if(!(rand()%5))
     {
         AudioInstance* instance = gAudioLibrary->getAudioInstance(AUDIO_MACHINEGUN);
         if(instance)

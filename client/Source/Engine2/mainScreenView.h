@@ -39,7 +39,7 @@ private:
     
     Image* mButtonMask;
 
-    AudioInstance* mAudio;
+    //AudioInstance* mAudio;
 
     float mCloudAlpha;
     float mPreloadPercent;

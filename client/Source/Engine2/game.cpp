@@ -39,8 +39,30 @@ Game::Game()
 
 Game::~Game()
 {
+    stopIntroBackgroundAudio();
 }
 
+void Game::startIntroBackgroundAudio()
+{
+    if(!mIntroBackgroundAudio)
+    {
+        // This is sort of a hack to get the audio outside of the main screen so it can play while 
+        // viewing the credits and tutorial.
+        mIntroBackgroundAudio = gAudioLibrary->getAudioInstance(AUDIO_BACKGROUND_INTRO);
+        gAudioLibrary->playAudioInstance(mIntroBackgroundAudio, PLAY_FOREVER, false);
+    }        
+}
+
+void Game::stopIntroBackgroundAudio()
+{
+    if(mIntroBackgroundAudio)
+    {
+        gAudioLibrary->stopAudioInstance(mIntroBackgroundAudio);
+        gAudioLibrary->closeAudioInstance(mIntroBackgroundAudio);
+        mIntroBackgroundAudio = NULL;
+    }    
+}    
+    
 #if THRASH_MEMORY
 
 struct Nasty

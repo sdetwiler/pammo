@@ -17,8 +17,9 @@ MainScreenView::MainScreenView()
     : View()
 {
     mCloudAlpha = 0;
-    mAudio = gAudioLibrary->getAudioInstance(AUDIO_BACKGROUND_INTRO);
-    gAudioLibrary->playAudioInstance(mAudio, PLAY_FOREVER, false);
+    
+    gGame->startIntroBackgroundAudio();
+    
     //gMainScreenView = this;
     // Load background.
     mAudioPreloadComplete = false;
@@ -33,8 +34,6 @@ MainScreenView::MainScreenView()
 
 MainScreenView::~MainScreenView()
 {
-    gAudioLibrary->stopAudioInstance(mAudio);
-    gAudioLibrary->closeAudioInstance(mAudio);
     gImageLibrary->setObserver(NULL);
     gImageLibrary->purgeImage(mBackground0);
     gImageLibrary->purgeImage(mBackground1);
@@ -150,8 +149,6 @@ bool MainScreenView::touch(uint32_t count, Touch* touches)
         case 1:
             if(mAudioPreloadComplete && mImagePreloadComplete)
             {
-                if(mAudio)
-                    gAudioLibrary->stopAudioInstance(mAudio);
 
                 destroy();
                 if(!gWorld)

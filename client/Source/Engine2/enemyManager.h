@@ -312,6 +312,7 @@ struct Enemy
 {
     ImageEntity          mEntity;
     Image*               mImages[ENEMY_MAX_IMAGE_COUNT];
+    bool                 mPlayAnimation;
     ImageEntity          mShadow;
     uint32_t             mImageCount;
     uint32_t             mCurrImage;

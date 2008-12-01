@@ -583,7 +583,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CODE_SIGN_ENTITLEMENTS = Source/iPhone/Entitlements.plist;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: JAMES MARR";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Source/iPhone/header.pch;
@@ -593,6 +593,7 @@
 				INFOPLIST_FILE = Source/iPhone/Info.plist;
 				PREBINDING = NO;
 				PRODUCT_NAME = Paradise;
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "DC10E610-63B8-4946-8185-BB1C1FDB3734";
 				SDKROOT = iphoneos2.2;
 			};
 			name = Distribution;
@@ -619,7 +620,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: JAMES MARR";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -630,6 +631,7 @@
 				INFOPLIST_FILE = Source/iPhone/Info.plist;
 				PREBINDING = NO;
 				PRODUCT_NAME = Paradise;
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "7C51D833-72B6-46AB-8A3A-50DD94B7AD11";
 				SDKROOT = iphoneos2.2;
 			};
 			name = Debug;
@@ -638,7 +640,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: JAMES MARR";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Source/iPhone/header.pch;
@@ -648,6 +650,7 @@
 				INFOPLIST_FILE = Source/iPhone/Info.plist;
 				PREBINDING = NO;
 				PRODUCT_NAME = Paradise;
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "7C51D833-72B6-46AB-8A3A-50DD94B7AD11";
 				SDKROOT = iphoneos2.2;
 			};
 			name = Release;

@@ -1,7 +1,7 @@
 "Enemy","Name",,,,,,,,,,,,
 ,"torpedo",,,,,,,,,,,,
 "Properties","Image Type","Image Path","Mass","Radius","Health","Point Value","Minimum Player Score","Maximum Player Score","Max Instance Per Wave",,,,,
-,"Single","84",50,10,10,100,0,2000,20,,,,,
+,"Single","84",50,10,10,100,0,2200,20,,,,,
 "Behavior","Type","Speed","","","","","","","","","","",""
 ,"Kamikaze",5,,,,,,,,,,,
 "Weapon","Type","Image Path","Damage","","","","","","","","","",""

@@ -35,7 +35,7 @@ private:
     
     Image* mBackground0;
     Image* mBackground1;
-    Image* mBackground2;
+//    Image* mBackground2;
     
     Image* mButtonMask;
 

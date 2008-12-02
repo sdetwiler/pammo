@@ -28,7 +28,6 @@ MainScreenView::MainScreenView()
     gAudioLibrary->setObserver(this);
     mBackground0 = gImageLibrary->getImage(INTERFACE_BACKGROUND_MAIN0);
     mBackground1 = gImageLibrary->getImage(INTERFACE_BACKGROUND_MAIN1);
-    mBackground2 = gImageLibrary->getImage(INTERFACE_BACKGROUND_MAIN2);
     mButtonMask = gImageLibrary->getImage(INTERFACE_BUTTONMASK);
 }
 
@@ -37,7 +36,6 @@ MainScreenView::~MainScreenView()
     gImageLibrary->setObserver(NULL);
     gImageLibrary->purgeImage(mBackground0);
     gImageLibrary->purgeImage(mBackground1);
-    gImageLibrary->purgeImage(mBackground2);
     gImageLibrary->purgeImage(mButtonMask);
 }
     
@@ -87,8 +85,7 @@ void MainScreenView::draw()
     Transform2 trans = Transform2::createScale(mBackground0->mSize);
     //Transform2 trans = Transform2::createScale(Vector2(mBackground0->mSize.y, mBackground0->mSize.x)) * Transform2::createTranslation(Vector2(0.5, 0.5)) * Transform2::createRotation(-M_PI/2) * Transform2::createTranslation(Vector2(-0.5, -0.5));
     drawImage(mBackground0, trans, mCloudAlpha); // clouds
-    drawImage(mBackground1, trans, 1); // arch
-    drawImage(mBackground2, trans, 1); // console
+    drawImage(mBackground1, trans, 1); // arch and console.
 
     if(mAudioPreloadComplete && mImagePreloadComplete)
     {

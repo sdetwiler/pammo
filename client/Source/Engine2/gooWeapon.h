@@ -18,6 +18,8 @@ class GooWeapon : public Weapon
         virtual void deselect();
         
         virtual void fire();
+        
+        virtual uint32_t getDisplayPriority() { return kGooWeaponDisplayPriority; }
 
         uint32_t mParticleCount;
         AudioInstance* mAudio;

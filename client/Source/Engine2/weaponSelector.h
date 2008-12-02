@@ -25,10 +25,12 @@ class WeaponSelector : public View
         virtual ~WeaponSelector();
     
         virtual uint32_t getTouchPriority() const;
+        virtual uint32_t getUpdatePriority() const;
         virtual uint32_t getDrawPriority() const;
     
         void reset();
         virtual bool touch(uint32_t count, Touch* touches);
+        virtual void update();
         virtual void draw();
         
         void setObserver(WeaponSelectorObserver* observer);

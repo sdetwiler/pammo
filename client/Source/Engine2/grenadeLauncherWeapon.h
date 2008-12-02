@@ -18,6 +18,9 @@ class GrenadeLauncherWeapon : public Weapon
         virtual void deselect();
         
         virtual void fire();
+        
+        virtual uint32_t getDisplayPriority() { return kGrenadeLauncherWeaponDisplayPriority; }
+        
         uint64_t mLastFire;
         uint64_t mFireFrequency;
 };

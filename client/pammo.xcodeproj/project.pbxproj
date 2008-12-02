@@ -593,7 +593,7 @@
 				INFOPLIST_FILE = Source/iPhone/Info.plist;
 				PREBINDING = NO;
 				PRODUCT_NAME = Paradise;
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "DC10E610-63B8-4946-8185-BB1C1FDB3734";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "24AB7B2E-4B05-44EA-BEDB-D6E2FBC241F9";
 				SDKROOT = iphoneos2.2;
 			};
 			name = Distribution;

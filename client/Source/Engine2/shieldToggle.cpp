@@ -20,7 +20,7 @@ ShieldToggle::ShieldToggle()
     mEnabledImage = gImageLibrary->getImage(INTERFACE_ICON_SHELD_ENABLE);
     
     mEntity = new ImageEntity();
-    mEntity->mCenter = Vector2(20, 100);
+    mEntity->mCenter = Vector2(24, 150);
     mEntity->mSize = Vector2(kIconSize, kIconSize);
     mEntity->makeDirty();
 }
@@ -34,6 +34,11 @@ uint32_t ShieldToggle::getTouchPriority() const
     return kShieldTogglePriority;
 }
 
+uint32_t ShieldToggle::getUpdatePriority() const
+{
+    return kShieldTogglePriority;
+}
+
 uint32_t ShieldToggle::getDrawPriority() const
 {
     return kShieldTogglePriority;
@@ -42,6 +47,8 @@ uint32_t ShieldToggle::getDrawPriority() const
 void ShieldToggle::reset()
 {
     setToggle(false);
+    
+    mEntity->mAlpha = 0;
 }
 
 bool ShieldToggle::touch(uint32_t count, Touch* touches)
@@ -65,6 +72,16 @@ bool ShieldToggle::touch(uint32_t count, Touch* touches)
         return true;
     }
     return false;
+}
+
+void ShieldToggle::update()
+{
+    if((mNotifications & kDraw) && mEntity->mAlpha < 1)
+    {
+        mEntity->mAlpha += 0.02;
+        if(mEntity->mAlpha > 1)
+            mEntity->mAlpha = 1;
+    }
 }
 
 void ShieldToggle::draw()

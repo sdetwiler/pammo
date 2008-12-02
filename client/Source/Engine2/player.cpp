@@ -143,9 +143,7 @@ void Player::reset()
     
     // Reset weapons.
     mWeaponSelector->reset();
-    //mWeaponSelector->addWeapon(mGrenadeLauncherWeapon);
     mWeaponSelector->addWeapon(mLightningWeapon);
-    //mWeaponSelector->addWeapon(mGooWeapon);
 
     // Reset life.
     mHealth = 1.0f;
@@ -486,6 +484,8 @@ void Player::givePowerup(PowerupType type)
             mHasShield = true;
             mShieldToggle->enableAll();
             mEnergyMeter->enableAll();
+            mEnergyMeter->setCurrentPercent(0);
+            mEnergyMeter->setTargetPercent(mEnergy);
             break;
         case kPowerupGooWeapon:
             mWeaponSelector->enableAll();

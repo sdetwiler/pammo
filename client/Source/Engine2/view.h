@@ -177,7 +177,7 @@ public:
     void disableDraw();
     void enableDraw();
 
-private:
+protected:
     friend class Game;
     void init();
 

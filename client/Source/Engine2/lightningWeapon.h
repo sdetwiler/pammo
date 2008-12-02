@@ -18,6 +18,8 @@ class LightningWeapon : public Weapon
         virtual void deselect();
         
         virtual void fire();
+        
+        virtual uint32_t getDisplayPriority() { return kLightningWeaponDisplayPriority; }
     
         uint32_t mParticleCount;
         AudioInstance* mAudio;

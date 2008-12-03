@@ -128,8 +128,9 @@ ImageTexture gImagePath[NUM_IMAGES] =
     {"vehicles/trebuchet/04.png", NULL, false, true},                 // 89
     {"vehicles/trebuchet/05.png", NULL, false, true},                 // 90
     {"vehicles/trebuchet/06.png", NULL, false, true},                 // 91
-    {"vehicles/trebuchet/07.png", NULL, false, true},                 // 92
-    {"vehicles/trebuchet/08.png", NULL, false, true},                 // 93
+////// These to images are no longer used or available.
+    {"vehicles/trebuchet/07.png", NULL, false, false},                 // 92
+    {"vehicles/trebuchet/08.png", NULL, false, false},                 // 93
 
     {"particles/jetFlame/00.png", NULL, false, true},                 // 94
 

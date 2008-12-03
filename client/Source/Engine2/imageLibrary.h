@@ -142,7 +142,7 @@ struct Image;
 
 #define VEHICLE_TORPEDO_00                          84
 
-#define VEHICLE_TREBUCHET_COUNT               9
+#define VEHICLE_TREBUCHET_COUNT               7//9
 #define VEHICLE_TREBUCHET_00                        85
 #define VEHICLE_TREBUCHET_01                        86
 #define VEHICLE_TREBUCHET_02                        87
@@ -258,7 +258,7 @@ private:
         RawImage          mRawImage;
     };
 
-    static const uint32_t kImageLoadStackSize = 20;
+    static const uint32_t kImageLoadStackSize = 2;
     ImageLoadRequest* mFree;
     ImageLoadRequest* mToService;
     ImageLoadRequest* mToNotify;

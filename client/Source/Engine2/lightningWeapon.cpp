@@ -125,6 +125,8 @@ void lightningBulletCollisionCallback(Body* self, Body* other, Contact* contact,
 	response->mBounceMe = true;
 	response->mBounceThem = true;
 
+    gWorld->getParticleSystem()->initSmokeParticle(self->mCenter, 0.0f, Vector2(0,0));
+
     doDamage(self, other, Lightning , 20.0f);
 	
 

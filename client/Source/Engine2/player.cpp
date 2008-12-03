@@ -343,6 +343,20 @@ void Player::update()
         if(!mDeadTime)
         {
             mDeadTime = now;
+
+            AudioInstance* instance = gAudioLibrary->getAudioInstance(AUDIO_EXPLOSION2);
+            if(instance)
+            {
+                gAudioLibrary->playAudioInstance(instance, PLAY_ONCE, true);
+                alSource3f(instance->mSource, AL_POSITION, mBody->mCenter.x, mBody->mCenter.y, 0.0f);    
+            }
+            
+            gWorld->getParticleSystem()->initExplosionParticle(mBody->mCenter);
+            gWorld->getParticleSystem()->initExplosionParticle(mBody->mCenter+Vector2(5,5));
+            gWorld->getParticleSystem()->initExplosionParticle(mBody->mCenter+Vector2(5,-5));
+            gWorld->getParticleSystem()->initExplosionParticle(mBody->mCenter+Vector2(-5,5));
+            
+            
             mBody->mVelocity = Vector2(0,0);
             mBody->mCollideProperties = 0;
             mBody->mProperties = 0;

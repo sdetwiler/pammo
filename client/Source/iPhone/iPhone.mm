@@ -113,7 +113,10 @@ void openRawImagePNG(char const* path, RawImage* image)
     uint32_t x = CGImageGetWidth(spriteImage);
     uint32_t y = CGImageGetHeight(spriteImage);
     image->mBytesPerPixel = CGImageGetBitsPerPixel(spriteImage)/8;
-    
+    if(!x || !y)
+    {
+        assert(0);
+    }
     // Set image size.
 	image->mSize.x = x;
 	image->mSize.y = y;

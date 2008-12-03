@@ -123,7 +123,7 @@ bool MainScreenView::touch(uint32_t count, Touch* touches)
 
     //  play
     options[1].ul = Vector2(190.0f, 205.0f);
-    options[1].lr = Vector2(280.0f, 280.0f);
+    options[1].lr = Vector2(280.0f, 305.0f);
 
     // credits
     options[2].ul = Vector2(355.0f, 200.0f);

@@ -1,7 +1,7 @@
 "Enemy","Name",,,,,,,,,,,,
 ,"trebuchetC",,,,,,,,,,,,
 "Properties","Image Type","Image Path","Mass","Radius","Health","Point Value","Minimum Player Score","Maximum Player Score","Max Instance Per Wave",,,,,
-,"Flipbook","85:9",50,20,200,2400,29000,-1,2,,,,,
+,"Flipbook","85:7",50,20,200,2400,29000,-1,2,,,,,
 "Behavior","Type","Speed","","","","","","","","","","",""
 ,"Pounce and Stalk",15,,,,,,,,,,,
 "Weapon","Type","Image Path","Accuracy","Damage","Distance Max","Firing Rate","","","","","","",""

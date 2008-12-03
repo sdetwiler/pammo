@@ -392,7 +392,7 @@ void Physics::collideAgainstBodies(Body* b1)
         contact.mContactNormal = normalize(diff);
         contact.mSeparatingVelocity = dot((b1->mVelocity - b2->mVelocity), contact.mContactNormal);
         contact.mPenetrationDepth = (b1->mRadius + b2->mRadius) - sqrt(magsq);
-        contact.mContactPoint = contact.mContactNormal * (b1->mRadius + b2->mRadius - contact.mPenetrationDepth)/2;
+        contact.mContactPoint = contact.mContactNormal * (b1->mRadius + b2->mRadius - contact.mPenetrationDepth)/2 + b2->mCenter;
         if(contact.mSeparatingVelocity > 0)
             continue;
         

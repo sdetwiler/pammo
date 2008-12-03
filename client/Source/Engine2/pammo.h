@@ -55,7 +55,13 @@ struct Touch
     void* mSerialNumber;
 };
 
-void dprintf(char const* format, ...);
+//#ifdef __DEBUG__
+//#define dprintf _dprintf
+//void _dprintf(char const* format, ...);
+//#else
+static inline void dprintf(...) {}
+//#endif
+
 void openRawImage(char const* filename, RawImage* image);
 Vector2 getFrameSize();
 uint64_t getTime(void);

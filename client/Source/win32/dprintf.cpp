@@ -7,7 +7,7 @@
 namespace pammo
 {
 
-void dprintf(char const* format, ...)
+void _dprintf(char const* format, ...)
 {
     // Get a debug console for win32. Yea.
     if(AllocConsole())

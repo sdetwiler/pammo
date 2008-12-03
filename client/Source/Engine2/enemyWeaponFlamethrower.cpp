@@ -26,6 +26,8 @@ void enemyWeaponFlamethrowerFireParticleCb(Particle* p, ParticleSystem* system)
 
 void enemyWeaponFlamethrowerFireCollisionCb(Body* self, Body* other, Contact* contact, ContactResponse* response)
 {
+    gWorld->getParticleSystem()->initSmokeParticle(contact->mContactPoint, 0.0f, Vector2(0,0), 5);
+
 	response->mBounceThem = true;
 	response->mBounceMe = true;
 

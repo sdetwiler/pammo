@@ -32,6 +32,8 @@ void enemyWeaponMachineGunShapeCollisionCb(Body* self, Shape* other, Contact* co
 
 void enemyWeaponMachineGunCollisionCb(Body* self, Body* other, Contact* contact, ContactResponse* response)
 {
+    gWorld->getParticleSystem()->initSmokeParticle(contact->mContactPoint, 0.0f, Vector2(0,0), 5);
+
 	response->mBounceThem = false;
 	response->mBounceMe = false;
 

@@ -300,7 +300,7 @@ void ParticleSystem::removeParticle(Particle* p)
 	p->mManager->removeParticle(p);
 }
 
-void ParticleSystem::initSmokeParticle(Vector2 const& initialPosition, float initialRotation, Vector2 const& initialVelocity)
+void ParticleSystem::initSmokeParticle(Vector2 const& initialPosition, float initialRotation, Vector2 const& initialVelocity, float positionSpread)
 {
     // Grab a particle.
     Particle* p = addParticle(2, true);
@@ -317,6 +317,12 @@ void ParticleSystem::initSmokeParticle(Vector2 const& initialPosition, float ini
     p->mImage.mCenter = initialPosition;
     p->mImage.mRotation = initialRotation;
     p->mImage.makeDirty();
+    
+    // Offset center.
+    if(positionSpread != 0)
+    {
+        p->mImage.mCenter += Vector2(((float)rand() / RAND_MAX - 0.5) * positionSpread, ((float)rand() / RAND_MAX - 0.5) * positionSpread);
+    }
     
     // Setup velocity. InitialVelocity from vehicle plus particle speed rotated for direction.
     p->mVelocity = initialVelocity * Transform2::createRotation(initialRotation);

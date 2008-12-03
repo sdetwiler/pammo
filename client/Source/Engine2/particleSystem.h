@@ -47,7 +47,7 @@ public:
         float           initialRotation;
         Vector2         initialVelocity;
     };
-	void initSmokeParticle(Vector2 const& initialPosition, float initialRotation, Vector2 const& initialVelocity);
+	void initSmokeParticle(Vector2 const& initialPosition, float initialRotation, Vector2 const& initialVelocity, float positionSpread = 0);
 
 	void initExplosionParticle(Vector2 const& initialPosition);
     void initRubbleParticle(Vector2 const& initialPosition);

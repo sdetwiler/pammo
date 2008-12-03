@@ -125,10 +125,9 @@ void lightningBulletCollisionCallback(Body* self, Body* other, Contact* contact,
 	response->mBounceMe = true;
 	response->mBounceThem = true;
 
-    gWorld->getParticleSystem()->initSmokeParticle(self->mCenter, 0.0f, Vector2(0,0));
+    gWorld->getParticleSystem()->initSmokeParticle(contact->mContactPoint, 0.0f, Vector2(0,0), 5);
 
     doDamage(self, other, Lightning , 20.0f);
-	
 
     // Stop in place and fade to dark.
 	Particle* me = (Particle*)self->mUserArg;
@@ -139,8 +138,7 @@ void lightningBulletCollisionCallback(Body* self, Body* other, Contact* contact,
 	
 void lightningBulletShapeCollisionCallback(Body* self, Shape* other, Contact* contact, bool* response)
 {
-    
-    gWorld->getParticleSystem()->initSmokeParticle(self->mCenter, 0.0f, Vector2(0,0));
+    gWorld->getParticleSystem()->initSmokeParticle(contact->mContactPoint, 0.0f, Vector2(0,0), 5);
 
     // When particles hit a wall, stop in place and fade to dark.
 	Particle* me = (Particle*)self->mUserArg;

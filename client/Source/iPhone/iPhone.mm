@@ -64,7 +64,7 @@ void spawnThread(void* (*func)(void*), void* arg)
     [thread start];
 }
 
-void dprintf(char const* format, ...)
+void _dprintf(char const* format, ...)
 {
 	va_list args;
 	va_start(args, format);

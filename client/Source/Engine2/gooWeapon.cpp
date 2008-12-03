@@ -86,7 +86,7 @@ void GooWeapon::fire()
     
     // Setup image.
 	//int i=rand()%3;
-	float velocity = 140;
+	float velocity = 160;
 	velocity += ((rand()%40)/40.0f);
 	
 	p->mImage.setImage(gImageLibrary->getImage(PARTICLE_GOO_00 + rand()%PARTICLE_GOO_COUNT));
@@ -121,14 +121,20 @@ void GooWeapon::fire()
 
 void gooBulletCollisionCallback(Body* self, Body* other, Contact* contact, ContactResponse* response)
 {
+    if(rand() % 4 == 0)
+        gWorld->getParticleSystem()->initSmokeParticle(contact->mContactPoint, 0.0f, Vector2(0,0), 15);
+        
 	response->mBounceMe = false;
 	response->mBounceThem = false;
-	
-	doDamage(self, other, Goo, 1.0f);
+    
+	doDamage(self, other, Goo, 3.0f);
 }
 	
 void gooBulletShapeCollisionCallback(Body* self, Shape* other, Contact* contact, bool* response)
 {
+    if(rand() % 8 == 0)
+        gWorld->getParticleSystem()->initSmokeParticle(contact->mContactPoint, 0.0f, Vector2(0,0), 5);
+    
     *response = true;
     //*response = false;
     self->mVelocity = Vector2(0, 0);

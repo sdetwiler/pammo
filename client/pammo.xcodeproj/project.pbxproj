@@ -578,7 +578,7 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		11EBD6CB0E57798C000D5705 /* Distribution */ = {
+		11EBD6CB0E57798C000D5705 /* Ad Hoc Distribution */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
@@ -593,16 +593,42 @@
 				INFOPLIST_FILE = Source/iPhone/Info.plist;
 				PREBINDING = NO;
 				PRODUCT_NAME = Paradise;
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "30785AD6-4BF1-4795-9E65-F502C14A8463";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "13DB1026-DD7D-4F49-96D7-C6754353BE55";
 				SDKROOT = iphoneos2.2;
 			};
-			name = Distribution;
+			name = "Ad Hoc Distribution";
 		};
-		11EBD6CC0E57798C000D5705 /* Distribution */ = {
+		11EBD6CC0E57798C000D5705 /* Ad Hoc Distribution */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 			};
-			name = Distribution;
+			name = "Ad Hoc Distribution";
+		};
+		1A7F0DEF0EE8F988002C77C5 /* App Store Distribution */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CODE_SIGN_ENTITLEMENTS = Source/iPhone/Entitlements.plist;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: JAMES MARR";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = Source/iPhone/header.pch;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = Source/Engine2/iPhone;
+				INFOPLIST_FILE = Source/iPhone/Info.plist;
+				PREBINDING = NO;
+				PRODUCT_NAME = Paradise;
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "B6355A94-FA65-4CBA-B106-6A1DB811E1F3";
+				SDKROOT = iphoneos2.2;
+			};
+			name = "App Store Distribution";
+		};
+		1A7F0DF00EE8F988002C77C5 /* App Store Distribution */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = "App Store Distribution";
 		};
 		1D6058940D05DD3E006BFB54 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -663,7 +689,8 @@
 			buildConfigurations = (
 				1D6058940D05DD3E006BFB54 /* Debug */,
 				1D6058950D05DD3E006BFB54 /* Release */,
-				11EBD6CC0E57798C000D5705 /* Distribution */,
+				11EBD6CC0E57798C000D5705 /* Ad Hoc Distribution */,
+				1A7F0DF00EE8F988002C77C5 /* App Store Distribution */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -673,7 +700,8 @@
 			buildConfigurations = (
 				C01FCF4F08A954540054247B /* Debug */,
 				C01FCF5008A954540054247B /* Release */,
-				11EBD6CB0E57798C000D5705 /* Distribution */,
+				11EBD6CB0E57798C000D5705 /* Ad Hoc Distribution */,
+				1A7F0DEF0EE8F988002C77C5 /* App Store Distribution */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

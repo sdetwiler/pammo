@@ -21,6 +21,7 @@ ViewProfiler gDrawProfiler;
 
 Game::Game()
 {
+    mIntroBackgroundAudio = NULL;
     gUpdateProfiler.setName("update");
     gDrawProfiler.setName("draw");
     gUpdateProfiler.reset();

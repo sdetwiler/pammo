@@ -36,10 +36,14 @@ uint32_t InfastructureManager::getDrawPriority() const
 
 void InfastructureManager::update()
 {
+    bool upgraded = false;
     uint32_t score = gWorld->getPlayer()->mScore;
     
     if(score >= mNextNewPowerScore)
     {
+        upgraded = true;
+        dprintf("mUpgradeScale: %f\n", mUpgradeScale);
+
         // Choose type.
         PowerupType type = kPowerupNone;
         uint32_t count = 0;
@@ -58,6 +62,8 @@ void InfastructureManager::update()
         
         if(createPowerup(type))
         {
+            upgraded = true;
+            dprintf("post mUpgradeScale: %f\n", mUpgradeScale);
             mGivenNewPowers |= type;
                 
             // If this was the last choice, disable future powerups.
@@ -71,6 +77,7 @@ void InfastructureManager::update()
     
     if(score >= mNextUpgradeScore)
     {
+        upgraded = true;
         // Choose type.
         PowerupType type;
         if((mGivenNewPowers & kPowerupShield) && (rand() & 1))
@@ -84,6 +91,7 @@ void InfastructureManager::update()
     
     if(score >= mNextRestoreScore)
     {
+        upgraded = true;
         // Choose type.
         PowerupType type;
         if((mGivenNewPowers & kPowerupShield) && (rand() & 1))
@@ -94,8 +102,9 @@ void InfastructureManager::update()
         if(createPowerup(type))
             mNextRestoreScore += (mNextRestoreScore*mUpgradeScale);
     }
-    
-    mUpgradeScale*=1.05f; // get harder over time.
+    if(upgraded)
+        mUpgradeScale*=1.05f; // get harder over time.
+
 }
 
 void InfastructureManager::draw()

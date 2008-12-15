@@ -41,8 +41,11 @@ class InfastructureManager : public View
         Vector2 mLocation;
         uint32_t mGivenNewPowers;
         uint32_t mNextNewPowerScore;
+        float mNextNewPowerMultiplier;
         uint32_t mNextUpgradeScore;
+        float mNextUpgradeMultiplier;
         uint32_t mNextRestoreScore;
+        float mNextRestoreMultiplier;
         
         float mUpgradeScale;
     

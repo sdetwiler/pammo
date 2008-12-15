@@ -243,9 +243,7 @@ Body* Physics::addBody()
     }
     else
     {
-        //body = new Body();
-        dprintf("Out of bodies!");
-        return 0;
+        body = new Body();
     }
     
     memset(body, 0, sizeof(Body));

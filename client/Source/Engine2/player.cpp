@@ -331,7 +331,7 @@ void Player::update()
         mShieldEntity.makeDirty();
         
         // Subtract energy.
-        mEnergy -= 1/400.;
+        mEnergy -= 1/600.;
         if(mEnergy <= 0)
         {
             mEnergy = 0;
@@ -490,12 +490,12 @@ void Player::givePowerup(PowerupType type)
     switch(type)
     {
         case kPowerupLifeUpgrade:
-            mMaxHealth += 0.2;
+            mMaxHealth += 0.33;
             mHealth = mMaxHealth;
             mHealthMeter->setTargetPercent(mHealth);
             break;
         case kPowerupEnergyUpgrade:
-            mMaxEnergy += 0.2;
+            mMaxEnergy += 0.5;
             mEnergy = mMaxEnergy;
             mEnergyMeter->setTargetPercent(mEnergy);
             break;

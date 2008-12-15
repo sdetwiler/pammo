@@ -509,8 +509,6 @@ void enemyPounceAndStalkDamageCb(Enemy* e, ParticleType type, float amount)
 
 EnemyManager::EnemyManager()
 {
-    mNextWaveScore = 0;
-    mWaveIncrement = 500;
 	mAddEnemies = NULL;
 	mRemoveEnemies = NULL;
 	mEnemies = NULL;
@@ -762,6 +760,7 @@ void EnemyManager::reset()
     mSpawnEvents.clear();
     mNextWaveScore = 0;
     mNumEnemies = 0;
+    mWaveIncrement = 500;
 }
 
 void EnemyManager::update()

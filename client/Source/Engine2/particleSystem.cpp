@@ -244,20 +244,23 @@ Particle* ParticleSystem::addParticle(uint32_t priority, bool optional)
 
     // Grab a particle.
 	Particle* p;
-	if(mFree == NULL)
+	if(mFree != NULL)
 	{
-		return NULL;
-	}
-
-	p = mFree;
-    p->mOptional = optional;
-	mFree = mFree->mNext;
-    memset(p, 0, sizeof(Particle));
-	mManagers[priority]->addParticle(p);
+        p = mFree;
+        mFree = mFree->mNext;
 
 #ifdef PROFILE
-    --mFreeCount;
+        --mFreeCount;
 #endif
+	}
+    else
+    {
+        p = new Particle();
+    }
+
+    p->mOptional = optional;
+    memset(p, 0, sizeof(Particle));
+	mManagers[priority]->addParticle(p);
 
     return p;
 }

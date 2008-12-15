@@ -17,11 +17,15 @@ InfastructureManager::InfastructureManager()
 void InfastructureManager::reset()
 {
     mGivenNewPowers = 0;
-    mUpgradeScale = 1.5f;
-    mNextNewPowerScore = 900 * mUpgradeScale;
     
-    mNextUpgradeScore = 1000 * mUpgradeScale;
-    mNextRestoreScore = 1500 * mUpgradeScale;
+    mNextNewPowerMultiplier = 3.0;
+    mNextNewPowerScore = 1500;
+    
+    mNextUpgradeMultiplier = 2.8;
+    mNextUpgradeScore = 2500;
+    
+    mNextRestoreMultiplier = 2.7;
+    mNextRestoreScore = 1350;
 }
 
 uint32_t InfastructureManager::getUpdatePriority() const
@@ -36,14 +40,10 @@ uint32_t InfastructureManager::getDrawPriority() const
 
 void InfastructureManager::update()
 {
-    bool upgraded = false;
     uint32_t score = gWorld->getPlayer()->mScore;
     
     if(score >= mNextNewPowerScore)
     {
-        upgraded = true;
-        dprintf("mUpgradeScale: %f\n", mUpgradeScale);
-
         // Choose type.
         PowerupType type = kPowerupNone;
         uint32_t count = 0;
@@ -62,22 +62,21 @@ void InfastructureManager::update()
         
         if(createPowerup(type))
         {
-            upgraded = true;
-            dprintf("post mUpgradeScale: %f\n", mUpgradeScale);
             mGivenNewPowers |= type;
                 
             // If this was the last choice, disable future powerups.
             if(count == 1)
                 mNextNewPowerScore = INT_MAX;
             else
-                mNextNewPowerScore += (mNextNewPowerScore * mUpgradeScale);
-                //mNextNewPowerScore += 50;
+            {
+                mNextNewPowerScore *= mNextNewPowerMultiplier;
+                mNextNewPowerMultiplier += 0.8;
+            }
         }
     }
     
     if(score >= mNextUpgradeScore)
     {
-        upgraded = true;
         // Choose type.
         PowerupType type;
         if((mGivenNewPowers & kPowerupShield) && (rand() & 1))
@@ -86,12 +85,14 @@ void InfastructureManager::update()
             type = kPowerupLifeUpgrade;
             
         if(createPowerup(type))
-            mNextUpgradeScore += (mNextUpgradeScore*mUpgradeScale);
+        {
+            mNextUpgradeScore *= mNextUpgradeMultiplier;
+            mNextUpgradeMultiplier += 0.25;
+        }
     }
     
     if(score >= mNextRestoreScore)
     {
-        upgraded = true;
         // Choose type.
         PowerupType type;
         if((mGivenNewPowers & kPowerupShield) && (rand() & 1))
@@ -100,10 +101,11 @@ void InfastructureManager::update()
             type = kPowerupLifeRestore;
             
         if(createPowerup(type))
-            mNextRestoreScore += (mNextRestoreScore*mUpgradeScale);
+        {
+            mNextRestoreScore *= mNextRestoreMultiplier;
+            mNextRestoreMultiplier += 0.23;
+        }
     }
-    if(upgraded)
-        mUpgradeScale*=1.05f; // get harder over time.
 
 }
 

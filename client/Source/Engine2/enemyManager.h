@@ -392,6 +392,8 @@ public:
     uint32_t mNextWaveScore;
     uint32_t mWaveIncrement;
     
+    uint32_t mNumEnemies; // How many enemies are pending to spawn or have spawned and not died?
+    
 protected:
 
 private:

@@ -515,6 +515,8 @@ EnemyManager::EnemyManager()
 	mRemoveEnemies = NULL;
 	mEnemies = NULL;
 	mFreed = NULL;
+    
+    reset();
 }
 
 EnemyManager::~EnemyManager()
@@ -759,6 +761,7 @@ void EnemyManager::reset()
 
     mSpawnEvents.clear();
     mNextWaveScore = 0;
+    mNumEnemies = 0;
 }
 
 void EnemyManager::update()
@@ -846,12 +849,16 @@ void EnemyManager::update()
     }
 
     // Check if a new wave should be created.
-    if(gWorld->getPlayer()->mScore >= mNextWaveScore)
+///    if(gWorld->getPlayer()->mScore >= mNextWaveScore)
+    if(!mNumEnemies)
     {
         uint32_t addedScore = createWave(mWaveIncrement);
         // createWave failed because no enemies exist. disable future waves.
         if(addedScore == 0xffffffff)
+        {
+            dprintf("Shit! createWave failed, so wer're done, man!");
             mNextWaveScore = addedScore;
+        }
         else
         {
             mNextWaveScore += addedScore;
@@ -991,6 +998,9 @@ Enemy* EnemyManager::addEnemy()
     e->mController.mBody = e->mBody;
     e->mController.mRotationDamping = 0.4f;
 
+    ++mNumEnemies;
+    dprintf("mNumEnemies: %u", mNumEnemies);
+
 	return e;
 }
 
@@ -1000,6 +1010,9 @@ void EnemyManager::removeEnemy(Enemy* e)
     // Push onto remove stack.
 	e->mRemoveNext = mRemoveEnemies;
 	mRemoveEnemies = e;
+    
+    --mNumEnemies;
+    dprintf("mNumEnemies: %u", mNumEnemies);
 }
 
 struct EnemyTemplateCount

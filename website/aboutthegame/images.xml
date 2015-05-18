@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gallery>
+<album title="Paradise Concept Gallery" description="See some initial conepts and early artwork." lgPath="album1/large/" tnPath="album1/thumbs/" tn="album1/albumThumb.jpg">
+
+<img src="001.jpg" caption="Vehicle concepts"/>
+<img src="002.jpg" caption="Vehicle concepts"/>
+<img src="003.jpg" caption="Vehicle concepts"/>
+<img src="004.jpg" caption="Vehicle concepts"/>
+<img src="005.jpg" caption="Vehicle concepts"/>
+<img src="006.jpg" caption="Vehicle concepts"/>
+<img src="007.jpg" caption="Gun Carriage"/>
+<img src="008.jpg" caption="Reverse Firetruck"/>
+<img src="009.jpg" caption="Kamikaze Death Torpedo"/>
+<img src="010.jpg" caption="2D mockups"/>
+<img src="011.jpg" caption="Enemy concepts"/>
+<img src="012.jpg" caption="Initial tank mockups"/>
+<img src="013.jpg" caption="More tank mockups, plus a more final design"/>
+<img src="014.jpg" caption="Sample screen from the grid-based map design"/>
+<img src="015.jpg" caption="Early controls mockup"/>
+<img src="016.jpg" caption="Early take on non-grid map"/>
+<img src="017.jpg" caption="Icon designs"/>
+
+</album>
+</gallery>
